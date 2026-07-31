@@ -1,7 +1,6 @@
-#pragma once
+﻿#pragma once
 #include "MovableActor.h"
-
-enum class BloonType{Red,Blue,Green,Yellow,Pink};
+#include "BloonType.h"
 
 class Bloon : public MovableActor
 {
@@ -9,15 +8,16 @@ class Bloon : public MovableActor
 
 public :
 	virtual void Update(float deltaTime) override;
-	virtual void Render(HDC hdc) override;
+	virtual void Render(Graphic& graphic) override;
 
 	/*void TakeDamage(int damage);
 	bool IsPopped() const { return _isPopped; }*/
 
-
+	BloonColor GetColor() const { return _color; }
 
 private:
-	BloonType _type;
-	int _hp;
+	// 등급 체인은 BloonType.h의 BloonColor(Red~Ceramic)를 기준으로 삼는다.
+	BloonColor _color = BloonColor::Red;
+	int32 _hp = 1;
 };
 

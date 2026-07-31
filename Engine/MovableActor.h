@@ -1,11 +1,11 @@
-#pragma once
+﻿#pragma once
 #include "Actor.h"
 class MovableActor : public Actor
 {
 	using Super = Actor;
 public:
 	virtual void Update(float deltaTime) override;
-	virtual void Render(HDC hdc) override;
+	virtual void Render(Graphic& graphic) override;
 
 	virtual void Move(float deltaTime);
 
@@ -16,6 +16,6 @@ public:
 
 protected:
 	Vector _dir;
-	float _moveSpeed;
+	float _moveSpeed = 0.f;
 };
 

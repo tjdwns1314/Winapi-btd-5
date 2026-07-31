@@ -3,7 +3,6 @@
 #include "Singleton.h"
 #include "Image.h"
 #include "Graphic.h"
-#include "GameScene.h"
 
 
 
@@ -29,14 +28,10 @@ private :
 	~Game() = default;
 
 private :
-	HWND _hwnd;
-	RECT _rect;
+	HWND _hwnd = nullptr;
+	RECT _rect = {};
 
-	HDC _hdc;
-	HDC _hdcBack;
-	HBITMAP _bmpBack;
-
+	// 렌더링은 Direct2D가 전담하므로 GDI 백버퍼(HDC/HBITMAP)는 사용하지 않는다.
 	Graphic _graphic;
-	GameScene _gameScene;
 };
 

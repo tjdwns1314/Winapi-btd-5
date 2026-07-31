@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 struct CellInfo
 {
 	float x, y, w, h;

@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "Actor.h"
 
 Actor::~Actor()
@@ -15,7 +15,7 @@ void Actor::Update(float deltaTime)
 {
 
 }
-void Actor::Render(HDC hdc)
+void Actor::Render(Graphic& graphic)
 {
 
 }

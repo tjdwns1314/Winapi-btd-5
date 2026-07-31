@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 float RadianToDegree(float radina);
 float DegreeToRadian(float degree);
 
@@ -25,8 +25,9 @@ enum class ActorType
 
 enum class SceneType
 {
-	Lobby,
-	Game,
+	Main,	// 타이틀 화면
+	Lobby,	// 스테이지(1-1/1-2/1-3) 선택
+	Game,	// 실제 플레이
 	Editor,
 	Max,
 };
@@ -34,7 +35,8 @@ enum class SceneType
 enum class ColliderType
 {
 	Circfle,
-	AABB,
+	AABB,	// 회전하지 않는 일반 풍선용
+	OBB,	// 이동 방향으로 회전하는 보스 풍선용
 	Max
 };
 

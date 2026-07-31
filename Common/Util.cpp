@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "Util.h"
 #include <numbers>  // C++20
 
