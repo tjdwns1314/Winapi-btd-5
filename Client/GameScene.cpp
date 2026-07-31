@@ -1,8 +1,10 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "GameScene.h"
 
 void GameScene::Init(Graphic& graphic)
 {
+	Super::Init(graphic);
+
 	_inGameBg.Load(graphic, L"Res\\InGame.png");
 	_sprite.LoadXml(L"Res\\InGame.xml");
 }
@@ -16,12 +18,18 @@ void GameScene::Render(Graphic& graphic)
 	}
 	//_inGameBg.Draw(graphic, 0.0f, 0.0f);
 
+	// 씬이 소유한 액터들을 레이어 순서대로 렌더링
+	Super::Render(graphic);
 }
-void GameScene::Release()
+
+void GameScene::Cleanup()
 {
 	_inGameBg.Release();
-}
-void GameScene::Update()
-{
 
+	Super::Cleanup();
+}
+
+void GameScene::Update(float deltaTime)
+{
+	Super::Update(deltaTime);
 }

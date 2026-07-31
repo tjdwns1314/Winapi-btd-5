@@ -1,13 +1,20 @@
-#pragma once
+﻿#pragma once
+#include "Scene.h"
 #include "Image.h"
 #include "Sprite.h"
-class GameScene
+
+class GameScene : public Scene
 {
+	using Super = Scene;
+
 public :
-	void Init(Graphic& graphic);
-	void Render(Graphic& graphic);
-	void Release();
-	void Update();
+	GameScene() : Super(SceneType::Game) {}
+
+	virtual void Init(Graphic& graphic) override;
+	virtual void Cleanup() override;
+	virtual void Update(float deltaTime) override;
+	virtual void Render(Graphic& graphic) override;
+
 private :
 	Image _inGameBg;
 	Sprite _sprite;

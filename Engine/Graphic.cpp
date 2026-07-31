@@ -43,6 +43,19 @@ void Graphic::Init(HWND hwnd)
 		D2D1::RenderTargetProperties(),
 		D2D1::HwndRenderTargetProperties(hwnd, D2D1::SizeU(rc.right, rc.bottom)),
 		&_renderTarget);
+	if (FAILED(hr)) return;
+
+	// 5. 재사용할 브러시 하나를 미리 만들어둔다. (색은 GetBrush에서 교체)
+	_renderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), &_brush);
+}
+
+ID2D1SolidColorBrush* Graphic::GetBrush(const D2D1::ColorF& color)
+{
+	if (_brush == nullptr)
+		return nullptr;
+
+	_brush->SetColor(color);
+	return _brush;
 }
 
 void Graphic::BeginDraw() { _renderTarget->BeginDraw(); }
@@ -51,6 +64,13 @@ void Graphic::Clear(D2D1::ColorF color) { _renderTarget->Clear(color); }
 
 void Graphic::Cleanup()
 {
+	// COM 객체는 delete가 아니라 Release로 해제한다.
+	if (_brush)
+	{
+		_brush->Release();
+		_brush = nullptr;
+	}
+
 	if (_wicFactory)
 	{
 		_wicFactory->Release();
