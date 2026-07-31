@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{508C75DB-C3A7-5D6A-A635-82797D232D0C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Client">
+      <UniqueIdentifier>{41C53174-9D83-505F-B69B-6EF37A63BCF0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{3AA37105-127E-5634-A212-952AE06BE39B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{0405D28D-2AAB-5D79-9AFE-BD29F4E28082}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Engine\Actor.h"><Filter>Engine</Filter></ClInclude>
+    <ClInclude Include="Engine\Graphic.h"><Filter>Engine</Filter></ClInclude>
+    <ClInclude Include="Engine\Image.h"><Filter>Engine</Filter></ClInclude>
+    <ClInclude Include="Engine\MovableActor.h"><Filter>Engine</Filter></ClInclude>
+    <ClInclude Include="Engine\Scene.h"><Filter>Engine</Filter></ClInclude>
+    <ClInclude Include="Engine\SceneManager.h"><Filter>Engine</Filter></ClInclude>
+    <ClInclude Include="Engine\Singleton.h"><Filter>Engine</Filter></ClInclude>
+    <ClInclude Include="Engine\Sprite.h"><Filter>Engine</Filter></ClInclude>
+    <ClInclude Include="Engine\TimeManager.h"><Filter>Engine</Filter></ClInclude>
+    <ClInclude Include="Client\Bloon.h"><Filter>Client</Filter></ClInclude>
+    <ClInclude Include="Client\BloonType.h"><Filter>Client</Filter></ClInclude>
+    <ClInclude Include="Client\Game.h"><Filter>Client</Filter></ClInclude>
+    <ClInclude Include="Client\GameScene.h"><Filter>Client</Filter></ClInclude>
+    <ClInclude Include="Client\Projectile.h"><Filter>Client</Filter></ClInclude>
+    <ClInclude Include="Client\Tower.h"><Filter>Client</Filter></ClInclude>
+    <ClInclude Include="Client\TowerDefense.h"><Filter>Client</Filter></ClInclude>
+    <ClInclude Include="Common\framework.h"><Filter>Common</Filter></ClInclude>
+    <ClInclude Include="Common\pch.h"><Filter>Common</Filter></ClInclude>
+    <ClInclude Include="Common\Resource.h"><Filter>Common</Filter></ClInclude>
+    <ClInclude Include="Common\targetver.h"><Filter>Common</Filter></ClInclude>
+    <ClInclude Include="Common\Util.h"><Filter>Common</Filter></ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Engine\Actor.cpp"><Filter>Engine</Filter></ClCompile>
+    <ClCompile Include="Engine\Graphic.cpp"><Filter>Engine</Filter></ClCompile>
+    <ClCompile Include="Engine\Image.cpp"><Filter>Engine</Filter></ClCompile>
+    <ClCompile Include="Engine\MovableActor.cpp"><Filter>Engine</Filter></ClCompile>
+    <ClCompile Include="Engine\Scene.cpp"><Filter>Engine</Filter></ClCompile>
+    <ClCompile Include="Engine\SceneManager.cpp"><Filter>Engine</Filter></ClCompile>
+    <ClCompile Include="Engine\Sprite.cpp"><Filter>Engine</Filter></ClCompile>
+    <ClCompile Include="Engine\TimeManager.cpp"><Filter>Engine</Filter></ClCompile>
+    <ClCompile Include="Client\Bloon.cpp"><Filter>Client</Filter></ClCompile>
+    <ClCompile Include="Client\Game.cpp"><Filter>Client</Filter></ClCompile>
+    <ClCompile Include="Client\GameScene.cpp"><Filter>Client</Filter></ClCompile>
+    <ClCompile Include="Client\Projectile.cpp"><Filter>Client</Filter></ClCompile>
+    <ClCompile Include="Client\Tower.cpp"><Filter>Client</Filter></ClCompile>
+    <ClCompile Include="Client\TowerDefense.cpp"><Filter>Client</Filter></ClCompile>
+    <ClCompile Include="Common\pch.cpp">
+      <Filter>Common</Filter>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="Common\Util.cpp"><Filter>Common</Filter></ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="TowerDefense.rc"><Filter>Resource Files</Filter></ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico"><Filter>Resource Files</Filter></Image>
+    <Image Include="TowerDefense.ico"><Filter>Resource Files</Filter></Image>
+  </ItemGroup>
+</Project>
