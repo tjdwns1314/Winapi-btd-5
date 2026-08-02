@@ -3,7 +3,7 @@
 #include "Graphic.h"
 #include "TimeManager.h"
 #include "SceneManager.h"
-#include "GameScene.h"
+#include "Scene/GameScene.h"
 
 #pragma comment(lib, "d2d1.lib")
 #pragma comment(lib, "windowscodecs.lib") // WIC(이미지 로더) 관련 함수도 쓰고 있으므로 같이 필요

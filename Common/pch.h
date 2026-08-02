@@ -13,6 +13,10 @@
 #include "Util.h"
 using namespace std;
 
+
+
+
+
 using int8 = char;		// 1byte 정수형
 using int16 = short;	// 2byte 정수형
 using int32 = int;		// 4byte 정수형
@@ -22,6 +26,11 @@ using uint8 = unsigned char;		// 1byte 정수형
 using uint16 = unsigned short;	// 2byte 정수형
 using uint32 = unsigned int;		// 4byte 정수형
 using uint64 = unsigned long long;// 8byte 정수형
+
+constexpr int32 GWinSizeX = 1440;
+constexpr int32 GWinSizeY = 1080;
+constexpr int32 BLOCK_SIZE = 30;
+
 
 #define SMALL_NUMBER			(1.e-8f)
 
@@ -146,9 +155,4 @@ struct Cell
 
 		return Cell{ (int32)pos.x / size,(int32)pos.y / size };
 	}
-};
-
-struct GridInfo
-{
-	vector<class Actor*> actors;
 };

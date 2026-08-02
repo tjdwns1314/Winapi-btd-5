@@ -15,8 +15,11 @@ public :
 	virtual void Update(float deltaTime) override;
 	virtual void Render(Graphic& graphic) override;
 
+
+
 private :
 	Image _inGameBg;
 	Sprite _sprite;
+
 };
 
