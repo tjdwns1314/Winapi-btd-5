@@ -5,8 +5,8 @@ void GameScene::Init(Graphic& graphic)
 {
 	Super::Init(graphic);
 
-	_inGameBg.Load(graphic, L"Res\\InGame.png");
-	_sprite.LoadXml(L"Res\\InGame.xml");
+	_inGameBg.Load(graphic, L"Resource\\InGame.png");
+	_sprite.LoadXml(L"Resource\\InGame.xml");
 }
 
 void GameScene::Render(Graphic& graphic)

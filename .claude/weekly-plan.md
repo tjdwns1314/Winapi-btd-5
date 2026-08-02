@@ -75,10 +75,10 @@
 > **산출물**: 1-1/1-2/1-3 각각 다른 미로 맵이 생성되고, A*로 계산한 경로를 풍선 한 마리가 시작점→도착점까지 따라간다. F1으로 그리드·경로 디버그 뷰를 켤 수 있다.
 
 ### 1-1. 그리드 / 타일 시스템
-- `Grid` 클래스 신설 — 20 × 15 타일 (`plan.md` 3절)
+- `Grid` 클래스 신설 — [Engine/Grid.h](../Engine/Grid.h)/[Engine/Grid.cpp](../Engine/Grid.cpp)에 분리 완료, 칸수 **40 × 30**, `BLOCK_SIZE = 30`px로 확정 (`plan.md` 3절/6절 — 해상도 1440 × 1080, 게임 화면 1200 × 900 기준)
 - 셀 상태는 **길 / 설치 가능** 두 가지만 (`enum class CellState`)
 - 화면 좌표 ↔ 셀 좌표 변환은 기존 [Common/pch.h](../Common/pch.h)의 `Cell::ConvertToCEll` 재사용
-- 셀별 액터 보관은 기존 `GridInfo` 구조체 활용
+- 셀별 액터 보관은 `Grid::GridInfo` 구조체 활용 (`Engine/Grid.h`)
 
 ### 1-2. 미로 맵 생성기 (`MapGenerator`)
 - 시작점: 왼쪽 가장자리 무작위 / 도착점: 오른쪽 가장자리 무작위

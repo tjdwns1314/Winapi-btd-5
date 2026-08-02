@@ -1,6 +1,6 @@
 ﻿#include "pch.h"
 #include "SceneManager.h"
-#include "Scene.h"
+#include "Scene/Scene.h"
 
 void SceneManager::Init(Graphic& graphic)
 {
