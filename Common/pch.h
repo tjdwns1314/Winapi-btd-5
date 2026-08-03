@@ -13,10 +13,6 @@
 #include "Util.h"
 using namespace std;
 
-
-
-
-
 using int8 = char;		// 1byte 정수형
 using int16 = short;	// 2byte 정수형
 using int32 = int;		// 4byte 정수형
@@ -27,15 +23,15 @@ using uint16 = unsigned short;	// 2byte 정수형
 using uint32 = unsigned int;		// 4byte 정수형
 using uint64 = unsigned long long;// 8byte 정수형
 
-constexpr int32 GWinSizeX = 1440;
-constexpr int32 GWinSizeY = 1080;
-constexpr int32 CenterX = GWinSizeX / 2;
-constexpr int32 CenterY = GWinSizeY / 2;
-constexpr int32 BLOCK_SIZE = 30;
-constexpr int32 GRID_COUNT_X = 40;	// 게임 화면 1200px ÷ BLOCK_SIZE
-constexpr int32 GRID_COUNT_Y = 30;	// 게임 화면 900px ÷ BLOCK_SIZE
-constexpr int32 GameAreaWidth = GRID_COUNT_X * BLOCK_SIZE;
-constexpr int32 GameAreaHeight = GRID_COUNT_Y * BLOCK_SIZE;
+constexpr int32 GWinSizeX = 1920;
+constexpr int32 GWinSizeY = 960;
+constexpr int32 GameAreaWidth = 1440;
+constexpr int32 GameAreaHeight = 960;
+constexpr int32 BLOCK_SIZE = 40;
+constexpr int32 GRID_COUNT_X = GameAreaWidth / BLOCK_SIZE;
+constexpr int32 GRID_COUNT_Y = GameAreaHeight / BLOCK_SIZE;
+static_assert(GRID_COUNT_X* BLOCK_SIZE == GameAreaWidth, "BLOCK_SIZE가 GameAreaWidth를 나누어떨어뜨리지 않습니다");
+static_assert(GRID_COUNT_Y* BLOCK_SIZE == GameAreaHeight, "BLOCK_SIZE가 GameAreaHeight를 나누어떨어뜨리지 않습니다");
 constexpr int32 GameAreaCenterX = GameAreaWidth / 2;
 constexpr int32 GameAreaCenterY = GameAreaHeight / 2;
 
