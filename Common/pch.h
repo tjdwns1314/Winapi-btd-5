@@ -29,7 +29,16 @@ using uint64 = unsigned long long;// 8byte 정수형
 
 constexpr int32 GWinSizeX = 1440;
 constexpr int32 GWinSizeY = 1080;
+constexpr int32 CenterX = GWinSizeX / 2;
+constexpr int32 CenterY = GWinSizeY / 2;
 constexpr int32 BLOCK_SIZE = 30;
+constexpr int32 GRID_COUNT_X = 40;	// 게임 화면 1200px ÷ BLOCK_SIZE
+constexpr int32 GRID_COUNT_Y = 30;	// 게임 화면 900px ÷ BLOCK_SIZE
+constexpr int32 GameAreaWidth = GRID_COUNT_X * BLOCK_SIZE;
+constexpr int32 GameAreaHeight = GRID_COUNT_Y * BLOCK_SIZE;
+constexpr int32 GameAreaCenterX = GameAreaWidth / 2;
+constexpr int32 GameAreaCenterY = GameAreaHeight / 2;
+
 
 
 #define SMALL_NUMBER			(1.e-8f)
