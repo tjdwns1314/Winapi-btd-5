@@ -10,8 +10,12 @@ class Image
 public:
 	void Load(Graphic& graphic, const wchar_t* fileName);
 	void Draw(Graphic& graphic, float x, float y);
+	void Draw(Graphic& graphic, float x, float y, float width, float height); // 목적지 크기로 스케일링
 	void Release();
 	void DrawCell(Graphic& graphic, float x, float y, const CellInfo& cell);
+
+
+	D2D1_SIZE_F GetSize() const { return _size; }
 private:
 	// 변환이 완료된 Direct2D 그래픽 데이터(비트맵) 주소입니다.
 	ID2D1Bitmap* _bitmap = nullptr;
