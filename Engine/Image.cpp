@@ -22,17 +22,26 @@ void Image::Draw(Graphic& graphic, float x, float y)
 	graphic.GetRenderTarget()->DrawBitmap(_bitmap, rect);
 }
 
-void Image::DrawCell(Graphic& graphic, float destX, float destY, const CellInfo& cell)
+void Image::Draw(Graphic& graphic, float x, float y, float width, float height)
+{
+	if (!_bitmap) return;
+
+	// (x,y)부터 (x+width, y+height)까지 목적지 크기로 스케일링해서 그림
+	D2D1_RECT_F rect = D2D1::RectF(x, y, x + width, y + height);
+	graphic.GetRenderTarget()->DrawBitmap(_bitmap, rect);
+}
+
+void Image::DrawCell(Graphic& graphic, float destX, float destY, const CellInfo& cell, float scale)
 {
 	if (!_bitmap) return;
 
 	// 아틀라스 원본 이미지에서 잘라올 영역
 	D2D1_RECT_F srcRect = D2D1::RectF(cell.x, cell.y, cell.x + cell.w, cell.y + cell.h);
 
-	// 논리 캔버스 기준 오프셋(ax, ay) 적용해서 흔들림 방지
-	float drawX = destX + cell.ax;
-	float drawY = destY + cell.ay;
-	D2D1_RECT_F destRect = D2D1::RectF(drawX, drawY, drawX + cell.w, drawY + cell.h);
+	// 논리 캔버스 기준 오프셋(ax, ay)도 scale만큼 같이 축소해서 비율 유지
+	float drawX = destX + cell.ax * scale;
+	float drawY = destY + cell.ay * scale;
+	D2D1_RECT_F destRect = D2D1::RectF(drawX, drawY, drawX + cell.w * scale, drawY + cell.h * scale);
 
 	graphic.GetRenderTarget()->DrawBitmap(
 		_bitmap,

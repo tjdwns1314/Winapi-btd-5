@@ -18,13 +18,14 @@ public :
 
 
 
-private :
-	// 디버그용 그리드 선 렌더링. 타일/타워배치 확인용이며 게임 로직에는 아직 관여하지 않는다.
+private:
 	void renderGrid(Graphic& graphic);
 
 	Image _inGameBg;
-	Image _RealGameBG;
-	Sprite _sprite;
+	Image _monkeyLaneBg;      // 기존 _RealGameBG 대체
+	Image _bloonImg;
+	Sprite _sprite;           // InGame.xml
+	Sprite _monkeyLaneSprite; // monkey_lane.xml
 	Grid _grid;
 
 };

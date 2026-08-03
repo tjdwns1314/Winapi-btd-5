@@ -12,7 +12,7 @@ public:
 	void Draw(Graphic& graphic, float x, float y);
 	void Draw(Graphic& graphic, float x, float y, float width, float height); // 목적지 크기로 스케일링
 	void Release();
-	void DrawCell(Graphic& graphic, float x, float y, const CellInfo& cell);
+	void DrawCell(Graphic& graphic, float x, float y, const CellInfo& cell, float scale = 1.0f);
 
 
 	D2D1_SIZE_F GetSize() const { return _size; }
