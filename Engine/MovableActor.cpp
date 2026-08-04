@@ -16,3 +16,7 @@ void MovableActor::Move(float deltaTime)
 	// 프레임률과 무관하게 같은 속도로 움직이도록 deltaTime을 곱한다.
 	SetPos(GetPos() + _dir * (_moveSpeed * deltaTime));
 }
+void MovableActor::Init()
+{
+	Super::Init();
+}

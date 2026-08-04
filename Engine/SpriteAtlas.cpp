@@ -1,5 +1,5 @@
 ﻿#include "pch.h"
-#include "Sprite.h"
+#include "SpriteAtlas.h"
 #include <fstream>
 #include <sstream>
 #include <regex>
@@ -30,7 +30,7 @@ namespace
     }
 }
 
-void Sprite::LoadXml(const wchar_t* xmlPath)
+void SpriteAtlas::LoadXml(const wchar_t* xmlPath)
 {
     _cells.clear();
 
@@ -68,7 +68,7 @@ void Sprite::LoadXml(const wchar_t* xmlPath)
     }
 }
 
-const CellInfo* Sprite::GetCell(const std::string& name)
+const CellInfo* SpriteAtlas::GetCell(const std::string& name)
 {
     auto it = _cells.find(name);
     if (it == _cells.end()) return nullptr;

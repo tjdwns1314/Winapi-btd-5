@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "Graphic.h"
-#include "Sprite.h"
+#include "SpriteAtlas.h"
 
 // Graphic이 엔진 전체 판을 관리한다면, 
 // Image는 맵 객체, 캐릭터, 풍선 등 낱개의 PNG 이미지 하나하나를 객체화한 것입니다.
@@ -9,10 +9,9 @@ class Image
 {
 public:
 	void Load(Graphic& graphic, const wchar_t* fileName);
-	void Draw(Graphic& graphic, float x, float y);
-	void Draw(Graphic& graphic, float x, float y, float width, float height); // 목적지 크기로 스케일링
+	void Draw(Graphic& graphic, float centerX, float centerY, float scale = 1.0f);
 	void Release();
-	void DrawCell(Graphic& graphic, float x, float y, const CellInfo& cell, float scale = 1.0f);
+	void DrawSprite(Graphic& graphic, float centerX, float centerY, const CellInfo& cell, float scale = 1.0f);
 
 
 	D2D1_SIZE_F GetSize() const { return _size; }

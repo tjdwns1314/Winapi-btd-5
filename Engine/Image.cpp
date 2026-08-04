@@ -12,35 +12,34 @@ void Image::Load(Graphic& graphic, const wchar_t* fileName)
 	if (_bitmap) _size = _bitmap->GetSize(); // 이미지의 가로, 세로 크기 기록
 }
 
-void Image::Draw(Graphic& graphic, float x, float y)
+void Image::Draw(Graphic& graphic, float centerX, float centerY, float scale)
 {
 	if (!_bitmap) return;
 
-	// (x,y) 위치부터 (x + width, y + height)까지 그릴 영역(Rect) 생성
-	D2D1_RECT_F rect = D2D1::RectF(x, y, x + _size.width, y + _size.height);
+	// (centerX, centerY)를 이미지 중심으로 삼아 scale만큼 확대/축소해서 그림
+	const float width = _size.width * scale;
+	const float height = _size.height * scale;
+	const float x = centerX - width * 0.5f;
+	const float y = centerY - height * 0.5f;
+
+	D2D1_RECT_F rect = D2D1::RectF(x, y, x + width, y + height);
 	// RenderTarget에 비트맵 출력 (투명도가 들어간 PNG가 알아서 합성되어 출력됨!)
 	graphic.GetRenderTarget()->DrawBitmap(_bitmap, rect);
 }
 
-void Image::Draw(Graphic& graphic, float x, float y, float width, float height)
-{
-	if (!_bitmap) return;
-
-	// (x,y)부터 (x+width, y+height)까지 목적지 크기로 스케일링해서 그림
-	D2D1_RECT_F rect = D2D1::RectF(x, y, x + width, y + height);
-	graphic.GetRenderTarget()->DrawBitmap(_bitmap, rect);
-}
-
-void Image::DrawCell(Graphic& graphic, float destX, float destY, const CellInfo& cell, float scale)
+void Image::DrawSprite(Graphic& graphic, float centerX, float centerY, const CellInfo& cell, float scale)
 {
 	if (!_bitmap) return;
 
 	// 아틀라스 원본 이미지에서 잘라올 영역
 	D2D1_RECT_F srcRect = D2D1::RectF(cell.x, cell.y, cell.x + cell.w, cell.y + cell.h);
 
-	// 논리 캔버스 기준 오프셋(ax, ay)도 scale만큼 같이 축소해서 비율 유지
-	float drawX = destX + cell.ax * scale;
-	float drawY = destY + cell.ay * scale;
+	// 트림 전 원본 스프라이트 크기(aw, ah) 기준으로 중심을 잡고,
+	// 트림 오프셋(ax, ay)만큼 되돌려서 실제 그릴 위치를 구한다.
+	const float originX = centerX - cell.aw * scale * 0.5f;
+	const float originY = centerY - cell.ah * scale * 0.5f;
+	const float drawX = originX + cell.ax * scale;
+	const float drawY = originY + cell.ay * scale;
 	D2D1_RECT_F destRect = D2D1::RectF(drawX, drawY, drawX + cell.w * scale, drawY + cell.h * scale);
 
 	graphic.GetRenderTarget()->DrawBitmap(

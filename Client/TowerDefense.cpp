@@ -131,7 +131,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
       CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);*/
 
    RECT rc = { 0,0,GWinSizeX,GWinSizeY };
-   AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE); // 원하는 클라이언트 크기를 기준으로 전체 창 크기 역산
+   AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, true); // 원하는 클라이언트 크기를 기준으로 전체 창 크기 역산
 
    HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
        100,

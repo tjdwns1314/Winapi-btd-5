@@ -54,8 +54,8 @@ msbuild TowerDefense.sln /p:Configuration=Release /p:Platform=x64
 렌더링은 고전적인 GDI 비트맵 블리팅이 아니라 **Direct2D + WIC**를 사용합니다(GDI가 PNG 알파 채널을 잘 다루지 못해서 의도적으로 선택한 방식). 핵심 구성 요소:
 
 - `Graphic` ([Engine/Graphic.h](Engine/Graphic.h)) — `ID2D1Factory`, `ID2D1HwndRenderTarget`, `IWICImagingFactory`를 소유하며, `BeginDraw`/`EndDraw`/`Clear`와 비트맵 로딩을 래핑합니다.
-- `Image` ([Engine/Image.h](Engine/Image.h)) — 로드된 PNG 하나(`ID2D1Bitmap`)와 그 크기를 담고 있으며, `DrawCell`로 스프라이트 시트의 일부 영역을 그립니다.
-- `Sprite` ([Engine/Sprite.h](Engine/Sprite.h)) — TexturePacker 스타일의 XML 아틀라스(`Res/InGame.xml`)를 이름별 `CellInfo` 사각형으로 로드하며, 이름으로 조회해 `Image::DrawCell`에 전달합니다.
+- `Image` ([Engine/Image.h](Engine/Image.h)) — 로드된 PNG 하나(`ID2D1Bitmap`)와 그 크기를 담고 있으며, `DrawSprite`로 스프라이트 시트의 일부 영역을 그립니다.
+- `SpriteAtlas` ([Engine/SpriteAtlas.h](Engine/SpriteAtlas.h)) — TexturePacker 스타일의 XML 아틀라스(`Res/InGame.xml`)를 이름별 `CellInfo` 사각형으로 로드하며, 이름으로 조회해 `Image::DrawSprite`에 전달합니다.
 - 필요한 라이브러리는 [Client/Game.cpp](Client/Game.cpp)의 `#pragma comment`로 링크됩니다: `d2d1.lib`, `windowscodecs.lib`, `ole32.lib`.
 
 ### 게임 루프 / 싱글톤
@@ -68,7 +68,7 @@ msbuild TowerDefense.sln /p:Configuration=Release /p:Platform=x64
 
 - `Bloon` ([Client/Bloon.h](Client/Bloon.h)) — `MovableActor`; 풍선 타입/HP는 [Client/BloonType.h](Client/BloonType.h)의 `BloonType`/`BloonColor`로 정의되며, 여기에는 앞으로 구현할 풍선 등급/터짐 체인(Red → Blue → ... → Ceramic)이 문서화되어 있습니다.
 - `Tower`와 `Projectile` ([Client/Tower.h](Client/Tower.h), [Client/Projectile.h](Client/Projectile.h))은 현재 비어 있는 스텁 클래스이며 앞으로 구현해야 합니다.
-- `GameScene` ([Client/GameScene.h](Client/GameScene.h))은 레벨 배경 `Image`와 `Sprite` 아틀라스를 소유하며, 씬별 액터 관리가 이루어질 곳입니다.
+- `GameScene` ([Client/GameScene.h](Client/GameScene.h))은 레벨 배경 `Image`와 `SpriteAtlas`를 소유하며, 씬별 액터 관리가 이루어질 곳입니다.
 
 설계상 언급되지만 아직 자리만 잡혀 있거나 주석 처리된 부분들도 있습니다. 특히 `Scene` ([Engine/Scene.h](Engine/Scene.h), 전체가 주석 처리됨)과 `SceneManager` ([Engine/SceneManager.h](Engine/SceneManager.h), 빈 싱글톤 껍데기)이며, `GameScene`은 아직 `Scene`을 상속하지 않습니다. 씬 전환 로직을 구현할 때는 이 두 개도 함께 채워 넣어야 할 것입니다.
 

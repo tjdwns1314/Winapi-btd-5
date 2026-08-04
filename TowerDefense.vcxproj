@@ -142,10 +142,13 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Client\BloonFactory.h" />
     <ClInclude Include="Engine\Actor.h" />
     <ClInclude Include="Engine\Grid.h" />
     <ClInclude Include="Client\Bloon.h" />
     <ClInclude Include="Client\BloonType.h" />
+    <ClInclude Include="Client\TileMap.h" />
+    <ClInclude Include="Client\PathFinder.h" />
     <ClInclude Include="Common\framework.h" />
     <ClInclude Include="Client\Game.h" />
     <ClInclude Include="Client\Scene\GameScene.h" />
@@ -155,12 +158,13 @@
     <ClInclude Include="Engine\Graphic.h" />
     <ClInclude Include="Engine\Image.h" />
     <ClInclude Include="Engine\MovableActor.h" />
+    <ClInclude Include="Engine\ResourceManager.h" />
     <ClInclude Include="Common\pch.h" />
     <ClInclude Include="Client\Projectile.h" />
     <ClInclude Include="Common\Resource.h" />
     <ClInclude Include="Engine\SceneManager.h" />
     <ClInclude Include="Engine\Singleton.h" />
-    <ClInclude Include="Engine\Sprite.h" />
+    <ClInclude Include="Engine\SpriteAtlas.h" />
     <ClInclude Include="Common\targetver.h" />
     <ClInclude Include="Engine\TimeManager.h" />
     <ClInclude Include="Client\Tower.h" />
@@ -168,9 +172,12 @@
     <ClInclude Include="Common\Util.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Client\BloonFactory.cpp" />
     <ClCompile Include="Engine\Actor.cpp" />
     <ClCompile Include="Engine\Grid.cpp" />
     <ClCompile Include="Client\Bloon.cpp" />
+    <ClCompile Include="Client\TileMap.cpp" />
+    <ClCompile Include="Client\PathFinder.cpp" />
     <ClCompile Include="Client\Game.cpp" />
     <ClCompile Include="Client\Scene\GameScene.cpp" />
     <ClCompile Include="Client\Scene\MainScene.cpp" />
@@ -179,13 +186,14 @@
     <ClCompile Include="Engine\Graphic.cpp" />
     <ClCompile Include="Engine\Image.cpp" />
     <ClCompile Include="Engine\MovableActor.cpp" />
+    <ClCompile Include="Engine\ResourceManager.cpp" />
     <ClCompile Include="Common\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="Client\Projectile.cpp" />
     <ClCompile Include="Engine\SceneManager.cpp" />
-    <ClCompile Include="Engine\Sprite.cpp" />
+    <ClCompile Include="Engine\SpriteAtlas.cpp" />
     <ClCompile Include="Engine\TimeManager.cpp" />
     <ClCompile Include="Client\Tower.cpp" />
     <ClCompile Include="Client\TowerDefense.cpp" />
@@ -197,6 +205,13 @@
   <ItemGroup>
     <Image Include="small.ico" />
     <Image Include="TowerDefense.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".claude\coding-convention.md" />
+    <None Include=".claude\commit-convention.md" />
+    <None Include=".claude\plan.md" />
+    <None Include=".claude\weekly-plan.md" />
+    <None Include="CLAUDE.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
