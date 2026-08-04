@@ -8,7 +8,7 @@ class Actor
 public:
 	virtual ~Actor();
 
-	void Init();
+	virtual void Init();
 	virtual void Destroy();
 	virtual void Update(float deltaTime);
 	virtual void Render(Graphic& graphic);

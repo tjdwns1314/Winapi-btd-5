@@ -6,7 +6,7 @@ class MovableActor : public Actor
 public:
 	virtual void Update(float deltaTime) override;
 	virtual void Render(Graphic& graphic) override;
-
+	virtual void Init() override;
 	virtual void Move(float deltaTime);
 
 	Vector GetDir() const { return _dir; }

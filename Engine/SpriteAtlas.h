@@ -5,7 +5,7 @@ struct CellInfo
 	float ax, ay, aw, ah;
 };
 
-class Sprite
+class SpriteAtlas
 {
 public:
     void LoadXml(const wchar_t* xmlPath);

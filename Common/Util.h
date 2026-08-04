@@ -54,4 +54,11 @@ enum DirType
 	DIR_LEFT,
 	DIR_RIGHT,
 };
+enum class TileType
+{
+	Path,
+	Buildable,
+	Obstacle,
+	Count,
+};
 

@@ -19,61 +19,182 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Engine\Actor.h"><Filter>Engine</Filter></ClInclude>
-    <ClInclude Include="Engine\Grid.h"><Filter>Engine</Filter></ClInclude>
-    <ClInclude Include="Engine\Graphic.h"><Filter>Engine</Filter></ClInclude>
-    <ClInclude Include="Engine\Image.h"><Filter>Engine</Filter></ClInclude>
-    <ClInclude Include="Engine\MovableActor.h"><Filter>Engine</Filter></ClInclude>
-    <ClInclude Include="Engine\SceneManager.h"><Filter>Engine</Filter></ClInclude>
-    <ClInclude Include="Engine\Singleton.h"><Filter>Engine</Filter></ClInclude>
-    <ClInclude Include="Engine\Sprite.h"><Filter>Engine</Filter></ClInclude>
-    <ClInclude Include="Engine\TimeManager.h"><Filter>Engine</Filter></ClInclude>
-    <ClInclude Include="Client\Bloon.h"><Filter>Client</Filter></ClInclude>
-    <ClInclude Include="Client\BloonType.h"><Filter>Client</Filter></ClInclude>
-    <ClInclude Include="Client\Game.h"><Filter>Client</Filter></ClInclude>
-    <ClInclude Include="Client\Scene\GameScene.h"><Filter>Client\Scene</Filter></ClInclude>
-    <ClInclude Include="Client\Scene\MainScene.h"><Filter>Client\Scene</Filter></ClInclude>
-    <ClInclude Include="Client\Scene\LobbyScene.h"><Filter>Client\Scene</Filter></ClInclude>
-    <ClInclude Include="Client\Scene\Scene.h"><Filter>Client\Scene</Filter></ClInclude>
-    <ClInclude Include="Client\Projectile.h"><Filter>Client</Filter></ClInclude>
-    <ClInclude Include="Client\Tower.h"><Filter>Client</Filter></ClInclude>
-    <ClInclude Include="Client\TowerDefense.h"><Filter>Client</Filter></ClInclude>
-    <ClInclude Include="Common\framework.h"><Filter>Common</Filter></ClInclude>
-    <ClInclude Include="Common\pch.h"><Filter>Common</Filter></ClInclude>
-    <ClInclude Include="Common\Resource.h"><Filter>Common</Filter></ClInclude>
-    <ClInclude Include="Common\targetver.h"><Filter>Common</Filter></ClInclude>
-    <ClInclude Include="Common\Util.h"><Filter>Common</Filter></ClInclude>
+    <ClInclude Include="Engine\Actor.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Grid.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Graphic.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Image.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\MovableActor.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\ResourceManager.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\SceneManager.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Singleton.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\SpriteAtlas.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\TimeManager.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\Bloon.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\BloonType.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\BloonFactory.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\TileMap.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\PathFinder.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\Game.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\Scene\GameScene.h">
+      <Filter>Client\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\Scene\MainScene.h">
+      <Filter>Client\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\Scene\LobbyScene.h">
+      <Filter>Client\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\Scene\Scene.h">
+      <Filter>Client\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\Projectile.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\Tower.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\TowerDefense.h">
+      <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\framework.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\pch.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Resource.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\targetver.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Common\Util.h">
+      <Filter>Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Engine\Actor.cpp"><Filter>Engine</Filter></ClCompile>
-    <ClCompile Include="Engine\Grid.cpp"><Filter>Engine</Filter></ClCompile>
-    <ClCompile Include="Engine\Graphic.cpp"><Filter>Engine</Filter></ClCompile>
-    <ClCompile Include="Engine\Image.cpp"><Filter>Engine</Filter></ClCompile>
-    <ClCompile Include="Engine\MovableActor.cpp"><Filter>Engine</Filter></ClCompile>
-    <ClCompile Include="Engine\SceneManager.cpp"><Filter>Engine</Filter></ClCompile>
-    <ClCompile Include="Engine\Sprite.cpp"><Filter>Engine</Filter></ClCompile>
-    <ClCompile Include="Engine\TimeManager.cpp"><Filter>Engine</Filter></ClCompile>
-    <ClCompile Include="Client\Bloon.cpp"><Filter>Client</Filter></ClCompile>
-    <ClCompile Include="Client\Game.cpp"><Filter>Client</Filter></ClCompile>
-    <ClCompile Include="Client\Scene\GameScene.cpp"><Filter>Client\Scene</Filter></ClCompile>
-    <ClCompile Include="Client\Scene\MainScene.cpp"><Filter>Client\Scene</Filter></ClCompile>
-    <ClCompile Include="Client\Scene\LobbyScene.cpp"><Filter>Client\Scene</Filter></ClCompile>
-    <ClCompile Include="Client\Scene\Scene.cpp"><Filter>Client\Scene</Filter></ClCompile>
-    <ClCompile Include="Client\Projectile.cpp"><Filter>Client</Filter></ClCompile>
-    <ClCompile Include="Client\Tower.cpp"><Filter>Client</Filter></ClCompile>
-    <ClCompile Include="Client\TowerDefense.cpp"><Filter>Client</Filter></ClCompile>
+    <ClCompile Include="Engine\Actor.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Grid.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Graphic.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Image.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\MovableActor.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\ResourceManager.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\SceneManager.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\SpriteAtlas.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\TimeManager.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\Bloon.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\BloonFactory.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\TileMap.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\PathFinder.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\Game.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\Scene\GameScene.cpp">
+      <Filter>Client\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\Scene\MainScene.cpp">
+      <Filter>Client\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\Scene\LobbyScene.cpp">
+      <Filter>Client\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\Scene\Scene.cpp">
+      <Filter>Client\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\Projectile.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\Tower.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\TowerDefense.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
     <ClCompile Include="Common\pch.cpp">
       <Filter>Common</Filter>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
     </ClCompile>
-    <ClCompile Include="Common\Util.cpp"><Filter>Common</Filter></ClCompile>
+    <ClCompile Include="Common\Util.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="TowerDefense.rc"><Filter>Resource Files</Filter></ResourceCompile>
+    <ResourceCompile Include="TowerDefense.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="small.ico"><Filter>Resource Files</Filter></Image>
-    <Image Include="TowerDefense.ico"><Filter>Resource Files</Filter></Image>
+    <Image Include="small.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="TowerDefense.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CLAUDE.md" />
+    <None Include=".claude\coding-convention.md" />
+    <None Include=".claude\commit-convention.md" />
+    <None Include=".claude\plan.md" />
+    <None Include=".claude\weekly-plan.md" />
   </ItemGroup>
 </Project>
