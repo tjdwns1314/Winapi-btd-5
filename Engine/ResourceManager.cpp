@@ -11,6 +11,9 @@ void ResourceManager::Preload(Graphic& graphic)
 
 	loadImage(graphic, L"Resource\\bloonImg.png");
 	loadImage(graphic, L"Resource\\Tile1.png");
+
+	loadImage(graphic, L"Resource\\in_game_hud.png");
+	loadAtlas(L"Resource\\in_game_hud.xml");
 }
 
 void ResourceManager::loadImage(Graphic& graphic, const wchar_t* fileName)

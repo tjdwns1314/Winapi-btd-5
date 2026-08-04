@@ -12,7 +12,7 @@ void Image::Load(Graphic& graphic, const wchar_t* fileName)
 	if (_bitmap) _size = _bitmap->GetSize(); // 이미지의 가로, 세로 크기 기록
 }
 
-void Image::Draw(Graphic& graphic, float centerX, float centerY, float scale)
+void Image::Draw(Graphic& graphic, float centerX, float centerY, float scale, float angle)
 {
 	if (!_bitmap) return;
 
@@ -23,11 +23,16 @@ void Image::Draw(Graphic& graphic, float centerX, float centerY, float scale)
 	const float y = centerY - height * 0.5f;
 
 	D2D1_RECT_F rect = D2D1::RectF(x, y, x + width, y + height);
+
+	ID2D1HwndRenderTarget* renderTarget = graphic.GetRenderTarget();
+	// (centerX, centerY)를 축으로 angle(도, 시계방향)만큼 회전시킨 뒤 그림
+	renderTarget->SetTransform(D2D1::Matrix3x2F::Rotation(angle, D2D1::Point2F(centerX, centerY)));
 	// RenderTarget에 비트맵 출력 (투명도가 들어간 PNG가 알아서 합성되어 출력됨!)
-	graphic.GetRenderTarget()->DrawBitmap(_bitmap, rect);
+	renderTarget->DrawBitmap(_bitmap, rect);
+	renderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
 }
 
-void Image::DrawSprite(Graphic& graphic, float centerX, float centerY, const CellInfo& cell, float scale)
+void Image::DrawSprite(Graphic& graphic, float centerX, float centerY, const CellInfo& cell, float scale, float angle)
 {
 	if (!_bitmap) return;
 
@@ -42,13 +47,17 @@ void Image::DrawSprite(Graphic& graphic, float centerX, float centerY, const Cel
 	const float drawY = originY + cell.ay * scale;
 	D2D1_RECT_F destRect = D2D1::RectF(drawX, drawY, drawX + cell.w * scale, drawY + cell.h * scale);
 
-	graphic.GetRenderTarget()->DrawBitmap(
+	ID2D1HwndRenderTarget* renderTarget = graphic.GetRenderTarget();
+	// (centerX, centerY, 트림 전 기준 중심)를 축으로 angle(도, 시계방향)만큼 회전시킨 뒤 그림
+	renderTarget->SetTransform(D2D1::Matrix3x2F::Rotation(angle, D2D1::Point2F(centerX, centerY)));
+	renderTarget->DrawBitmap(
 		_bitmap,
 		destRect,
 		1.0f,
 		D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
 		srcRect
 	);
+	renderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
 }
 
 void Image::Release()
