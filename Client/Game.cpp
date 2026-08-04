@@ -4,6 +4,7 @@
 #include "TimeManager.h"
 #include "SceneManager.h"
 #include "ResourceManager.h"
+#include "InputManager.h"
 #include "Scene/GameScene.h"
 
 #pragma comment(lib, "d2d1.lib")
@@ -21,6 +22,7 @@ void Game::Init(HWND hwnd)
 	_graphic.Init(hwnd);
 
 	TimeManager::GetInstance().Init();
+	InputManager::GetInstance().Init(hwnd);
 
 	// 게임 시작 시 필요한 이미지/아틀라스 리소스를 한 번에 전부 로드한다.
 	// 이후 개별 객체는 ResourceManager::GetImage/GetAtlas로 조회만 한다.
@@ -43,6 +45,7 @@ void Game::Update()
 {
 	TimeManager& timeManager = TimeManager::GetInstance();
 	timeManager.Update();
+	InputManager::GetInstance().Update();
 
 	SceneManager::GetInstance().Update(timeManager.GetDT());
 }

@@ -17,6 +17,9 @@ void GameScene::Init(Graphic& graphic)
 
 	_tile1Img = &res.GetImage(L"Resource\\Tile1.png");
 
+	_hudImg = &res.GetImage(L"Resource\\in_game_hud.png");
+	_hudSprite = &res.GetAtlas(L"Resource\\in_game_hud.xml");
+
 	_grid.Init(GRID_COUNT_X, GRID_COUNT_Y, BLOCK_SIZE);
 	_tileMap.Init(GRID_COUNT_X, GRID_COUNT_Y); // 기본값 TileType::Path로 전체 채움
 	_tileMap.GenerateRandomStartEndPoint();
@@ -38,10 +41,15 @@ void GameScene::Render(Graphic& graphic)
 {
 	renderTileMap(graphic);
 
-	const CellInfo* cell = _sprite->GetCell("angry_squirrel_arm_01");
+	const CellInfo* cell = _sprite->GetCell("dart_monkey_arm_01");
 	if (cell)
 	{
 		_inGameBg->DrawSprite(graphic, 500.0f, 500.0f, *cell);
+	}
+	const CellInfo* cell1 = _sprite->GetCell("dart_monkey_body");
+	if (cell)
+	{
+		_inGameBg->DrawSprite(graphic, 250.0f, 250.0f, *cell1);
 	}
 
 	//const CellInfo* bgCell = _monkeyLaneSprite->GetCell("monkey_lane");
@@ -54,8 +62,14 @@ void GameScene::Render(Graphic& graphic)
 	//	_monkeyLaneBg->DrawSprite(graphic, GameAreaCenterX, GameAreaCenterY, *bgCell, bgScale);
 	//}
 
-	renderGrid(graphic);
+	const CellInfo* thumbBoxCell = _hudSprite->GetCell("side_hud_bg_01");
+	if (thumbBoxCell)
+	{
+		_hudImg->DrawSprite(graphic, 1575.0f, 135.0f, *thumbBoxCell,1.0f);
+	}
 
+	renderGrid(graphic);
+	renderPathDebug(graphic);
 	renderStartEndDebug(graphic);
 
 	Super::Render(graphic);
@@ -101,6 +115,21 @@ void GameScene::renderGrid(Graphic& graphic)
 	{
 		const float py = static_cast<float>(y * gridSize);
 		renderTarget->DrawLine(D2D1::Point2F(0.f, py), D2D1::Point2F(width, py), brush);
+	}
+}
+
+void GameScene::renderPathDebug(Graphic& graphic)
+{
+	ID2D1HwndRenderTarget* renderTarget = graphic.GetRenderTarget();
+	ID2D1SolidColorBrush* brush = graphic.GetBrush(D2D1::ColorF(D2D1::ColorF::Blue));
+	if (renderTarget == nullptr || brush == nullptr)
+		return;
+
+	const float radius = static_cast<float>(_grid.GetGridSize()) * 0.15f;
+
+	for (const Vector& point : _path)
+	{
+		renderTarget->FillEllipse(D2D1::Ellipse(D2D1::Point2F(point.x, point.y), radius, radius), brush);
 	}
 }
 

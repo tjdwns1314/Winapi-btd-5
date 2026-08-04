@@ -27,13 +27,15 @@ private:
 	void renderTileMap(Graphic& graphic);
 	void renderGrid(Graphic& graphic);
 	void renderStartEndDebug(Graphic& graphic);
-
+	void renderPathDebug(Graphic& graphic);
 
 	Image * _inGameBg = nullptr;
 	Image * _monkeyLaneBg = nullptr;      // 기존 _RealGameBG 대체
 	Image * _tile1Img = nullptr;
+	Image * _hudImg = nullptr;            // in_game_hud.png (시험용)
 	SpriteAtlas * _sprite = nullptr;           // InGame.xml
 	SpriteAtlas * _monkeyLaneSprite = nullptr; // monkey_lane.xml
+	SpriteAtlas * _hudSprite = nullptr;   // in_game_hud.xml (시험용)
 	Grid _grid;
 	TileMap _tileMap;
 	vector<Vector> _path;

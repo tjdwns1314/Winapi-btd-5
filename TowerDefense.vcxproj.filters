@@ -34,6 +34,15 @@
     <ClInclude Include="Engine\MovableActor.h">
       <Filter>Engine</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Widget.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\UIButton.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\InputManager.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
     <ClInclude Include="Engine\ResourceManager.h">
       <Filter>Engine</Filter>
     </ClInclude>
@@ -118,6 +127,15 @@
       <Filter>Engine</Filter>
     </ClCompile>
     <ClCompile Include="Engine\MovableActor.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Widget.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\UIButton.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\InputManager.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
     <ClCompile Include="Engine\ResourceManager.cpp">
