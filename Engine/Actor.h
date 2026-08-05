@@ -45,6 +45,7 @@ public:
 	void SetPendingKill() { _pendingKill = true; }
 
 	void SetPool(IObjectPool* pool) { _pool = pool; }
+	IObjectPool* GetPool() const { return _pool; }
 
 protected:
 	void SetActorType(ActorType type) { _actorType = type; }

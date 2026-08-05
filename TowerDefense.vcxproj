@@ -168,6 +168,7 @@
     <ClInclude Include="Engine\Graphics\SpriteAtlas.h" />
     <ClInclude Include="Engine\UI\Widget.h" />
     <ClInclude Include="Engine\UI\UIButton.h" />
+    <ClInclude Include="Engine\UI\UIManager.h" />
     <ClInclude Include="Engine\InputManager.h" />
     <ClInclude Include="Common\targetver.h" />
     <ClInclude Include="Engine\TimeManager.h" />
@@ -200,6 +201,7 @@
     <ClCompile Include="Engine\Graphics\SpriteAtlas.cpp" />
     <ClCompile Include="Engine\UI\Widget.cpp" />
     <ClCompile Include="Engine\UI\UIButton.cpp" />
+    <ClCompile Include="Engine\UI\UIManager.cpp" />
     <ClCompile Include="Engine\InputManager.cpp" />
     <ClCompile Include="Engine\TimeManager.cpp" />
     <ClCompile Include="Client\Object\Tower.cpp" />

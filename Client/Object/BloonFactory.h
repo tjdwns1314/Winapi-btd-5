@@ -1,5 +1,6 @@
-#pragma once
+﻿#pragma once
 #include "BloonType.h"
+#include "ObjectPool.h"
 
 class Bloon;
 
@@ -8,5 +9,5 @@ class Bloon;
 class BloonFactory
 {
 public:
-	static Bloon* Create(BloonColor color, const Vector& pos, const vector<Vector>* path);
+	static Bloon* Create(ObjectPool<Bloon>& pool, BloonColor color, const Vector& pos, const vector<Vector>* path);
 };

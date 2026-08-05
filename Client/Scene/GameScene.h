@@ -34,6 +34,7 @@ private:
 	void renderStartButton(Graphic& graphic);
 	void startWave();
 
+	ObjectPool<Bloon> _bloonPool;
 
 
 	Image * _inGameBg = nullptr;

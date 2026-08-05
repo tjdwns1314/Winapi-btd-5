@@ -81,10 +81,6 @@ vector<Vector> PathFinder::FindPath(const TileMap& tileMap, Cell start, Cell end
 		}
 	}
 
-
-
-
-
 	vector<Vector> path;
 	if (found == false)
 		return path;

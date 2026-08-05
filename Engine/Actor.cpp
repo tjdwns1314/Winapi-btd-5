@@ -22,5 +22,5 @@ void Actor::Render(Graphic& graphic)
 
 void Actor::Init()
 {
-
+	_pendingKill = false;
 }

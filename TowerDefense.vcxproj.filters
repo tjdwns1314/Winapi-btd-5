@@ -61,6 +61,9 @@
     <ClInclude Include="Engine\UI\UIButton.h">
       <Filter>Engine\UI</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\UI\UIManager.h">
+      <Filter>Engine\UI</Filter>
+    </ClInclude>
     <ClInclude Include="Engine\InputManager.h">
       <Filter>Engine</Filter>
     </ClInclude>
@@ -154,6 +157,9 @@
       <Filter>Engine\UI</Filter>
     </ClCompile>
     <ClCompile Include="Engine\UI\UIButton.cpp">
+      <Filter>Engine\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\UI\UIManager.cpp">
       <Filter>Engine\UI</Filter>
     </ClCompile>
     <ClCompile Include="Engine\InputManager.cpp">
