@@ -2,6 +2,7 @@
 
 // 렌더링은 GDI가 아니라 Direct2D를 사용하므로 HDC 대신 Graphic을 넘긴다.
 class Graphic;
+class IObjectPool;
 
 class Actor
 {
@@ -16,6 +17,8 @@ public:
 	virtual void OnEnter(Actor* other) {}
 	virtual void OnStay(Actor* other) {}
 	virtual void OnExit(Actor* other) {}
+
+	ActorType GetActorType() const { return _actorType; }
 
 	Vector GetPos() const { return _pos; }
 	void SetPos(const Vector& pos) { _pos = pos; }
@@ -41,12 +44,18 @@ public:
 	bool IsPendingKill() const { return _pendingKill; }
 	void SetPendingKill() { _pendingKill = true; }
 
+	void SetPool(IObjectPool* pool) { _pool = pool; }
+
+protected:
+	void SetActorType(ActorType type) { _actorType = type; }
+
 private :
 
 	string _name;
 	class Scene* _owner = nullptr;
-	int32 _layer = static_cast<int32>(RenederLayer::Background);
+	int32 _layer = static_cast<int32>(RenderLayer::Background);
 	bool _active = true;
+	ActorType _actorType = ActorType::Count;
 
 	Vector _pos;
 	Vector _scale = { 1.f, 1.f };
@@ -54,7 +63,7 @@ private :
 
 
 	bool _pendingKill = false;
-	//IObjectPool* _pool = nullptr;
+	IObjectPool* _pool = nullptr;
 	//vector<class Component*> _components;
 
 };

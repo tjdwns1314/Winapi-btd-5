@@ -30,8 +30,8 @@ public:
 protected:
 	SceneType _sceneType = SceneType::Max;
 
-	// RenederLayer 순서대로 그리기 위해 레이어별로 나눠서 보관한다.
-	vector<Actor*> _actors[static_cast<int32>(RenederLayer::Count)];
+	// RenderLayer 순서대로 그리기 위해 레이어별로 나눠서 보관한다.
+	vector<Actor*> _actors[static_cast<int32>(RenderLayer::Count)];
 	vector<function<void()>> _postUpdateActions;
 };
 

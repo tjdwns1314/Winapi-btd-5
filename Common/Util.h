@@ -2,11 +2,11 @@
 float RadianToDegree(float radina);
 float DegreeToRadian(float degree);
 
-enum class RenederLayer
+enum class RenderLayer
 {
 	Background,
-	Enemy,
-	Bullet,
+	Bloon,
+	Projectile,
 	Tower,
 	Effect,
 
@@ -16,8 +16,9 @@ enum class RenederLayer
 enum class ActorType
 {
 	Background,
+	Projectile,
 	Block,
-	Enemy,
+	Bloon,
 	Tower,
 	Effect,
 	Count,

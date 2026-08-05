@@ -5,6 +5,9 @@ class Tower : public Actor
 {
 	using Super = Actor;
 
+public:
+	virtual void Init() override;
+
 private:
 	float _attackRange = 1.f;	// 공격 사거리 (placeholder, 실제 범위 확인 후 조정 예정)
 	float _damage = 1.f;		// 공격 데미지 (placeholder)

@@ -12,7 +12,6 @@ public :
 	virtual void Update(float deltaTime) override;
 	virtual void Render(Graphic& graphic) override;
 
-
 	BloonColor GetColor() const { return _color; }
 	void SetColor(BloonColor color) { _color = color; }
 	void SetPath(const vector<Vector>* path) { _path = path; _waypointIndex = 0; }

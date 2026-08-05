@@ -158,6 +158,7 @@
     <ClInclude Include="Engine\Graphic.h" />
     <ClInclude Include="Engine\Image.h" />
     <ClInclude Include="Engine\MovableActor.h" />
+    <ClInclude Include="Engine\ObjectPool.h" />
     <ClInclude Include="Engine\ResourceManager.h" />
     <ClInclude Include="Common\pch.h" />
     <ClInclude Include="Client\Projectile.h" />
