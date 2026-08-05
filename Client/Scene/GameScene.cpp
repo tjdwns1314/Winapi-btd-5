@@ -2,7 +2,7 @@
 #include "GameScene.h"
 #include "Bloon.h"
 #include "TimeManager.h"
-
+#include "UIManager.h"
 
 void GameScene::Init(Graphic& graphic)
 {
@@ -42,6 +42,10 @@ void GameScene::Init(Graphic& graphic)
 			startWave();
 			_startButton.SetActive(false);
 		});
+
+	_bloonPool.Init(200);
+
+	UIManager::GetInstance().Register(&_startButton);
 }
 
 void GameScene::startWave()
@@ -50,12 +54,14 @@ void GameScene::startWave()
 		return;
 	_isStarted = true;
 
-	Bloon* bloon = BloonFactory::Create(BloonColor::Red, _bloonSpawnPos, &_path);
-	AddActor(bloon);
+	Bloon* bloon = BloonFactory::Create(_bloonPool, BloonColor::Red, _bloonSpawnPos, &_path);
+	if (bloon != nullptr)
+		AddActor(bloon);
 
 	TimeManager::GetInstance().AddTimer([this]() {
-		Bloon* bloon2 = BloonFactory::Create(BloonColor::Red, _bloonSpawnPos, &_path);
-		AddActor(bloon2);
+		Bloon* bloon = BloonFactory::Create(_bloonPool, BloonColor::Red, _bloonSpawnPos, &_path);
+		if (bloon != nullptr)
+			AddActor(bloon);
 		}, 1.0f, false);
 }
 
@@ -183,11 +189,12 @@ void GameScene::renderStartEndDebug(Graphic& graphic)
 
 void GameScene::Cleanup()
 {
+	UIManager::GetInstance().Clear();
 	Super::Cleanup();
 }
 
 void GameScene::Update(float deltaTime)
 {
 	Super::Update(deltaTime);
-	_startButton.Update(deltaTime);
+	UIManager::GetInstance().Update(deltaTime);
 }

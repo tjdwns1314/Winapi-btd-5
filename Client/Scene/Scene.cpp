@@ -1,6 +1,7 @@
 ﻿#include "pch.h"
 #include "Scene.h"
 #include "Actor.h"
+#include "ObjectPool.h"
 
 Scene::~Scene()
 {
@@ -16,7 +17,8 @@ void Scene::Cleanup()
 	for (int32 layer = 0; layer < static_cast<int32>(RenderLayer::Count); ++layer)
 	{
 		for (Actor* actor : _actors[layer])
-			delete actor;
+			if (actor->GetPool() == nullptr)
+				delete actor;
 
 		_actors[layer].clear();
 	}
@@ -69,6 +71,9 @@ void Scene::AddPostUpdateAction(function<void()> action)
 
 void Scene::PostUpdate()
 {
+
+
+
 	// 1. 예약된 작업 처리 (액터 추가 등)
 	//    처리 도중 새 작업이 또 예약될 수 있으므로 비운 뒤 실행한다.
 	vector<function<void()>> actions;
@@ -88,7 +93,10 @@ void Scene::PostUpdate()
 				continue;
 
 			actors[i]->Destroy();
-			delete actors[i];
+			if (IObjectPool* pool = actors[i]->GetPool())
+				pool->Return(actors[i]);
+			else
+				delete actors[i];
 			actors.erase(actors.begin() + i);
 		}
 	}
