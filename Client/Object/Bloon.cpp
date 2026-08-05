@@ -54,6 +54,8 @@ void Bloon::followPath(float deltaTime)
 	{
 		SetPos(target);
 		++_waypointIndex;
+		if (_waypointIndex >= _path->size())
+			SetPendingKill();
 		return;
 	}
 
