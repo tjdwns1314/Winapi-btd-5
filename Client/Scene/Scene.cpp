@@ -31,7 +31,7 @@ void Scene::AddActor(Actor* actor)
 	if (actor == nullptr)
 		return;
 
-	int32 layer = actor->GetLayer();
+	int32 layer = static_cast<int32>(actor->GetLayer());
 	if (layer < 0 || layer >= static_cast<int32>(RenderLayer::Count))
 		layer = static_cast<int32>(RenderLayer::Background);
 

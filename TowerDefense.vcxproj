@@ -143,6 +143,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Client\Object\BloonFactory.h" />
+    <ClInclude Include="Client\Object\WaveManager.h" />
     <ClInclude Include="Engine\Actor.h" />
     <ClInclude Include="Engine\Grid.h" />
     <ClInclude Include="Client\Object\Bloon.h" />
@@ -178,6 +179,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client\Object\BloonFactory.cpp" />
+    <ClCompile Include="Client\Object\WaveManager.cpp" />
     <ClCompile Include="Engine\Actor.cpp" />
     <ClCompile Include="Engine\Grid.cpp" />
     <ClCompile Include="Client\Object\Bloon.cpp" />

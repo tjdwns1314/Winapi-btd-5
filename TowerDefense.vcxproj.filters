@@ -91,6 +91,9 @@
     <ClInclude Include="Client\Object\BloonFactory.h">
       <Filter>Client\Object</Filter>
     </ClInclude>
+    <ClInclude Include="Client\Object\WaveManager.h">
+      <Filter>Client\Object</Filter>
+    </ClInclude>
     <ClInclude Include="Client\Map\TileMap.h">
       <Filter>Client\Map</Filter>
     </ClInclude>
@@ -181,6 +184,9 @@
       <Filter>Client\Object</Filter>
     </ClCompile>
     <ClCompile Include="Client\Object\BloonFactory.cpp">
+      <Filter>Client\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\Object\WaveManager.cpp">
       <Filter>Client\Object</Filter>
     </ClCompile>
     <ClCompile Include="Client\Map\TileMap.cpp">
