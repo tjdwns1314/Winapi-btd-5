@@ -5,8 +5,7 @@
 ## 타입 / 자료구조
 
 - 원시 `int`/POINT 연산 대신, [Common/pch.h](../Common/pch.h)의 타입 별칭(`int32`, `uint32`, `int8` 등)과 [Common/Util.h](../Common/Util.h)의 `Vector`/`Cell`/`GridInfo` 구조체를 프로젝트 전역에서 우선 사용합니다.
-- `Util.h`에 정의된 `RenederLayer`, `ActorType`, `SceneType`, `ColliderType`, `DirType` 같은 열거형이 게임의 분류 체계(렌더 레이어 순서, 콜라이더 형태, 씬 타입 등)에 대한 기준(source of truth)입니다. 새 값을 추가할 때도 이 열거형들을 확장하세요.
-  - `RenederLayer`는 기존에 있던 오타이며, 일관성을 위해 그대로 유지합니다. 새로 이름을 짓는 게 아니라면 고치지 마세요.
+- `Util.h`에 정의된 `RenderLayer`, `ActorType`, `SceneType`, `ColliderType`, `DirType` 같은 열거형이 게임의 분류 체계(렌더 레이어 순서, 콜라이더 형태, 씬 타입 등)에 대한 기준(source of truth)입니다. 새 값을 추가할 때도 이 열거형들을 확장하세요.
 
 ## 클래스 구조
 

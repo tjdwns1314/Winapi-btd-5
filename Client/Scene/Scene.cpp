@@ -13,7 +13,7 @@ void Scene::Init(Graphic& graphic)
 
 void Scene::Cleanup()
 {
-	for (int32 layer = 0; layer < static_cast<int32>(RenederLayer::Count); ++layer)
+	for (int32 layer = 0; layer < static_cast<int32>(RenderLayer::Count); ++layer)
 	{
 		for (Actor* actor : _actors[layer])
 			delete actor;
@@ -30,8 +30,8 @@ void Scene::AddActor(Actor* actor)
 		return;
 
 	int32 layer = actor->GetLayer();
-	if (layer < 0 || layer >= static_cast<int32>(RenederLayer::Count))
-		layer = static_cast<int32>(RenederLayer::Background);
+	if (layer < 0 || layer >= static_cast<int32>(RenderLayer::Count))
+		layer = static_cast<int32>(RenderLayer::Background);
 
 	actor->SetOwner(this);
 	_actors[layer].push_back(actor);
@@ -39,7 +39,7 @@ void Scene::AddActor(Actor* actor)
 
 void Scene::Update(float deltaTime)
 {
-	for (int32 layer = 0; layer < static_cast<int32>(RenederLayer::Count); ++layer)
+	for (int32 layer = 0; layer < static_cast<int32>(RenderLayer::Count); ++layer)
 	{
 		for (Actor* actor : _actors[layer])
 		{
@@ -52,7 +52,7 @@ void Scene::Update(float deltaTime)
 void Scene::Render(Graphic& graphic)
 {
 	// 배경 → 적 → 총알 → 타워 → 이펙트 순서로 그린다.
-	for (int32 layer = 0; layer < static_cast<int32>(RenederLayer::Count); ++layer)
+	for (int32 layer = 0; layer < static_cast<int32>(RenderLayer::Count); ++layer)
 	{
 		for (Actor* actor : _actors[layer])
 		{
@@ -78,7 +78,7 @@ void Scene::PostUpdate()
 		action();
 
 	// 2. 죽음 표시된 액터 실제 제거
-	for (int32 layer = 0; layer < static_cast<int32>(RenederLayer::Count); ++layer)
+	for (int32 layer = 0; layer < static_cast<int32>(RenderLayer::Count); ++layer)
 	{
 		vector<Actor*>& actors = _actors[layer];
 

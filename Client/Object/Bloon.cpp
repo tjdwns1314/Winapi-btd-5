@@ -5,6 +5,7 @@
 void Bloon::Init()
 {
 	Super::Init();
+	SetActorType(ActorType::Bloon);
 	_image = &ResourceManager::GetInstance().GetImage(getImageKey(_color));
 
 	const D2D1_SIZE_F size = _image->GetSize();
