@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "PathFinder.h"
 #include <queue>
 #include <algorithm>
@@ -22,6 +22,7 @@ namespace
 		return static_cast<float>(std::abs(a.iX - b.iX) + std::abs(a.iY - b.iY));
 	}
 }
+
 
 vector<Vector> PathFinder::FindPath(const TileMap& tileMap, Cell start, Cell end,
 	int32 gridCountX, int32 gridCountY, int32 gridSize)
@@ -79,6 +80,10 @@ vector<Vector> PathFinder::FindPath(const TileMap& tileMap, Cell start, Cell end
 			}
 		}
 	}
+
+
+
+
 
 	vector<Vector> path;
 	if (found == false)
