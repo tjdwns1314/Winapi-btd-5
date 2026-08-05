@@ -76,14 +76,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Client;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Client;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -94,14 +94,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Client;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Client;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -113,14 +113,14 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Client;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Client;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -131,79 +131,79 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Client;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Client;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Client\BloonFactory.h" />
+    <ClInclude Include="Client\Object\BloonFactory.h" />
     <ClInclude Include="Engine\Actor.h" />
     <ClInclude Include="Engine\Grid.h" />
-    <ClInclude Include="Client\Bloon.h" />
-    <ClInclude Include="Client\BloonType.h" />
-    <ClInclude Include="Client\TileMap.h" />
-    <ClInclude Include="Client\PathFinder.h" />
+    <ClInclude Include="Client\Object\Bloon.h" />
+    <ClInclude Include="Client\Object\BloonType.h" />
+    <ClInclude Include="Client\Map\TileMap.h" />
+    <ClInclude Include="Client\Algorithm\PathFinder.h" />
     <ClInclude Include="Common\framework.h" />
-    <ClInclude Include="Client\Game.h" />
+    <ClInclude Include="Client\Core\Game.h" />
     <ClInclude Include="Client\Scene\GameScene.h" />
     <ClInclude Include="Client\Scene\MainScene.h" />
     <ClInclude Include="Client\Scene\LobbyScene.h" />
     <ClInclude Include="Client\Scene\Scene.h" />
-    <ClInclude Include="Engine\Graphic.h" />
-    <ClInclude Include="Engine\Image.h" />
+    <ClInclude Include="Engine\Graphics\Graphic.h" />
+    <ClInclude Include="Engine\Graphics\Image.h" />
     <ClInclude Include="Engine\MovableActor.h" />
     <ClInclude Include="Engine\ObjectPool.h" />
     <ClInclude Include="Engine\ResourceManager.h" />
     <ClInclude Include="Common\pch.h" />
-    <ClInclude Include="Client\Projectile.h" />
+    <ClInclude Include="Client\Object\Projectile.h" />
     <ClInclude Include="Common\Resource.h" />
     <ClInclude Include="Engine\SceneManager.h" />
     <ClInclude Include="Engine\Singleton.h" />
-    <ClInclude Include="Engine\SpriteAtlas.h" />
-    <ClInclude Include="Engine\Widget.h" />
-    <ClInclude Include="Engine\UIButton.h" />
+    <ClInclude Include="Engine\Graphics\SpriteAtlas.h" />
+    <ClInclude Include="Engine\UI\Widget.h" />
+    <ClInclude Include="Engine\UI\UIButton.h" />
     <ClInclude Include="Engine\InputManager.h" />
     <ClInclude Include="Common\targetver.h" />
     <ClInclude Include="Engine\TimeManager.h" />
-    <ClInclude Include="Client\Tower.h" />
-    <ClInclude Include="Client\TowerDefense.h" />
+    <ClInclude Include="Client\Object\Tower.h" />
+    <ClInclude Include="Client\Core\TowerDefense.h" />
     <ClInclude Include="Common\Util.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Client\BloonFactory.cpp" />
+    <ClCompile Include="Client\Object\BloonFactory.cpp" />
     <ClCompile Include="Engine\Actor.cpp" />
     <ClCompile Include="Engine\Grid.cpp" />
-    <ClCompile Include="Client\Bloon.cpp" />
-    <ClCompile Include="Client\TileMap.cpp" />
-    <ClCompile Include="Client\PathFinder.cpp" />
-    <ClCompile Include="Client\Game.cpp" />
+    <ClCompile Include="Client\Object\Bloon.cpp" />
+    <ClCompile Include="Client\Map\TileMap.cpp" />
+    <ClCompile Include="Client\Algorithm\PathFinder.cpp" />
+    <ClCompile Include="Client\Core\Game.cpp" />
     <ClCompile Include="Client\Scene\GameScene.cpp" />
     <ClCompile Include="Client\Scene\MainScene.cpp" />
     <ClCompile Include="Client\Scene\LobbyScene.cpp" />
     <ClCompile Include="Client\Scene\Scene.cpp" />
-    <ClCompile Include="Engine\Graphic.cpp" />
-    <ClCompile Include="Engine\Image.cpp" />
+    <ClCompile Include="Engine\Graphics\Graphic.cpp" />
+    <ClCompile Include="Engine\Graphics\Image.cpp" />
     <ClCompile Include="Engine\MovableActor.cpp" />
     <ClCompile Include="Engine\ResourceManager.cpp" />
     <ClCompile Include="Common\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
     </ClCompile>
-    <ClCompile Include="Client\Projectile.cpp" />
+    <ClCompile Include="Client\Object\Projectile.cpp" />
     <ClCompile Include="Engine\SceneManager.cpp" />
-    <ClCompile Include="Engine\SpriteAtlas.cpp" />
-    <ClCompile Include="Engine\Widget.cpp" />
-    <ClCompile Include="Engine\UIButton.cpp" />
+    <ClCompile Include="Engine\Graphics\SpriteAtlas.cpp" />
+    <ClCompile Include="Engine\UI\Widget.cpp" />
+    <ClCompile Include="Engine\UI\UIButton.cpp" />
     <ClCompile Include="Engine\InputManager.cpp" />
     <ClCompile Include="Engine\TimeManager.cpp" />
-    <ClCompile Include="Client\Tower.cpp" />
-    <ClCompile Include="Client\TowerDefense.cpp" />
+    <ClCompile Include="Client\Object\Tower.cpp" />
+    <ClCompile Include="Client\Core\TowerDefense.cpp" />
     <ClCompile Include="Common\Util.cpp" />
   </ItemGroup>
   <ItemGroup>
