@@ -24,6 +24,13 @@ void Tower::Update(float deltaTime)
 
 	if (_target == nullptr)
 		_target = findTarget();
+
+	_fireTimer += deltaTime;
+	if (_fireTimer >= _attackSpeed)
+	{
+		_fireTimer -= _attackSpeed;
+		fire();
+	}
 }
 
 void Tower::Render(Graphic& graphic)
@@ -45,9 +52,18 @@ void Tower::RenderRange(Graphic& graphic) const
 		return;
 	const Vector pos = GetPos();
 	renderTarget->DrawEllipse(D2D1::Ellipse(D2D1::Point2F(pos.x, pos.y), _attackRange, _attackRange), brush, 2.f);
-	
+
 }
 
+void Tower::fire()
+{
+	GameScene* owner = static_cast<GameScene*>(GetOwner());
+	if (owner == nullptr)
+		return;
+
+	// TODO: 콜리전 매니저 도입 후 사거리 내 타겟 방향으로 교체
+	owner->SpawnProjectile(GetPos(), Vector(1.f, 0.f), _damage);
+}
 
 const char* Tower::GetSpriteName()
 {

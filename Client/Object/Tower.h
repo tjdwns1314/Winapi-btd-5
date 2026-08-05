@@ -18,6 +18,7 @@ private:
 	void RenderRange(Graphic& graphic) const;
 	Bloon* findTarget() const;
 	bool isInRange(const Actor* target) const;
+	void fire();
 	static const char* GetSpriteName();
 
 
@@ -25,6 +26,7 @@ private:
 	const CellInfo* _cell = nullptr;
 	Bloon* _target = nullptr;
 
+	float _fireTimer = 0.f;	// 콜리전 매니저로 실제 사거리 판정을 붙이기 전까지, 주기 발사 타이머로만 사용
 
 	float _attackRange = BLOCK_SIZE * 2.f;	// 공격 사거리 (placeholder: 그리드 2칸 분량, 실제 밸런스 값은 추후 조정 예정)
 	float _damage = 1.f;		// 공격 데미지 (placeholder)
