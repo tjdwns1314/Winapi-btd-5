@@ -1,11 +1,17 @@
 ﻿#include "pch.h"
 #include "Tower.h"
 #include "GameScene.h"
+#include "ResourceManager.h"
 
 void Tower::Init()
 {
 	Super::Init();
 	SetActorType(ActorType::Tower);
+	SetLayer(RenderLayer::Tower);
+
+	ResourceManager& res = ResourceManager::GetInstance();
+	_image = &res.GetImage(L"Resource\\InGame.png");
+	_cell = res.GetAtlas(L"Resource\\InGame.xml").GetCell(GetSpriteName());
 }
 
 void Tower::Update(float deltaTime)
@@ -18,6 +24,34 @@ void Tower::Update(float deltaTime)
 
 	if (_target == nullptr)
 		_target = findTarget();
+}
+
+void Tower::Render(Graphic& graphic)
+{
+	Super::Render(graphic);
+	if (_image == nullptr || _cell == nullptr)
+		return;
+	const Vector pos = GetPos();
+	const Vector scale = GetScale();
+	_image->DrawSprite(graphic, pos.x, pos.y, *_cell, scale.x);
+	RenderRange(graphic);
+}
+
+void Tower::RenderRange(Graphic& graphic) const
+{
+	ID2D1HwndRenderTarget* renderTarget = graphic.GetRenderTarget();
+	ID2D1SolidColorBrush* brush = graphic.GetBrush(D2D1::ColorF(D2D1::ColorF::White, 0.5f));
+	if (renderTarget == nullptr || brush == nullptr)
+		return;
+	const Vector pos = GetPos();
+	renderTarget->DrawEllipse(D2D1::Ellipse(D2D1::Point2F(pos.x, pos.y), _attackRange, _attackRange), brush, 2.f);
+	
+}
+
+
+const char* Tower::GetSpriteName()
+{
+	return "dart_monkey_body";
 }
 
 bool Tower::isInRange(const Actor* target) const

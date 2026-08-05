@@ -1,6 +1,5 @@
-#pragma once
-
-class Actor;
+﻿#pragma once
+#include "Actor.h"
 
 class IObjectPool
 {

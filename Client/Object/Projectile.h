@@ -2,6 +2,7 @@
 #include "MovableActor.h"
 
 class Image;
+struct CellInfo;
 
 class Projectile : public MovableActor
 {
@@ -18,12 +19,14 @@ public:
 	float GetDamage() const { return _damage; }
 
 private:
-	static const wchar_t* getImageKey();
+	static const char* GetSpriteName();
 
 	float _damage = 1.f;
 	float _maxDistance = 800.f;	// 이 거리 이상 날아가면 삭제 (placeholder, 실제 사거리 확인 후 조정)
 	float _traveledDistance = 0.f;
 	Image* _image = nullptr;
+
+	const CellInfo* _cell = nullptr;
 
 };
 

@@ -6,8 +6,10 @@ void Projectile::Init()
 {
 	Super::Init();
 	SetActorType(ActorType::Projectile);
-	SetLayer(static_cast<int32>(RenderLayer::Projectile));
-	_image = &ResourceManager::GetInstance().GetImage(getImageKey());
+	SetLayer(RenderLayer::Projectile);
+	ResourceManager& res = ResourceManager::GetInstance();
+	_image = &res.GetImage(L"Resource\\InGame.png");
+	_cell = res.GetAtlas(L"Resource\\InGame.xml").GetCell(GetSpriteName());
 }
 
 void Projectile::Update(float deltaTime)
@@ -23,14 +25,15 @@ void Projectile::Update(float deltaTime)
 void Projectile::Render(Graphic& graphic)
 {
 	Super::Render(graphic);
-	if (_image == nullptr)
+	if (_image == nullptr || _cell == nullptr)
 		return;
+		
 	const Vector pos = GetPos();
 	const Vector scale = GetScale();
-	_image->Draw(graphic, pos.x, pos.y, scale.x);
+	_image->DrawSprite(graphic, pos.x, pos.y,*_cell, scale.x);
 
 }
-const wchar_t* Projectile::getImageKey()
+const char* Projectile::GetSpriteName()
 {
-	return L"Resource\\projectileImg.png";
+	return "dart_monkey_dart";
 }

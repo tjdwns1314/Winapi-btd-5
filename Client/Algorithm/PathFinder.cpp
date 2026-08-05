@@ -1,8 +1,5 @@
 ﻿#include "pch.h"
 #include "PathFinder.h"
-#include <queue>
-#include <algorithm>
-#include <limits>
 
 namespace
 {

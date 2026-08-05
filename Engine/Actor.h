@@ -33,8 +33,8 @@ public:
 	class Scene* GetOwner() const { return _owner; }
 	void SetOwner(class Scene* owner) { _owner = owner; }
 
-	int32 GetLayer() const { return _layer; }
-	void SetLayer(int32 layer) { _layer = layer; }
+	RenderLayer GetLayer() const { return _layer; }
+	void SetLayer(RenderLayer layer) { _layer = layer; }
 
 	bool IsActive() const { return _active; }
 	void SetActive(bool active) { _active = active; }
@@ -54,7 +54,7 @@ private :
 
 	string _name;
 	class Scene* _owner = nullptr;
-	int32 _layer = static_cast<int32>(RenderLayer::Background);
+	RenderLayer _layer = RenderLayer::Background;
 	bool _active = true;
 	ActorType _actorType = ActorType::Count;
 

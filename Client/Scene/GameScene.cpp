@@ -1,8 +1,7 @@
 ﻿#include "pch.h"
 #include "GameScene.h"
-#include "Bloon.h"
-#include "TimeManager.h"
 #include "UIManager.h"
+#include "Tower.h"
 
 void GameScene::Init(Graphic& graphic)
 {
@@ -39,46 +38,28 @@ void GameScene::Init(Graphic& graphic)
 	_startButton.SetActive(true);
 	_startButton.SetOnClick([this]()
 		{
-			startWave();
+			_waveManager.StartWave(0);
 			_startButton.SetActive(false);
 		});
 
 	_bloonPool.Init(200);
+	_waveManager.Init(&_bloonPool, _bloonSpawnPos, &_path, this);
+
+	Tower* tower = new Tower();
+	tower->SetPos(Vector(2.5f * gridSize, 2.5f * gridSize));
+	tower->Init();
+	AddActor(tower);
 
 	UIManager::GetInstance().Register(&_startButton);
+
+
+
 }
 
-void GameScene::startWave()
-{
-	if (_isStarted)
-		return;
-	_isStarted = true;
-
-	Bloon* bloon = BloonFactory::Create(_bloonPool, BloonColor::Red, _bloonSpawnPos, &_path);
-	if (bloon != nullptr)
-		AddActor(bloon);
-
-	TimeManager::GetInstance().AddTimer([this]() {
-		Bloon* bloon = BloonFactory::Create(_bloonPool, BloonColor::Red, _bloonSpawnPos, &_path);
-		if (bloon != nullptr)
-			AddActor(bloon);
-		}, 1.0f, false);
-}
 
 void GameScene::Render(Graphic& graphic)
 {
 	renderTileMap(graphic);
-
-	const CellInfo* cell = _sprite->GetCell("dart_monkey_arm_01");
-	if (cell)
-	{
-		_inGameBg->DrawSprite(graphic, 500.0f, 500.0f, *cell);
-	}
-	const CellInfo* cell1 = _sprite->GetCell("dart_monkey_body");
-	if (cell)
-	{
-		_inGameBg->DrawSprite(graphic, 250.0f, 250.0f, *cell1);
-	}
 
 	const CellInfo* thumbBoxCell = _hudSprite->GetCell("side_hud_bg_01");
 	if (thumbBoxCell)
@@ -196,5 +177,6 @@ void GameScene::Cleanup()
 void GameScene::Update(float deltaTime)
 {
 	Super::Update(deltaTime);
+	_waveManager.Update(deltaTime);
 	UIManager::GetInstance().Update(deltaTime);
 }

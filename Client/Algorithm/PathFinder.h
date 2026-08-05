@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "TileMap.h"
 
 // TileMap 위에서 A*로 경로를 계산해 픽셀 좌표 웨이포인트 목록을 반환한다.

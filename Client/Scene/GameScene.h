@@ -8,6 +8,8 @@
 #include "ResourceManager.h"
 #include "BloonFactory.h"
 #include "UIButton.h"
+#include "Bloon.h"
+#include "WaveManager.h"
 
 
 class GameScene : public Scene
@@ -32,10 +34,9 @@ private:
 	void renderPathDebug(Graphic& graphic);
 
 	void renderStartButton(Graphic& graphic);
-	void startWave();
 
 	ObjectPool<Bloon> _bloonPool;
-
+	WaveManager _waveManager;
 
 	Image * _inGameBg = nullptr;
 	Image * _monkeyLaneBg = nullptr;      // 기존 _RealGameBG 대체
@@ -50,8 +51,9 @@ private:
 
 
 	UIButton _startButton;
-	bool _isStarted = false;
 	Vector _bloonSpawnPos;
+
+
 
 };
 

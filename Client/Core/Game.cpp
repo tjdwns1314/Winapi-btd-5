@@ -1,6 +1,5 @@
 ﻿#include "pch.h"
 #include "Game.h"
-#include "Graphic.h"
 #include "TimeManager.h"
 #include "SceneManager.h"
 #include "ResourceManager.h"
