@@ -7,6 +7,7 @@
 #include "PathFinder.h"
 #include "ResourceManager.h"
 #include "BloonFactory.h"
+#include "UIButton.h"
 
 
 class GameScene : public Scene
@@ -21,13 +22,19 @@ public :
 	virtual void Update(float deltaTime) override;
 	virtual void Render(Graphic& graphic) override;
 
-
+	// 사거리 탐색 등에서 특정 레이어 액터 목록을 읽기 전용으로 조회할 때 사용한다.
+	const vector<Actor*>& GetActors(RenderLayer layer) const { return _actors[static_cast<int32>(layer)]; }
 
 private:
 	void renderTileMap(Graphic& graphic);
 	void renderGrid(Graphic& graphic);
 	void renderStartEndDebug(Graphic& graphic);
 	void renderPathDebug(Graphic& graphic);
+
+	void renderStartButton(Graphic& graphic);
+	void startWave();
+
+
 
 	Image * _inGameBg = nullptr;
 	Image * _monkeyLaneBg = nullptr;      // 기존 _RealGameBG 대체
@@ -39,6 +46,11 @@ private:
 	Grid _grid;
 	TileMap _tileMap;
 	vector<Vector> _path;
+
+
+	UIButton _startButton;
+	bool _isStarted = false;
+	Vector _bloonSpawnPos;
 
 };
 

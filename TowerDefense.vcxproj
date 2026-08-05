@@ -76,14 +76,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Scene;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Scene;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -94,14 +94,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Scene;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Scene;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -113,14 +113,14 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Scene;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Scene;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -131,14 +131,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Scene;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Scene;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>

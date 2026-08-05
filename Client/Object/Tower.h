@@ -1,5 +1,7 @@
 ﻿#pragma once
 #include "Actor.h"
+#include "Bloon.h"
+
 
 class Tower : public Actor
 {
@@ -7,8 +9,13 @@ class Tower : public Actor
 
 public:
 	virtual void Init() override;
-
+	virtual void Update(float deltaTime) override;
 private:
+
+	Bloon* findTarget() const;
+	bool isInRange(const Actor* target) const;
+	Bloon* _target = nullptr;
+
 	float _attackRange = 1.f;	// 공격 사거리 (placeholder, 실제 범위 확인 후 조정 예정)
 	float _damage = 1.f;		// 공격 데미지 (placeholder)
 	float _attackSpeed = 1.f;	// 공격 속도(초당 공격 횟수 또는 공격 주기) (placeholder)

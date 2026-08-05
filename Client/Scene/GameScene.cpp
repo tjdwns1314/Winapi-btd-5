@@ -1,6 +1,7 @@
 ﻿#include "pch.h"
 #include "GameScene.h"
 #include "Bloon.h"
+#include "TimeManager.h"
 
 
 void GameScene::Init(Graphic& graphic)
@@ -29,12 +30,33 @@ void GameScene::Init(Graphic& graphic)
 	const int32 gridSize = _grid.GetGridSize();
 	_path = PathFinder::FindPath(_tileMap, startCell, endCell, GRID_COUNT_X, GRID_COUNT_Y, gridSize);
 
-	const Vector spawnPos(
+	_bloonSpawnPos = Vector(
 		(startCell.iX + 0.5f) * gridSize,
 		(startCell.iY + 0.5f) * gridSize);
 
-	Bloon* bloon = BloonFactory::Create(BloonColor::Red, spawnPos, &_path);
+	_startButton.SetPos(Vector(1575.0f, 450.0f));
+	_startButton.SetSize(Vector(128.0f, 129.0f));
+	_startButton.SetActive(true);
+	_startButton.SetOnClick([this]()
+		{
+			startWave();
+			_startButton.SetActive(false);
+		});
+}
+
+void GameScene::startWave()
+{
+	if (_isStarted)
+		return;
+	_isStarted = true;
+
+	Bloon* bloon = BloonFactory::Create(BloonColor::Red, _bloonSpawnPos, &_path);
 	AddActor(bloon);
+
+	TimeManager::GetInstance().AddTimer([this]() {
+		Bloon* bloon2 = BloonFactory::Create(BloonColor::Red, _bloonSpawnPos, &_path);
+		AddActor(bloon2);
+		}, 1.0f, false);
 }
 
 void GameScene::Render(Graphic& graphic)
@@ -52,16 +74,6 @@ void GameScene::Render(Graphic& graphic)
 		_inGameBg->DrawSprite(graphic, 250.0f, 250.0f, *cell1);
 	}
 
-	//const CellInfo* bgCell = _monkeyLaneSprite->GetCell("monkey_lane");
-	//if (bgCell)
-	//{
-	//	const float scaleX = static_cast<float>(GameAreaWidth) / bgCell->w;
-	//	const float scaleY = static_cast<float>(GameAreaHeight) / bgCell->h;
-	//	const float bgScale = min(scaleX, scaleY);
-
-	//	_monkeyLaneBg->DrawSprite(graphic, GameAreaCenterX, GameAreaCenterY, *bgCell, bgScale);
-	//}
-
 	const CellInfo* thumbBoxCell = _hudSprite->GetCell("side_hud_bg_01");
 	if (thumbBoxCell)
 	{
@@ -71,9 +83,21 @@ void GameScene::Render(Graphic& graphic)
 	renderGrid(graphic);
 	renderPathDebug(graphic);
 	renderStartEndDebug(graphic);
+	renderStartButton(graphic);
 
 	Super::Render(graphic);
 }
+
+void GameScene::renderStartButton(Graphic& graphic)
+{
+	const CellInfo* playCell = _hudSprite->GetCell("play_icon");
+	if (playCell == nullptr)
+		return;
+
+	const  Vector pos = _startButton.GetPos();
+	_hudImg->DrawSprite(graphic, pos.x, pos.y, *playCell, 1.0f, 0.0f);
+}
+
 
 void GameScene::renderTileMap(Graphic& graphic)
 {
@@ -165,4 +189,5 @@ void GameScene::Cleanup()
 void GameScene::Update(float deltaTime)
 {
 	Super::Update(deltaTime);
+	_startButton.Update(deltaTime);
 }
