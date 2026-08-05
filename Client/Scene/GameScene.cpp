@@ -43,6 +43,7 @@ void GameScene::Init(Graphic& graphic)
 		});
 
 	_bloonPool.Init(200);
+	_projectilePool.Init(200);
 	_waveManager.Init(&_bloonPool, _bloonSpawnPos, &_path, this);
 
 	Tower* tower = new Tower();
@@ -56,6 +57,13 @@ void GameScene::Init(Graphic& graphic)
 
 }
 
+Projectile* GameScene::SpawnProjectile(const Vector& pos, const Vector& dir, float damage)
+{
+	Projectile* projectile = ProjectileFactory::Create(_projectilePool, pos, dir, damage);
+	if (projectile != nullptr)
+		AddActor(projectile);
+	return projectile;
+}
 
 void GameScene::Render(Graphic& graphic)
 {
