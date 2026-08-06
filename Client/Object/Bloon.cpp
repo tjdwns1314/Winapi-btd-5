@@ -1,6 +1,8 @@
 ﻿#include "pch.h"
 #include "Bloon.h"
 #include "ResourceManager.h"
+#include "ColliderCircle.h"
+
 
 void Bloon::Init()
 {
@@ -11,6 +13,7 @@ void Bloon::Init()
 	const D2D1_SIZE_F size = _image->GetSize();
 	const float scale = static_cast<float>(BLOCK_SIZE) / size.width;
 	SetScale(Vector(scale, scale));
+	SetCollider(new ColliderCircle(this, static_cast<float>(BLOCK_SIZE) / 2.f));
 
 	// TODO: 색상별 이동속도 데이터가 생기면 여기서 분기한다.
 	SetMoveSpeed(300.f);
