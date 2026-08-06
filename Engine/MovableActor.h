@@ -19,7 +19,7 @@ public:
 	float GetMoveSpeed() const { return _moveSpeed;}
 	void SetMoveSpeed(float speed) { _moveSpeed = speed; }
 
-	Collider* GetCollider() const { return _collider; }
+	virtual Collider* GetCollider() const override { return _collider; }
 	// 소유권을 넘겨받는다: 이전 콜라이더가 있으면 삭제하고 새 것으로 교체한다.
 	void SetCollider(Collider* collider);
 
