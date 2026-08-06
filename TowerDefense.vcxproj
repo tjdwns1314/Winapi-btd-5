@@ -148,6 +148,7 @@
     <ClInclude Include="Engine\Collider.h" />
     <ClInclude Include="Engine\ColliderCircle.h" />
     <ClInclude Include="Engine\ColliderEllipse.h" />
+    <ClInclude Include="Engine\CollisionManager.h" />
     <ClInclude Include="Engine\Actor.h" />
     <ClInclude Include="Engine\Grid.h" />
     <ClInclude Include="Client\Object\Bloon.h" />
@@ -188,6 +189,7 @@
     <ClCompile Include="Engine\Collider.cpp" />
     <ClCompile Include="Engine\ColliderCircle.cpp" />
     <ClCompile Include="Engine\ColliderEllipse.cpp" />
+    <ClCompile Include="Engine\CollisionManager.cpp" />
     <ClCompile Include="Engine\Actor.cpp" />
     <ClCompile Include="Engine\Grid.cpp" />
     <ClCompile Include="Client\Object\Bloon.cpp" />

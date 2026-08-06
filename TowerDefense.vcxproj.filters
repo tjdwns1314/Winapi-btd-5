@@ -151,6 +151,9 @@
     <ClInclude Include="Engine\ColliderEllipse.h">
       <Filter>Engine</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\CollisionManager.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\Actor.cpp">
@@ -249,6 +252,9 @@
       <Filter>Engine</Filter>
     </ClCompile>
     <ClCompile Include="Engine\ColliderEllipse.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\CollisionManager.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
   </ItemGroup>
