@@ -142,6 +142,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BloonPopResolver.h" />
     <ClInclude Include="Client\Object\BloonFactory.h" />
     <ClInclude Include="Client\Object\WaveManager.h" />
     <ClInclude Include="Client\Object\ProjectileFactory.h" />
@@ -184,6 +185,7 @@
     <ClInclude Include="Client\Object\PoolManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BloonPopResolver.cpp" />
     <ClCompile Include="Client\Object\BloonFactory.cpp" />
     <ClCompile Include="Client\Object\WaveManager.cpp" />
     <ClCompile Include="Client\Object\ProjectileFactory.cpp" />
