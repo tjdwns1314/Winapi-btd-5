@@ -181,6 +181,7 @@
     <ClInclude Include="Client\Object\Tower.h" />
     <ClInclude Include="Client\Core\TowerDefense.h" />
     <ClInclude Include="Common\Util.h" />
+    <ClInclude Include="Client\Object\PoolManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client\Object\BloonFactory.cpp" />
@@ -219,6 +220,7 @@
     <ClCompile Include="Client\Object\Tower.cpp" />
     <ClCompile Include="Client\Core\TowerDefense.cpp" />
     <ClCompile Include="Common\Util.cpp" />
+    <ClCompile Include="Client\Object\PoolManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="TowerDefense.rc" />

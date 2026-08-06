@@ -29,6 +29,9 @@ public :
 	// Tower가 풀/Scene 등록을 직접 몰라도 되도록, 발사만 대행해준다.
 	Projectile* SpawnProjectile(const Vector& pos, const Vector& dir, float damage);
 
+	// Bloon이 죽을 때 하위 등급 생성을 대행해준다 (SpawnProjectile과 동일한 패턴).
+	Bloon* SpawnBloon(BloonColor color, const Vector& pos, const vector<Vector>* path);
+
 private:
 	void renderTileMap(Graphic& graphic);
 	void renderGrid(Graphic& graphic);
@@ -37,8 +40,6 @@ private:
 
 	void renderStartButton(Graphic& graphic);
 
-	ObjectPool<Bloon> _bloonPool;
-	ObjectPool<Projectile> _projectilePool;
 	WaveManager _waveManager;
 
 	Image * _inGameBg = nullptr;

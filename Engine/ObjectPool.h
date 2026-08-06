@@ -14,6 +14,9 @@ class ObjectPool : public IObjectPool
 public:
 	void Init(size_t size)
 	{
+		_buffer.clear();
+		_available.clear();
+
 		_buffer.resize(size);
 		_available.reserve(size);
 
