@@ -26,9 +26,6 @@ public :
 	virtual void Update(float deltaTime) override;
 	virtual void Render(Graphic& graphic) override;
 
-	// 사거리 탐색 등에서 특정 레이어 액터 목록을 읽기 전용으로 조회할 때 사용한다.
-	const vector<Actor*>& GetActors(RenderLayer layer) const { return _actors[static_cast<int32>(layer)]; }
-
 	// Tower가 풀/Scene 등록을 직접 몰라도 되도록, 발사만 대행해준다.
 	Projectile* SpawnProjectile(const Vector& pos, const Vector& dir, float damage);
 
