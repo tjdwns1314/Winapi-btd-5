@@ -20,6 +20,9 @@ public:
 
 	void AddActor(Actor* actor);
 
+	// 사거리 탐색, 충돌 판정 등에서 레이어별 액터 목록을 읽기 전용으로 조회할 때 사용한다.
+	const vector<Actor*>& GetActors(RenderLayer layer) const { return _actors[static_cast<int32>(layer)]; }
+
 	// 프레임 도중 컨테이너를 건드리지 않기 위해, 죽은 액터 정리와
 	// 예약된 작업은 모두 프레임 끝(PostUpdate)에서 처리한다.
 	void PostUpdate();
