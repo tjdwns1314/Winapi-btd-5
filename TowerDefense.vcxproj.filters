@@ -154,6 +154,9 @@
     <ClInclude Include="Engine\CollisionManager.h">
       <Filter>Engine</Filter>
     </ClInclude>
+    <ClInclude Include="Client\Object\PoolManager.h">
+      <Filter>Client\Object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\Actor.cpp">
@@ -256,6 +259,9 @@
     </ClCompile>
     <ClCompile Include="Engine\CollisionManager.cpp">
       <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\Object\PoolManager.cpp">
+      <Filter>Client\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

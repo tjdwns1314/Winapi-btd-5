@@ -26,6 +26,12 @@ void Projectile::Update(float deltaTime)
 		SetPendingKill();
 }
 
+void Projectile::OnEnter(Actor* other)
+{
+	if (other != nullptr && other->GetActorType() == ActorType::Bloon)
+		SetPendingKill();
+}
+
 void Projectile::Render(Graphic& graphic)
 {
 	Super::Render(graphic);

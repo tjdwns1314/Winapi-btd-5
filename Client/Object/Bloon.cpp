@@ -2,6 +2,8 @@
 #include "Bloon.h"
 #include "ResourceManager.h"
 #include "ColliderCircle.h"
+#include "Projectile.h"
+#include "GameScene.h"
 
 
 void Bloon::Init()
@@ -18,6 +20,22 @@ void Bloon::Init()
 	// TODO: 색상별 이동속도 데이터가 생기면 여기서 분기한다.
 	SetMoveSpeed(300.f);
 	SetLayer(RenderLayer::Bloon);
+}
+
+void Bloon::OnEnter(Actor* other)
+{
+	if (other == nullptr || other->GetActorType() != ActorType::Projectile)
+	{
+		return;
+	}
+
+	const Projectile* projectile = static_cast<Projectile*>(other);
+	_hp -= static_cast<int32>(projectile->GetDamage());
+	if (_hp > 0)
+		return;
+	SetPendingKill();
+	if (_color != BloonColor::Red)
+		spawnNextTier();
 }
 
 void Bloon::Update(float deltaTime)
@@ -66,4 +84,15 @@ void Bloon::followPath(float deltaTime)
 	const float dist = std::sqrtf(distSq);
 	SetDir(Vector(toTarget.x / dist, toTarget.y / dist));
 	Move(deltaTime); // MovableActor::Move가 _dir * _moveSpeed * deltaTime 만큼 이동시킴
+}
+
+void Bloon::spawnNextTier() const
+{
+	GameScene* owner = static_cast<GameScene*>
+		(GetOwner());
+	if (owner == nullptr)
+		return;
+
+	const BloonColor nextColor = static_cast<BloonColor>(static_cast<int32>(_color) - 1);
+	owner->SpawnBloon(nextColor, GetPos(), _path);
 }

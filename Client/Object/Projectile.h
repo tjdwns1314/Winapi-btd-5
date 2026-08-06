@@ -12,6 +12,7 @@ public:
 	virtual void Init() override;
 	virtual void Update(float deltaTime) override;
 	virtual void Render(Graphic& graphic) override;
+	virtual void OnEnter(Actor* other) override;
 
 	RenderLayer GetRenderLayer() const { return RenderLayer::Projectile; }
 

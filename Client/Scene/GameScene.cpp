@@ -3,6 +3,7 @@
 #include "UIManager.h"
 #include "Tower.h"
 #include "CollisionManager.h"
+#include "PoolManager.h"
 
 void GameScene::Init(Graphic& graphic)
 {
@@ -43,9 +44,8 @@ void GameScene::Init(Graphic& graphic)
 			_startButton.SetActive(false);
 		});
 
-	_bloonPool.Init(200);
-	_projectilePool.Init(200);
-	_waveManager.Init(&_bloonPool, _bloonSpawnPos, &_path, this);
+	PoolManager::GetInstance().Init(200, 200);
+	_waveManager.Init(&PoolManager::GetInstance().GetBloonPool(),_bloonSpawnPos, &_path, this);
 
 	Tower* tower = new Tower();
 	tower->SetPos(Vector(7.5f * gridSize, 7.5f * gridSize));
@@ -54,33 +54,36 @@ void GameScene::Init(Graphic& graphic)
 
 	UIManager::GetInstance().Register(&_startButton);
 	CollisionManager::GetInstance().RegisterLayer(RenderLayer::Bloon, RenderLayer::Projectile);
-
-
 }
 
 Projectile* GameScene::SpawnProjectile(const Vector& pos, const Vector& dir, float damage)
 {
-	Projectile* projectile = ProjectileFactory::Create(_projectilePool, pos, dir, damage);
+	Projectile* projectile = ProjectileFactory::Create(PoolManager::GetInstance().GetProjectilePool(), pos, dir, damage);
 	if (projectile != nullptr)
 		AddActor(projectile);
 	return projectile;
 }
 
+Bloon* GameScene::SpawnBloon(BloonColor color, const Vector& pos, const vector<Vector>* path)
+{
+	Bloon* bloon = BloonFactory::Create(PoolManager::GetInstance().GetBloonPool(), color, pos, path);
+	if (bloon != nullptr)
+		AddActor(bloon);
+	return bloon;
+}
+
 void GameScene::Render(Graphic& graphic)
 {
 	renderTileMap(graphic);
-
 	const CellInfo* thumbBoxCell = _hudSprite->GetCell("side_hud_bg_01");
 	if (thumbBoxCell)
 	{
 		_hudImg->DrawSprite(graphic, 1575.0f, 135.0f, *thumbBoxCell,1.0f);
 	}
-
 	renderGrid(graphic);
 	renderPathDebug(graphic);
 	renderStartEndDebug(graphic);
 	renderStartButton(graphic);
-
 	Super::Render(graphic);
 }
 
