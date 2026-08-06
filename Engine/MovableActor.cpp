@@ -1,5 +1,11 @@
 ﻿#include "pch.h"
 #include "MovableActor.h"
+#include "Collider.h"
+
+MovableActor::~MovableActor()
+{
+	delete _collider;
+}
 
 void MovableActor::Update(float deltaTime)
 {
@@ -19,4 +25,10 @@ void MovableActor::Move(float deltaTime)
 void MovableActor::Init()
 {
 	Super::Init();
+}
+
+void MovableActor::SetCollider(Collider* collider)
+{
+	delete _collider;
+	_collider = collider;
 }

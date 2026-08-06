@@ -35,9 +35,8 @@ enum class SceneType
 
 enum class ColliderType
 {
-	Circfle,
-	AABB,	// 회전하지 않는 일반 풍선용
-	OBB,	// 이동 방향으로 회전하는 보스 풍선용
+	Circle,
+	Ellipse,
 	Max
 };
 
