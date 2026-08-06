@@ -3,6 +3,7 @@
 // 렌더링은 GDI가 아니라 Direct2D를 사용하므로 HDC 대신 Graphic을 넘긴다.
 class Graphic;
 class IObjectPool;
+class Collider;
 
 class Actor
 {
@@ -17,6 +18,9 @@ public:
 	virtual void OnEnter(Actor* other) {}
 	virtual void OnStay(Actor* other) {}
 	virtual void OnExit(Actor* other) {}
+
+	// 콜라이더가 없는 Actor(Tower 등)는 기본적으로 nullptr을 반환한다.
+	virtual Collider* GetCollider() const { return nullptr; }
 
 	ActorType GetActorType() const { return _actorType; }
 
