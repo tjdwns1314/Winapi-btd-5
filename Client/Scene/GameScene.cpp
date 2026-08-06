@@ -2,6 +2,7 @@
 #include "GameScene.h"
 #include "UIManager.h"
 #include "Tower.h"
+#include "CollisionManager.h"
 
 void GameScene::Init(Graphic& graphic)
 {
@@ -47,12 +48,12 @@ void GameScene::Init(Graphic& graphic)
 	_waveManager.Init(&_bloonPool, _bloonSpawnPos, &_path, this);
 
 	Tower* tower = new Tower();
-	tower->SetPos(Vector(2.5f * gridSize, 2.5f * gridSize));
+	tower->SetPos(Vector(7.5f * gridSize, 7.5f * gridSize));
 	tower->Init();
 	AddActor(tower);
 
 	UIManager::GetInstance().Register(&_startButton);
-
+	CollisionManager::GetInstance().RegisterLayer(RenderLayer::Bloon, RenderLayer::Projectile);
 
 
 }
@@ -187,4 +188,5 @@ void GameScene::Update(float deltaTime)
 	Super::Update(deltaTime);
 	_waveManager.Update(deltaTime);
 	UIManager::GetInstance().Update(deltaTime);
+	CollisionManager::GetInstance().Update(*this);
 }

@@ -2,6 +2,24 @@
 #include "Tower.h"
 #include "GameScene.h"
 #include "ResourceManager.h"
+#include "Collider.h"
+#include "ColliderCircle.h"
+
+namespace
+{
+	float GetColliderRadius(const Actor* actor)
+	{
+		if (actor == nullptr)
+			return 0.f;
+		Collider* collider = actor->GetCollider();
+		if (collider == nullptr || collider->GetType() != ColliderType::Circle)
+			return 0.f;
+
+		return static_cast<ColliderCircle*>(collider)->GetRadius();
+	}
+}
+
+
 
 void Tower::Init()
 {
@@ -57,12 +75,20 @@ void Tower::RenderRange(Graphic& graphic) const
 
 void Tower::fire()
 {
+	if (_target == nullptr)
+		return;
+
 	GameScene* owner = static_cast<GameScene*>(GetOwner());
 	if (owner == nullptr)
 		return;
 
-	// TODO: 콜리전 매니저 도입 후 사거리 내 타겟 방향으로 교체
-	owner->SpawnProjectile(GetPos(), Vector(1.f, 0.f), _damage);
+
+	Vector dir = _target->GetPos() - GetPos();
+	if (dir.Length() < SMALL_NUMBER)
+		return;
+
+	dir.Normalize();
+	owner->SpawnProjectile(GetPos(), dir, _damage);
 }
 
 const char* Tower::GetSpriteName()
@@ -74,9 +100,11 @@ bool Tower::isInRange(const Actor* target) const
 {
 	if (target == nullptr)
 		return false;
+
+	const float range = _attackRange + GetColliderRadius(target);
 	const Vector diff = target->GetPos() - GetPos();
 	const float distSq = diff.x * diff.x + diff.y * diff.y;
-	return distSq <= _attackRange * _attackRange;
+	return distSq <= range * range;
 }
 
 Bloon* Tower::findTarget() const
@@ -87,7 +115,7 @@ Bloon* Tower::findTarget() const
 		return nullptr;
 
 	Bloon* nearest = nullptr;
-	float nearestDistSq = _attackRange * _attackRange;
+	float nearestDistSq = FLT_MAX;
 
 	for (Actor* actor : owner->GetActors(RenderLayer::Bloon))
 	{
@@ -96,7 +124,9 @@ Bloon* Tower::findTarget() const
 
 		const Vector diff = actor->GetPos() - GetPos();
 		const float distSq = diff.x * diff.x + diff.y * diff.y;
-		if (distSq > nearestDistSq)
+		if (nearest != nullptr && distSq >= nearestDistSq)
+			continue;
+		if (isInRange(actor) == false)
 			continue;
 		nearest = static_cast<Bloon*>(actor);
 		nearestDistSq = distSq;

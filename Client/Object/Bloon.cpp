@@ -17,6 +17,7 @@ void Bloon::Init()
 
 	// TODO: 색상별 이동속도 데이터가 생기면 여기서 분기한다.
 	SetMoveSpeed(300.f);
+	SetLayer(RenderLayer::Bloon);
 }
 
 void Bloon::Update(float deltaTime)
