@@ -145,6 +145,9 @@
     <ClInclude Include="Client\Object\BloonFactory.h" />
     <ClInclude Include="Client\Object\WaveManager.h" />
     <ClInclude Include="Client\Object\ProjectileFactory.h" />
+    <ClInclude Include="Engine\Collider.h" />
+    <ClInclude Include="Engine\ColliderCircle.h" />
+    <ClInclude Include="Engine\ColliderEllipse.h" />
     <ClInclude Include="Engine\Actor.h" />
     <ClInclude Include="Engine\Grid.h" />
     <ClInclude Include="Client\Object\Bloon.h" />
@@ -182,6 +185,9 @@
     <ClCompile Include="Client\Object\BloonFactory.cpp" />
     <ClCompile Include="Client\Object\WaveManager.cpp" />
     <ClCompile Include="Client\Object\ProjectileFactory.cpp" />
+    <ClCompile Include="Engine\Collider.cpp" />
+    <ClCompile Include="Engine\ColliderCircle.cpp" />
+    <ClCompile Include="Engine\ColliderEllipse.cpp" />
     <ClCompile Include="Engine\Actor.cpp" />
     <ClCompile Include="Engine\Grid.cpp" />
     <ClCompile Include="Client\Object\Bloon.cpp" />
