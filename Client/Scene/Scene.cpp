@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "Actor.h"
 #include "ObjectPool.h"
+#include "CollisionManager.h"
 
 Scene::~Scene()
 {
@@ -91,6 +92,10 @@ void Scene::PostUpdate()
 		{
 			if (actors[i]->IsPendingKill() == false)
 				continue;
+
+			// 실제로 delete/Pool 반환되기 직전에 Exit를 확정 짓는다.
+			// (다음 프레임까지 기다리면 재사용된 포인터에 엉뚱한 Exit가 갈 수 있다)
+			CollisionManager::GetInstance().RemoveActor(actors[i]);
 
 			actors[i]->Destroy();
 			if (IObjectPool* pool = actors[i]->GetPool())
