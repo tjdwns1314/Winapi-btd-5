@@ -28,7 +28,7 @@ private:
 
 	float _fireTimer = 0.f;	// 콜리전 매니저로 실제 사거리 판정을 붙이기 전까지, 주기 발사 타이머로만 사용
 
-	float _attackRange = BLOCK_SIZE * 7.f;	// 공격 사거리 (placeholder: 그리드 2칸 분량, 실제 밸런스 값은 추후 조정 예정)
+	float _attackRange = BLOCK_SIZE * 3.f;	// 공격 사거리 (placeholder: 그리드 2칸 분량, 실제 밸런스 값은 추후 조정 예정)
 	float _damage = 1.f;		// 공격 데미지 (placeholder)
 	float _attackSpeed = 1.f;	// 공격 속도(초당 공격 횟수 또는 공격 주기) (placeholder)
 	int32 _grade = 1;			// 현재 등급, 1부터 시작

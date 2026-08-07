@@ -9,10 +9,10 @@ void Projectile::Init()
 	SetActorType(ActorType::Projectile);
 	SetLayer(RenderLayer::Projectile);
 	ResourceManager& res = ResourceManager::GetInstance();
-	_image = &res.GetImage(L"Resource\\InGame.png");
-	_cell = res.GetAtlas(L"Resource\\InGame.xml").GetCell(GetSpriteName());
+	_image = &res.GetImage(L"Resource\\Sprite\\InGame.png");
+	_cell = res.GetAtlas(L"Resource\\Sprite\\InGame.xml").GetCell(GetSpriteName());
 	_traveledDistance = 0.f;	// 풀에서 재사용될 때 이전 비행 거리가 남지 않도록 초기화
-	SetMoveSpeed(2000.f);	// 투사체 속도 (placeholder: 눈으로 확인 가능한 값, 실제 밸런스는 추후 조정)
+	SetMoveSpeed(500.f);	// 투사체 속도 (placeholder: 눈으로 확인 가능한 값, 실제 밸런스는 추후 조정)
 	SetCollider(new ColliderCircle(this, 20.f));
 }
 
