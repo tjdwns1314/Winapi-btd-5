@@ -3,17 +3,28 @@
 
 void ResourceManager::Preload(Graphic& graphic)
 {
-	loadImage(graphic, L"Resource\\monkey_lane.png");
-	loadAtlas(L"Resource\\monkey_lane.xml");
+	loadImage(graphic, L"Resource\\Sprite\\monkey_lane.png");
+	loadAtlas(L"Resource\\Sprite\\monkey_lane.xml");
 
-	loadImage(graphic, L"Resource\\InGame.png");
-	loadAtlas(L"Resource\\InGame.xml");
+	loadImage(graphic, L"Resource\\Sprite\\InGame.png");
+	loadAtlas(L"Resource\\Sprite\\InGame.xml");
 
-	loadImage(graphic, L"Resource\\bloonImg.png");
-	loadImage(graphic, L"Resource\\Tile1.png");
+	loadImage(graphic, L"Resource\\Tile\\Tile1.png");
 
-	loadImage(graphic, L"Resource\\in_game_hud.png");
-	loadAtlas(L"Resource\\in_game_hud.xml");
+	loadImage(graphic, L"Resource\\Sprite\\in_game_hud.png");
+	loadAtlas(L"Resource\\Sprite\\in_game_hud.xml");
+
+	loadImage(graphic, L"Resource\\Red.png");
+	loadImage(graphic, L"Resource\\Blue.png");
+	loadImage(graphic, L"Resource\\Green.png");
+	loadImage(graphic, L"Resource\\Yellow.png");
+	loadImage(graphic, L"Resource\\Pink.png");
+	loadImage(graphic, L"Resource\\Black.png");
+	loadImage(graphic, L"Resource\\White.png");
+	loadImage(graphic, L"Resource\\Lead.png");
+	loadImage(graphic, L"Resource\\Zebra.png");
+	loadImage(graphic, L"Resource\\Rainbow.png");
+	loadImage(graphic, L"Resource\\Ceramic.png");
 }
 
 void ResourceManager::loadImage(Graphic& graphic, const wchar_t* fileName)

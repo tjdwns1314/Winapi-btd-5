@@ -17,9 +17,11 @@ public :
 	void SetColor(BloonColor color) { _color = color; }
 	void SetPath(const vector<Vector>* path) { _path = path; _waypointIndex = 0; }
 
+	void SetHp(int32 hp) { _hp = hp; }
+	void SetImage(Image* image) { _image = image; }
 
 private:
-	static const wchar_t* getImageKey(BloonColor color);
+	//static const wchar_t* getImageKey(BloonColor color);
 	void followPath(float deltaTime);
 	void spawnNextTier() const;
 
