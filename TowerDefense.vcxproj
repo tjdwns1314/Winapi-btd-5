@@ -146,6 +146,7 @@
     <ClInclude Include="Client\Object\BloonFactory.h" />
     <ClInclude Include="Client\Object\WaveManager.h" />
     <ClInclude Include="Client\Object\ProjectileFactory.h" />
+    <ClInclude Include="Common\External\json.hpp" />
     <ClInclude Include="Engine\Collision\Collider.h" />
     <ClInclude Include="Engine\Collision\ColliderCircle.h" />
     <ClInclude Include="Engine\Collision\ColliderEllipse.h" />
@@ -188,6 +189,7 @@
   <ItemGroup>
     <ClCompile Include="Client\Object\BloonPopResolver.cpp" />
     <ClCompile Include="Client\Object\BloonFactory.cpp" />
+    <ClCompile Include="Client\Object\BloonType.cpp" />
     <ClCompile Include="Client\Object\WaveManager.cpp" />
     <ClCompile Include="Client\Object\ProjectileFactory.cpp" />
     <ClCompile Include="Engine\Collision\Collider.cpp" />

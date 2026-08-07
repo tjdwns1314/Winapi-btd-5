@@ -175,6 +175,9 @@
     <ClInclude Include="Client\Object\PoolManager.h">
       <Filter>Client\Object</Filter>
     </ClInclude>
+    <ClInclude Include="Common\External\json.hpp">
+      <Filter>Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\Core\Actor.cpp">
@@ -287,6 +290,7 @@
     <ClCompile Include="Client\Object\PoolManager.cpp">
       <Filter>Client\Object</Filter>
     </ClCompile>
+    <ClCompile Include="Client\Object\BloonType.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="TowerDefense.rc">
