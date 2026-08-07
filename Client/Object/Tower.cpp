@@ -28,8 +28,8 @@ void Tower::Init()
 	SetLayer(RenderLayer::Tower);
 
 	ResourceManager& res = ResourceManager::GetInstance();
-	_image = &res.GetImage(L"Resource\\InGame.png");
-	_cell = res.GetAtlas(L"Resource\\InGame.xml").GetCell(GetSpriteName());
+	_image = &res.GetImage(L"Resource\\Sprite\\InGame.png");
+	_cell = res.GetAtlas(L"Resource\\Sprite\\InGame.xml").GetCell(GetSpriteName());
 }
 
 void Tower::Update(float deltaTime)
