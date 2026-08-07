@@ -34,6 +34,7 @@ struct BloonStat
 };
 
 const BloonStat& GetBloonStat(BloonColor color);
+BloonColor ParseBloonColorName(const string& name);
 
 enum class BloonProperty : unsigned int
 {
