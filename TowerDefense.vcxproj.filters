@@ -10,6 +10,9 @@
     <Filter Include="Client\Scene">
       <UniqueIdentifier>{7A2E5B1C-4F3D-4A2B-9E1F-1C2D3E4F5A6B}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Client\UI">
+      <UniqueIdentifier>{8B3F6C2D-5A4E-4B3C-AF20-2D3E4F5A6B7C}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Client\Core">
       <UniqueIdentifier>{1B2C3D4E-5F60-4A1B-8C2D-3E4F5A6B7C8D}</UniqueIdentifier>
     </Filter>
@@ -28,6 +31,15 @@
     <Filter Include="Engine\UI">
       <UniqueIdentifier>{60718293-A4B5-4F60-D172-8D9E0F1A2B3C}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Core">
+      <UniqueIdentifier>{71829304-B5C6-4061-E283-9E0F1A2B3C4D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Manager">
+      <UniqueIdentifier>{82930415-C6D7-4172-F394-0F1A2B3C4D5E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Collision">
+      <UniqueIdentifier>{93041526-D7E8-4283-0405-1A2B3C4D5E6F}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Common">
       <UniqueIdentifier>{3AA37105-127E-5634-A212-952AE06BE39B}</UniqueIdentifier>
     </Filter>
@@ -37,11 +49,11 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Engine\Actor.h">
-      <Filter>Engine</Filter>
+    <ClInclude Include="Engine\Core\Actor.h">
+      <Filter>Engine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Grid.h">
-      <Filter>Engine</Filter>
+    <ClInclude Include="Engine\Core\Grid.h">
+      <Filter>Engine\Core</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Graphics\Graphic.h">
       <Filter>Engine\Graphics</Filter>
@@ -49,11 +61,11 @@
     <ClInclude Include="Engine\Graphics\Image.h">
       <Filter>Engine\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\MovableActor.h">
-      <Filter>Engine</Filter>
+    <ClInclude Include="Engine\Core\MovableActor.h">
+      <Filter>Engine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\ObjectPool.h">
-      <Filter>Engine</Filter>
+    <ClInclude Include="Engine\Core\ObjectPool.h">
+      <Filter>Engine\Core</Filter>
     </ClInclude>
     <ClInclude Include="Engine\UI\Widget.h">
       <Filter>Engine\UI</Filter>
@@ -61,26 +73,29 @@
     <ClInclude Include="Engine\UI\UIButton.h">
       <Filter>Engine\UI</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\UI\UIManager.h">
-      <Filter>Engine\UI</Filter>
+    <ClInclude Include="Engine\Manager\UIManager.h">
+      <Filter>Engine\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\InputManager.h">
-      <Filter>Engine</Filter>
+    <ClInclude Include="Client\UI\GameSceneUI.h">
+      <Filter>Client\UI</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\ResourceManager.h">
-      <Filter>Engine</Filter>
+    <ClInclude Include="Engine\Manager\InputManager.h">
+      <Filter>Engine\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\SceneManager.h">
-      <Filter>Engine</Filter>
+    <ClInclude Include="Engine\Manager\ResourceManager.h">
+      <Filter>Engine\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Singleton.h">
-      <Filter>Engine</Filter>
+    <ClInclude Include="Engine\Manager\SceneManager.h">
+      <Filter>Engine\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Core\Singleton.h">
+      <Filter>Engine\Core</Filter>
     </ClInclude>
     <ClInclude Include="Engine\Graphics\SpriteAtlas.h">
       <Filter>Engine\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\TimeManager.h">
-      <Filter>Engine</Filter>
+    <ClInclude Include="Engine\Manager\TimeManager.h">
+      <Filter>Engine\Manager</Filter>
     </ClInclude>
     <ClInclude Include="Client\Object\Bloon.h">
       <Filter>Client\Object</Filter>
@@ -95,6 +110,9 @@
       <Filter>Client\Object</Filter>
     </ClInclude>
     <ClInclude Include="Client\Object\ProjectileFactory.h">
+      <Filter>Client\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\Object\BloonPopResolver.h">
       <Filter>Client\Object</Filter>
     </ClInclude>
     <ClInclude Include="Client\Map\TileMap.h">
@@ -142,28 +160,28 @@
     <ClInclude Include="Common\Util.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Collider.h">
-      <Filter>Engine</Filter>
+    <ClInclude Include="Engine\Collision\Collider.h">
+      <Filter>Engine\Collision</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\ColliderCircle.h">
-      <Filter>Engine</Filter>
+    <ClInclude Include="Engine\Collision\ColliderCircle.h">
+      <Filter>Engine\Collision</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\ColliderEllipse.h">
-      <Filter>Engine</Filter>
+    <ClInclude Include="Engine\Collision\ColliderEllipse.h">
+      <Filter>Engine\Collision</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\CollisionManager.h">
-      <Filter>Engine</Filter>
+    <ClInclude Include="Engine\Collision\CollisionManager.h">
+      <Filter>Engine\Collision</Filter>
     </ClInclude>
     <ClInclude Include="Client\Object\PoolManager.h">
       <Filter>Client\Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Engine\Actor.cpp">
-      <Filter>Engine</Filter>
+    <ClCompile Include="Engine\Core\Actor.cpp">
+      <Filter>Engine\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Grid.cpp">
-      <Filter>Engine</Filter>
+    <ClCompile Include="Engine\Core\Grid.cpp">
+      <Filter>Engine\Core</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Graphics\Graphic.cpp">
       <Filter>Engine\Graphics</Filter>
@@ -171,8 +189,8 @@
     <ClCompile Include="Engine\Graphics\Image.cpp">
       <Filter>Engine\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\MovableActor.cpp">
-      <Filter>Engine</Filter>
+    <ClCompile Include="Engine\Core\MovableActor.cpp">
+      <Filter>Engine\Core</Filter>
     </ClCompile>
     <ClCompile Include="Engine\UI\Widget.cpp">
       <Filter>Engine\UI</Filter>
@@ -180,23 +198,26 @@
     <ClCompile Include="Engine\UI\UIButton.cpp">
       <Filter>Engine\UI</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\UI\UIManager.cpp">
-      <Filter>Engine\UI</Filter>
+    <ClCompile Include="Engine\Manager\UIManager.cpp">
+      <Filter>Engine\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\InputManager.cpp">
-      <Filter>Engine</Filter>
+    <ClCompile Include="Client\UI\GameSceneUI.cpp">
+      <Filter>Client\UI</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\ResourceManager.cpp">
-      <Filter>Engine</Filter>
+    <ClCompile Include="Engine\Manager\InputManager.cpp">
+      <Filter>Engine\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\SceneManager.cpp">
-      <Filter>Engine</Filter>
+    <ClCompile Include="Engine\Manager\ResourceManager.cpp">
+      <Filter>Engine\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Manager\SceneManager.cpp">
+      <Filter>Engine\Manager</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Graphics\SpriteAtlas.cpp">
       <Filter>Engine\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\TimeManager.cpp">
-      <Filter>Engine</Filter>
+    <ClCompile Include="Engine\Manager\TimeManager.cpp">
+      <Filter>Engine\Manager</Filter>
     </ClCompile>
     <ClCompile Include="Client\Object\Bloon.cpp">
       <Filter>Client\Object</Filter>
@@ -208,6 +229,9 @@
       <Filter>Client\Object</Filter>
     </ClCompile>
     <ClCompile Include="Client\Object\ProjectileFactory.cpp">
+      <Filter>Client\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\Object\BloonPopResolver.cpp">
       <Filter>Client\Object</Filter>
     </ClCompile>
     <ClCompile Include="Client\Map\TileMap.cpp">
@@ -248,17 +272,17 @@
     <ClCompile Include="Common\Util.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Collider.cpp">
-      <Filter>Engine</Filter>
+    <ClCompile Include="Engine\Collision\Collider.cpp">
+      <Filter>Engine\Collision</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\ColliderCircle.cpp">
-      <Filter>Engine</Filter>
+    <ClCompile Include="Engine\Collision\ColliderCircle.cpp">
+      <Filter>Engine\Collision</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\ColliderEllipse.cpp">
-      <Filter>Engine</Filter>
+    <ClCompile Include="Engine\Collision\ColliderEllipse.cpp">
+      <Filter>Engine\Collision</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\CollisionManager.cpp">
-      <Filter>Engine</Filter>
+    <ClCompile Include="Engine\Collision\CollisionManager.cpp">
+      <Filter>Engine\Collision</Filter>
     </ClCompile>
     <ClCompile Include="Client\Object\PoolManager.cpp">
       <Filter>Client\Object</Filter>
