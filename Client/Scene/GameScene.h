@@ -7,7 +7,7 @@
 #include "PathFinder.h"
 #include "ResourceManager.h"
 #include "BloonFactory.h"
-#include "UIButton.h"
+#include "GameSceneUI.h"
 #include "Bloon.h"
 #include "WaveManager.h"
 #include "ProjectileFactory.h"
@@ -32,13 +32,16 @@ public :
 	// Bloon이 죽을 때 하위 등급 생성을 대행해준다 (SpawnProjectile과 동일한 패턴).
 	Bloon* SpawnBloon(BloonColor color, const Vector& pos, const vector<Vector>* path);
 
+protected:
+	virtual void CreateUI() override;
+
 private:
 	void renderTileMap(Graphic& graphic);
 	void renderGrid(Graphic& graphic);
 	void renderStartEndDebug(Graphic& graphic);
 	void renderPathDebug(Graphic& graphic);
 
-	void renderStartButton(Graphic& graphic);
+	void updateTowerDrag();
 
 	WaveManager _waveManager;
 
@@ -46,6 +49,7 @@ private:
 	Image * _monkeyLaneBg = nullptr;      // 기존 _RealGameBG 대체
 	Image * _tile1Img = nullptr;
 	Image * _hudImg = nullptr;            // in_game_hud.png (시험용)
+	Image * _blueImg = nullptr;           // [임시 테스트] Blue.png
 	SpriteAtlas * _sprite = nullptr;           // InGame.xml
 	SpriteAtlas * _monkeyLaneSprite = nullptr; // monkey_lane.xml
 	SpriteAtlas * _hudSprite = nullptr;   // in_game_hud.xml (시험용)
@@ -54,7 +58,8 @@ private:
 	vector<Vector> _path;
 
 
-	UIButton _startButton;
+	GameSceneUI _ui;
+	bool _isDraggingTower = false;
 	Vector _bloonSpawnPos;
 
 
