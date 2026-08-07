@@ -1,0 +1,16 @@
+{
+    "round":15,
+    "spawns":
+    [
+        {
+            "type":"Red",
+            "count":20,
+            "interval":0.08
+        },
+        {
+            "type":"Blue",
+            "count":30,
+            "interval":0.06
+        }
+    ]
+}

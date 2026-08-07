@@ -5,24 +5,6 @@
 
 namespace
 {
-    BloonColor parseBloonColor(const string& name)
-    {
-        static const unordered_map<string, BloonColor> table
-            =
-        {
-            {"Red",BloonColor::Red},
-            {"Blue",BloonColor::Blue},
-            {"Green",BloonColor::Green},
-            {"Yellow",BloonColor::Yellow},
-            {"Pink",BloonColor::Pink},
-            {"White",BloonColor::White},
-            {"Zebra",BloonColor::Zebra},
-            {"Rainbow",BloonColor::Rainbow},
-            {"Ceramic",BloonColor::Ceramic},
-        };
-        return table.at(name);
-    }
-
     vector<BloonStat> loadBloonStats()
     {
         vector<BloonStat> stats;
@@ -39,7 +21,7 @@ namespace
         {
             BloonStat stat;
             stat.color =
-                parseBloonColor(entry.at("color").get<string>());
+                ParseBloonColorName(entry.at("color").get<string>());
 
             stat.layerHp =
                 entry.at("layerHp").get<int32>();
@@ -58,7 +40,7 @@ namespace
             {
                 BloonChildSpawn spawn;
                 spawn.color =
-                    parseBloonColor(child.at("color").get<string>());
+                    ParseBloonColorName(entry.at("color").get<string>());
 
                 spawn.count =
                     child.at("count").get<int32>();
@@ -79,4 +61,22 @@ const BloonStat& GetBloonStat(BloonColor color)
 {
     static const vector<BloonStat> stats = loadBloonStats();
     return stats[static_cast<size_t>(color)];
+}
+
+BloonColor ParseBloonColorName(const string& name)
+{
+    static const unordered_map<string, BloonColor> table
+        =
+    {
+        {"Red",BloonColor::Red},
+        {"Blue",BloonColor::Blue},
+        {"Green",BloonColor::Green},
+        {"Yellow",BloonColor::Yellow},
+        {"Pink",BloonColor::Pink},
+        {"White",BloonColor::White},
+        {"Zebra",BloonColor::Zebra},
+        {"Rainbow",BloonColor::Rainbow},
+        {"Ceramic",BloonColor::Ceramic},
+    };
+    return table.at(name);
 }
