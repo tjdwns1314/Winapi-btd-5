@@ -76,14 +76,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Scene;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Engine\Core;$(ProjectDir)Engine\Manager;$(ProjectDir)Engine\Collision;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Scene;$(ProjectDir)Client\UI;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Scene;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Engine\Core;$(ProjectDir)Engine\Manager;$(ProjectDir)Engine\Collision;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Scene;$(ProjectDir)Client\UI;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -94,14 +94,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Scene;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Engine\Core;$(ProjectDir)Engine\Manager;$(ProjectDir)Engine\Collision;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Scene;$(ProjectDir)Client\UI;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Scene;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Engine\Core;$(ProjectDir)Engine\Manager;$(ProjectDir)Engine\Collision;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Scene;$(ProjectDir)Client\UI;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -113,14 +113,14 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Scene;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Engine\Core;$(ProjectDir)Engine\Manager;$(ProjectDir)Engine\Collision;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Scene;$(ProjectDir)Client\UI;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Scene;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Engine\Core;$(ProjectDir)Engine\Manager;$(ProjectDir)Engine\Collision;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Scene;$(ProjectDir)Client\UI;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -131,27 +131,27 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Scene;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Engine\Core;$(ProjectDir)Engine\Manager;$(ProjectDir)Engine\Collision;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Scene;$(ProjectDir)Client\UI;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Scene;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Engine\Core;$(ProjectDir)Engine\Manager;$(ProjectDir)Engine\Collision;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Scene;$(ProjectDir)Client\UI;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="BloonPopResolver.h" />
+    <ClInclude Include="Client\Object\BloonPopResolver.h" />
     <ClInclude Include="Client\Object\BloonFactory.h" />
     <ClInclude Include="Client\Object\WaveManager.h" />
     <ClInclude Include="Client\Object\ProjectileFactory.h" />
-    <ClInclude Include="Engine\Collider.h" />
-    <ClInclude Include="Engine\ColliderCircle.h" />
-    <ClInclude Include="Engine\ColliderEllipse.h" />
-    <ClInclude Include="Engine\CollisionManager.h" />
-    <ClInclude Include="Engine\Actor.h" />
-    <ClInclude Include="Engine\Grid.h" />
+    <ClInclude Include="Engine\Collision\Collider.h" />
+    <ClInclude Include="Engine\Collision\ColliderCircle.h" />
+    <ClInclude Include="Engine\Collision\ColliderEllipse.h" />
+    <ClInclude Include="Engine\Collision\CollisionManager.h" />
+    <ClInclude Include="Engine\Core\Actor.h" />
+    <ClInclude Include="Engine\Core\Grid.h" />
     <ClInclude Include="Client\Object\Bloon.h" />
     <ClInclude Include="Client\Object\BloonType.h" />
     <ClInclude Include="Client\Map\TileMap.h" />
@@ -164,37 +164,38 @@
     <ClInclude Include="Client\Scene\Scene.h" />
     <ClInclude Include="Engine\Graphics\Graphic.h" />
     <ClInclude Include="Engine\Graphics\Image.h" />
-    <ClInclude Include="Engine\MovableActor.h" />
-    <ClInclude Include="Engine\ObjectPool.h" />
-    <ClInclude Include="Engine\ResourceManager.h" />
+    <ClInclude Include="Engine\Core\MovableActor.h" />
+    <ClInclude Include="Engine\Core\ObjectPool.h" />
+    <ClInclude Include="Engine\Manager\ResourceManager.h" />
     <ClInclude Include="Common\pch.h" />
     <ClInclude Include="Client\Object\Projectile.h" />
     <ClInclude Include="Common\Resource.h" />
-    <ClInclude Include="Engine\SceneManager.h" />
-    <ClInclude Include="Engine\Singleton.h" />
+    <ClInclude Include="Engine\Manager\SceneManager.h" />
+    <ClInclude Include="Engine\Core\Singleton.h" />
     <ClInclude Include="Engine\Graphics\SpriteAtlas.h" />
     <ClInclude Include="Engine\UI\Widget.h" />
     <ClInclude Include="Engine\UI\UIButton.h" />
-    <ClInclude Include="Engine\UI\UIManager.h" />
-    <ClInclude Include="Engine\InputManager.h" />
+    <ClInclude Include="Engine\Manager\UIManager.h" />
+    <ClInclude Include="Client\UI\GameSceneUI.h" />
+    <ClInclude Include="Engine\Manager\InputManager.h" />
     <ClInclude Include="Common\targetver.h" />
-    <ClInclude Include="Engine\TimeManager.h" />
+    <ClInclude Include="Engine\Manager\TimeManager.h" />
     <ClInclude Include="Client\Object\Tower.h" />
     <ClInclude Include="Client\Core\TowerDefense.h" />
     <ClInclude Include="Common\Util.h" />
     <ClInclude Include="Client\Object\PoolManager.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BloonPopResolver.cpp" />
+    <ClCompile Include="Client\Object\BloonPopResolver.cpp" />
     <ClCompile Include="Client\Object\BloonFactory.cpp" />
     <ClCompile Include="Client\Object\WaveManager.cpp" />
     <ClCompile Include="Client\Object\ProjectileFactory.cpp" />
-    <ClCompile Include="Engine\Collider.cpp" />
-    <ClCompile Include="Engine\ColliderCircle.cpp" />
-    <ClCompile Include="Engine\ColliderEllipse.cpp" />
-    <ClCompile Include="Engine\CollisionManager.cpp" />
-    <ClCompile Include="Engine\Actor.cpp" />
-    <ClCompile Include="Engine\Grid.cpp" />
+    <ClCompile Include="Engine\Collision\Collider.cpp" />
+    <ClCompile Include="Engine\Collision\ColliderCircle.cpp" />
+    <ClCompile Include="Engine\Collision\ColliderEllipse.cpp" />
+    <ClCompile Include="Engine\Collision\CollisionManager.cpp" />
+    <ClCompile Include="Engine\Core\Actor.cpp" />
+    <ClCompile Include="Engine\Core\Grid.cpp" />
     <ClCompile Include="Client\Object\Bloon.cpp" />
     <ClCompile Include="Client\Map\TileMap.cpp" />
     <ClCompile Include="Client\Algorithm\PathFinder.cpp" />
@@ -205,20 +206,21 @@
     <ClCompile Include="Client\Scene\Scene.cpp" />
     <ClCompile Include="Engine\Graphics\Graphic.cpp" />
     <ClCompile Include="Engine\Graphics\Image.cpp" />
-    <ClCompile Include="Engine\MovableActor.cpp" />
-    <ClCompile Include="Engine\ResourceManager.cpp" />
+    <ClCompile Include="Engine\Core\MovableActor.cpp" />
+    <ClCompile Include="Engine\Manager\ResourceManager.cpp" />
     <ClCompile Include="Common\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="Client\Object\Projectile.cpp" />
-    <ClCompile Include="Engine\SceneManager.cpp" />
+    <ClCompile Include="Engine\Manager\SceneManager.cpp" />
     <ClCompile Include="Engine\Graphics\SpriteAtlas.cpp" />
     <ClCompile Include="Engine\UI\Widget.cpp" />
     <ClCompile Include="Engine\UI\UIButton.cpp" />
-    <ClCompile Include="Engine\UI\UIManager.cpp" />
-    <ClCompile Include="Engine\InputManager.cpp" />
-    <ClCompile Include="Engine\TimeManager.cpp" />
+    <ClCompile Include="Engine\Manager\UIManager.cpp" />
+    <ClCompile Include="Client\UI\GameSceneUI.cpp" />
+    <ClCompile Include="Engine\Manager\InputManager.cpp" />
+    <ClCompile Include="Engine\Manager\TimeManager.cpp" />
     <ClCompile Include="Client\Object\Tower.cpp" />
     <ClCompile Include="Client\Core\TowerDefense.cpp" />
     <ClCompile Include="Common\Util.cpp" />
