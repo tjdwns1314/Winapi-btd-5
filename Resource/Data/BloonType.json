@@ -1,0 +1,92 @@
+{
+    "bloons" : [
+            {
+            "color": "Red", 
+            "layerHp":1,
+            "speed" : 200,
+            "goldReward" : 1,
+            "spriteKey" : "Red",
+            "children" : []
+            },
+            {
+            "color": "Blue", 
+            "layerHp":1,
+            "speed" : 250,
+            "goldReward" : 2,
+            "spriteKey" : "Blue",
+            "children" : [{"color":"Red","count":1}]
+            },
+            {
+            "color": "Green", 
+            "layerHp":1,
+            "speed" : 300,
+            "goldReward" : 3,
+            "spriteKey" : "Green",
+            "children" : [{"color":"Blue","count":1}]
+            },
+            {
+            "color": "Yellow", 
+            "layerHp":1,
+            "speed" : 350,
+            "goldReward" : 4,
+            "spriteKey" : "Yellow",
+            "children" : [{"color":"Green","count":1}]
+            },
+            {
+            "color": "Pink", 
+            "layerHp":1,
+            "speed" : 400,
+            "goldReward" : 5,
+            "spriteKey" : "Pink",
+            "children" : [{"color":"Yellow","count":1}]
+            },
+            {
+            "color": "Black", 
+            "layerHp":1,
+            "speed" : 200,
+            "goldReward" : 11,
+            "spriteKey" : "Black",
+            "children" : [{"color":"Pink","count":2}]
+            },
+            {
+            "color": "White", 
+            "layerHp":1,
+            "speed" : 200,
+            "goldReward" : 11,
+            "spriteKey" : "White",
+            "children" : [{"color":"Pink","count":2}]
+            },
+            {
+            "color": "Lead", 
+            "layerHp":1,
+            "speed" : 200,
+            "goldReward" : 23,
+            "spriteKey" : "Lead",
+            "children" : [{"color":"Black","count":2}]
+            },
+            {
+            "color": "Zebra", 
+            "layerHp":1,
+            "speed" : 200,
+            "goldReward" : 23,
+            "spriteKey" : "Zebra",
+            "children" : [{"color":"Black","count":1},{"color":"White","count":1}]
+            },
+            {
+            "color": "Rainbow", 
+            "layerHp":1,
+            "speed" : 200,
+            "goldReward" : 47,
+            "spriteKey" : "Rainbow",
+            "children" : [{"color":"Zebra","count":2}]
+            },
+            {
+            "color": "Ceramic", 
+            "layerHp":10,
+            "speed" : 200,
+            "goldReward" : 95,
+            "spriteKey" : "Ceramic",
+            "children" : [{"color":"Rainbow","count":2}]
+            }
+    ]
+}
