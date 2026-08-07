@@ -16,6 +16,7 @@ public:
 	void Update();
 
 	bool GetButtonDown(KeyType key) const;
+	bool GetButtonUp(KeyType key) const;
 	Vector GetMousePos() const { return _mousePos; }
 
 private:

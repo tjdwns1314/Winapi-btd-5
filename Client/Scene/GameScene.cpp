@@ -1,8 +1,7 @@
 ﻿#include "pch.h"
 #include "GameScene.h"
-#include "UIManager.h"
+#include "InputManager.h"
 #include "Tower.h"
-#include "CollisionManager.h"
 #include "PoolManager.h"
 
 void GameScene::Init(Graphic& graphic)
@@ -11,16 +10,18 @@ void GameScene::Init(Graphic& graphic)
 
 	ResourceManager& res = ResourceManager::GetInstance();
 
-	_monkeyLaneBg = &res.GetImage(L"Resource\\monkey_lane.png");
-	_monkeyLaneSprite = &res.GetAtlas(L"Resource\\monkey_lane.xml");
+	_monkeyLaneBg = &res.GetImage(L"Resource\\Sprite\\monkey_lane.png");
+	_monkeyLaneSprite = &res.GetAtlas(L"Resource\\Sprite\\monkey_lane.xml");
 
-	_inGameBg = &res.GetImage(L"Resource\\InGame.png");
-	_sprite = &res.GetAtlas(L"Resource\\InGame.xml");
+	_inGameBg = &res.GetImage(L"Resource\\Sprite\\InGame.png");
+	_sprite = &res.GetAtlas(L"Resource\\Sprite\\InGame.xml");
 
-	_tile1Img = &res.GetImage(L"Resource\\Tile1.png");
+	_tile1Img = &res.GetImage(L"Resource\\Tile\\Tile1.png");
 
-	_hudImg = &res.GetImage(L"Resource\\in_game_hud.png");
-	_hudSprite = &res.GetAtlas(L"Resource\\in_game_hud.xml");
+	_hudImg = &res.GetImage(L"Resource\\Sprite\\in_game_hud.png");
+	_hudSprite = &res.GetAtlas(L"Resource\\Sprite\\in_game_hud.xml");
+
+	_blueImg = &res.GetImage(L"Resource\\Blue.png");
 
 	_grid.Init(GRID_COUNT_X, GRID_COUNT_Y, BLOCK_SIZE);
 	_tileMap.Init(GRID_COUNT_X, GRID_COUNT_Y); // 기본값 TileType::Path로 전체 채움
@@ -35,25 +36,18 @@ void GameScene::Init(Graphic& graphic)
 		(startCell.iX + 0.5f) * gridSize,
 		(startCell.iY + 0.5f) * gridSize);
 
-	_startButton.SetPos(Vector(1575.0f, 450.0f));
-	_startButton.SetSize(Vector(128.0f, 129.0f));
-	_startButton.SetActive(true);
-	_startButton.SetOnClick([this]()
-		{
-			_waveManager.StartWave(0);
-			_startButton.SetActive(false);
-		});
-
 	PoolManager::GetInstance().Init(200, 200);
 	_waveManager.Init(&PoolManager::GetInstance().GetBloonPool(),_bloonSpawnPos, &_path, this);
 
-	Tower* tower = new Tower();
-	tower->SetPos(Vector(7.5f * gridSize, 7.5f * gridSize));
-	tower->Init();
-	AddActor(tower);
 
-	UIManager::GetInstance().Register(&_startButton);
-	CollisionManager::GetInstance().RegisterLayer(RenderLayer::Bloon, RenderLayer::Projectile);
+	GetCollisionManager().RegisterLayer(RenderLayer::Bloon, RenderLayer::Projectile);
+}
+
+void GameScene::CreateUI()
+{
+	_ui.Init(
+		[this]() { _waveManager.StartWave(0); },
+		[this]() { _isDraggingTower = true; });
 }
 
 Projectile* GameScene::SpawnProjectile(const Vector& pos, const Vector& dir, float damage)
@@ -75,28 +69,29 @@ Bloon* GameScene::SpawnBloon(BloonColor color, const Vector& pos, const vector<V
 void GameScene::Render(Graphic& graphic)
 {
 	renderTileMap(graphic);
+
+	// [임시 테스트] Blue.png 단일 이미지 확인용 - 확인 끝나면 제거
+	_blueImg->Draw(graphic, 400.0f, 400.0f, 1.0f);
+
 	const CellInfo* thumbBoxCell = _hudSprite->GetCell("side_hud_bg_01");
 	if (thumbBoxCell)
 	{
 		_hudImg->DrawSprite(graphic, 1575.0f, 135.0f, *thumbBoxCell,1.0f);
 	}
+
+	// [임시 테스트] 스프라이트 한 장 확인용 - 확인 끝나면 제거
+	//const CellInfo* testCell = _sprite->GetCell("bloon_scrambler_bell_a");
+	//if (testCell)
+	//{
+	//	_inGameBg->DrawSprite(graphic, 400.0f, 400.0f, *testCell, 1.0f);
+	//}
+
 	renderGrid(graphic);
 	renderPathDebug(graphic);
 	renderStartEndDebug(graphic);
-	renderStartButton(graphic);
+	_ui.Render(graphic, _isDraggingTower, InputManager::GetInstance().GetMousePos());
 	Super::Render(graphic);
 }
-
-void GameScene::renderStartButton(Graphic& graphic)
-{
-	const CellInfo* playCell = _hudSprite->GetCell("play_icon");
-	if (playCell == nullptr)
-		return;
-
-	const  Vector pos = _startButton.GetPos();
-	_hudImg->DrawSprite(graphic, pos.x, pos.y, *playCell, 1.0f, 0.0f);
-}
-
 
 void GameScene::renderTileMap(Graphic& graphic)
 {
@@ -182,7 +177,6 @@ void GameScene::renderStartEndDebug(Graphic& graphic)
 
 void GameScene::Cleanup()
 {
-	UIManager::GetInstance().Clear();
 	Super::Cleanup();
 }
 
@@ -190,6 +184,40 @@ void GameScene::Update(float deltaTime)
 {
 	Super::Update(deltaTime);
 	_waveManager.Update(deltaTime);
-	UIManager::GetInstance().Update(deltaTime);
-	CollisionManager::GetInstance().Update(*this);
+	updateTowerDrag();
+	GetCollisionManager().Update(*this);
+}
+
+void GameScene::updateTowerDrag()
+{
+	if (_isDraggingTower == false)
+		return;
+
+	if (InputManager::GetInstance().GetButtonUp(KeyType::LeftMouse) == false)
+		return;
+
+	_isDraggingTower = false;
+
+	const Vector mousePos = InputManager::GetInstance().GetMousePos();
+	if (mousePos.x < 0.f || mousePos.x >= GameAreaWidth
+		|| mousePos.y < 0.f || mousePos.y >= GameAreaHeight)
+		return; // 게임 영역(그리드) 밖에서 손을 떼면 설치하지 않는다.
+
+	const int32 gridSize = _grid.GetGridSize();
+	const Cell targetCell = Cell::ConvertToCEll(mousePos, gridSize);
+
+	for (Actor* actor : GetActors(RenderLayer::Tower))
+	{
+		if (actor->IsPendingKill())
+			continue;
+
+		const Cell cell = Cell::ConvertToCEll(actor->GetPos(), gridSize);
+		if (cell.iX == targetCell.iX && cell.iY == targetCell.iY)
+			return; // 이미 타워가 있는 셀에는 중복 설치 금지
+	}
+
+	Tower* tower = new Tower();
+	tower->SetPos(Vector((targetCell.iX + 0.5f) * gridSize, (targetCell.iY + 0.5f) * gridSize));
+	tower->Init();
+	AddActor(tower);
 }

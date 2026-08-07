@@ -20,3 +20,9 @@ bool InputManager::GetButtonDown(KeyType key) const
 	const int32 index = static_cast<int32>(key);
 	return _currPressed[index] && !_prevPressed[index]; // 눌리는 그 순간(edge)만 true
 }
+
+bool InputManager::GetButtonUp(KeyType key) const
+{
+	const int32 index = static_cast<int32>(key);
+	return !_currPressed[index] && _prevPressed[index]; // 떼는 그 순간(edge)만 true
+}

@@ -1,6 +1,11 @@
 ﻿#include "pch.h"
 #include "UIManager.h"
 
+UIManager::~UIManager()
+{
+	Clear();
+}
+
 void UIManager::Register(Widget* widget)
 {
 	if (widget != nullptr)
@@ -9,6 +14,9 @@ void UIManager::Register(Widget* widget)
 
 void UIManager::Clear()
 {
+	for (Widget* widget : _widgets)
+		delete widget;
+
 	_widgets.clear();
 }
 
@@ -18,5 +26,14 @@ void UIManager::Update(float deltaTime)
 	{
 		if (widget->IsActive())
 			widget->Update(deltaTime);
+	}
+}
+
+void UIManager::Render(Graphic& graphic)
+{
+	for (Widget* widget : _widgets)
+	{
+		if (widget->IsActive())
+			widget->Render(graphic);
 	}
 }
