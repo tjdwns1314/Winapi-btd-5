@@ -3,6 +3,7 @@
 #include "Actor.h"
 #include "ObjectPool.h"
 #include "CollisionManager.h"
+#include "UIManager.h"
 
 Scene::~Scene()
 {
@@ -11,10 +12,16 @@ Scene::~Scene()
 
 void Scene::Init(Graphic& graphic)
 {
+	// Scene이 Init될 때마다 UIManager가 기본 세팅(초기화)을 하고,
+	// 어떤 UI를 만들지는 파생 씬의 CreateUI()가 결정한다.
+	UIManager::GetInstance().Clear();
+	CreateUI();
 }
 
 void Scene::Cleanup()
 {
+	UIManager::GetInstance().Clear();
+
 	for (int32 layer = 0; layer < static_cast<int32>(RenderLayer::Count); ++layer)
 	{
 		for (Actor* actor : _actors[layer])
@@ -50,6 +57,7 @@ void Scene::Update(float deltaTime)
 				actor->Update(deltaTime);
 		}
 	}
+	UIManager::GetInstance().Update(deltaTime);
 }
 
 void Scene::Render(Graphic& graphic)
@@ -63,6 +71,7 @@ void Scene::Render(Graphic& graphic)
 				actor->Render(graphic);
 		}
 	}
+	UIManager::GetInstance().Render(graphic);
 }
 
 void Scene::AddPostUpdateAction(function<void()> action)
@@ -95,7 +104,7 @@ void Scene::PostUpdate()
 
 			// 실제로 delete/Pool 반환되기 직전에 Exit를 확정 짓는다.
 			// (다음 프레임까지 기다리면 재사용된 포인터에 엉뚱한 Exit가 갈 수 있다)
-			CollisionManager::GetInstance().RemoveActor(actors[i]);
+			_collisionManager.RemoveActor(actors[i]);
 
 			actors[i]->Destroy();
 			if (IObjectPool* pool = actors[i]->GetPool())

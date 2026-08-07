@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "CollisionManager.h"
 class Actor;
 class Graphic;
 
@@ -31,10 +32,21 @@ public:
 	SceneType GetSceneType() const { return _sceneType; }
 
 protected:
+	// 씬마다 필요한 UI를 이 시점에 만들어 등록한다.
+	// Engine은 Client UI를 모르므로 기본은 아무것도 하지 않고, 파생 씬이 override한다.
+	virtual void CreateUI() {}
+
 	SceneType _sceneType = SceneType::Max;
 
 	// RenderLayer 순서대로 그리기 위해 레이어별로 나눠서 보관한다.
 	vector<Actor*> _actors[static_cast<int32>(RenderLayer::Count)];
 	vector<function<void()>> _postUpdateActions;
+
+	CollisionManager& GetCollisionManager()
+	{
+		return _collisionManager;
+	}
+
+	CollisionManager _collisionManager;
 };
 
