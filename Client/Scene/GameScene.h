@@ -30,7 +30,7 @@ public :
 	Projectile* SpawnProjectile(const Vector& pos, const Vector& dir, float damage);
 
 	// Bloon이 죽을 때 하위 등급 생성을 대행해준다 (SpawnProjectile과 동일한 패턴).
-	Bloon* SpawnBloon(BloonColor color, const Vector& pos, const vector<Vector>* path);
+	Bloon* SpawnBloon(BloonColor color, const Vector& pos, const vector<Vector>* path, size_t waypointIndex = 0);
 
 protected:
 	virtual void CreateUI() override;
@@ -42,6 +42,7 @@ private:
 	void renderPathDebug(Graphic& graphic);
 
 	void updateTowerDrag();
+	void updateDebugWaveTitle();
 
 	WaveManager _waveManager;
 
@@ -61,6 +62,10 @@ private:
 	GameSceneUI _ui;
 	bool _isDraggingTower = false;
 	Vector _bloonSpawnPos;
+
+	// 디버그 타이틀바 표시용 캐시(값이 바뀔 때만 SetWindowText 호출)
+	int32 _lastTitleCurrentRound = -1;
+	int32 _lastTitleNextRound = -1;
 
 
 

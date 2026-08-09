@@ -3,6 +3,7 @@
 #include "InputManager.h"
 #include "Tower.h"
 #include "PoolManager.h"
+#include "Game.h"
 
 void GameScene::Init(Graphic& graphic)
 {
@@ -46,8 +47,32 @@ void GameScene::Init(Graphic& graphic)
 void GameScene::CreateUI()
 {
 	_ui.Init(
-		[this]() { _waveManager.StartWave(0); },
-		[this]() { _isDraggingTower = true; });
+		[this]() { _waveManager.StartNextWave(); },
+		[this]() { _isDraggingTower = true; },
+		[this]() { _waveManager.SetNextRound(_waveManager.GetNextRoundNumber() + 1); },
+		[this]() { _waveManager.SetNextRound(_waveManager.GetNextRoundNumber() - 1); });
+
+	updateDebugWaveTitle();
+}
+
+void GameScene::updateDebugWaveTitle()
+{
+	const int32 currentRound = _waveManager.GetCurrentRoundNumber();
+	const int32 nextRound = _waveManager.GetNextRoundNumber();
+
+	if (currentRound == _lastTitleCurrentRound && nextRound == _lastTitleNextRound)
+		return;
+
+	_lastTitleCurrentRound = currentRound;
+	_lastTitleNextRound = nextRound;
+
+	wchar_t title[64];
+	if (currentRound > 0)
+		swprintf_s(title, L"TowerDefense - 현재 웨이브: %d / 다음 시작 웨이브: %d", currentRound, nextRound);
+	else
+		swprintf_s(title, L"TowerDefense - 다음 시작 웨이브: %d", nextRound);
+
+	SetWindowText(Game::GetInstance().GetHwnd(), title);
 }
 
 Projectile* GameScene::SpawnProjectile(const Vector& pos, const Vector& dir, float damage)
@@ -58,9 +83,9 @@ Projectile* GameScene::SpawnProjectile(const Vector& pos, const Vector& dir, flo
 	return projectile;
 }
 
-Bloon* GameScene::SpawnBloon(BloonColor color, const Vector& pos, const vector<Vector>* path)
+Bloon* GameScene::SpawnBloon(BloonColor color, const Vector& pos, const vector<Vector>* path, size_t waypointIndex)
 {
-	Bloon* bloon = BloonFactory::Create(PoolManager::GetInstance().GetBloonPool(), color, pos, path);
+	Bloon* bloon = BloonFactory::Create(PoolManager::GetInstance().GetBloonPool(), color, pos, path, waypointIndex);
 	if (bloon != nullptr)
 		AddActor(bloon);
 	return bloon;
@@ -71,7 +96,7 @@ void GameScene::Render(Graphic& graphic)
 	renderTileMap(graphic);
 
 	// [임시 테스트] Blue.png 단일 이미지 확인용 - 확인 끝나면 제거
-	_blueImg->Draw(graphic, 400.0f, 400.0f, 1.0f);
+	//_blueImg->Draw(graphic, 400.0f, 400.0f, 1.0f);
 
 	const CellInfo* thumbBoxCell = _hudSprite->GetCell("side_hud_bg_01");
 	if (thumbBoxCell)
@@ -186,6 +211,7 @@ void GameScene::Update(float deltaTime)
 	_waveManager.Update(deltaTime);
 	updateTowerDrag();
 	GetCollisionManager().Update(*this);
+	updateDebugWaveTitle();
 }
 
 void GameScene::updateTowerDrag()
