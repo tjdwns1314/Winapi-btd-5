@@ -1,16 +1,16 @@
-{
-    "round":15,
+﻿{
+    "round":1,
     "spawns":
     [
         {
             "type":"Red",
             "count":20,
-            "interval":0.08
+            "interval":0.5
         },
         {
             "type":"Blue",
             "count":30,
-            "interval":0.06
+            "interval":0.5
         }
     ]
 }
