@@ -15,7 +15,8 @@ public :
 
 	BloonColor GetColor() const { return _color; }
 	void SetColor(BloonColor color) { _color = color; }
-	void SetPath(const vector<Vector>* path) { _path = path; _waypointIndex = 0; }
+	void SetPath(const vector<Vector>* path, size_t waypointIndex = 0) { _path = path; _waypointIndex = waypointIndex; }
+	size_t GetWaypointIndex() const { return _waypointIndex; }
 
 	void SetHp(int32 hp) { _hp = hp; }
 	void SetImage(Image* image) { _image = image; }
