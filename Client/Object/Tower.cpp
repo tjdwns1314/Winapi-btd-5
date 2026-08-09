@@ -43,6 +43,13 @@ void Tower::Update(float deltaTime)
 	if (_target == nullptr)
 		_target = findTarget();
 
+	if (_target != nullptr)
+	{
+		Vector dir = _target->GetPos() - GetPos();
+		if (dir.Length() >= SMALL_NUMBER)
+			SetRotation(RadianToDegree(atan2f(dir.x, -dir.y)));
+	}
+
 	_fireTimer += deltaTime;
 	if (_fireTimer >= _attackSpeed)
 	{
@@ -58,7 +65,7 @@ void Tower::Render(Graphic& graphic)
 		return;
 	const Vector pos = GetPos();
 	const Vector scale = GetScale();
-	_image->DrawSprite(graphic, pos.x, pos.y, *_cell, scale.x);
+	_image->DrawSprite(graphic, pos.x, pos.y, *_cell, scale.x, GetRotation());
 	RenderRange(graphic);
 }
 

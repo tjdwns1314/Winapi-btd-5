@@ -14,6 +14,8 @@ void Projectile::Init()
 	_traveledDistance = 0.f;	// 풀에서 재사용될 때 이전 비행 거리가 남지 않도록 초기화
 	SetMoveSpeed(500.f);	// 투사체 속도 (placeholder: 눈으로 확인 가능한 값, 실제 밸런스는 추후 조정)
 	SetCollider(new ColliderCircle(this, 20.f));
+	const Vector dir = GetDir();
+	SetRotation(RadianToDegree(atan2f(dir.x, -dir.y)));
 }
 
 void Projectile::Update(float deltaTime)
@@ -40,7 +42,7 @@ void Projectile::Render(Graphic& graphic)
 		
 	const Vector pos = GetPos();
 	const Vector scale = GetScale();
-	_image->DrawSprite(graphic, pos.x, pos.y,*_cell, scale.x);
+	_image->DrawSprite(graphic, pos.x, pos.y,*_cell, scale.x,GetRotation());
 
 }
 const char* Projectile::GetSpriteName()
