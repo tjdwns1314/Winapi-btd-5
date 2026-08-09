@@ -90,5 +90,5 @@ void Bloon::spawnNextTier() const
 		return;
 
 	const BloonColor nextColor = static_cast<BloonColor>(static_cast<int32>(_color) - 1);
-	owner->SpawnBloon(nextColor, GetPos(), _path);
+	owner->SpawnBloon(nextColor, GetPos(), _path, _waypointIndex);
 }

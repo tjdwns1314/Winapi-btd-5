@@ -12,7 +12,7 @@ namespace
 	}
 }
 
-Bloon* BloonFactory::Create(ObjectPool<Bloon>& pool, BloonColor color, const Vector& pos, const vector<Vector>* path)
+Bloon* BloonFactory::Create(ObjectPool<Bloon>& pool, BloonColor color, const Vector& pos, const vector<Vector>* path, size_t waypointIndex)
 {
 	Bloon* bloon = pool.Acquire();
 	if (bloon == nullptr)
@@ -22,7 +22,7 @@ Bloon* BloonFactory::Create(ObjectPool<Bloon>& pool, BloonColor color, const Vec
 
 	bloon->SetColor(color);
 	bloon->SetPos(pos);
-	bloon->SetPath(path);
+	bloon->SetPath(path, waypointIndex);
 	bloon->SetHp(stat.layerHp);
 	bloon->SetMoveSpeed(stat.speed);
 	bloon->SetImage(&getBloonImage(stat.spriteKey));

@@ -9,5 +9,6 @@ class Bloon;
 class BloonFactory
 {
 public:
-	static Bloon* Create(ObjectPool<Bloon>& pool, BloonColor color, const Vector& pos, const vector<Vector>* path);
+	static Bloon* Create(ObjectPool<Bloon>& pool,
+		BloonColor color, const Vector& pos, const vector<Vector>* path, size_t waypointIndex = 0);
 };

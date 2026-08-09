@@ -25,7 +25,7 @@ namespace
 
             stat.layerHp =
                 entry.at("layerHp").get<int32>();
-            stat.layerHp =
+            stat.speed =
                 entry.at("speed").get<float>();
             stat.goldReward =
                 entry.at("goldReward").get<int32>();
@@ -73,7 +73,9 @@ BloonColor ParseBloonColorName(const string& name)
         {"Green",BloonColor::Green},
         {"Yellow",BloonColor::Yellow},
         {"Pink",BloonColor::Pink},
+        {"Black",BloonColor::Black},
         {"White",BloonColor::White},
+        {"Lead",BloonColor::Lead},
         {"Zebra",BloonColor::Zebra},
         {"Rainbow",BloonColor::Rainbow},
         {"Ceramic",BloonColor::Ceramic},
