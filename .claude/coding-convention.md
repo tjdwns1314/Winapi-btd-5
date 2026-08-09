@@ -13,6 +13,28 @@
 - 게임 오브젝트는 `Actor` → `MovableActor` 상속 체인을 따릅니다. 위치를 가지지만 움직이지 않는 것은 `Actor`, 방향/속도를 가지고 매 프레임 이동하는 것은 `MovableActor`를 상속하세요.
 - `Engine/`은 게임과 무관한 재사용 가능 레이어입니다. `Engine/` 코드는 `Client/`의 타입(Bloon, Tower, GameScene 등)을 참조해서는 안 됩니다.
 
+## 주석 스타일
+
+- 함수 본문에서 로직의 **흐름(단계)**을 설명할 때만 각 단계 앞에 `1.`, `2.`, `3.`... 처럼 번호를 매긴 한 줄 주석을 붙입니다.
+- 흐름 설명이 아닌 변수/값 하나에 대한 부연 설명은 기존처럼 코드 옆에 `//`로 짧게 붙입니다. 모든 주석을 번호 매기라는 규칙이 아닙니다.
+- 예시: [Client/Object/WaveManager.cpp](../Client/Object/WaveManager.cpp)의 `StartNextWave()`, `spawnNext()`, `buildRound()`.
+
+```cpp
+void Example::DoSomething()
+{
+	int32 count = 0; // 변수 설명은 이렇게 옆에 짧게
+
+	// 1. 첫 번째 단계 설명
+	...
+
+	// 2. 두 번째 단계 설명
+	...
+
+	// 3. 세 번째 단계 설명
+	...
+}
+```
+
 ## 인코딩
 
 - 소스 코드 주석은 한글로 작성합니다.
