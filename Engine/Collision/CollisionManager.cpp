@@ -29,12 +29,17 @@ void CollisionManager::Update(Scene& scene)
 
 void CollisionManager::checkLayer(Scene& scene, RenderLayer a, RenderLayer b)
 {
-	for (Actor* actorA : scene.GetActors(a))
+	// OnEnter 콜백(예: Bloon::spawnNextTier -> Scene::AddActor)이 원본 벡터를
+	// 재할당시킬 수 있으므로, 순회 중에는 복사본을 사용한다.
+	const vector<Actor*> actorsA = scene.GetActors(a);
+	const vector<Actor*> actorsB = scene.GetActors(b);
+
+	for (Actor* actorA : actorsA)
 	{
 		if (actorA->IsPendingKill() || actorA->GetCollider() == nullptr)
 			continue;
 
-		for (Actor* actorB : scene.GetActors(b))
+		for (Actor* actorB : actorsB)
 		{
 			if (actorB->IsPendingKill() || actorB->GetCollider() == nullptr)
 				continue;
