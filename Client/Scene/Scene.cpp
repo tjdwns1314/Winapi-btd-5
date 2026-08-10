@@ -7,111 +7,111 @@
 
 Scene::~Scene()
 {
-	Cleanup();
+    Cleanup();
 }
 
 void Scene::Init(Graphic& graphic)
 {
-	// Scene이 Init될 때마다 UIManager가 기본 세팅(초기화)을 하고,
-	// 어떤 UI를 만들지는 파생 씬의 CreateUI()가 결정한다.
-	UIManager::GetInstance().Clear();
-	CreateUI();
+    // Scene이 Init될 때마다 UIManager가 기본 세팅(초기화)을 하고,
+    // 어떤 UI를 만들지는 파생 씬의 CreateUI()가 결정한다.
+    UIManager::GetInstance().Clear();
+    CreateUI();
 }
 
 void Scene::Cleanup()
 {
-	UIManager::GetInstance().Clear();
+    UIManager::GetInstance().Clear();
 
-	for (int32 layer = 0; layer < static_cast<int32>(RenderLayer::Count); ++layer)
-	{
-		for (Actor* actor : _actors[layer])
-			if (actor->GetPool() == nullptr)
-				delete actor;
+    for (int32 layer = 0; layer < static_cast<int32>(RenderLayer::Count); ++layer)
+    {
+        for (Actor* actor : _actors[layer])
+        {
+            if (actor->GetPool() == nullptr)
+                delete actor;
+        }
 
-		_actors[layer].clear();
-	}
+        _actors[layer].clear();
+    }
 
-	_postUpdateActions.clear();
-}
-
-void Scene::AddActor(Actor* actor)
-{
-	if (actor == nullptr)
-		return;
-
-	int32 layer = static_cast<int32>(actor->GetLayer());
-	if (layer < 0 || layer >= static_cast<int32>(RenderLayer::Count))
-		layer = static_cast<int32>(RenderLayer::Background);
-
-	actor->SetOwner(this);
-	_actors[layer].push_back(actor);
+    _postUpdateActions.clear();
 }
 
 void Scene::Update(float deltaTime)
 {
-	for (int32 layer = 0; layer < static_cast<int32>(RenderLayer::Count); ++layer)
-	{
-		for (Actor* actor : _actors[layer])
-		{
-			if (actor->IsActive() && actor->IsPendingKill() == false)
-				actor->Update(deltaTime);
-		}
-	}
-	UIManager::GetInstance().Update(deltaTime);
+    forEachActiveActor([deltaTime](Actor* actor) { actor->Update(deltaTime); });
+    UIManager::GetInstance().Update(deltaTime);
 }
 
 void Scene::Render(Graphic& graphic)
 {
-	// 배경 → 적 → 총알 → 타워 → 이펙트 순서로 그린다.
-	for (int32 layer = 0; layer < static_cast<int32>(RenderLayer::Count); ++layer)
-	{
-		for (Actor* actor : _actors[layer])
-		{
-			if (actor->IsActive() && actor->IsPendingKill() == false)
-				actor->Render(graphic);
-		}
-	}
-	UIManager::GetInstance().Render(graphic);
-}
-
-void Scene::AddPostUpdateAction(function<void()> action)
-{
-	_postUpdateActions.push_back(action);
+    // 배경 → 적 → 총알 → 타워 → 이펙트 순서로 그린다.
+    forEachActiveActor([&graphic](Actor* actor) { actor->Render(graphic); });
+    UIManager::GetInstance().Render(graphic);
 }
 
 void Scene::PostUpdate()
 {
+    // 1. 예약된 작업 처리
+    // 처리 도중 새 작업이 또 예약될 수 있으므로 비운 뒤 실행한다.
+    vector<function<void()>> actions;
+    actions.swap(_postUpdateActions);
 
+    for (function<void()>& action : actions)
+        action();
 
+    // 2. 죽음 표시된 액터 실제 제거
+    for (int32 layer = 0; layer < static_cast<int32>(RenderLayer::Count); ++layer)
+    {
+        vector<Actor*>& actors = _actors[layer];
 
-	// 1. 예약된 작업 처리 (액터 추가 등)
-	//    처리 도중 새 작업이 또 예약될 수 있으므로 비운 뒤 실행한다.
-	vector<function<void()>> actions;
-	actions.swap(_postUpdateActions);
+        for (int32 i = static_cast<int32>(actors.size()) - 1; i >= 0; --i)
+        {
+            if (actors[i]->IsPendingKill() == false)
+                continue;
 
-	for (function<void()>& action : actions)
-		action();
+            // 실제로 delete/Pool 반환되기 직전에 Exit를 확정 짓는다.
+            // (다음 프레임까지 기다리면 재사용된 포인터에 엉뚱한 Exit가 갈 수 있다)
+            _collisionManager.RemoveActor(actors[i]);
 
-	// 2. 죽음 표시된 액터 실제 제거
-	for (int32 layer = 0; layer < static_cast<int32>(RenderLayer::Count); ++layer)
-	{
-		vector<Actor*>& actors = _actors[layer];
+            actors[i]->Destroy();
 
-		for (int32 i = static_cast<int32>(actors.size()) - 1; i >= 0; --i)
-		{
-			if (actors[i]->IsPendingKill() == false)
-				continue;
+            if (IObjectPool* pool = actors[i]->GetPool())
+                pool->Return(actors[i]);
+            else
+                delete actors[i];
 
-			// 실제로 delete/Pool 반환되기 직전에 Exit를 확정 짓는다.
-			// (다음 프레임까지 기다리면 재사용된 포인터에 엉뚱한 Exit가 갈 수 있다)
-			_collisionManager.RemoveActor(actors[i]);
+            actors.erase(actors.begin() + i);
+        }
+    }
+}
 
-			actors[i]->Destroy();
-			if (IObjectPool* pool = actors[i]->GetPool())
-				pool->Return(actors[i]);
-			else
-				delete actors[i];
-			actors.erase(actors.begin() + i);
-		}
-	}
+void Scene::AddActor(Actor* actor)
+{
+    if (actor == nullptr)
+        return;
+
+    int32 layer = static_cast<int32>(actor->GetLayer());
+
+    if (layer < 0 || layer >= static_cast<int32>(RenderLayer::Count))
+        layer = static_cast<int32>(RenderLayer::Background);
+
+    actor->SetOwner(this);
+    _actors[layer].push_back(actor);
+}
+
+void Scene::AddPostUpdateAction(function<void()> action)
+{
+    _postUpdateActions.push_back(action);
+}
+
+void Scene::forEachActiveActor(function<void(Actor*)> action)
+{
+    for (int32 layer = 0; layer < static_cast<int32>(RenderLayer::Count); ++layer)
+    {
+        for (Actor* actor : _actors[layer])
+        {
+            if (actor->IsActive() && actor->IsPendingKill() == false)
+                action(actor);
+        }
+    }
 }
