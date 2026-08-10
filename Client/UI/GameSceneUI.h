@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "UIButton.h"
 
 class Graphic;
@@ -10,19 +10,27 @@ class SpriteAtlas;
 class GameSceneUI
 {
 public:
-	void Init(function<void()> onStartWave, function<void()> onShopClick,
-		function<void()> onWaveUp, function<void()> onWaveDown);
-	void Render(Graphic& graphic, bool isDraggingTower, const Vector& dragPreviewPos);
+	void Init(
+		function<void()> onStartWave,
+		function<void()> onDartShopClick,
+		function<void()> onTackShopClick,
+		function<void()> onWaveUp,
+		function<void()> onWaveDown);
+	void Render(Graphic& graphic,
+		const char* draggingTowerSprite,
+		const Vector& dragPreviewPos);
 private:
+	UIButton* createButton(const Vector& pos, const Vector& size, function<void()> onClick);
 	void renderDebugWaveButtons(Graphic& graphic) const;
 
+	// 버튼
 	UIButton* _startButton = nullptr;
 	UIButton* _dartMonkeyShopButton = nullptr;
-
-	// 디버그용: 시작 라운드를 +/-로 조절하는 버튼(정식 스프라이트 없이 도형으로 그림).
-	UIButton* _waveUpButton = nullptr;
+	UIButton* _tackShooterShopButton = nullptr;
+	UIButton* _waveUpButton = nullptr;   // 디버그용: 시작 라운드를 +/-로 조절(정식 스프라이트 없이 도형으로 그림)
 	UIButton* _waveDownButton = nullptr;
 
+	// 스프라이트 리소스
 	Image* _hudImg = nullptr;
 	SpriteAtlas* _hudSprite = nullptr;
 	Image* _inGameBg = nullptr;

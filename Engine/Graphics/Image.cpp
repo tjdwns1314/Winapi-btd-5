@@ -32,7 +32,7 @@ void Image::Draw(Graphic& graphic, float centerX, float centerY, float scale, fl
 	renderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
 }
 
-void Image::DrawSprite(Graphic& graphic, float centerX, float centerY, const CellInfo& cell, float scale, float angle)
+void Image::DrawSprite(Graphic& graphic, float centerX, float centerY, const CellInfo& cell, float scale, float angle, bool flipX)
 {
 	if (!_bitmap) return;
 
@@ -45,11 +45,17 @@ void Image::DrawSprite(Graphic& graphic, float centerX, float centerY, const Cel
 	const float originY = centerY - cell.ah * scale * 0.5f;
 	const float drawX = originX + cell.ax * scale;
 	const float drawY = originY + cell.ay * scale;
-	D2D1_RECT_F destRect = D2D1::RectF(drawX, drawY, drawX + cell.w * scale, drawY + cell.h * scale);
 
+	D2D1_RECT_F destRect = D2D1::RectF(drawX, drawY, drawX + cell.w * scale, drawY + cell.h * scale);
 	ID2D1HwndRenderTarget* renderTarget = graphic.GetRenderTarget();
-	// (centerX, centerY, 트림 전 기준 중심)를 축으로 angle(도, 시계방향)만큼 회전시킨 뒤 그림
-	renderTarget->SetTransform(D2D1::Matrix3x2F::Rotation(angle, D2D1::Point2F(centerX, centerY)));
+
+	D2D1::Matrix3x2F transform = D2D1::Matrix3x2F::Identity();
+	if (flipX)
+		transform = transform *
+		D2D1::Matrix3x2F::Scale(D2D1::SizeF(-1.0f, 1.0f),
+			D2D1::Point2F(centerX, centerY));
+	transform = transform * D2D1::Matrix3x2F::Rotation(angle, D2D1::Point2F(centerX, centerY));
+	renderTarget->SetTransform(transform);
 	renderTarget->DrawBitmap(
 		_bitmap,
 		destRect,
@@ -57,7 +63,6 @@ void Image::DrawSprite(Graphic& graphic, float centerX, float centerY, const Cel
 		D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
 		srcRect
 	);
-	renderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
 }
 
 void Image::Release()
