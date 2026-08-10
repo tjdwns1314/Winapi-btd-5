@@ -1,11 +1,12 @@
 #pragma once
+
 #include "Scene.h"
 
 class MainScene : public Scene
 {
 	using Super = Scene;
 
-public :
+public:
 	MainScene() : Super(SceneType::Main) {}
 
 	virtual void Init(Graphic& graphic) override;
@@ -13,3 +14,4 @@ public :
 	virtual void Update(float deltaTime) override;
 	virtual void Render(Graphic& graphic) override;
 };
+
