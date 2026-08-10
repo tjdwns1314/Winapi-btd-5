@@ -11,8 +11,7 @@ public:
 	void Load(Graphic& graphic, const wchar_t* fileName);
 	void Draw(Graphic& graphic, float centerX, float centerY, float scale = 1.0f, float angle = 0.0f);
 	void Release();
-	void DrawSprite(Graphic& graphic, float centerX, float centerY, const CellInfo& cell, float scale = 1.0f, float angle = 0.0f);
-
+	void DrawSprite(Graphic& graphic, float centerX, float centerY, const CellInfo& cell, float scale = 1.0f, float angle = 0.0f, bool flipX = false);
 
 	D2D1_SIZE_F GetSize() const { return _size; }
 private:

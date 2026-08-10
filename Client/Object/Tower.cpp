@@ -19,8 +19,6 @@ namespace
 	}
 }
 
-
-
 void Tower::Init()
 {
 	Super::Init();
@@ -29,7 +27,7 @@ void Tower::Init()
 
 	ResourceManager& res = ResourceManager::GetInstance();
 	_image = &res.GetImage(L"Resource\\Sprite\\InGame.png");
-	_cell = res.GetAtlas(L"Resource\\Sprite\\InGame.xml").GetCell(GetSpriteName());
+	_cell = res.GetAtlas(L"Resource\\Sprite\\InGame.xml").GetCell(_spriteName);
 }
 
 void Tower::Update(float deltaTime)
@@ -77,30 +75,6 @@ void Tower::RenderRange(Graphic& graphic) const
 		return;
 	const Vector pos = GetPos();
 	renderTarget->DrawEllipse(D2D1::Ellipse(D2D1::Point2F(pos.x, pos.y), _attackRange, _attackRange), brush, 2.f);
-
-}
-
-void Tower::fire()
-{
-	if (_target == nullptr)
-		return;
-
-	GameScene* owner = static_cast<GameScene*>(GetOwner());
-	if (owner == nullptr)
-		return;
-
-
-	Vector dir = _target->GetPos() - GetPos();
-	if (dir.Length() < SMALL_NUMBER)
-		return;
-
-	dir.Normalize();
-	owner->SpawnProjectile(GetPos(), dir, _damage);
-}
-
-const char* Tower::GetSpriteName()
-{
-	return "dart_monkey_body";
 }
 
 bool Tower::isInRange(const Actor* target) const
@@ -139,4 +113,21 @@ Bloon* Tower::findTarget() const
 		nearestDistSq = distSq;
 	}
 	return nearest;
+}
+
+void Tower::fire()
+{
+	if (_target == nullptr)
+		return;
+
+	GameScene* owner = static_cast<GameScene*>(GetOwner());
+	if (owner == nullptr)
+		return;
+
+	Vector dir = _target->GetPos() - GetPos();
+	if (dir.Length() < SMALL_NUMBER)
+		return;
+
+	dir.Normalize();
+	owner->SpawnProjectile(GetPos(), dir, _damage);
 }

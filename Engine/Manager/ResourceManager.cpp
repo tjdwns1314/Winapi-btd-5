@@ -10,6 +10,7 @@ void ResourceManager::Preload(Graphic& graphic)
 	loadAtlas(L"Resource\\Sprite\\InGame.xml");
 
 	loadImage(graphic, L"Resource\\Tile\\Tile1.png");
+	loadImage(graphic, L"Resource\\Tile\\Tile2.png");
 
 	loadImage(graphic, L"Resource\\Sprite\\in_game_hud.png");
 	loadAtlas(L"Resource\\Sprite\\in_game_hud.xml");
