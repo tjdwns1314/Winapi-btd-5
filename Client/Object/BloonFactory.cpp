@@ -1,6 +1,7 @@
 ﻿#include "pch.h"
 #include "BloonFactory.h"
 #include "Bloon.h"
+#include "BloonPopResolver.h"
 #include "ResourceManager.h"
 
 namespace
@@ -26,6 +27,7 @@ Bloon* BloonFactory::Create(ObjectPool<Bloon>& pool, BloonColor color, const Vec
 	bloon->SetHp(stat.layerHp);
 	bloon->SetMoveSpeed(stat.speed);
 	bloon->SetImage(&getBloonImage(stat.spriteKey));
+	bloon->SetHitHandler(&BloonPopResolver::HandleHit);
 	bloon->Init();
 	return bloon;
 }

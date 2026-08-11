@@ -1,16 +1,32 @@
-﻿#pragma once
+#pragma once
 #include "BloonType.h"
+
+class Bloon;
+
 class BloonPopResolver
 {
 public:
-	struct Result
+	static int32 GetLayerHp(BloonColor color);
+
+	// Bloon::SetHitHandler에 연결되는 델리게이트.
+	// Bloon은 이 함수 시그니처만 알 뿐, 내부에서 hp 차감/사망 판정/자식 스폰이
+	// 어떻게 이뤄지는지는 모른다.
+	static void HandleHit(Bloon& bloon, float damage);
+
+private:
+	// 이번 히트로 살아남아 새로 소환될 풍선 하나 (관통 데미지로 여러 단계 내려간 뒤의 최종 hp)
+	struct SpawnRequest
 	{
-		bool hasNext = false;
 		BloonColor color = BloonColor::Red;
 		int32 hp = 0;
 	};
 
-	static int32 GetLayerHp(BloonColor color);
-	static Result Resolve(BloonColor popedColor, int32 leftoverDamage);
-};
+	struct Result
+	{
+		bool popped = false;           // 이번 히트로 터졌는지
+		int32 remainingHp = 0;         // popped == false 일 때 남은 hp
+		vector<SpawnRequest> spawns;   // popped == true 일 때 생성할 자식 목록
+	};
 
+	static Result resolve(BloonColor color, int32 hp, int32 damage);
+};

@@ -2,7 +2,6 @@
 #include "Bloon.h"
 #include "ColliderCircle.h"
 #include "Projectile.h"
-#include "GameScene.h"
 
 
 void Bloon::Init()
@@ -25,13 +24,11 @@ void Bloon::OnEnter(Actor* other)
 		return;
 	}
 
-	const Projectile* projectile = static_cast<Projectile*>(other);
-	_hp -= static_cast<int32>(projectile->GetDamage());
-	if (_hp > 0)
+	if (!_hitHandler)
 		return;
-	SetPendingKill();
-	if (_color != BloonColor::Red)
-		spawnNextTier();
+
+	const Projectile* projectile = static_cast<Projectile*>(other);
+	_hitHandler(*this, projectile->GetDamage());
 }
 
 void Bloon::Update(float deltaTime)
@@ -82,13 +79,3 @@ void Bloon::followPath(float deltaTime)
 	Move(deltaTime); // MovableActor::Move가 _dir * _moveSpeed * deltaTime 만큼 이동시킴
 }
 
-void Bloon::spawnNextTier() const
-{
-	GameScene* owner = static_cast<GameScene*>
-		(GetOwner());
-	if (owner == nullptr)
-		return;
-
-	const BloonColor nextColor = static_cast<BloonColor>(static_cast<int32>(_color) - 1);
-	owner->SpawnBloon(nextColor, GetPos(), _path, _waypointIndex);
-}
