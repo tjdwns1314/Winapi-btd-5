@@ -1,10 +1,11 @@
-#pragma once
+﻿#pragma once
 #include "Singleton.h"
 
 enum class KeyType
 {
 	LeftMouse,
 	RightMouse,
+	F1,
 };
 
 class InputManager : public Singleton<InputManager>
@@ -25,6 +26,6 @@ private:
 
 	HWND _hwnd = nullptr;
 	Vector _mousePos;
-	bool _prevPressed[2] = {};
-	bool _currPressed[2] = {};
+	bool _prevPressed[3] = {};
+	bool _currPressed[3] = {};
 };
