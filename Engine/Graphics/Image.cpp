@@ -12,6 +12,18 @@ void Image::Load(Graphic& graphic, const wchar_t* fileName)
 	if (_bitmap) _size = _bitmap->GetSize(); // 이미지의 가로, 세로 크기 기록
 }
 
+void Image::LoadFromBitmap(ID2D1Bitmap* bitmap)
+{
+	_bitmap = bitmap;
+	if (_bitmap) _size = _bitmap->GetSize();
+}
+
+// [실제 화면용] 화면 렌더타깃을 꺼내서 아래 공용 버전으로 위임한다.
+void Image::DrawSprite(Graphic& graphic, float centerX, float centerY, const CellInfo& cell, float scale, float angle, bool flipX)
+{
+	DrawSprite(graphic.GetRenderTarget(), centerX, centerY, cell, scale, angle, flipX);
+}
+
 void Image::Draw(Graphic& graphic, float centerX, float centerY, float scale, float angle)
 {
 	if (!_bitmap) return;
@@ -32,7 +44,10 @@ void Image::Draw(Graphic& graphic, float centerX, float centerY, float scale, fl
 	renderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
 }
 
-void Image::DrawSprite(Graphic& graphic, float centerX, float centerY, const CellInfo& cell, float scale, float angle, bool flipX)
+// [공용/임시 도화지용] 실제로 DrawBitmap을 호출하는 본체.
+// renderTarget으로 화면(ID2D1HwndRenderTarget)과 임시 텍스처(ID2D1BitmapRenderTarget)를
+// 구분 없이 받을 수 있어서, BakeImage로 굽는 용도로도 그대로 재사용된다.
+void Image::DrawSprite(ID2D1RenderTarget* renderTarget, float centerX, float centerY, const CellInfo& cell, float scale, float angle, bool flipX)
 {
 	if (!_bitmap) return;
 
@@ -47,7 +62,6 @@ void Image::DrawSprite(Graphic& graphic, float centerX, float centerY, const Cel
 	const float drawY = originY + cell.ay * scale;
 
 	D2D1_RECT_F destRect = D2D1::RectF(drawX, drawY, drawX + cell.w * scale, drawY + cell.h * scale);
-	ID2D1HwndRenderTarget* renderTarget = graphic.GetRenderTarget();
 
 	D2D1::Matrix3x2F transform = D2D1::Matrix3x2F::Identity();
 	if (flipX)
@@ -63,6 +77,8 @@ void Image::DrawSprite(Graphic& graphic, float centerX, float centerY, const Cel
 		D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
 		srcRect
 	);
+
+	renderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
 }
 
 void Image::Release()
