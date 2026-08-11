@@ -1,0 +1,7 @@
+bloon_scrambler_bell_a : 빨간풍선
+bloon_scrambler_bell_b : 흔들리는 빨간풍선
+
+
+golden_bloon_01 : 골드 풍선 
+stock_bloon : 하얀 풍선
+stock_regen_bloon : 하얀 하트 풍선
