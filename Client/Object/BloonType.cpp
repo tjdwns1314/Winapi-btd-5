@@ -40,7 +40,7 @@ namespace
             {
                 BloonChildSpawn spawn;
                 spawn.color =
-                    ParseBloonColorName(entry.at("color").get<string>());
+                    ParseBloonColorName(child.at("color").get<string>());
 
                 spawn.count =
                     child.at("count").get<int32>();
