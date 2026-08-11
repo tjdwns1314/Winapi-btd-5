@@ -58,6 +58,13 @@ ID2D1SolidColorBrush* Graphic::GetBrush(const D2D1::ColorF& color)
 	return _brush;
 }
 
+ID2D1BitmapRenderTarget* Graphic::CreateOffscreenRenderTarget(D2D1_SIZE_F size)
+{
+	ID2D1BitmapRenderTarget* target = nullptr;
+	_renderTarget->CreateCompatibleRenderTarget(size, &target);
+	return target;
+}
+
 void Graphic::BeginDraw() { _renderTarget->BeginDraw(); }
 void Graphic::EndDraw() { _renderTarget->EndDraw(); }
 void Graphic::Clear(D2D1::ColorF color) { _renderTarget->Clear(color); }

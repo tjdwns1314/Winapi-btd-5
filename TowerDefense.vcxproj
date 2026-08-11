@@ -165,6 +165,7 @@
     <ClInclude Include="Client\Scene\Scene.h" />
     <ClInclude Include="Engine\Graphics\Graphic.h" />
     <ClInclude Include="Engine\Graphics\Image.h" />
+    <ClInclude Include="Engine\Graphics\SpriteBaker.h" />
     <ClInclude Include="Engine\Core\MovableActor.h" />
     <ClInclude Include="Engine\Core\ObjectPool.h" />
     <ClInclude Include="Engine\Manager\ResourceManager.h" />
@@ -214,6 +215,7 @@
     <ClCompile Include="Client\Scene\Scene.cpp" />
     <ClCompile Include="Engine\Graphics\Graphic.cpp" />
     <ClCompile Include="Engine\Graphics\Image.cpp" />
+    <ClCompile Include="Engine\Graphics\SpriteBaker.cpp" />
     <ClCompile Include="Engine\Core\MovableActor.cpp" />
     <ClCompile Include="Engine\Manager\ResourceManager.cpp" />
     <ClCompile Include="Common\pch.cpp">

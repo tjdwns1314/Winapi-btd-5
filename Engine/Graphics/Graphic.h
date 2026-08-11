@@ -14,6 +14,12 @@ public :
 	// 디버그용 그리드/경로 렌더, 타워 사거리 표시 등에 사용.
 	ID2D1SolidColorBrush* GetBrush(const D2D1::ColorF& color);
 
+	// 메인 화면과 별개로, 지정한 크기만큼의 임시 도화지(오프스크린 렌더타깃)을 만든다.
+	// 여기에 스프라이트를 미리 합성해두면, 이후에는 완성된 비트맵 하나만 그리면 된다.
+	ID2D1BitmapRenderTarget* CreateOffscreenRenderTarget(D2D1_SIZE_F size);
+
+
+
 private:
 	// Direct2D 객체들을 생성해주는 공장
 	ID2D1Factory* _factory = nullptr;
