@@ -146,6 +146,7 @@
     <ClInclude Include="Client\Object\BloonFactory.h" />
     <ClInclude Include="Client\Object\WaveManager.h" />
     <ClInclude Include="Client\Object\ProjectileFactory.h" />
+    <ClInclude Include="Client\Scene\EditorScene.h" />
     <ClInclude Include="Common\External\json.hpp" />
     <ClInclude Include="Engine\Collision\Collider.h" />
     <ClInclude Include="Engine\Collision\ColliderCircle.h" />
@@ -199,6 +200,7 @@
     <ClCompile Include="Client\Object\TowerFireBehavior.cpp" />
     <ClCompile Include="Client\Object\WaveManager.cpp" />
     <ClCompile Include="Client\Object\ProjectileFactory.cpp" />
+    <ClCompile Include="Client\Scene\EditorScene.cpp" />
     <ClCompile Include="Engine\Collision\Collider.cpp" />
     <ClCompile Include="Engine\Collision\ColliderCircle.cpp" />
     <ClCompile Include="Engine\Collision\ColliderEllipse.cpp" />

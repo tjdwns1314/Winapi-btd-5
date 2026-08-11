@@ -190,6 +190,9 @@
     <ClInclude Include="Common\External\json.hpp">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="Client\Scene\EditorScene.h">
+      <Filter>Client\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\Core\Actor.cpp">
@@ -316,6 +319,9 @@
     </ClCompile>
     <ClCompile Include="Client\Object\BloonType.cpp">
       <Filter>Client\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\Scene\EditorScene.cpp">
+      <Filter>Client\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
