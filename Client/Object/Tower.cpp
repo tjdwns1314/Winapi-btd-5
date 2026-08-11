@@ -1,7 +1,6 @@
 ﻿#include "pch.h"
 #include "Tower.h"
 #include "GameScene.h"
-#include "ResourceManager.h"
 #include "Collider.h"
 #include "ColliderCircle.h"
 
@@ -24,10 +23,6 @@ void Tower::Init()
 	Super::Init();
 	SetActorType(ActorType::Tower);
 	SetLayer(RenderLayer::Tower);
-
-	ResourceManager& res = ResourceManager::GetInstance();
-	_image = &res.GetImage(L"Resource\\Sprite\\InGame.png");
-	_cell = res.GetAtlas(L"Resource\\Sprite\\InGame.xml").GetCell(_spriteName);
 }
 
 void Tower::Update(float deltaTime)
@@ -38,20 +33,34 @@ void Tower::Update(float deltaTime)
 	if (_target != nullptr && (_target->IsPendingKill() || isInRange(_target) == false))
 		_target = nullptr;
 
+	const bool hadTarget = (_target != nullptr);
 	if (_target == nullptr)
 		_target = findTarget();
 
-	if (_target != nullptr)
+	if (_stat.rotatesToTarget && _target != nullptr)
 	{
 		Vector dir = _target->GetPos() - GetPos();
 		if (dir.Length() >= SMALL_NUMBER)
 			SetRotation(RadianToDegree(atan2f(dir.x, -dir.y)));
 	}
 
-	_fireTimer += deltaTime;
-	if (_fireTimer >= _attackSpeed)
+	if (_target == nullptr)
 	{
-		_fireTimer -= _attackSpeed;
+		_fireTimer = 0.f;
+		return;
+	}
+
+	if (hadTarget == false)
+	{
+		fire();
+		_fireTimer = 0.f;
+		return;
+	}
+
+	_fireTimer += deltaTime;
+	if (_fireTimer >= _stat.attackSpeed)
+	{
+		_fireTimer -= _stat.attackSpeed;
 		fire();
 	}
 }
@@ -59,11 +68,16 @@ void Tower::Update(float deltaTime)
 void Tower::Render(Graphic& graphic)
 {
 	Super::Render(graphic);
-	if (_image == nullptr || _cell == nullptr)
-		return;
 	const Vector pos = GetPos();
 	const Vector scale = GetScale();
-	_image->DrawSprite(graphic, pos.x, pos.y, *_cell, scale.x, GetRotation());
+
+	if (_bakedImage != nullptr)
+		_bakedImage->Draw(graphic, pos.x, pos.y, scale.x, GetRotation());
+	else if (_image != nullptr && _cell != nullptr)
+		_image->DrawSprite(graphic, pos.x, pos.y, *_cell, scale.x, GetRotation());
+	else
+		return;
+
 	RenderRange(graphic);
 }
 
@@ -74,7 +88,7 @@ void Tower::RenderRange(Graphic& graphic) const
 	if (renderTarget == nullptr || brush == nullptr)
 		return;
 	const Vector pos = GetPos();
-	renderTarget->DrawEllipse(D2D1::Ellipse(D2D1::Point2F(pos.x, pos.y), _attackRange, _attackRange), brush, 2.f);
+	renderTarget->DrawEllipse(D2D1::Ellipse(D2D1::Point2F(pos.x, pos.y), _stat.attackRange, _stat.attackRange), brush, 2.f);
 }
 
 bool Tower::isInRange(const Actor* target) const
@@ -82,7 +96,7 @@ bool Tower::isInRange(const Actor* target) const
 	if (target == nullptr)
 		return false;
 
-	const float range = _attackRange + GetColliderRadius(target);
+	const float range = _stat.attackRange + GetColliderRadius(target);
 	const Vector diff = target->GetPos() - GetPos();
 	const float distSq = diff.x * diff.x + diff.y * diff.y;
 	return distSq <= range * range;
@@ -115,19 +129,13 @@ Bloon* Tower::findTarget() const
 	return nearest;
 }
 
+GameScene* Tower::GetGameScene() const
+{
+	return static_cast<GameScene*>(GetOwner());
+}
+
 void Tower::fire()
 {
-	if (_target == nullptr)
-		return;
-
-	GameScene* owner = static_cast<GameScene*>(GetOwner());
-	if (owner == nullptr)
-		return;
-
-	Vector dir = _target->GetPos() - GetPos();
-	if (dir.Length() < SMALL_NUMBER)
-		return;
-
-	dir.Normalize();
-	owner->SpawnProjectile(GetPos(), dir, _damage);
+	if (_fireBehavior != nullptr)
+		_fireBehavior(*this);
 }

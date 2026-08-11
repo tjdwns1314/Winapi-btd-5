@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "UIButton.h"
+#include "TowerType.h"
 
 class Graphic;
 class Image;
@@ -17,11 +18,13 @@ public:
 		function<void()> onWaveUp,
 		function<void()> onWaveDown);
 	void Render(Graphic& graphic,
-		const char* draggingTowerSprite,
+		bool isDraggingTower,
+		TowerType draggingTowerType,
 		const Vector& dragPreviewPos);
 private:
 	UIButton* createButton(const Vector& pos, const Vector& size, function<void()> onClick);
 	void renderDebugWaveButtons(Graphic& graphic) const;
+	void drawTowerIcon(Graphic& graphic, const Vector& pos, TowerType type, float scale) const;
 
 	// 버튼
 	UIButton* _startButton = nullptr;

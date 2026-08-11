@@ -1,0 +1,52 @@
+{
+    "towers" :[
+        {
+            "type" : "DartMonkey",
+            "damage" : 1,
+            "attackRange" : 240,
+            "attackSpeed" : 1.0,
+            "rotatesToTarget" : true,
+            "attackCount" : 1,
+            "projectileKey" : "dart",
+            "basePrice" : 200,
+            "refundPrice" : 140,
+            "upgradeCosts" : [100,250,500,1000]
+        },
+        {
+            "type": "TackShooter",
+            "damage": 1,
+            "attackRange": 100,
+            "attackSpeed": 2.0,
+            "rotatesToTarget": false,
+            "attackCount": 8,
+            "projectileKey": "tack",
+            "basePrice": 260,
+            "refundPrice": 182,
+           "upgradeCosts": [150, 300, 600, 1200]
+        },
+        {
+            "type": "SniperMonkey",
+            "damage": 1,
+            "attackRange": 2000,
+            "attackSpeed": 1.0,
+            "rotatesToTarget": true,
+            "attackCount": 1,
+            "projectileKey": "sniper_bullet",
+            "basePrice": 350,
+            "refundPrice": 245,
+            "upgradeCosts": [200, 400, 800, 1600]
+        },
+        {
+            "type": "BombTower",
+            "damage": 1,
+            "attackRange": 180,
+            "attackSpeed": 1.0,
+            "rotatesToTarget": true,
+            "attackCount": 1,
+            "projectileKey": "bomb",
+            "basePrice": 425,
+            "refundPrice": 297,
+            "upgradeCosts": [250, 500, 1000, 2000]
+        }
+    ]
+}
