@@ -34,7 +34,7 @@ UIButton* GameSceneUI::createButton(const Vector& pos, const Vector& size, funct
 	return button;
 }
 
-void GameSceneUI::Render(Graphic& graphic, const char* draggingTowerSprite, const Vector& dragPreviewPos)
+void GameSceneUI::Render(Graphic& graphic, bool isDraggingTower, TowerType draggingTowerType, const Vector& dragPreviewPos)
 {
 	const CellInfo* playCell = _hudSprite->GetCell("play_icon");
 	if (playCell != nullptr)
@@ -43,32 +43,28 @@ void GameSceneUI::Render(Graphic& graphic, const char* draggingTowerSprite, cons
 		_hudImg->DrawSprite(graphic, pos.x, pos.y, *playCell, 1.0f, 0.0f);
 	}
 
-	const CellInfo* bodyCell = _sprite->GetCell("dart_monkey_body");
-	if (bodyCell != nullptr)
-	{
-		const Vector shopPos = _dartMonkeyShopButton->GetPos();
-		_inGameBg->DrawSprite(graphic, shopPos.x, shopPos.y, *bodyCell, 1.0f, 0.0f);
-	}
+	drawTowerIcon(graphic, _dartMonkeyShopButton->GetPos(), TowerType::DartMonkey, 1.0f);
+	// 상점 박스가 작아서(52x104) 베이크 텍스처(200x200)를 그대로 넣을 수 없어 축소해서 그린다.
+	// 0.5는 임시값 — 빌드 후 눈으로 보고 조정할 것.
+	drawTowerIcon(graphic, _tackShooterShopButton->GetPos(), TowerType::TackShooter, 1.0f);
 
-	const CellInfo* tackCell = _sprite->GetCell("tack_shooter_base");
-	if (tackCell != nullptr)
-	{
-		// tack_shooter_base는 원의 절단면(대칭축)이 박스 오른쪽 끝(aw/2)에 있어서,
-		// 두 장을 절단면 기준으로 shopPos에서 만나게 하려면 aw/2만큼 좌우로 밀어줘야 한다.
-		const Vector shopPos = _tackShooterShopButton->GetPos();
-		const float halfWidth = tackCell->aw * 0.5f;
-		_inGameBg->DrawSprite(graphic, shopPos.x - halfWidth, shopPos.y, *tackCell, 1.0f, 0.0f);
-		_inGameBg->DrawSprite(graphic, shopPos.x + halfWidth, shopPos.y, *tackCell, 1.0f, 0.0f, true);
-	}
-
-	if (draggingTowerSprite != nullptr)
-	{
-		const CellInfo* previewCell = _sprite->GetCell(draggingTowerSprite);
-		if (previewCell != nullptr)
-			_inGameBg->DrawSprite(graphic, dragPreviewPos.x, dragPreviewPos.y, *previewCell, 1.0f, 0.0f);
-	}
+	if (isDraggingTower)
+		drawTowerIcon(graphic, dragPreviewPos, draggingTowerType, 1.0f);
 
 	renderDebugWaveButtons(graphic);
+}
+
+void GameSceneUI::drawTowerIcon(Graphic& graphic, const Vector& pos, TowerType type, float scale) const
+{
+	const TowerVisual& visual = GetTowerVisual(type);
+	if (visual.useBakedImage)
+	{
+		ResourceManager::GetInstance().GetImage(visual.bakedImageKey.c_str()).Draw(graphic, pos.x, pos.y, scale, 0.0f);
+		return;
+	}
+
+	if (const CellInfo* cell = _sprite->GetCell(visual.cellName.c_str()))
+		_inGameBg->DrawSprite(graphic, pos.x, pos.y, *cell, scale, 0.0f);
 }
 
 void GameSceneUI::renderDebugWaveButtons(Graphic& graphic) const

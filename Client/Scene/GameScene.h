@@ -13,6 +13,7 @@
 #include "WaveManager.h"
 #include "ProjectileFactory.h"
 #include "Projectile.h"
+#include "TowerType.h"
 
 class GameScene : public Scene
 {
@@ -34,9 +35,6 @@ public:
 	// --------------------------------------------------
 	// Tower가 풀/Scene 등록을 직접 몰라도 되도록, 발사만 대행해준다.
 	Projectile* SpawnProjectile(const Vector& pos, const Vector& dir, float damage);
-
-	// Bloon이 죽을 때 하위 등급 생성을 대행해준다 (SpawnProjectile과 동일한 패턴).
-	Bloon* SpawnBloon(BloonColor color, const Vector& pos, const vector<Vector>* path, size_t waypointIndex = 0);
 
 protected:
 	virtual void CreateUI() override;
@@ -74,7 +72,8 @@ private:
 
 	// UI 및 타워 드래그 상태
 	GameSceneUI _ui;
-	const char* _draggingTowerSprite = nullptr;
+	bool _isDraggingTower = false;
+	TowerType _draggingTowerType = TowerType::DartMonkey;
 
 	// 디버그 타이틀바 표시용 캐시 (값이 바뀔 때만 SetWindowText 호출)
 	int32 _lastTitleCurrentRound = -1;

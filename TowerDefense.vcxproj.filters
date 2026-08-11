@@ -106,6 +106,15 @@
     <ClInclude Include="Client\Object\BloonFactory.h">
       <Filter>Client\Object</Filter>
     </ClInclude>
+    <ClInclude Include="Client\Object\TowerType.h">
+      <Filter>Client\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\Object\TowerFactory.h">
+      <Filter>Client\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\Object\TowerFireBehavior.h">
+      <Filter>Client\Object</Filter>
+    </ClInclude>
     <ClInclude Include="Client\Object\WaveManager.h">
       <Filter>Client\Object</Filter>
     </ClInclude>
@@ -264,6 +273,15 @@
     <ClCompile Include="Client\Object\Tower.cpp">
       <Filter>Client\Object</Filter>
     </ClCompile>
+    <ClCompile Include="Client\Object\TowerType.cpp">
+      <Filter>Client\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\Object\TowerFactory.cpp">
+      <Filter>Client\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\Object\TowerFireBehavior.cpp">
+      <Filter>Client\Object</Filter>
+    </ClCompile>
     <ClCompile Include="Client\Core\TowerDefense.cpp">
       <Filter>Client\Core</Filter>
     </ClCompile>
@@ -290,7 +308,9 @@
     <ClCompile Include="Client\Object\PoolManager.cpp">
       <Filter>Client\Object</Filter>
     </ClCompile>
-    <ClCompile Include="Client\Object\BloonType.cpp" />
+    <ClCompile Include="Client\Object\BloonType.cpp">
+      <Filter>Client\Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="TowerDefense.rc">

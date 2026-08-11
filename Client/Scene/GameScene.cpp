@@ -2,6 +2,7 @@
 #include "GameScene.h"
 #include "InputManager.h"
 #include "Tower.h"
+#include "TowerFactory.h"
 #include "PoolManager.h"
 #include "Game.h"
 
@@ -38,7 +39,7 @@ void GameScene::Init(Graphic& graphic)
 		(startCell.iX + 0.5f) * gridSize,
 		(startCell.iY + 0.5f) * gridSize);
 
-	PoolManager::GetInstance().Init(200, 200);
+	PoolManager::GetInstance().Init(200, 200, 50);
 	_waveManager.Init(&PoolManager::GetInstance().GetBloonPool(), _bloonSpawnPos, &_path, this);
 
 	GetCollisionManager().RegisterLayer(RenderLayer::Bloon, RenderLayer::Projectile);
@@ -71,17 +72,17 @@ void GameScene::Render(Graphic& graphic)
 		_hudImg->DrawSprite(graphic, 1575.0f, 135.0f, *thumbBoxCell, 1.0f);
 	}
 
-	// [임시 테스트] 스프라이트 한 장 확인용 - 확인 끝나면 제거
-	//const CellInfo* testCell = _sprite->GetCell("bloon_scrambler_bell_a");
-	//if (testCell)
-	//{
-	//	_inGameBg->DrawSprite(graphic, 400.0f, 400.0f, *testCell, 1.0f);
-	//}
+	// [임시 테스트] tack_shooter_tack_logo 확인용 - 확인 끝나면 제거
+	const CellInfo* tackLogoCell = _sprite->GetCell("bomb_tower_01");
+	if (tackLogoCell)
+	{
+		_inGameBg->DrawSprite(graphic, 400.0f, 400.0f, *tackLogoCell, 1.0f);
+	}
 
 	renderGrid(graphic);
 	renderPathDebug(graphic);
 	renderStartEndDebug(graphic);
-	_ui.Render(graphic, _draggingTowerSprite, InputManager::GetInstance().GetMousePos());
+	_ui.Render(graphic, _isDraggingTower, _draggingTowerType, InputManager::GetInstance().GetMousePos());
 	Super::Render(graphic);
 }
 
@@ -89,8 +90,8 @@ void GameScene::CreateUI()
 {
 	_ui.Init(
 		[this]() { _waveManager.StartNextWave(); },
-		[this]() { if (_waveManager.IsWaveActive() == false) _draggingTowerSprite = "dart_monkey_body"; },
-		[this]() { if (_waveManager.IsWaveActive() == false) _draggingTowerSprite = "tack_shooter_base"; },
+		[this]() { if (_waveManager.IsWaveActive() == false) { _isDraggingTower = true; _draggingTowerType = TowerType::DartMonkey; } },
+		[this]() { if (_waveManager.IsWaveActive() == false) { _isDraggingTower = true; _draggingTowerType = TowerType::TackShooter; } },
 		[this]() { _waveManager.SetNextRound(_waveManager.GetNextRoundNumber() + 1); },
 		[this]() { _waveManager.SetNextRound(_waveManager.GetNextRoundNumber() - 1); });
 
@@ -106,25 +107,16 @@ Projectile* GameScene::SpawnProjectile(const Vector& pos, const Vector& dir, flo
 	return projectile;
 }
 
-Bloon* GameScene::SpawnBloon(BloonColor color, const Vector& pos, const vector<Vector>* path, size_t waypointIndex)
-{
-	Bloon* bloon = BloonFactory::Create(PoolManager::GetInstance().GetBloonPool(), color, pos, path, waypointIndex);
-	if (bloon != nullptr)
-		AddActor(bloon);
-
-	return bloon;
-}
-
 void GameScene::updateTowerDrag()
 {
-	if (_draggingTowerSprite == nullptr)
+	if (_isDraggingTower == false)
 		return;
 
 	if (InputManager::GetInstance().GetButtonUp(KeyType::LeftMouse) == false)
 		return;
 
-	const char* spriteName = _draggingTowerSprite;
-	_draggingTowerSprite = nullptr;
+	const TowerType towerType = _draggingTowerType;
+	_isDraggingTower = false;
 
 	const Vector mousePos = InputManager::GetInstance().GetMousePos();
 	if (mousePos.x < 0.f || mousePos.x >= GameAreaWidth
@@ -161,11 +153,10 @@ void GameScene::updateTowerDrag()
 	}
 	_path = std::move(newPath);
 
-	Tower* tower = new Tower();
-	tower->SetSpriteName(spriteName);
-	tower->SetPos(Vector((targetCell.iX + 0.5f) * gridSize, (targetCell.iY + 0.5f) * gridSize));
-	tower->Init();
-	AddActor(tower);
+	Tower* tower = TowerFactory::Create(PoolManager::GetInstance().GetTowerPool(), towerType,
+		Vector((targetCell.iX + 0.5f) * gridSize, (targetCell.iY + 0.5f) * gridSize));
+	if (tower != nullptr)
+		AddActor(tower);
 }
 
 void GameScene::updateDebugWaveTitle()
