@@ -70,6 +70,7 @@ const TowerVisual& GetTowerVisual(TowerType type)
 		{ TowerType::DartMonkey,  TowerVisual{ true,  L"dart_monkey_baked", "" } },
 		{ TowerType::TackShooter, TowerVisual{ true,  L"tack_shooter_baked", "" } },
 		{ TowerType::SniperMonkey, TowerVisual{ true, L"sniper_monkey_baked", "" } },
+		{ TowerType::BombTower, TowerVisual{ true,  L"bomb_tower_baked", "" } },
 	};
 	return table.at(type);
 }
