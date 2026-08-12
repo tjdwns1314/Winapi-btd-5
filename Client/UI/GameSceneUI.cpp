@@ -7,6 +7,7 @@ void GameSceneUI::Init(
 	function<void()> onStartWave,
 	function<void()> onDartShopClick,
 	function<void()> onTackShopClick,
+	function<void()> onSniperShopClick,
 	function<void()> onWaveUp,
 	function<void()> onWaveDown)
 {
@@ -19,6 +20,7 @@ void GameSceneUI::Init(
 	_startButton = createButton(Vector(1575.0f, 450.0f), Vector(128.0f, 129.0f), onStartWave);
 	_dartMonkeyShopButton = createButton(Vector(1575.0f, 650.0f), Vector(109.0f, 113.0f), onDartShopClick);
 	_tackShooterShopButton = createButton(Vector(1575.0f, 790.0f), Vector(52.0f, 104.0f), onTackShopClick);
+	_sniperMonkeyShopButton = createButton(Vector(1720.0f, 650.0f), Vector(109.0f, 113.0f), onSniperShopClick);
 	_waveUpButton = createButton(Vector(1720.0f, 450.0f), Vector(40.0f, 40.0f), onWaveUp);
 	_waveDownButton = createButton(Vector(1720.0f, 500.0f), Vector(40.0f, 40.0f), onWaveDown);
 }
@@ -47,6 +49,7 @@ void GameSceneUI::Render(Graphic& graphic, bool isDraggingTower, TowerType dragg
 	// 상점 박스가 작아서(52x104) 베이크 텍스처(200x200)를 그대로 넣을 수 없어 축소해서 그린다.
 	// 0.5는 임시값 — 빌드 후 눈으로 보고 조정할 것.
 	drawTowerIcon(graphic, _tackShooterShopButton->GetPos(), TowerType::TackShooter, 1.0f);
+	drawTowerIcon(graphic, _sniperMonkeyShopButton->GetPos(), TowerType::SniperMonkey, 1.0f);
 
 	if (isDraggingTower)
 		drawTowerIcon(graphic, dragPreviewPos, draggingTowerType, 1.0f);

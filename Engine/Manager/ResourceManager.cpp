@@ -64,6 +64,13 @@ void ResourceManager::Init(Graphic& graphic)
 	{.cellName = "dart_monkey_arm_01" },
 	{.cellName = "dart_monkey_body" },
 	});
+
+	baker.Bake(*this, graphic, L"sniper_monkey_baked", { 140.0f, 230.0f }, {
+	{.cellName = "sniper_arm",         .offset = {-5.0f, -60.0f} },
+	{.cellName = "dart_monkey_body" },
+	{.cellName = "sniper_green_hat",   .offset = {-5.0f, -5.0f} },
+	{.cellName = "sniper_basic_rifle", .offset = {-25.0f, -70.0f} },
+	});
 }
 
 void ResourceManager::loadAtlas(const wchar_t* xmlPath)
