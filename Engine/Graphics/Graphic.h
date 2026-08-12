@@ -18,6 +18,9 @@ public :
 	// 여기에 스프라이트를 미리 합성해두면, 이후에는 완성된 비트맵 하나만 그리면 된다.
 	ID2D1BitmapRenderTarget* CreateOffscreenRenderTarget(D2D1_SIZE_F size);
 
+	void DrawText(const wchar_t* text, D2D1_RECT_F layoutRect, FontSize size,
+		D2D1::ColorF color, DWRITE_TEXT_ALIGNMENT align =
+		DWRITE_TEXT_ALIGNMENT_LEADING);
 
 
 private:
@@ -29,5 +32,9 @@ private:
 	IWICImagingFactory* _wicFactory = nullptr;
 	// 재사용 브러시. 매 프레임 생성하지 않기 위해 캐싱한다.
 	ID2D1SolidColorBrush* _brush = nullptr;
+
+	IDWriteFactory* _dwriteFactory = nullptr;
+	unordered_map<FontSize, IDWriteTextFormat*> _textFormats;
+	IDWriteTextFormat* GetTextFormat(FontSize size);
 };
 
