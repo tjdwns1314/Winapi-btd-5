@@ -25,6 +25,7 @@ namespace
 			stat.damage = entry.at("damage").get<int32>();
 			stat.attackRange = entry.at("attackRange").get<float>();
 			stat.attackSpeed = entry.at("attackSpeed").get<float>();
+			stat.projectileSpeed = entry.at("projectileSpeed").get<float>();
 			stat.rotatesToTarget = entry.at("rotatesToTarget").get<bool>();
 			stat.attackCount = entry.at("attackCount").get<int32>();
 			stat.projectileKey = entry.at("projectileKey").get<string>();

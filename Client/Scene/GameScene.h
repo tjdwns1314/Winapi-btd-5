@@ -39,7 +39,7 @@ public:
 	// --------------------------------------------------
 	// Tower가 풀/Scene 등록을 직접 몰라도 되도록, 발사만 대행해준다.
 	Projectile* SpawnProjectile(const Vector& pos,
-		const Vector& dir, float damage, const string& spriteKey);
+		const Vector& dir, float damage, const string& spriteKey, float speed);
 
 	// 체력은 싱글톤이 아니라 GameScene이 소유한다. BloonPopResolver가 새어나감 데미지를 넣을 때 접근한다.
 	HealthManager& GetHealthManager() { return _healthManager; }

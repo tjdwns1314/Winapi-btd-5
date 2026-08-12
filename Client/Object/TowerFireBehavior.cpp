@@ -21,7 +21,7 @@ namespace
 			return;
 
 		dir.Normalize();
-		owner->SpawnProjectile(tower.GetPos(), dir, static_cast<float>(tower.GetStat().damage), tower.GetStat().projectileKey);
+		owner->SpawnProjectile(tower.GetPos(), dir, static_cast<float>(tower.GetStat().damage), tower.GetStat().projectileKey, tower.GetStat().projectileSpeed);
 	}
 
 	// 압정슈터: 사거리 안에 적이 있을 때만 8방향으로 동시에 발사. 방향 자체는 타겟을 따라가지 않는다.
@@ -39,7 +39,7 @@ namespace
 		{
 			const float rad = DegreeToRadian(360.0f / directionCount * i);
 			const Vector dir(sinf(rad), -cosf(rad));
-			owner->SpawnProjectile(tower.GetPos(), dir, static_cast<float>(tower.GetStat().damage), tower.GetStat().projectileKey);
+			owner->SpawnProjectile(tower.GetPos(), dir, static_cast<float>(tower.GetStat().damage), tower.GetStat().projectileKey, tower.GetStat().projectileSpeed);
 		}
 	}
 

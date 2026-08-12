@@ -15,6 +15,7 @@ struct TowerStat
 	int32 damage;
 	float attackRange;
 	float attackSpeed;
+	float projectileSpeed;
 	bool rotatesToTarget;
 	int32 attackCount;
 	string projectileKey;
