@@ -27,6 +27,7 @@ private:
 	UIButton* createButton(const Vector& pos, const Vector& size, function<void()> onClick);
 	void renderDebugWaveButtons(Graphic& graphic) const;
 	void drawTowerIcon(Graphic& graphic, const Vector& pos, TowerType type, float scale) const;
+	void drawRangePreview(Graphic& graphic, const Vector& pos, TowerType type) const;
 
 	// 버튼
 	UIButton* _startButton = nullptr;
