@@ -47,7 +47,69 @@ void Graphic::Init(HWND hwnd)
 
 	// 5. 재사용할 브러시 하나를 미리 만들어둔다. (색은 GetBrush에서 교체)
 	_renderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), &_brush);
+
+
+
+
+
+
+	// 팩토리 객체 생성 함수
+	// 첫번째 인자 팩토리 타입 => 폰트 및 기타 데이터 공유
+	// 두번째 인자 지정한 타입의 고유 식별자 가져오기
+	// 생성된 팩토리 객체의 주소를 받아올 포인터 변수의 주소
+	// hr : com함수의 작업 성공/실패 여부를 나타내는 상태 코드
+	// 상태코드가 실패했는지 확인하는매크로 
+	hr = DWriteCreateFactory(
+		DWRITE_FACTORY_TYPE_SHARED,
+		__uuidof(IDWriteFactory),
+		reinterpret_cast<IUnknown**>
+		(&_dwriteFactory));
+	if (FAILED(hr)) return;
+
+
 }
+
+IDWriteTextFormat*Graphic::GetTextFormat(FontSize size)
+{
+	auto it = _textFormats.find(size);
+	if (it != _textFormats.end())
+		return it->second;
+
+	IDWriteTextFormat* format = nullptr;
+	_dwriteFactory->CreateTextFormat(L"맑은 고딕", nullptr,
+		DWRITE_FONT_WEIGHT_BOLD,
+		DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH_NORMAL,
+		static_cast<float>(size), 
+		L"ko-kr", 
+		&format);
+	_textFormats[size] = format;
+	return format;
+}
+
+void Graphic::DrawText(const wchar_t* text, 
+	D2D1_RECT_F layoutRect, 
+	FontSize size, 
+	D2D1::ColorF color,
+	DWRITE_TEXT_ALIGNMENT align)
+{
+	IDWriteTextFormat* format = GetTextFormat(size);
+	if (format == nullptr) return;
+	format->SetTextAlignment(align);
+
+	ID2D1SolidColorBrush* brush = GetBrush(color);
+	if (brush == nullptr) return;
+
+	_renderTarget->DrawText(text, 
+		static_cast<uint32>(wcslen(text)), 
+		format, 
+		layoutRect, 
+		brush);
+
+}
+
+
+
 
 ID2D1SolidColorBrush* Graphic::GetBrush(const D2D1::ColorF& color)
 {
@@ -72,6 +134,18 @@ void Graphic::Clear(D2D1::ColorF color) { _renderTarget->Clear(color); }
 void Graphic::Cleanup()
 {
 	// COM 객체는 delete가 아니라 Release로 해제한다.
+	for (auto& [size, format] : _textFormats)
+	{
+		if (format) format->Release();
+	}
+	_textFormats.clear();
+
+	if (_dwriteFactory)
+	{
+		_dwriteFactory->Release();
+		_dwriteFactory = nullptr;
+	}
+
 	if (_brush)
 	{
 		_brush->Release();

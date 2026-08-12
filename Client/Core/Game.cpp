@@ -10,6 +10,7 @@
 #pragma comment(lib, "d2d1.lib")
 #pragma comment(lib, "windowscodecs.lib") // WIC(이미지 로더) 관련 함수도 쓰고 있으므로 같이 필요
 #pragma comment(lib, "ole32.lib")
+#pragma comment(lib, "dwrite.lib")
 
 void Game::Init(HWND hwnd)
 {
