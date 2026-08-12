@@ -8,6 +8,17 @@ class SpriteAtlas;
 
 // GameScene 전용 UI(시작 버튼, 상점 버튼, 타워 드래그 프리뷰)의
 // 생성/배치/렌더링을 전담한다. GameScene은 콜백만 넘기고 결과를 그리게 시킨다.
+
+struct TowerSelectionInfo
+{
+	bool isSelected = false;
+	int32 sellPrice = 0;
+	int32 upgradePrice = 0;
+	bool canUpgrade = false;
+};
+
+
+
 class GameSceneUI
 {
 public:
@@ -18,11 +29,15 @@ public:
 		function<void()> onSniperShopClick,
 		function<void()> onBombShopClick,
 		function<void()> onWaveUp,
-		function<void()> onWaveDown);
+		function<void()> onWaveDown,
+		function<void()> onSellClick,
+		function<void()> onUpgradeClick);
+
 	void Render(Graphic& graphic,
 		bool isDraggingTower,
 		TowerType draggingTowerType,
 		const Vector& dragPreviewPos,
+		const TowerSelectionInfo& selection,
 		int32 hp,
 		int32 gold);
 private:
@@ -30,6 +45,7 @@ private:
 	void renderDebugWaveButtons(Graphic& graphic) const;
 	void renderGoldText(Graphic& graphic, int32 gold) const;
 	void renderHpText(Graphic& graphic, int32 hp) const;
+	void renderTowerSelectionPanel(Graphic& graphic, const TowerSelectionInfo& selection) const;
 	void drawTowerIcon(Graphic& graphic, const Vector& pos, TowerType type, float scale) const;
 	void drawRangePreview(Graphic& graphic, const Vector& pos, TowerType type) const;
 
@@ -41,6 +57,8 @@ private:
 	UIButton* _bombTowerShopButton = nullptr;
 	UIButton* _waveUpButton = nullptr;   // 디버그용: 시작 라운드를 +/-로 조절(정식 스프라이트 없이 도형으로 그림)
 	UIButton* _waveDownButton = nullptr;
+	UIButton* _sellButton = nullptr;
+	UIButton* _upgradeButton = nullptr;
 
 	// 스프라이트 리소스
 	Image* _hudImg = nullptr;

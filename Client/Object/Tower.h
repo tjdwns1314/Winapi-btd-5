@@ -30,6 +30,15 @@ public:
 	void SetStat(const TowerStat& stat) { _stat = stat; }
 	const TowerStat& GetStat() const { return _stat; }
 
+
+	int32 GetGrade() const { return _grade; }
+	bool CanUpgrade() const { return _canUpgrade; }
+	int32 GetSellPrice() const { return _stat.refundPrice; }
+	int32 GetNextUpgradeCost() const;
+	void ApplyUpgrade();
+
+
+
 	// TowerFactory가 종류별 발사 함수를 꽂아준다.
 	void SetFireBehavior(FireBehaviorFn behavior) { _fireBehavior = behavior; }
 

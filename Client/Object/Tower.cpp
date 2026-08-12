@@ -117,6 +117,25 @@ Bloon* Tower::findTarget() const
 	return nearest;
 }
 
+int32 Tower::GetNextUpgradeCost() const
+{
+	if (!_canUpgrade)
+		return 0;
+
+	const int32 upgradeIndex = _grade - 1;
+	if (upgradeIndex < 0 || upgradeIndex >= static_cast<int32>(_stat.upgradeCosts.size()))
+		return 0;
+	return _stat.upgradeCosts[upgradeIndex];
+}
+
+void Tower::ApplyUpgrade()
+{
+	if (!_canUpgrade)
+		return;
+	++_grade;
+	_canUpgrade = (_grade - 1) < static_cast<int32>(_stat.upgradeCosts.size());
+}
+
 GameScene* Tower::GetGameScene() const
 {
 	return static_cast<GameScene*>(GetOwner());

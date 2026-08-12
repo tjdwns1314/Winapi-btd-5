@@ -57,6 +57,7 @@ void GameScene::Update(float deltaTime)
 	Super::Update(deltaTime);
 	_waveManager.Update(deltaTime);
 	updateTowerDrag();
+	updateTowerSelect();
 	GetCollisionManager().Update(*this);
 	updateDebugWaveTitle();
 }
@@ -84,8 +85,23 @@ void GameScene::Render(Graphic& graphic)
 	renderGrid(graphic);
 	renderPathDebug(graphic);
 	renderStartEndDebug(graphic);
-	_ui.Render(graphic, _isDraggingTower, _draggingTowerType,
-		InputManager::GetInstance().GetMousePos(), _healthManager.GetHp(), _economyManager.GetGold());
+
+	TowerSelectionInfo selection;
+	if (_selectedTower != nullptr)
+	{
+		selection.isSelected = true;
+		selection.sellPrice = _selectedTower->GetSellPrice();
+		selection.canUpgrade = _selectedTower->CanUpgrade();
+		selection.upgradePrice = _selectedTower->GetNextUpgradeCost();
+	}
+	_ui.Render(graphic,
+		_isDraggingTower,
+		_draggingTowerType,
+		InputManager::GetInstance().GetMousePos(),
+		selection,
+		_healthManager.GetHp(),
+		_economyManager.GetGold());
+
 	Super::Render(graphic);
 }
 
@@ -98,12 +114,14 @@ void GameScene::CreateUI()
 		[this]() { tryStartTowerDrag(TowerType::SniperMonkey); },
 		[this]() { tryStartTowerDrag(TowerType::BombTower); },
 		[this]() { _waveManager.SetNextRound(_waveManager.GetNextRoundNumber() + 1); },
-		[this]() { _waveManager.SetNextRound(_waveManager.GetNextRoundNumber() - 1); });
+		[this]() { _waveManager.SetNextRound(_waveManager.GetNextRoundNumber() - 1); },
+		[this]() { sellSelectedTower(); },
+		[this]() { upgradeSelectedTower(); });
 
 	updateDebugWaveTitle();
 }
 
-Projectile* GameScene::SpawnProjectile(const Vector& pos,
+Projectile* GameScene::SpawnProjectile(const Vector& pos, 
 	const Vector& dir, float damage, const string& spriteKey)
 {
 	Projectile* projectile = ProjectileFactory::Create(PoolManager::GetInstance().GetProjectilePool(), pos, dir, damage,spriteKey);
@@ -189,6 +207,68 @@ void GameScene::updateTowerDrag()
 	{
 		_economyManager.Add(price); // 생성 실패 시 차감했던 골드 환불
 	}
+}
+
+void GameScene::updateTowerSelect()
+{
+	if (_isDraggingTower)
+		return;
+
+	if (InputManager::GetInstance().GetButtonDown(KeyType::LeftMouse) == false)
+		return;
+
+	const Vector mousePos = InputManager::GetInstance().GetMousePos();
+	if (mousePos.x < 0.f || mousePos.x >= GameAreaWidth
+		|| mousePos.y < 0.f || mousePos.y >= GameAreaHeight)
+		return; // 게임 영역 밖(우측 HUD 등) 클릭은 선택에 영향을 주지 않는다.
+
+	const int32 gridSize = _grid.GetGridSize();
+	const Cell clickCell = Cell::ConvertToCEll(mousePos, gridSize);
+
+	_selectedTower = nullptr;
+	for (Actor* actor : GetActors(RenderLayer::Tower))
+	{
+		if (actor->IsPendingKill())
+			continue;
+
+		const Cell cell = Cell::ConvertToCEll(actor->GetPos(), gridSize);
+		if (cell.iX == clickCell.iX && cell.iY == clickCell.iY)
+		{
+			_selectedTower = static_cast<Tower*>(actor);
+			break;
+		}
+	}
+}
+
+void GameScene::sellSelectedTower()
+{
+	if (_selectedTower == nullptr)
+		return;
+
+	_economyManager.Add(_selectedTower->GetSellPrice());
+
+	const int32 gridSize = _grid.GetGridSize();
+	const Cell cell = Cell::ConvertToCEll(_selectedTower->GetPos(), gridSize);
+	_tileMap.SetTile(cell.iX, cell.iY, TileType::Path);
+
+	const Cell startCell = _tileMap.GetStartPoint();
+	const Cell endCell = _tileMap.GetEndPoint();
+	_path = PathFinder::FindPath(_tileMap, startCell, endCell, GRID_COUNT_X, GRID_COUNT_Y, gridSize);
+
+	_selectedTower->SetPendingKill();
+	_selectedTower = nullptr;
+}
+
+void GameScene::upgradeSelectedTower()
+{
+	if (_selectedTower == nullptr || _selectedTower->CanUpgrade() == false)
+		return;
+
+	const int32 cost = _selectedTower->GetNextUpgradeCost();
+	if (_economyManager.TrySpend(cost) == false)
+		return; // 골드 부족
+
+	_selectedTower->ApplyUpgrade();
 }
 
 void GameScene::updateDebugWaveTitle()
