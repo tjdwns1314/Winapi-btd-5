@@ -100,9 +100,10 @@ void GameScene::CreateUI()
 	updateDebugWaveTitle();
 }
 
-Projectile* GameScene::SpawnProjectile(const Vector& pos, const Vector& dir, float damage)
+Projectile* GameScene::SpawnProjectile(const Vector& pos, 
+	const Vector& dir, float damage, const string& spriteKey)
 {
-	Projectile* projectile = ProjectileFactory::Create(PoolManager::GetInstance().GetProjectilePool(), pos, dir, damage);
+	Projectile* projectile = ProjectileFactory::Create(PoolManager::GetInstance().GetProjectilePool(), pos, dir, damage,spriteKey);
 	if (projectile != nullptr)
 		AddActor(projectile);
 

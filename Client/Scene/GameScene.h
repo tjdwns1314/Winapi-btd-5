@@ -34,7 +34,8 @@ public:
 	//  오브젝트 스폰 대행
 	// --------------------------------------------------
 	// Tower가 풀/Scene 등록을 직접 몰라도 되도록, 발사만 대행해준다.
-	Projectile* SpawnProjectile(const Vector& pos, const Vector& dir, float damage);
+	Projectile* SpawnProjectile(const Vector& pos, 
+		const Vector& dir, float damage, const string& spriteKey);
 
 protected:
 	virtual void CreateUI() override;
