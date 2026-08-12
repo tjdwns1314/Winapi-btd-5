@@ -17,6 +17,8 @@
 #include "HealthManager.h"
 #include "EconomyManager.h"
 
+class Tower;
+
 class GameScene : public Scene
 {
 	using Super = Scene;
@@ -59,6 +61,11 @@ private:
 	void updateDebugWaveTitle();
 	void tryStartTowerDrag(TowerType type);
 
+	void updateTowerSelect();
+	void sellSelectedTower();
+	void upgradeSelectedTower();
+
+
 private:
 	WaveManager _waveManager;
 	HealthManager _healthManager;
@@ -85,6 +92,7 @@ private:
 	GameSceneUI _ui;
 	bool _isDraggingTower = false;
 	TowerType _draggingTowerType = TowerType::DartMonkey;
+	Tower* _selectedTower = nullptr;
 
 	// 디버그 타이틀바 표시용 캐시 (값이 바뀔 때만 SetWindowText 호출)
 	int32 _lastTitleCurrentRound = -1;
