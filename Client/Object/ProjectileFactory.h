@@ -8,7 +8,7 @@ class Projectile;
 class ProjectileFactory
 {
 public:
-	static Projectile* Create(ObjectPool<Projectile>& pool, 
-		const Vector& pos, const Vector& dir, float damage, 
-		const string& spriteKey);
+	static Projectile* Create(ObjectPool<Projectile>& pool,
+		const Vector& pos, const Vector& dir, float damage,
+		const string& spriteKey, float speed);
 };

@@ -3,7 +3,7 @@
 #include "Projectile.h"
 
 Projectile* ProjectileFactory::Create(ObjectPool<Projectile>& pool, 
-	const Vector& pos, const Vector& dir, float damage, const string& spriteKey)
+	const Vector& pos, const Vector& dir, float damage, const string& spriteKey, float speed)
 {
 	Projectile* projectile = pool.Acquire();
 	if (projectile == nullptr)
@@ -13,6 +13,7 @@ Projectile* ProjectileFactory::Create(ObjectPool<Projectile>& pool,
 	projectile->SetDir(dir);
 	projectile->SetDamage(damage);
 	projectile->SetSpriteKey(spriteKey);
+	projectile->SetProjectileSpeed(speed);
 	projectile->Init();
 	return projectile;
 }
