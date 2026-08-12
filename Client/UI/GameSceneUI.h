@@ -22,10 +22,12 @@ public:
 	void Render(Graphic& graphic,
 		bool isDraggingTower,
 		TowerType draggingTowerType,
-		const Vector& dragPreviewPos);
+		const Vector& dragPreviewPos,
+		int32 gold);
 private:
 	UIButton* createButton(const Vector& pos, const Vector& size, function<void()> onClick);
 	void renderDebugWaveButtons(Graphic& graphic) const;
+	void renderGoldText(Graphic& graphic, int32 gold) const;
 	void drawTowerIcon(Graphic& graphic, const Vector& pos, TowerType type, float scale) const;
 	void drawRangePreview(Graphic& graphic, const Vector& pos, TowerType type) const;
 

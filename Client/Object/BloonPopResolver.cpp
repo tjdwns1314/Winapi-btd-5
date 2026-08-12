@@ -4,6 +4,7 @@
 #include "BloonFactory.h"
 #include "PoolManager.h"
 #include "Scene.h"
+#include "GameScene.h"
 
 int32 BloonPopResolver::GetLayerHp(BloonColor color)
 {
@@ -24,6 +25,7 @@ BloonPopResolver::Result BloonPopResolver::resolve(BloonColor color, int32 hp, i
 
 	result.popped = true;
 	const int32 leftoverDamage = -hp; // 이번 레이어를 죽이고 남은 관통 데미지
+	result.totalGoldReward = GetBloonStat(color).goldReward; // 이 레이어 자체가 터진 몫
 
 	const BloonStat& stat = GetBloonStat(color);
 	for (const BloonChildSpawn& child : stat.children)
@@ -36,6 +38,7 @@ BloonPopResolver::Result BloonPopResolver::resolve(BloonColor color, int32 hp, i
 				// 남은 데미지가 자식까지 죽였다면, 그 자식이 만든 스폰 목록을 그대로 이어붙인다.
 				for (const SpawnRequest& spawn : childResult.spawns)
 					result.spawns.push_back(spawn);
+				result.totalGoldReward += childResult.totalGoldReward; // 자식까지 실제로 터졌을 때만 그만큼 합산
 			}
 			else
 			{
@@ -62,6 +65,10 @@ void BloonPopResolver::HandleHit(Bloon& bloon, float damage)
 	if (owner == nullptr)
 		return;
 
+	// Bloon은 GameScene에서만 생성되므로 안전하게 다운캐스팅한다.
+	GameScene* gameScene = static_cast<GameScene*>(owner);
+	gameScene->GetEconomyManager().Add(result.totalGoldReward);
+
 	for (const SpawnRequest& spawn : result.spawns)
 	{
 		Bloon* child = BloonFactory::Create(PoolManager::GetInstance().GetBloonPool(),
@@ -72,7 +79,5 @@ void BloonPopResolver::HandleHit(Bloon& bloon, float damage)
 		owner->AddActor(child);
 	}
 }
-
-
 
 

@@ -41,6 +41,7 @@ void GameScene::Init(Graphic& graphic)
 
 	PoolManager::GetInstance().Init(200, 200, 50);
 	_waveManager.Init(&PoolManager::GetInstance().GetBloonPool(), _bloonSpawnPos, &_path, this);
+	_economyManager.Init(10000); // 초기 골드: 임시값 — 밸런스 확정되면 조정
 
 	GetCollisionManager().RegisterLayer(RenderLayer::Bloon, RenderLayer::Projectile);
 }
@@ -82,7 +83,8 @@ void GameScene::Render(Graphic& graphic)
 	renderGrid(graphic);
 	renderPathDebug(graphic);
 	renderStartEndDebug(graphic);
-	_ui.Render(graphic, _isDraggingTower, _draggingTowerType, InputManager::GetInstance().GetMousePos());
+	_ui.Render(graphic, _isDraggingTower, _draggingTowerType,
+		InputManager::GetInstance().GetMousePos(), _economyManager.GetGold());
 	Super::Render(graphic);
 }
 
@@ -90,17 +92,17 @@ void GameScene::CreateUI()
 {
 	_ui.Init(
 		[this]() { _waveManager.StartNextWave(); },
-		[this]() { if (_waveManager.IsWaveActive() == false) { _isDraggingTower = true; _draggingTowerType = TowerType::DartMonkey; } },
-		[this]() { if (_waveManager.IsWaveActive() == false) { _isDraggingTower = true; _draggingTowerType = TowerType::TackShooter; } },
-		[this]() { if (_waveManager.IsWaveActive() == false) { _isDraggingTower = true; _draggingTowerType = TowerType::SniperMonkey; } },
-		[this]() { if (_waveManager.IsWaveActive() == false) { _isDraggingTower = true; _draggingTowerType = TowerType::BombTower; } },
+		[this]() { tryStartTowerDrag(TowerType::DartMonkey); },
+		[this]() { tryStartTowerDrag(TowerType::TackShooter); },
+		[this]() { tryStartTowerDrag(TowerType::SniperMonkey); },
+		[this]() { tryStartTowerDrag(TowerType::BombTower); },
 		[this]() { _waveManager.SetNextRound(_waveManager.GetNextRoundNumber() + 1); },
 		[this]() { _waveManager.SetNextRound(_waveManager.GetNextRoundNumber() - 1); });
 
 	updateDebugWaveTitle();
 }
 
-Projectile* GameScene::SpawnProjectile(const Vector& pos, 
+Projectile* GameScene::SpawnProjectile(const Vector& pos,
 	const Vector& dir, float damage, const string& spriteKey)
 {
 	Projectile* projectile = ProjectileFactory::Create(PoolManager::GetInstance().GetProjectilePool(), pos, dir, damage,spriteKey);
@@ -108,6 +110,18 @@ Projectile* GameScene::SpawnProjectile(const Vector& pos,
 		AddActor(projectile);
 
 	return projectile;
+}
+
+void GameScene::tryStartTowerDrag(TowerType type)
+{
+	if (_waveManager.IsWaveActive())
+		return;
+
+	if (_economyManager.GetGold() < GetTowerStat(type).basePrice)
+		return; // 골드가 부족하면 드래그를 시작하지 않는다.
+
+	_isDraggingTower = true;
+	_draggingTowerType = type;
 }
 
 void GameScene::updateTowerDrag()
@@ -154,12 +168,26 @@ void GameScene::updateTowerDrag()
 		_tileMap.SetTile(targetCell.iX, targetCell.iY, TileType::Path);
 		return;
 	}
+
+	const int32 price = GetTowerStat(towerType).basePrice;
+	if (_economyManager.TrySpend(price) == false)
+	{
+		_tileMap.SetTile(targetCell.iX, targetCell.iY, TileType::Path);
+		return; // 골드 부족 시 설치 취소
+	}
+
 	_path = std::move(newPath);
 
 	Tower* tower = TowerFactory::Create(PoolManager::GetInstance().GetTowerPool(), towerType,
 		Vector((targetCell.iX + 0.5f) * gridSize, (targetCell.iY + 0.5f) * gridSize));
 	if (tower != nullptr)
+	{
 		AddActor(tower);
+	}
+	else
+	{
+		_economyManager.Add(price); // 생성 실패 시 차감했던 골드 환불
+	}
 }
 
 void GameScene::updateDebugWaveTitle()

@@ -12,7 +12,7 @@
             "color": "Blue", 
             "layerHp":1,
             "speed" : 250,
-            "goldReward" : 2,
+            "goldReward" : 1,
             "spriteKey" : "Blue",
             "children" : [{"color":"Red","count":1}]
             },
@@ -20,7 +20,7 @@
             "color": "Green", 
             "layerHp":1,
             "speed" : 300,
-            "goldReward" : 3,
+            "goldReward" : 1,
             "spriteKey" : "Green",
             "children" : [{"color":"Blue","count":1}]
             },
@@ -28,7 +28,7 @@
             "color": "Yellow", 
             "layerHp":1,
             "speed" : 350,
-            "goldReward" : 4,
+            "goldReward" : 1,
             "spriteKey" : "Yellow",
             "children" : [{"color":"Green","count":1}]
             },
@@ -36,55 +36,55 @@
             "color": "Pink", 
             "layerHp":1,
             "speed" : 400,
-            "goldReward" : 5,
+            "goldReward" : 1,
             "spriteKey" : "Pink",
             "children" : [{"color":"Yellow","count":1}]
             },
             {
-            "color": "Black", 
+            "color": "Black",
             "layerHp":1,
             "speed" : 200,
-            "goldReward" : 11,
+            "goldReward" : 1,
             "spriteKey" : "Black",
             "children" : [{"color":"Pink","count":2}]
             },
             {
-            "color": "White", 
+            "color": "White",
             "layerHp":1,
             "speed" : 200,
-            "goldReward" : 11,
+            "goldReward" : 1,
             "spriteKey" : "White",
             "children" : [{"color":"Pink","count":2}]
             },
             {
-            "color": "Lead", 
+            "color": "Lead",
             "layerHp":1,
             "speed" : 200,
-            "goldReward" : 23,
+            "goldReward" : 1,
             "spriteKey" : "Lead",
             "children" : [{"color":"Black","count":2}]
             },
             {
-            "color": "Zebra", 
+            "color": "Zebra",
             "layerHp":1,
             "speed" : 200,
-            "goldReward" : 23,
+            "goldReward" : 1,
             "spriteKey" : "Zebra",
             "children" : [{"color":"Black","count":1},{"color":"White","count":1}]
             },
             {
-            "color": "Rainbow", 
+            "color": "Rainbow",
             "layerHp":1,
             "speed" : 200,
-            "goldReward" : 47,
+            "goldReward" : 1,
             "spriteKey" : "Rainbow",
             "children" : [{"color":"Zebra","count":2}]
             },
             {
-            "color": "Ceramic", 
+            "color": "Ceramic",
             "layerHp":10,
             "speed" : 200,
-            "goldReward" : 95,
+            "goldReward" : 1,
             "spriteKey" : "Ceramic",
             "children" : [{"color":"Rainbow","count":2}]
             }

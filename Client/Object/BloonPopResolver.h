@@ -26,6 +26,7 @@ private:
 		bool popped = false;           // 이번 히트로 터졌는지
 		int32 remainingHp = 0;         // popped == false 일 때 남은 hp
 		vector<SpawnRequest> spawns;   // popped == true 일 때 생성할 자식 목록
+		int32 totalGoldReward = 0;     // popped == true 일 때, 이번 히트로 실제 터진 모든 레이어의 골드 보상 합
 	};
 
 	static Result resolve(BloonColor color, int32 hp, int32 damage);

@@ -14,6 +14,7 @@
 #include "ProjectileFactory.h"
 #include "Projectile.h"
 #include "TowerType.h"
+#include "EconomyManager.h"
 
 class GameScene : public Scene
 {
@@ -34,8 +35,11 @@ public:
 	//  오브젝트 스폰 대행
 	// --------------------------------------------------
 	// Tower가 풀/Scene 등록을 직접 몰라도 되도록, 발사만 대행해준다.
-	Projectile* SpawnProjectile(const Vector& pos, 
+	Projectile* SpawnProjectile(const Vector& pos,
 		const Vector& dir, float damage, const string& spriteKey);
+
+	// 골드는 싱글톤이 아니라 GameScene이 소유한다. 타워 구매/판매/보상 지급 시 접근한다.
+	EconomyManager& GetEconomyManager() { return _economyManager; }
 
 protected:
 	virtual void CreateUI() override;
@@ -50,9 +54,11 @@ private:
 	// 내부 로직 헬퍼
 	void updateTowerDrag();
 	void updateDebugWaveTitle();
+	void tryStartTowerDrag(TowerType type);
 
 private:
 	WaveManager _waveManager;
+	EconomyManager _economyManager;
 
 	// 스프라이트 및 이미지 리소스
 	Image*       _inGameBg           = nullptr;
