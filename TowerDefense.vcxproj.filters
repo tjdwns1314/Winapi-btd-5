@@ -139,6 +139,9 @@
     <ClInclude Include="Client\Core\EconomyManager.h">
       <Filter>Client\Core</Filter>
     </ClInclude>
+    <ClInclude Include="Client\Core\HealthManager.h">
+      <Filter>Client\Core</Filter>
+    </ClInclude>
     <ClInclude Include="Client\Scene\GameScene.h">
       <Filter>Client\Scene</Filter>
     </ClInclude>
@@ -268,6 +271,9 @@
       <Filter>Client\Core</Filter>
     </ClCompile>
     <ClCompile Include="Client\Core\EconomyManager.cpp">
+      <Filter>Client\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\Core\HealthManager.cpp">
       <Filter>Client\Core</Filter>
     </ClCompile>
     <ClCompile Include="Client\Scene\GameScene.cpp">

@@ -14,6 +14,7 @@
 #include "ProjectileFactory.h"
 #include "Projectile.h"
 #include "TowerType.h"
+#include "HealthManager.h"
 #include "EconomyManager.h"
 
 class GameScene : public Scene
@@ -38,7 +39,9 @@ public:
 	Projectile* SpawnProjectile(const Vector& pos,
 		const Vector& dir, float damage, const string& spriteKey);
 
-	// 골드는 싱글톤이 아니라 GameScene이 소유한다. 타워 구매/판매/보상 지급 시 접근한다.
+	// 체력은 싱글톤이 아니라 GameScene이 소유한다. BloonPopResolver가 새어나감 데미지를 넣을 때 접근한다.
+	HealthManager& GetHealthManager() { return _healthManager; }
+	// 골드도 마찬가지로 싱글톤이 아니라 GameScene이 소유한다.
 	EconomyManager& GetEconomyManager() { return _economyManager; }
 
 protected:
@@ -58,6 +61,7 @@ private:
 
 private:
 	WaveManager _waveManager;
+	HealthManager _healthManager;
 	EconomyManager _economyManager;
 
 	// 스프라이트 및 이미지 리소스

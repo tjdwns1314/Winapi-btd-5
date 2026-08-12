@@ -42,6 +42,7 @@ BloonPopResolver::Result BloonPopResolver::resolve(BloonColor color, int32 hp, i
 			}
 			else
 			{
+				// 터지지 않고 살아남아 새로 스폰되는 개체는 보상 없음(나중에 실제로 처치될 때 받는다).
 				result.spawns.push_back({ child.color, childResult.remainingHp });
 			}
 		}
@@ -65,7 +66,7 @@ void BloonPopResolver::HandleHit(Bloon& bloon, float damage)
 	if (owner == nullptr)
 		return;
 
-	// Bloon은 GameScene에서만 생성되므로 안전하게 다운캐스팅한다.
+	// Bloon은 GameScene에서만 생성되므로 안전하게 다운캐스팅한다. (HandleLeak과 동일한 패턴)
 	GameScene* gameScene = static_cast<GameScene*>(owner);
 	gameScene->GetEconomyManager().Add(result.totalGoldReward);
 
@@ -80,4 +81,25 @@ void BloonPopResolver::HandleHit(Bloon& bloon, float damage)
 	}
 }
 
+int32 BloonPopResolver::GetLeakDamage(BloonColor color)
+{
+	const BloonStat& stat = GetBloonStat(color);
+	int32 total = 1; // 자기 자신 몫
+
+	for (const BloonChildSpawn& child : stat.children)
+		total += child.count * GetLeakDamage(child.color);
+
+	return total;
+}
+
+void BloonPopResolver::HandleLeak(Bloon& bloon)
+{
+	Scene* owner = bloon.GetOwner();
+	if (owner == nullptr)
+		return;
+
+	// Bloon은 GameScene에서만 생성되므로 안전하게 다운캐스팅한다. (Tower.cpp와 동일한 패턴)
+	GameScene* gameScene = static_cast<GameScene*>(owner);
+	gameScene->GetHealthManager().TakeDamage(GetLeakDamage(bloon.GetColor()));
+}
 

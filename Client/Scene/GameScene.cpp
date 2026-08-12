@@ -41,6 +41,7 @@ void GameScene::Init(Graphic& graphic)
 
 	PoolManager::GetInstance().Init(200, 200, 50);
 	_waveManager.Init(&PoolManager::GetInstance().GetBloonPool(), _bloonSpawnPos, &_path, this);
+	_healthManager.Init(100); // 초기 체력: 임시값 — 밸런스 확정되면 조정
 	_economyManager.Init(10000); // 초기 골드: 임시값 — 밸런스 확정되면 조정
 
 	GetCollisionManager().RegisterLayer(RenderLayer::Bloon, RenderLayer::Projectile);
@@ -84,7 +85,7 @@ void GameScene::Render(Graphic& graphic)
 	renderPathDebug(graphic);
 	renderStartEndDebug(graphic);
 	_ui.Render(graphic, _isDraggingTower, _draggingTowerType,
-		InputManager::GetInstance().GetMousePos(), _economyManager.GetGold());
+		InputManager::GetInstance().GetMousePos(), _healthManager.GetHp(), _economyManager.GetGold());
 	Super::Render(graphic);
 }
 

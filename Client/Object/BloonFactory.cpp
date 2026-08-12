@@ -28,6 +28,7 @@ Bloon* BloonFactory::Create(ObjectPool<Bloon>& pool, BloonColor color, const Vec
 	bloon->SetMoveSpeed(stat.speed);
 	bloon->SetImage(&getBloonImage(stat.spriteKey));
 	bloon->SetHitHandler(&BloonPopResolver::HandleHit);
+	bloon->SetLeakHandler(&BloonPopResolver::HandleLeak);
 	bloon->Init();
 	return bloon;
 }
