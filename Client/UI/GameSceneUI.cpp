@@ -39,7 +39,7 @@ UIButton* GameSceneUI::createButton(const Vector& pos, const Vector& size, funct
 }
 
 void GameSceneUI::Render(Graphic& graphic, bool isDraggingTower, TowerType draggingTowerType,
-	const Vector& dragPreviewPos, int32 gold)
+	const Vector& dragPreviewPos, int32 hp, int32 gold)
 {
 	const CellInfo* playCell = _hudSprite->GetCell("play_icon");
 	if (playCell != nullptr)
@@ -63,6 +63,7 @@ void GameSceneUI::Render(Graphic& graphic, bool isDraggingTower, TowerType dragg
 
 	renderDebugWaveButtons(graphic);
 	renderGoldText(graphic, gold);
+	renderHpText(graphic, hp);
 }
 
 void GameSceneUI::drawRangePreview(Graphic& graphic, const Vector& pos, TowerType type) const
@@ -96,6 +97,15 @@ void GameSceneUI::renderGoldText(Graphic& graphic, int32 gold) const
 
 	graphic.DrawTextW(text, D2D1::RectF(1440.0f, 20.0f, 1760.0f, 60.0f),
 		FONT_30, D2D1::ColorF(D2D1::ColorF::Gold), DWRITE_TEXT_ALIGNMENT_CENTER);
+}
+
+void GameSceneUI::renderHpText(Graphic& graphic, int32 hp) const
+{
+	wchar_t text[32];
+	swprintf_s(text, L"HP: %d", hp);
+
+	graphic.DrawTextW(text, D2D1::RectF(1440.0f, 60.0f, 1760.0f, 100.0f),
+		FONT_30, D2D1::ColorF(D2D1::ColorF::Red), DWRITE_TEXT_ALIGNMENT_CENTER);
 }
 
 void GameSceneUI::renderDebugWaveButtons(Graphic& graphic) const

@@ -11,6 +11,8 @@ class Bloon : public MovableActor
 public:
 	// Bloon은 이 시그니처만 알 뿐, 실제로 무엇이 연결되는지는 모른다(BloonFactory가 조립).
 	using HitHandler = std::function<void(Bloon&, float)>;
+	// 경로 끝까지 도달해 새어나갔을 때 호출되는 델리게이트.
+	using LeakHandler = std::function<void(Bloon&)>;
 
 	// 초기화 및 업데이트
 	virtual void Init() override;
@@ -27,6 +29,7 @@ public:
 	void SetImage(Image* image) { _image = image; }
 
 	void SetHitHandler(HitHandler handler) { _hitHandler = std::move(handler); }
+	void SetLeakHandler(LeakHandler handler) { _leakHandler = std::move(handler); }
 
 	void ApplyDamage(float damage) { if (_hitHandler) _hitHandler(*this, damage); }
 
@@ -50,6 +53,7 @@ private:
 	int32 _hp = 1;
 	Image* _image = nullptr;
 	HitHandler _hitHandler;
+	LeakHandler _leakHandler;
 
 	// 경로 정보
 	const vector<Vector>* _path = nullptr;

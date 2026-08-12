@@ -161,6 +161,7 @@
     <ClInclude Include="Common\framework.h" />
     <ClInclude Include="Client\Core\Game.h" />
     <ClInclude Include="Client\Core\EconomyManager.h" />
+    <ClInclude Include="Client\Core\HealthManager.h" />
     <ClInclude Include="Client\Scene\GameScene.h" />
     <ClInclude Include="Client\Scene\MainScene.h" />
     <ClInclude Include="Client\Scene\LobbyScene.h" />
@@ -213,6 +214,7 @@
     <ClCompile Include="Client\Algorithm\PathFinder.cpp" />
     <ClCompile Include="Client\Core\Game.cpp" />
     <ClCompile Include="Client\Core\EconomyManager.cpp" />
+    <ClCompile Include="Client\Core\HealthManager.cpp" />
     <ClCompile Include="Client\Scene\GameScene.cpp" />
     <ClCompile Include="Client\Scene\MainScene.cpp" />
     <ClCompile Include="Client\Scene\LobbyScene.cpp" />
