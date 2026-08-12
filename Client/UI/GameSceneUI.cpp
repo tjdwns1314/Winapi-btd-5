@@ -100,14 +100,18 @@ void GameSceneUI::renderDebugWaveButtons(Graphic& graphic) const
 
 		const Vector pos = button->GetPos();
 		const Vector size = button->GetSize();
-		const D2D1_RECT_F rect = D2D1::RectF(pos.x, pos.y, pos.x + size.x, pos.y + size.y);
+		const D2D1_RECT_F rect = D2D1::RectF(
+			pos.x - size.x * 0.5f,
+			pos.y - size.y * 0.5f,
+			pos.x + size.x * 0.5f,
+			pos.y + size.y * 0.5f);
 
 		ID2D1SolidColorBrush* bgBrush = graphic.GetBrush(D2D1::ColorF(D2D1::ColorF::DarkGray, 0.8f));
 		if (bgBrush != nullptr)
 			renderTarget->FillRectangle(rect, bgBrush);
 
-		const float cx = pos.x + size.x * 0.5f;
-		const float cy = pos.y + size.y * 0.5f;
+		const float cx = pos.x;
+		const float cy = pos.y;
 		const float half = size.x * 0.3f;
 		const float thickness = 4.0f;
 
