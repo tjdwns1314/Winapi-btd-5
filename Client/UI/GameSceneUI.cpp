@@ -55,9 +55,23 @@ void GameSceneUI::Render(Graphic& graphic, bool isDraggingTower, TowerType dragg
 	drawTowerIcon(graphic, _bombTowerShopButton->GetPos(), TowerType::BombTower, 1.0f);
 
 	if (isDraggingTower)
+	{
+		drawRangePreview(graphic, dragPreviewPos, draggingTowerType);
 		drawTowerIcon(graphic, dragPreviewPos, draggingTowerType, 1.0f);
+	}
 
 	renderDebugWaveButtons(graphic);
+}
+
+void GameSceneUI::drawRangePreview(Graphic& graphic, const Vector& pos, TowerType type) const
+{
+	ID2D1HwndRenderTarget* renderTarget = graphic.GetRenderTarget();
+	ID2D1SolidColorBrush* brush = graphic.GetBrush(D2D1::ColorF(D2D1::ColorF::White, 0.5f));
+	if (renderTarget == nullptr || brush == nullptr)
+		return;
+
+	const float range = GetTowerStat(type).attackRange;
+	renderTarget->DrawEllipse(D2D1::Ellipse(D2D1::Point2F(pos.x, pos.y), range, range), brush, 2.f);
 }
 
 void GameSceneUI::drawTowerIcon(Graphic& graphic, const Vector& pos, TowerType type, float scale) const
