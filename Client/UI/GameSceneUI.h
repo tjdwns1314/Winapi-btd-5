@@ -16,6 +16,7 @@ public:
 		function<void()> onDartShopClick,
 		function<void()> onTackShopClick,
 		function<void()> onSniperShopClick,
+		function<void()> onBombShopClick,
 		function<void()> onWaveUp,
 		function<void()> onWaveDown);
 	void Render(Graphic& graphic,
@@ -32,6 +33,7 @@ private:
 	UIButton* _dartMonkeyShopButton = nullptr;
 	UIButton* _tackShooterShopButton = nullptr;
 	UIButton* _sniperMonkeyShopButton = nullptr;
+	UIButton* _bombTowerShopButton = nullptr;
 	UIButton* _waveUpButton = nullptr;   // 디버그용: 시작 라운드를 +/-로 조절(정식 스프라이트 없이 도형으로 그림)
 	UIButton* _waveDownButton = nullptr;
 
