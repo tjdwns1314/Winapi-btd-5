@@ -18,13 +18,13 @@ void GameSceneUI::Init(
 	_inGameBg = &res.GetImage(L"Resource\\Sprite\\InGame.png");
 	_sprite = &res.GetAtlas(L"Resource\\Sprite\\InGame.xml");
 
-	_startButton = createButton(Vector(1575.0f, 450.0f), Vector(128.0f, 129.0f), onStartWave);
-	_dartMonkeyShopButton = createButton(Vector(1575.0f, 650.0f), Vector(109.0f, 113.0f), onDartShopClick);
-	_tackShooterShopButton = createButton(Vector(1575.0f, 790.0f), Vector(52.0f, 104.0f), onTackShopClick);
-	_sniperMonkeyShopButton = createButton(Vector(1720.0f, 650.0f), Vector(109.0f, 113.0f), onSniperShopClick);
-	_bombTowerShopButton = createButton(Vector(1720.0f, 790.0f), Vector(109.0f, 113.0f), onBombShopClick);
-	_waveUpButton = createButton(Vector(1720.0f, 450.0f), Vector(40.0f, 40.0f), onWaveUp);
-	_waveDownButton = createButton(Vector(1720.0f, 500.0f), Vector(40.0f, 40.0f), onWaveDown);
+	_startButton = createButton(Vector(1512.5f, 950.0f), Vector(128.0f, 129.0f), onStartWave);
+	_dartMonkeyShopButton = createButton(Vector(1512.5f, 350.0f), Vector(109.0f, 113.0f), onDartShopClick);
+	_tackShooterShopButton = createButton(Vector(1675.0f, 350.0f), Vector(52.0f, 104.0f), onTackShopClick);
+	_sniperMonkeyShopButton = createButton(Vector(1512.5f, 550.0f), Vector(109.0f, 113.0f), onSniperShopClick);
+	_bombTowerShopButton = createButton(Vector(1675.0f, 550.0f), Vector(109.0f, 113.0f), onBombShopClick);
+	_waveUpButton = createButton(Vector(1720.0f, 950.0f), Vector(40.0f, 40.0f), onWaveUp);
+	_waveDownButton = createButton(Vector(1720.0f, 900.0f), Vector(40.0f, 40.0f), onWaveDown);
 }
 
 UIButton* GameSceneUI::createButton(const Vector& pos, const Vector& size, function<void()> onClick)

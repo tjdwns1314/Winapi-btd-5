@@ -27,9 +27,9 @@ using uint32 = unsigned int;		// 4byte 정수형
 using uint64 = unsigned long long;// 8byte 정수형
 
 constexpr int32 GWinSizeX = 1760;
-constexpr int32 GWinSizeY = 960;
+constexpr int32 GWinSizeY = 1040;
 constexpr int32 GameAreaWidth = 1440;
-constexpr int32 GameAreaHeight = 960;
+constexpr int32 GameAreaHeight = 1040;
 constexpr int32 BLOCK_SIZE = 80;
 constexpr int32 GRID_COUNT_X = GameAreaWidth / BLOCK_SIZE;
 constexpr int32 GRID_COUNT_Y = GameAreaHeight / BLOCK_SIZE;
