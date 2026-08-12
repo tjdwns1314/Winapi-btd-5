@@ -92,6 +92,7 @@ void GameScene::CreateUI()
 		[this]() { _waveManager.StartNextWave(); },
 		[this]() { if (_waveManager.IsWaveActive() == false) { _isDraggingTower = true; _draggingTowerType = TowerType::DartMonkey; } },
 		[this]() { if (_waveManager.IsWaveActive() == false) { _isDraggingTower = true; _draggingTowerType = TowerType::TackShooter; } },
+		[this]() { if (_waveManager.IsWaveActive() == false) { _isDraggingTower = true; _draggingTowerType = TowerType::SniperMonkey; } },
 		[this]() { _waveManager.SetNextRound(_waveManager.GetNextRoundNumber() + 1); },
 		[this]() { _waveManager.SetNextRound(_waveManager.GetNextRoundNumber() - 1); });
 
