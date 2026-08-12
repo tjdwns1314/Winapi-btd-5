@@ -23,6 +23,7 @@ void Tower::Init()
 	Super::Init();
 	SetActorType(ActorType::Tower);
 	SetLayer(RenderLayer::Tower);
+	_fireTimer = _stat.attackSpeed;	// 처음 타겟이 잡히면 쿨타임 대기 없이 바로 쏘도록 미리 채워둔다.
 }
 
 void Tower::Update(float deltaTime)
@@ -33,7 +34,6 @@ void Tower::Update(float deltaTime)
 	if (_target != nullptr && (_target->IsPendingKill() || isInRange(_target) == false))
 		_target = nullptr;
 
-	const bool hadTarget = (_target != nullptr);
 	if (_target == nullptr)
 		_target = findTarget();
 
@@ -44,25 +44,13 @@ void Tower::Update(float deltaTime)
 			SetRotation(RadianToDegree(atan2f(dir.x, -dir.y)));
 	}
 
-	if (_target == nullptr)
-	{
-		_fireTimer = 0.f;
-		return;
-	}
-
-	if (hadTarget == false)
-	{
-		fire();
-		_fireTimer = 0.f;
-		return;
-	}
-
+	// 타겟 유무와 상관없이 쿨타임은 계속 흐른다. 발사 자체만 타겟이 있을 때로 제한한다.
 	_fireTimer += deltaTime;
-	if (_fireTimer >= _stat.attackSpeed)
-	{
-		_fireTimer -= _stat.attackSpeed;
-		fire();
-	}
+	if (_target == nullptr || _fireTimer < _stat.attackSpeed)
+		return;
+
+	_fireTimer = 0.f;
+	fire();
 }
 
 void Tower::Render(Graphic& graphic)
