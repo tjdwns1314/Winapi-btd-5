@@ -59,6 +59,11 @@ void ResourceManager::Init(Graphic& graphic)
 		{ .cellName = "bomb_tower_01", .anchor = BakeAnchor::Left },
 		{ .cellName = "bomb_tower_01", .anchor = BakeAnchor::Right, .flipX = true },
 	});
+
+	baker.Bake(*this, graphic, L"dart_monkey_baked", { 123.0f, 115.0f }, {
+	{.cellName = "dart_monkey_arm_01" },
+	{.cellName = "dart_monkey_body" },
+	});
 }
 
 void ResourceManager::loadAtlas(const wchar_t* xmlPath)
