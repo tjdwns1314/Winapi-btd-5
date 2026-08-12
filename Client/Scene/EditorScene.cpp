@@ -30,34 +30,19 @@ void EditorScene::Render(Graphic& graphic)
 
 
 
-	/*if (const CellInfo* cell = _sprite->GetCell("sniper_arm"))
+	if (const CellInfo* cell = _sprite->GetCell("tack_shooter_tack"))
 	{
 		_inGameBg->DrawSprite(graphic, 695.0f, 640.0f, *cell, 1.0f, 0.0f);
 	}
-	if (const CellInfo* cell = _sprite->GetCell("dart_monkey_body"))
-	{
-		_inGameBg->DrawSprite(graphic, 700.0f, 700.0f, *cell, 1.0f, 0.0f);
-	}
-
-	if (const CellInfo* cell = _sprite->GetCell("sniper_green_hat"))
-		 {
-		_inGameBg->DrawSprite(graphic, 695.0f, 695.0f, *cell, 1.0f, 0.0f);
-		}
-	if (const CellInfo* cell = _sprite->GetCell("sniper_basic_rifle"))
-	{
-		_inGameBg->DrawSprite(graphic, 675.0f, 630.0f, *cell, 1.0f, 0.0f);
-	}
 
 
 
-	if (const CellInfo* cell = _sprite->GetCell("dart_monkey_arm_01"))
+
+	if (const CellInfo* cell = _sprite->GetCell("bomb_tower_bomb_01"))
 	{
 		_inGameBg->DrawSprite(graphic, 500.0f, 500.0f, *cell, 1.0f, 0.0f);
 	}
-	if (const CellInfo* cell = _sprite->GetCell("dart_monkey_body"))
-	{
-		_inGameBg->DrawSprite(graphic, 500.0f, 500.0f, *cell, 1.0f, 0.0f);
-	}*/
+
 
 }
 
