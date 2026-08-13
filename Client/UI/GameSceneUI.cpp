@@ -12,13 +12,16 @@ void GameSceneUI::Init(
 	function<void()> onWaveUp,
 	function<void()> onWaveDown,
 	function<void()> onSellClick,
-	function<void()> onUpgradeClick)
+	function<void()> onUpgradeClick,
+	function<void()> onRestartClick)
 {
 	ResourceManager& res = ResourceManager::GetInstance();
 	_hudImg = &res.GetImage(L"Resource\\Sprite\\in_game_hud.png");
 	_hudSprite = &res.GetAtlas(L"Resource\\Sprite\\in_game_hud.xml");
 	_inGameBg = &res.GetImage(L"Resource\\Sprite\\InGame.png");
 	_sprite = &res.GetAtlas(L"Resource\\Sprite\\InGame.xml");
+	_popupImg = &res.GetImage(L"Resource\\Sprite\\game_over_popup.png");
+	_popupSprite = &res.GetAtlas(L"Resource\\Sprite\\game_over_popup.xml");
 
 	_startButton = createButton(Vector(1512.5f, 950.0f), Vector(128.0f, 129.0f), onStartWave);
 	_dartMonkeyShopButton = createButton(Vector(1512.5f, 350.0f), Vector(109.0f, 113.0f), onDartShopClick);
@@ -34,6 +37,10 @@ void GameSceneUI::Init(
 	_upgradeButton = createButton(Vector(1675.0f, 700.0f), Vector(109.0f, 60.0f), onUpgradeClick);
 	_sellButton->SetActive(false);
 	_upgradeButton->SetActive(false);
+
+	// 게임오버 팝업의 재시작 버튼. baked 이미지(131x137) 크기에 맞춰 게임 영역 정중앙에 둔다.
+	_restartButton = createButton(Vector(GameAreaCenterX, GameAreaCenterY), Vector(131.0f, 137.0f), onRestartClick);
+	_restartButton->SetActive(false);
 }
 
 UIButton* GameSceneUI::createButton(const Vector& pos, const Vector& size, function<void()> onClick)
@@ -61,7 +68,8 @@ void GameSceneUI::renderStartButton(Graphic& graphic, bool isWaveActive, bool is
 }
 
 void GameSceneUI::Render(Graphic& graphic, bool isDraggingTower, TowerType draggingTowerType,
-	const Vector& dragPreviewPos, const TowerSelectionInfo& selection, int32 hp, int32 gold, bool isWaveActive, bool isSpeedEnabled)
+	const Vector& dragPreviewPos, const TowerSelectionInfo& selection, int32 hp, int32 gold, bool isWaveActive, bool isSpeedEnabled,
+	bool isGameOver)
 {
 	renderStartButton(graphic, isWaveActive, isSpeedEnabled);
 
@@ -86,6 +94,29 @@ void GameSceneUI::Render(Graphic& graphic, bool isDraggingTower, TowerType dragg
 	_upgradeButton->SetActive(selection.isSelected && selection.canUpgrade);
 	if (selection.isSelected)
 		renderTowerSelectionPanel(graphic, selection);
+
+	_restartButton->SetActive(isGameOver);
+	if (isGameOver)
+		renderGameOverPopup(graphic);
+}
+
+void GameSceneUI::renderGameOverPopup(Graphic& graphic) const
+{
+	ID2D1HwndRenderTarget* renderTarget = graphic.GetRenderTarget();
+	ID2D1SolidColorBrush* dimBrush = graphic.GetBrush(D2D1::ColorF(D2D1::ColorF::Black, 0.6f));
+	if (renderTarget != nullptr && dimBrush != nullptr)
+	{
+		// game_over_popup.xml에는 배경 패널 셀이 없어서, 게임 영역 전체를 어둡게 깔아 팝업처럼 보이게 한다.
+		renderTarget->FillRectangle(D2D1::RectF(0.0f, 0.0f,
+			static_cast<float>(GameAreaWidth), static_cast<float>(GameAreaHeight)), dimBrush);
+	}
+
+	graphic.DrawTextW(L"GAME OVER",
+		D2D1::RectF(0.0f, GameAreaCenterY - 160.0f, static_cast<float>(GameAreaWidth), GameAreaCenterY - 80.0f),
+		FONT_30, D2D1::ColorF(D2D1::ColorF::Red), DWRITE_TEXT_ALIGNMENT_CENTER);
+
+	ResourceManager::GetInstance().GetImage(L"restart_button_baked")
+		.Draw(graphic, GameAreaCenterX, GameAreaCenterY, 1.0f, 0.0f);
 }
 
 void GameSceneUI::drawRangePreview(Graphic& graphic, const Vector& pos, TowerType type) const

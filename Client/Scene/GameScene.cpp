@@ -1,6 +1,7 @@
 ﻿#include "pch.h"
 #include "GameScene.h"
 #include "InputManager.h"
+#include "UIManager.h"
 #include "Tower.h"
 #include "TowerFactory.h"
 #include "PoolManager.h"
@@ -9,6 +10,7 @@
 void GameScene::Init(Graphic& graphic)
 {
 	Super::Init(graphic);
+	_graphicRef = &graphic;
 
 	ResourceManager& res = ResourceManager::GetInstance();
 
@@ -57,6 +59,17 @@ void GameScene::Cleanup()
 
 void GameScene::Update(float deltaTime)
 {
+	if (_healthManager.IsGameOver())
+	{
+		for (Actor* actor : GetActors(RenderLayer::Bloon))
+		{
+			if (actor->IsActive() && actor->IsPendingKill() == false)
+				actor->Update(deltaTime);
+		}
+		UIManager::GetInstance().Update(deltaTime);
+		return;
+	}
+
 	const float scaledDeltaTime = deltaTime * getTimeScale();
 
 	Super::Update(scaledDeltaTime);
@@ -102,11 +115,11 @@ void GameScene::Render(Graphic& graphic)
 	}
 
 	// [임시 테스트] tack_shooter_tack_logo 확인용 - 확인 끝나면 제거
-	const CellInfo* tackLogoCell = _sprite->GetCell("bomb_tower_01");
-	if (tackLogoCell)
-	{
-		_inGameBg->DrawSprite(graphic, 400.0f, 400.0f, *tackLogoCell, 1.0f);
-	}
+	//const CellInfo* tackLogoCell = _sprite->GetCell("bomb_tower_01");
+	//if (tackLogoCell)
+	//{
+	//	_inGameBg->DrawSprite(graphic, 400.0f, 400.0f, *tackLogoCell, 1.0f);
+	//}
 
 	renderGrid(graphic);
 	renderPathDebug(graphic);
@@ -129,7 +142,8 @@ void GameScene::Render(Graphic& graphic)
 		_healthManager.GetHp(),
 		_economyManager.GetGold(),
 		_waveManager.IsWaveActive(),
-		_speedEnabled);
+		_speedEnabled,
+		_healthManager.IsGameOver());
 
 	Super::Render(graphic);
 }
@@ -145,10 +159,21 @@ void GameScene::CreateUI()
 		[this]() { _waveManager.SetNextRound(_waveManager.GetNextRoundNumber() + 1); },
 		[this]() { _waveManager.SetNextRound(_waveManager.GetNextRoundNumber() - 1); },
 		[this]() { sellSelectedTower(); },
-		[this]() { upgradeSelectedTower(); });
-
+		[this]() { upgradeSelectedTower(); },
+		[this]() { Restart(); });
 	updateDebugWaveTitle();
 }
+
+
+void GameScene::Restart()
+{
+	Graphic* graphic = _graphicRef;
+	Cleanup();
+	if (graphic != nullptr)
+		Init(*graphic);
+}
+
+
 
 void GameScene::onStartButtonClick()
 {

@@ -44,7 +44,6 @@ public:
 	void AddDebugCircle(const Vector& pos, float radius, float duration);
 
 
-
 	// 체력은 싱글톤이 아니라 GameScene이 소유한다. BloonPopResolver가 새어나감 데미지를 넣을 때 접근한다.
 	HealthManager& GetHealthManager() { return _healthManager; }
 	// 골드도 마찬가지로 싱글톤이 아니라 GameScene이 소유한다.
@@ -82,12 +81,19 @@ private:
 	void sellSelectedTower();
 	void upgradeSelectedTower();
 
+	// 게임오버 후 재시작 버튼을 누르면 호출된다. Cleanup() 후 Init()을 다시 실행해 전부 초기화한다.
+	void Restart();
+
 
 private:
 	WaveManager _waveManager;
 	HealthManager _healthManager;
 	EconomyManager _economyManager;
 	bool _speedEnabled = false; // 2배속 on/off. 웨이브가 끝나도 리셋하지 않고 유지한다.
+
+	// Restart()에서 Init()을 다시 호출하기 위해 보관해둔다. Game이 소유한 Graphic이라 수명은 항상 유효하다.
+	Graphic* _graphicRef = nullptr;
+
 
 	// 스프라이트 및 이미지 리소스
 	Image*       _inGameBg           = nullptr;

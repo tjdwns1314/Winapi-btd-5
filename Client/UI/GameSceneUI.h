@@ -31,7 +31,8 @@ public:
 		function<void()> onWaveUp,
 		function<void()> onWaveDown,
 		function<void()> onSellClick,
-		function<void()> onUpgradeClick);
+		function<void()> onUpgradeClick,
+		function<void()> onRestartClick);
 
 	void Render(Graphic& graphic,
 		bool isDraggingTower,
@@ -40,7 +41,8 @@ public:
 		const TowerSelectionInfo& selection,
 		int32 hp,
 		int32 gold, bool isWaveActive,
-		bool isSpeedEnabled);
+		bool isSpeedEnabled,
+		bool isGameOver);
 private:
 	UIButton* createButton(const Vector& pos, const Vector& size, function<void()> onClick);
 	void renderStartButton(Graphic& graphic, bool isWaveActive, bool isSpeedEnabled)const;
@@ -48,6 +50,7 @@ private:
 	void renderGoldText(Graphic& graphic, int32 gold) const;
 	void renderHpText(Graphic& graphic, int32 hp) const;
 	void renderTowerSelectionPanel(Graphic& graphic, const TowerSelectionInfo& selection) const;
+	void renderGameOverPopup(Graphic& graphic) const;
 	void drawTowerIcon(Graphic& graphic, const Vector& pos, TowerType type, float scale) const;
 	void drawRangePreview(Graphic& graphic, const Vector& pos, TowerType type) const;
 
@@ -61,10 +64,13 @@ private:
 	UIButton* _waveDownButton = nullptr;
 	UIButton* _sellButton = nullptr;
 	UIButton* _upgradeButton = nullptr;
+	UIButton* _restartButton = nullptr;
 
 	// 스프라이트 리소스
 	Image* _hudImg = nullptr;
 	SpriteAtlas* _hudSprite = nullptr;
 	Image* _inGameBg = nullptr;
 	SpriteAtlas* _sprite = nullptr;
+	Image* _popupImg = nullptr;
+	SpriteAtlas* _popupSprite = nullptr;
 };
