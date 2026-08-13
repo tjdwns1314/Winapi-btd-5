@@ -1,7 +1,10 @@
 ﻿#include "pch.h"
 #include "Projectile.h"
 #include "ResourceManager.h"
+#include "Scene.h"
+#include "Bloon.h"
 #include "ColliderCircle.h"
+#include "GameScene.h"
 
 void Projectile::Init()
 {
@@ -33,8 +36,23 @@ void Projectile::Update(float deltaTime)
 
 void Projectile::OnEnter(Actor* other)
 {
-	if (other != nullptr && other->GetActorType() == ActorType::Bloon)
-		SetPendingKill();
+	if (other == nullptr || other->GetActorType() != ActorType::Bloon)
+		return;
+
+	if (_splashRadius > 0.f)
+	{
+		const Vector center = GetPos();
+		static_cast<GameScene*>(GetOwner())->AddDebugCircle(center, _splashRadius, 1.f);
+		const vector<Actor*> bloons = GetOwner()->GetActors(RenderLayer::Bloon);
+		for (Actor* actor : bloons)
+		{
+			if (actor == other || actor->IsPendingKill())
+				continue;
+			if ((actor->GetPos() - center).Length() <= _splashRadius)
+				static_cast<Bloon*>(actor)->ApplyDamage(_damage);
+		}
+	}
+	SetPendingKill();
 }
 
 void Projectile::Render(Graphic& graphic)

@@ -43,6 +43,26 @@ namespace
 		}
 	}
 
+	void fireSplash(Tower& tower)
+	{
+		Bloon* target = tower.GetTarget();
+		if (target == nullptr)
+			return;
+
+		GameScene* owner = tower.GetGameScene();
+		if (owner == nullptr)
+			return;
+
+		Vector dir = target->GetPos() - tower.GetPos();
+		if (dir.Length() < SMALL_NUMBER)
+			return;
+
+		dir.Normalize();
+		owner->SpawnProjectile(tower.GetPos(),dir,static_cast<float>(tower.GetStat().damage),
+			tower.GetStat().projectileKey,tower.GetStat().projectileSpeed,
+			tower.GetStat().splashRadius);
+	}
+
 	void fireHitscan(Tower& tower)
 	{
 		Bloon* target = tower.GetTarget();
@@ -60,6 +80,7 @@ FireBehaviorFn GetFireBehavior(TowerType type)
 		{ TowerType::DartMonkey,  &fireSingleTarget },
 		{ TowerType::TackShooter, &fireEightDirections },
 		{ TowerType::SniperMonkey, &fireHitscan},
+		{ TowerType::BombTower, &fireSplash},
 
 	};
 

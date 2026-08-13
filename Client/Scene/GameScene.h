@@ -39,7 +39,11 @@ public:
 	// --------------------------------------------------
 	// Tower가 풀/Scene 등록을 직접 몰라도 되도록, 발사만 대행해준다.
 	Projectile* SpawnProjectile(const Vector& pos,
-		const Vector& dir, float damage, const string& spriteKey, float speed);
+		const Vector& dir, float damage, const string& spriteKey, float speed, float splashRadius = 0.f);
+
+	void AddDebugCircle(const Vector& pos, float radius, float duration);
+
+
 
 	// 체력은 싱글톤이 아니라 GameScene이 소유한다. BloonPopResolver가 새어나감 데미지를 넣을 때 접근한다.
 	HealthManager& GetHealthManager() { return _healthManager; }
@@ -55,6 +59,17 @@ private:
 	void renderGrid(Graphic& graphic);
 	void renderStartEndDebug(Graphic& graphic);
 	void renderPathDebug(Graphic& graphic);
+	void renderDebugCircles(Graphic& graphic);
+
+	struct DebugCircle
+	{
+		Vector pos;
+		float radius;
+		float remaining;
+	};
+	vector<DebugCircle> _debugCircles;
+
+
 
 	// 내부 로직 헬퍼
 	void updateTowerDrag();

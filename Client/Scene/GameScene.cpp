@@ -60,6 +60,19 @@ void GameScene::Update(float deltaTime)
 	updateTowerSelect();
 	GetCollisionManager().Update(*this);
 	updateDebugWaveTitle();
+
+	for (DebugCircle& circle : _debugCircles)
+		circle.remaining -= deltaTime;
+
+	std::erase_if(_debugCircles, [](const DebugCircle& circle)
+		{
+			return circle.remaining <= 0.f;
+		});
+}
+
+void GameScene::AddDebugCircle(const Vector& pos, float radius, float duration)
+{
+	_debugCircles.push_back({ pos,radius,duration });
 }
 
 void GameScene::Render(Graphic& graphic)
@@ -85,6 +98,7 @@ void GameScene::Render(Graphic& graphic)
 	renderGrid(graphic);
 	renderPathDebug(graphic);
 	renderStartEndDebug(graphic);
+	renderDebugCircles(graphic);
 
 	TowerSelectionInfo selection;
 	if (_selectedTower != nullptr)
@@ -122,9 +136,9 @@ void GameScene::CreateUI()
 }
 
 Projectile* GameScene::SpawnProjectile(const Vector& pos,
-	const Vector& dir, float damage, const string& spriteKey, float speed)
+	const Vector& dir, float damage, const string& spriteKey, float speed, float splashRadius)
 {
-	Projectile* projectile = ProjectileFactory::Create(PoolManager::GetInstance().GetProjectilePool(), pos, dir, damage, spriteKey, speed);
+	Projectile* projectile = ProjectileFactory::Create(PoolManager::GetInstance().GetProjectilePool(), pos, dir, damage, spriteKey, speed,splashRadius);
 	if (projectile != nullptr)
 		AddActor(projectile);
 
@@ -354,6 +368,17 @@ void GameScene::renderPathDebug(Graphic& graphic)
 	{
 		renderTarget->FillEllipse(D2D1::Ellipse(D2D1::Point2F(point.x, point.y), radius, radius), brush);
 	}
+}
+
+void GameScene::renderDebugCircles(Graphic& graphic)
+{
+	ID2D1HwndRenderTarget* renderTarget = graphic.GetRenderTarget();
+	ID2D1SolidColorBrush* brush = graphic.GetBrush(D2D1::ColorF(D2D1::ColorF::Yellow, 0.6f));
+	if (renderTarget == nullptr || brush == nullptr)
+		return;
+
+	for (const DebugCircle& circle : _debugCircles)
+		renderTarget->DrawEllipse(D2D1::Ellipse(D2D1::Point2F(circle.pos.x, circle.pos.y), circle.radius, circle.radius), brush, 2.f);
 }
 
 void GameScene::renderStartEndDebug(Graphic& graphic)

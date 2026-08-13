@@ -9,6 +9,7 @@
             "rotatesToTarget" : true,
             "attackCount" : 1,
             "projectileKey" : "dart_monkey_dart",
+            "splashRadius" : 0,
             "basePrice" : 200,
             "refundPrice" : 140,
             "upgradeCosts" : [100,250,500,1000]
@@ -22,6 +23,7 @@
             "rotatesToTarget": false,
             "attackCount": 8,
             "projectileKey": "tack_shooter_tack",
+            "splashRadius": 0,
             "basePrice": 260,
             "refundPrice": 182,
            "upgradeCosts": [150, 300, 600, 1200]
@@ -35,6 +37,7 @@
             "rotatesToTarget": true,
             "attackCount": 1,
             "projectileKey": "",
+            "splashRadius": 0,
             "basePrice": 350,
             "refundPrice": 245,
             "upgradeCosts": [200, 400, 800, 1600]
@@ -44,10 +47,11 @@
             "damage": 1,
             "attackRange": 180,
             "attackSpeed": 3,
-            "projectileSpeed": 300,
+            "projectileSpeed": 150,
             "rotatesToTarget": true,
             "attackCount": 1,
             "projectileKey": "bomb_tower_bomb_01",
+            "splashRadius": 120,
             "basePrice": 425,
             "refundPrice": 297,
             "upgradeCosts": [250, 500, 1000, 2000]

@@ -29,6 +29,7 @@ namespace
 			stat.rotatesToTarget = entry.at("rotatesToTarget").get<bool>();
 			stat.attackCount = entry.at("attackCount").get<int32>();
 			stat.projectileKey = entry.at("projectileKey").get<string>();
+			stat.splashRadius = entry.at("splashRadius").get<float>();
 			stat.basePrice = entry.at("basePrice").get<int32>();
 			stat.refundPrice = entry.at("refundPrice").get<int32>();
 
