@@ -189,6 +189,9 @@
     <ClInclude Include="Client\Object\TowerType.h" />
     <ClInclude Include="Client\Object\TowerFactory.h" />
     <ClInclude Include="Client\Object\TowerFireBehavior.h" />
+    <ClInclude Include="Client\Object\Obstacle.h" />
+    <ClInclude Include="Client\Object\ObstacleType.h" />
+    <ClInclude Include="Client\Object\ObstacleFactory.h" />
     <ClInclude Include="Client\Core\TowerDefense.h" />
     <ClInclude Include="Common\Util.h" />
     <ClInclude Include="Client\Object\PoolManager.h" />
@@ -199,6 +202,9 @@
     <ClCompile Include="Client\Object\BloonType.cpp" />
     <ClCompile Include="Client\Object\TowerType.cpp" />
     <ClCompile Include="Client\Object\TowerFactory.cpp" />
+    <ClCompile Include="Client\Object\Obstacle.cpp" />
+    <ClCompile Include="Client\Object\ObstacleType.cpp" />
+    <ClCompile Include="Client\Object\ObstacleFactory.cpp" />
     <ClCompile Include="Client\Object\TowerFireBehavior.cpp" />
     <ClCompile Include="Client\Object\WaveManager.cpp" />
     <ClCompile Include="Client\Object\ProjectileFactory.cpp" />

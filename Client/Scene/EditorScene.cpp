@@ -36,18 +36,23 @@ void EditorScene::Render(Graphic& graphic)
 
 
 
-	if (const CellInfo* cell = _sprite->GetCell("play_icon"))
-	{
-		_inGameBg->DrawSprite(graphic, 695.0f, 640.0f, *cell, 1.0f, 0.0f);
-	}
 
 
 
 
-	if (const CellInfo* cell = _sprite->GetCell("ff_icon"))
+
+	if (const CellInfo* cell = _sprite->GetCell("banana_farm_tree"))
 	{
 		_inGameBg->DrawSprite(graphic, 500.0f, 500.0f, *cell, 1.0f, 0.0f);
 	}
+
+	if (const CellInfo* cell = _sprite->GetCell("banana_box"))
+	{
+		_inGameBg->DrawSprite(graphic, 600.0f, 500.0f, *cell, 1.0f, 0.0f);
+	}
+
+
+
 
 	graphic.DrawTextW(L"안녕하세요", 
 		D2D1::RectF(50.0f, 50.0f, 400.0f, 100.0f), 

@@ -14,10 +14,12 @@
 #include "ProjectileFactory.h"
 #include "Projectile.h"
 #include "TowerType.h"
+#include "ObstacleType.h"
 #include "HealthManager.h"
 #include "EconomyManager.h"
 
 class Tower;
+class Obstacle;
 
 class GameScene : public Scene
 {
@@ -73,12 +75,22 @@ private:
 	void onStartButtonClick();
 	float getTimeScale() const;
 	void updateTowerDrag();
+	void updateObstacleDrag();
 	void updateDebugWaveTitle();
 	void tryStartTowerDrag(TowerType type);
+	void tryStartObstacleDrag();
 
 	void updateTowerSelect();
+	void updateObstacleSelect();
 	void sellSelectedTower();
+	void sellSelectedObstacle();
 	void upgradeSelectedTower();
+
+	// 설치/선택/판매 공통 뼈대. Tower/Obstacle이 "가격"과 "뭘 만들지"만 넘겨서 재사용한다.
+	bool isCellOccupied(const Cell& cell) const;
+	bool tryPlaceOnGrid(int32 price, const function<Actor* (const Vector&)>& createFn);
+	Actor* findActorAt(const Vector& pos, RenderLayer layer) const;
+	void clearTileAndRepath(const Vector& pos);
 
 	// 게임오버 후 재시작 버튼을 누르면 호출된다. Cleanup() 후 Init()을 다시 실행해 전부 초기화한다.
 	void Restart();
@@ -116,6 +128,8 @@ private:
 	bool _isDraggingTower = false;
 	TowerType _draggingTowerType = TowerType::DartMonkey;
 	Tower* _selectedTower = nullptr;
+	bool _isDraggingObstacle = false;
+	Obstacle* _selectedObstacle = nullptr;
 
 	// 디버그 타이틀바 표시용 캐시 (값이 바뀔 때만 SetWindowText 호출)
 	int32 _lastTitleCurrentRound = -1;

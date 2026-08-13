@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "UIButton.h"
 #include "TowerType.h"
+#include "ObstacleType.h"
 
 class Graphic;
 class Image;
@@ -18,6 +19,12 @@ struct TowerSelectionInfo
 	bool canUpgrade = false;
 };
 
+struct ObstacleSelectionInfo
+{
+	bool isSelected = false;
+	int32 sellPrice = 0;
+};
+
 
 
 class GameSceneUI
@@ -29,17 +36,21 @@ public:
 		function<void()> onTackShopClick,
 		function<void()> onSniperShopClick,
 		function<void()> onBombShopClick,
+		function<void()> onObstacleShopClick,
 		function<void()> onWaveUp,
 		function<void()> onWaveDown,
 		function<void()> onSellClick,
 		function<void()> onUpgradeClick,
+		function<void()> onObstacleSellClick,
 		function<void()> onRestartClick);
 
 	void Render(Graphic& graphic,
 		bool isDraggingTower,
 		TowerType draggingTowerType,
+		bool isDraggingObstacle,
 		const Vector& dragPreviewPos,
 		const TowerSelectionInfo& selection,
+		const ObstacleSelectionInfo& obstacleSelection,
 		int32 hp,
 		int32 gold, bool isWaveActive,
 		bool isSpeedEnabled,
@@ -51,8 +62,10 @@ private:
 	void renderGoldText(Graphic& graphic, int32 gold) const;
 	void renderHpText(Graphic& graphic, int32 hp) const;
 	void renderTowerSelectionPanel(Graphic& graphic, const TowerSelectionInfo& selection) const;
+	void renderObstacleSelectionPanel(Graphic& graphic, const ObstacleSelectionInfo& selection) const;
 	void renderGameOverPopup(Graphic& graphic) const;
 	void drawTowerIcon(Graphic& graphic, const Vector& pos, TowerType type, float scale) const;
+	void drawObstacleIcon(Graphic& graphic, const Vector& pos, float scale) const;
 	void drawRangePreview(Graphic& graphic, const Vector& pos, TowerType type) const;
 
 	// 버튼
@@ -61,10 +74,12 @@ private:
 	UIButton* _tackShooterShopButton = nullptr;
 	UIButton* _sniperMonkeyShopButton = nullptr;
 	UIButton* _bombTowerShopButton = nullptr;
+	UIButton* _obstacleShopButton = nullptr;
 	UIButton* _waveUpButton = nullptr;   // 디버그용: 시작 라운드를 +/-로 조절(정식 스프라이트 없이 도형으로 그림)
 	UIButton* _waveDownButton = nullptr;
 	UIButton* _sellButton = nullptr;
 	UIButton* _upgradeButton = nullptr;
+	UIButton* _obstacleSellButton = nullptr;
 	UIButton* _restartButton = nullptr;
 
 	// 스프라이트 리소스

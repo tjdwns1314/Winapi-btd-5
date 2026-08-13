@@ -34,9 +34,6 @@ struct TowerStat
 const TowerStat& GetTowerStat(TowerType type);
 TowerType ParseTowerTypeName(const string& name);
 
-// 타워 종류별로 어떤 이미지를 그릴지 정의한다.
-// useBakedImage == true면 ResourceManager::BakeImage로 미리 구운 합성 텍스처(bakedImageKey)를 통째로 그리고,
-// false면 atlas에서 cellName 셀 하나를 조회해서 그린다.
 struct TowerVisual
 {
 	bool useBakedImage;
