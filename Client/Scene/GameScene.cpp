@@ -55,6 +55,7 @@ void GameScene::Init(Graphic& graphic)
 void GameScene::Cleanup()
 {
 	Super::Cleanup();
+	_selectedTower = nullptr;
 }
 
 void GameScene::Update(float deltaTime)
@@ -130,6 +131,7 @@ void GameScene::Render(Graphic& graphic)
 	if (_selectedTower != nullptr)
 	{
 		selection.isSelected = true;
+		selection.grade = _selectedTower->GetGrade();
 		selection.sellPrice = _selectedTower->GetSellPrice();
 		selection.canUpgrade = _selectedTower->CanUpgrade();
 		selection.upgradePrice = _selectedTower->GetNextUpgradeCost();

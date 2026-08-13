@@ -12,6 +12,7 @@ class SpriteAtlas;
 struct TowerSelectionInfo
 {
 	bool isSelected = false;
+	int32 grade = 1;
 	int32 sellPrice = 0;
 	int32 upgradePrice = 0;
 	bool canUpgrade = false;
