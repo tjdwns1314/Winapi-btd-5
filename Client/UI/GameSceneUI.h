@@ -39,9 +39,11 @@ public:
 		const Vector& dragPreviewPos,
 		const TowerSelectionInfo& selection,
 		int32 hp,
-		int32 gold);
+		int32 gold, bool isWaveActive,
+		bool isSpeedEnabled);
 private:
 	UIButton* createButton(const Vector& pos, const Vector& size, function<void()> onClick);
+	void renderStartButton(Graphic& graphic, bool isWaveActive, bool isSpeedEnabled)const;
 	void renderDebugWaveButtons(Graphic& graphic) const;
 	void renderGoldText(Graphic& graphic, int32 gold) const;
 	void renderHpText(Graphic& graphic, int32 hp) const;
