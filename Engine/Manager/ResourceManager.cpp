@@ -16,6 +16,9 @@ void ResourceManager::Preload(Graphic& graphic)
 	loadImage(graphic, L"Resource\\Sprite\\in_game_hud.png");
 	loadAtlas(L"Resource\\Sprite\\in_game_hud.xml");
 
+	loadImage(graphic, L"Resource\\Sprite\\game_over_popup.png");
+	loadAtlas(L"Resource\\Sprite\\game_over_popup.xml");
+
 	loadImage(graphic, L"Resource\\Red.png");
 	loadImage(graphic, L"Resource\\Blue.png");
 	loadImage(graphic, L"Resource\\Green.png");
@@ -71,6 +74,25 @@ void ResourceManager::Init(Graphic& graphic)
 	{.cellName = "sniper_green_hat",   .offset = {-5.0f, -5.0f} },
 	{.cellName = "sniper_basic_rifle", .offset = {-25.0f, -70.0f} },
 	});
+
+	// plain_button(in_game_hud) 베이스 위에 try_again_icon(game_over_popup)을 겹쳐 하나의 이미지로 굽는다.
+	// 서로 다른 아틀라스라 SpriteBaker(BakeFrame)로는 합성이 안 되어 BakeImage에 직접 그린다.
+	{
+		Image& hudImg = GetImage(L"Resource\\Sprite\\in_game_hud.png");
+		SpriteAtlas& hudAtlas = GetAtlas(L"Resource\\Sprite\\in_game_hud.xml");
+		Image& popupImg = GetImage(L"Resource\\Sprite\\game_over_popup.png");
+		SpriteAtlas& popupAtlas = GetAtlas(L"Resource\\Sprite\\game_over_popup.xml");
+
+		const CellInfo* baseCell = hudAtlas.GetCell("plain_button");
+		const CellInfo* iconCell = popupAtlas.GetCell("try_again_icon");
+
+		BakeImage(L"restart_button_baked", graphic, { 131.0f, 137.0f },
+			[&](ID2D1RenderTarget* rt)
+			{
+				if (baseCell) hudImg.DrawSprite(rt, 65.5f, 68.5f, *baseCell, 1.0f, 0.0f);
+				if (iconCell) popupImg.DrawSprite(rt, 65.5f, 68.5f, *iconCell, 1.0f, 0.0f);
+			});
+	}
 }
 
 void ResourceManager::loadAtlas(const wchar_t* xmlPath)

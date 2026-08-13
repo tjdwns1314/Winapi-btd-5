@@ -47,6 +47,14 @@ void WaveManager::Init(ObjectPool<Bloon>* pool, const Vector& spawnPos, const ve
 	_spawnPos = spawnPos;
 	_path = path;
 	_scene = scene;
+
+	// 재시작 시 GameScene이 이 WaveManager 인스턴스를 재사용하므로,
+	// 이전 판의 라운드 진행 상태가 그대로 남지 않도록 여기서 리셋한다.
+	_state = WaveState::Idle;
+	_roundIndex = 0;
+	_spawnIndex = 0;
+	_spawnTimer = 0.f;
+	_currentRound = WaveData{};
 }
 
 bool WaveManager::StartNextWave()
