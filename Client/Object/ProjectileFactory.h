@@ -10,5 +10,5 @@ class ProjectileFactory
 public:
 	static Projectile* Create(ObjectPool<Projectile>& pool,
 		const Vector& pos, const Vector& dir, float damage,
-		const string& spriteKey, float speed);
+		const string& spriteKey, float speed, float splashRadius = 0.f);
 };

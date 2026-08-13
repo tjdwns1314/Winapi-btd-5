@@ -19,6 +19,7 @@ struct TowerStat
 	bool rotatesToTarget;
 	int32 attackCount;
 	string projectileKey;
+	float splashRadius;
 	int32 basePrice;
 	int32 refundPrice;
 	vector<int32> upgradeCosts;

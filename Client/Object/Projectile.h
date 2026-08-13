@@ -22,12 +22,14 @@ public:
 	void SetSpriteKey(const string& key) { _spriteKey = key; }
 
 	void SetProjectileSpeed(float speed) { _speed = speed; }
+	void SetSplashRadius(float radius) { _splashRadius = radius; }
 
 private:
 	float _damage = 1.f;
 	float _maxDistance = 800.f;	// 이 거리 이상 날아가면 삭제 (placeholder, 실제 사거리 확인 후 조정)
 	float _traveledDistance = 0.f;
 	float _speed = 500.0f;
+	float _splashRadius = 0.f;
 
 	Image* _image = nullptr;
 
