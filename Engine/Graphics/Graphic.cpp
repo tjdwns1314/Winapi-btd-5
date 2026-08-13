@@ -105,11 +105,7 @@ void Graphic::DrawText(const wchar_t* text,
 		format, 
 		layoutRect, 
 		brush);
-
 }
-
-
-
 
 ID2D1SolidColorBrush* Graphic::GetBrush(const D2D1::ColorF& color)
 {
