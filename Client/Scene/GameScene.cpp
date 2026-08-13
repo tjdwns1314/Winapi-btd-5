@@ -45,6 +45,9 @@ void GameScene::Init(Graphic& graphic)
 	_economyManager.Init(10000); // 초기 골드: 임시값 — 밸런스 확정되면 조정
 
 	GetCollisionManager().RegisterLayer(RenderLayer::Bloon, RenderLayer::Projectile);
+
+	_speedEnabled = false;
+
 }
 
 void GameScene::Cleanup()
@@ -54,8 +57,11 @@ void GameScene::Cleanup()
 
 void GameScene::Update(float deltaTime)
 {
-	Super::Update(deltaTime);
-	_waveManager.Update(deltaTime);
+	const float scaledDeltaTime = deltaTime * getTimeScale();
+
+	Super::Update(scaledDeltaTime);
+	_waveManager.Update(scaledDeltaTime);
+
 	updateTowerDrag();
 	updateTowerSelect();
 	GetCollisionManager().Update(*this);
@@ -69,6 +75,13 @@ void GameScene::Update(float deltaTime)
 			return circle.remaining <= 0.f;
 		});
 }
+
+float GameScene::getTimeScale() const
+{
+	constexpr float kFastTimeScale = 2.0f;
+	return _speedEnabled ? kFastTimeScale : 1.0f;
+}
+
 
 void GameScene::AddDebugCircle(const Vector& pos, float radius, float duration)
 {
@@ -114,7 +127,9 @@ void GameScene::Render(Graphic& graphic)
 		InputManager::GetInstance().GetMousePos(),
 		selection,
 		_healthManager.GetHp(),
-		_economyManager.GetGold());
+		_economyManager.GetGold(),
+		_waveManager.IsWaveActive(),
+		_speedEnabled);
 
 	Super::Render(graphic);
 }
@@ -122,7 +137,7 @@ void GameScene::Render(Graphic& graphic)
 void GameScene::CreateUI()
 {
 	_ui.Init(
-		[this]() { _waveManager.StartNextWave(); },
+		[this]() {onStartButtonClick(); },
 		[this]() { tryStartTowerDrag(TowerType::DartMonkey); },
 		[this]() { tryStartTowerDrag(TowerType::TackShooter); },
 		[this]() { tryStartTowerDrag(TowerType::SniperMonkey); },
@@ -133,6 +148,16 @@ void GameScene::CreateUI()
 		[this]() { upgradeSelectedTower(); });
 
 	updateDebugWaveTitle();
+}
+
+void GameScene::onStartButtonClick()
+{
+	if (_waveManager.IsWaveActive() == false)
+	{
+		_waveManager.StartNextWave();
+		return;
+	}
+	_speedEnabled = !_speedEnabled;
 }
 
 Projectile* GameScene::SpawnProjectile(const Vector& pos,

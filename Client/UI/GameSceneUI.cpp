@@ -47,15 +47,23 @@ UIButton* GameSceneUI::createButton(const Vector& pos, const Vector& size, funct
 	return button;
 }
 
-void GameSceneUI::Render(Graphic& graphic, bool isDraggingTower, TowerType draggingTowerType,
-	const Vector& dragPreviewPos, const TowerSelectionInfo& selection, int32 hp, int32 gold)
+void GameSceneUI::renderStartButton(Graphic& graphic, bool isWaveActive, bool isSpeedEnabled) const
 {
-	const CellInfo* playCell = _hudSprite->GetCell("play_icon");
-	if (playCell != nullptr)
-	{
-		const Vector pos = _startButton->GetPos();
-		_hudImg->DrawSprite(graphic, pos.x, pos.y, *playCell, 1.0f, 0.0f);
-	}
+	const char* cellName = "play_icon";
+	if (isWaveActive)
+		cellName = isSpeedEnabled ? "ff_icon_red" : "ff_icon";
+
+	const CellInfo* cell = _hudSprite->GetCell(cellName);
+	if (cell == nullptr) return;
+
+	const Vector pos = _startButton->GetPos(); 
+	_hudImg->DrawSprite(graphic, pos.x, pos.y, *cell, 1.0f, 0.0f);
+}
+
+void GameSceneUI::Render(Graphic& graphic, bool isDraggingTower, TowerType draggingTowerType,
+	const Vector& dragPreviewPos, const TowerSelectionInfo& selection, int32 hp, int32 gold, bool isWaveActive, bool isSpeedEnabled)
+{
+	renderStartButton(graphic, isWaveActive, isSpeedEnabled);
 
 	drawTowerIcon(graphic, _dartMonkeyShopButton->GetPos(), TowerType::DartMonkey, 1.0f);
 	// 상점 박스가 작아서(52x104) 베이크 텍스처(200x200)를 그대로 넣을 수 없어 축소해서 그린다.

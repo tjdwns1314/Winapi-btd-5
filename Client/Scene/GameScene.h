@@ -72,6 +72,8 @@ private:
 
 
 	// 내부 로직 헬퍼
+	void onStartButtonClick();
+	float getTimeScale() const;
 	void updateTowerDrag();
 	void updateDebugWaveTitle();
 	void tryStartTowerDrag(TowerType type);
@@ -85,6 +87,7 @@ private:
 	WaveManager _waveManager;
 	HealthManager _healthManager;
 	EconomyManager _economyManager;
+	bool _speedEnabled = false; // 2배속 on/off. 웨이브가 끝나도 리셋하지 않고 유지한다.
 
 	// 스프라이트 및 이미지 리소스
 	Image*       _inGameBg           = nullptr;
