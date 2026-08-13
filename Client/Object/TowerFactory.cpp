@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "TowerFactory.h"
 #include "Tower.h"
 #include "TowerFireBehavior.h"
@@ -26,7 +26,7 @@ Tower* TowerFactory::Create(ObjectPool<Tower>& pool, TowerType type, const Vecto
 		tower->SetCell(res.GetAtlas(L"Resource\\Sprite\\InGame.xml").GetCell(visual.cellName.c_str()));
 	}
 
-	tower->SetStat(GetTowerStat(type));
+	tower->SetTowerData(GetTowerStat(type));
 	tower->SetFireBehavior(GetFireBehavior(type));
 
 	tower->Init();

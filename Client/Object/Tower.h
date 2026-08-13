@@ -27,13 +27,15 @@ public:
 
 	// TowerFactory가 GetTowerStat()으로 조회한 스탯을 통째로 복사해서 넣어준다.
 	// 복사본이라 업그레이드 등으로 개체별로 값이 바뀌어도 같은 타입의 다른 타워에 영향 없다.
-	void SetStat(const TowerStat& stat) { _stat = stat; }
-	const TowerStat& GetStat() const { return _stat; }
+	void SetTowerData(const TowerStat& data) 
+	{ _towerData = &data; _stat = data.grades.front(); }
+	const TowerStat& GetTowerData() const { return *_towerData; }
+	const TowerGradeStat& GetStat() const { return _stat; }
 
 
 	int32 GetGrade() const { return _grade; }
 	bool CanUpgrade() const { return _canUpgrade; }
-	int32 GetSellPrice() const { return _stat.refundPrice; }
+	int32 GetSellPrice() const { return _towerData->refundPrice; }
 	int32 GetNextUpgradeCost() const;
 	void ApplyUpgrade();
 
@@ -59,7 +61,9 @@ private:
 	Bloon* _target = nullptr;
 
 	TowerType _type = TowerType::DartMonkey;
-	TowerStat _stat{}; // 스폰 시 GetTowerStat()에서 복사해온 값(damage/attackRange/attackSpeed/rotatesToTarget/attackCount/projectileKey/basePrice/refundPrice/upgradeCosts).
+	const TowerStat* _towerData = nullptr; // 타입별 고정값 + 등급표(정적 테이블을 가리킴).
+	TowerGradeStat _stat{};                // 현재 등급 스탯. ApplyUpgrade()마다 _towerData->grades[i]로 교체.
+	
 	FireBehaviorFn _fireBehavior = nullptr;
 
 	float _fireTimer = 0.f;	// 콜리전 매니저로 실제 사거리 판정을 붙이기 전까지, 주기 발사 타이머로만 사용
