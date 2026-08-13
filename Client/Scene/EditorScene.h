@@ -19,5 +19,11 @@ public :
 private :
 	Image* _inGameBg = nullptr;
 	SpriteAtlas* _sprite = nullptr;
+
+	Image* _hudImg = nullptr;      // in_game_hud.png
+	SpriteAtlas * _hudSprite = nullptr; // in_game_hud.xml
+
+	Image* _popupImg = nullptr;      // game_over_popup.png
+	SpriteAtlas* _popupSprite = nullptr; // game_over_popup.xml
 };
 
