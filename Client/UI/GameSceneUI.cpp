@@ -126,7 +126,7 @@ void GameSceneUI::drawRangePreview(Graphic& graphic, const Vector& pos, TowerTyp
 	if (renderTarget == nullptr || brush == nullptr)
 		return;
 
-	const float range = GetTowerStat(type).attackRange;
+	const float range = GetTowerStat(type).grades.front().attackRange;
 	renderTarget->DrawEllipse(D2D1::Ellipse(D2D1::Point2F(pos.x, pos.y), range, range), brush, 2.f);
 }
 
@@ -164,12 +164,12 @@ void GameSceneUI::renderHpText(Graphic& graphic, int32 hp) const
 void GameSceneUI::renderTowerSelectionPanel(Graphic& graphic, const TowerSelectionInfo& selection) const
 {
 	ID2D1HwndRenderTarget* renderTarget = graphic.GetRenderTarget();
-	ID2D1SolidColorBrush* bgBrush = graphic.GetBrush(D2D1::ColorF(D2D1::ColorF::DarkSlateGray, 0.85f));
 
 	auto drawButtonBg = [&](UIButton* button)
 	{
-		if (renderTarget == nullptr || bgBrush == nullptr)
+			if (renderTarget == nullptr)
 			return;
+			ID2D1SolidColorBrush* bgBrush = graphic.GetBrush(D2D1::ColorF(D2D1::ColorF::DarkSlateGray, 0.85f));
 		const Vector pos = button->GetPos();
 		const Vector size = button->GetSize();
 		renderTarget->FillRectangle(D2D1::RectF(
@@ -199,6 +199,13 @@ void GameSceneUI::renderTowerSelectionPanel(Graphic& graphic, const TowerSelecti
 		swprintf_s(upgradeText, L"업그레이드: %d", selection.upgradePrice);
 		drawPriceText(_upgradeButton, upgradeText);
 	}
+
+	// 배경 브러시(bgBrush)를 다 쓴 뒤 맨 마지막에 그린다 — 그 전에 그리면
+	// 공용 브러시 색이 White로 바뀌어서 sell/upgrade 배경이 흰색으로 칠해지는 버그가 생긴다.
+	wchar_t levelText[32];
+	swprintf_s(levelText, L"레벨 %d", selection.grade);
+	graphic.DrawTextW(levelText, D2D1::RectF(1450.0f, 600.0f, 1740.0f, 640.0f),
+		FONT_20, D2D1::ColorF(D2D1::ColorF::White), DWRITE_TEXT_ALIGNMENT_CENTER);
 }
 
 void GameSceneUI::renderDebugWaveButtons(Graphic& graphic) const
