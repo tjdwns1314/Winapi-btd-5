@@ -3,7 +3,7 @@
         {
             "type" : "DartMonkey",
             "damage" : 1,
-            "attackRange" : 240,
+            "attackRange" : 200,
             "attackSpeed" : 1.0,
             "projectileSpeed" : 500,
             "rotatesToTarget" : true,
@@ -17,7 +17,7 @@
         {
             "type": "TackShooter",
             "damage": 1,
-            "attackRange": 100,
+            "attackRange": 150,
             "attackSpeed": 3,
             "projectileSpeed": 350,
             "rotatesToTarget": false,
@@ -45,7 +45,7 @@
         {
             "type": "BombTower",
             "damage": 1,
-            "attackRange": 180,
+            "attackRange": 250,
             "attackSpeed": 3,
             "projectileSpeed": 150,
             "rotatesToTarget": true,
