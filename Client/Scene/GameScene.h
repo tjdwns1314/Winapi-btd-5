@@ -38,8 +38,7 @@ public:
 	//  오브젝트 스폰 대행
 	// --------------------------------------------------
 	// Tower가 풀/Scene 등록을 직접 몰라도 되도록, 발사만 대행해준다.
-	Projectile* SpawnProjectile(const Vector& pos,
-		const Vector& dir, float damage, const string& spriteKey, float speed, float splashRadius = 0.f);
+	Projectile* SpawnProjectile(const Vector& pos,const Vector& dir, float damage, const string& spriteKey, float speed, float splashRadius = 0.f, int32 pierceCount = 1);
 
 	void AddDebugCircle(const Vector& pos, float radius, float duration);
 

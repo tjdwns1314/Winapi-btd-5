@@ -18,6 +18,7 @@ void Projectile::Init()
 
 
 	_traveledDistance = 0.f;	// 풀에서 재사용될 때 이전 비행 거리가 남지 않도록 초기화
+	_pierceRemaining = _pierceCount;
 	SetMoveSpeed(_speed);
 	SetCollider(new ColliderCircle(this, 20.f));
 	const Vector dir = GetDir();
@@ -52,7 +53,8 @@ void Projectile::OnEnter(Actor* other)
 				static_cast<Bloon*>(actor)->ApplyDamage(_damage);
 		}
 	}
-	SetPendingKill();
+	if (--_pierceRemaining <= 0)
+		SetPendingKill();
 }
 
 void Projectile::Render(Graphic& graphic)

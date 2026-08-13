@@ -23,6 +23,9 @@ public:
 
 	void SetProjectileSpeed(float speed) { _speed = speed; }
 	void SetSplashRadius(float radius) { _splashRadius = radius; }
+	void SetPierceCount(int32 count) {
+		_pierceCount = count;
+	}
 
 private:
 	float _damage = 1.f;
@@ -30,7 +33,8 @@ private:
 	float _traveledDistance = 0.f;
 	float _speed = 500.0f;
 	float _splashRadius = 0.f;
-
+	int32 _pierceCount = 1;      // 목표 관통 횟수(스폰 시 설정)
+	int32 _pierceRemaining = 1;  // 현재 남은 관통 횟수(Init에서 _pierceCount로 리셋)
 	Image* _image = nullptr;
 
 	const CellInfo* _cell = nullptr;
