@@ -1,4 +1,4 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "GameSceneUI.h"
 #include "UIManager.h"
 #include "ResourceManager.h"
@@ -9,10 +9,12 @@ void GameSceneUI::Init(
 	function<void()> onTackShopClick,
 	function<void()> onSniperShopClick,
 	function<void()> onBombShopClick,
+	function<void()> onObstacleShopClick,
 	function<void()> onWaveUp,
 	function<void()> onWaveDown,
 	function<void()> onSellClick,
 	function<void()> onUpgradeClick,
+	function<void()> onObstacleSellClick,
 	function<void()> onRestartClick)
 {
 	ResourceManager& res = ResourceManager::GetInstance();
@@ -26,8 +28,10 @@ void GameSceneUI::Init(
 	_startButton = createButton(Vector(1512.5f, 950.0f), Vector(128.0f, 129.0f), onStartWave);
 	_dartMonkeyShopButton = createButton(Vector(1512.5f, 350.0f), Vector(109.0f, 113.0f), onDartShopClick);
 	_tackShooterShopButton = createButton(Vector(1675.0f, 350.0f), Vector(52.0f, 104.0f), onTackShopClick);
-	_sniperMonkeyShopButton = createButton(Vector(1512.5f, 550.0f), Vector(109.0f, 113.0f), onSniperShopClick);
-	_bombTowerShopButton = createButton(Vector(1675.0f, 550.0f), Vector(109.0f, 113.0f), onBombShopClick);
+	_sniperMonkeyShopButton = createButton(Vector(1512.5f, 520.0f), Vector(109.0f, 113.0f), onSniperShopClick);
+	_bombTowerShopButton = createButton(Vector(1675.0f, 520.0f), Vector(109.0f, 113.0f), onBombShopClick);
+	// 위치는 임시값 — 빌드 후 눈으로 보고 조정할 것.
+	_obstacleShopButton = createButton(Vector(1675.0f, 700.0f), Vector(109.0f, 113.0f), onObstacleShopClick);
 	_waveUpButton = createButton(Vector(1720.0f, 950.0f), Vector(40.0f, 40.0f), onWaveUp);
 	_waveDownButton = createButton(Vector(1720.0f, 900.0f), Vector(40.0f, 40.0f), onWaveDown);
 
@@ -37,6 +41,9 @@ void GameSceneUI::Init(
 	_upgradeButton = createButton(Vector(1675.0f, 700.0f), Vector(109.0f, 60.0f), onUpgradeClick);
 	_sellButton->SetActive(false);
 	_upgradeButton->SetActive(false);
+
+	_obstacleSellButton = createButton(Vector(1837.5f, 700.0f), Vector(109.0f, 60.0f), onObstacleSellClick);
+	_obstacleSellButton->SetActive(false);
 
 	// 게임오버 팝업의 재시작 버튼. baked 이미지(131x137) 크기에 맞춰 게임 영역 정중앙에 둔다.
 	_restartButton = createButton(Vector(GameAreaCenterX, GameAreaCenterY), Vector(131.0f, 137.0f), onRestartClick);
@@ -68,7 +75,10 @@ void GameSceneUI::renderStartButton(Graphic& graphic, bool isWaveActive, bool is
 }
 
 void GameSceneUI::Render(Graphic& graphic, bool isDraggingTower, TowerType draggingTowerType,
-	const Vector& dragPreviewPos, const TowerSelectionInfo& selection, int32 hp, int32 gold, bool isWaveActive, bool isSpeedEnabled,
+	bool isDraggingObstacle,
+	const Vector& dragPreviewPos, const TowerSelectionInfo& selection,
+	const ObstacleSelectionInfo& obstacleSelection,
+	int32 hp, int32 gold, bool isWaveActive, bool isSpeedEnabled,
 	bool isGameOver)
 {
 	renderStartButton(graphic, isWaveActive, isSpeedEnabled);
@@ -79,12 +89,15 @@ void GameSceneUI::Render(Graphic& graphic, bool isDraggingTower, TowerType dragg
 	drawTowerIcon(graphic, _tackShooterShopButton->GetPos(), TowerType::TackShooter, 1.0f);
 	drawTowerIcon(graphic, _sniperMonkeyShopButton->GetPos(), TowerType::SniperMonkey, 1.0f);
 	drawTowerIcon(graphic, _bombTowerShopButton->GetPos(), TowerType::BombTower, 1.0f);
+	drawObstacleIcon(graphic, _obstacleShopButton->GetPos(), 1.0f);
 
 	if (isDraggingTower)
 	{
 		drawRangePreview(graphic, dragPreviewPos, draggingTowerType);
 		drawTowerIcon(graphic, dragPreviewPos, draggingTowerType, 1.0f);
 	}
+	if (isDraggingObstacle)
+		drawObstacleIcon(graphic, dragPreviewPos, 1.0f);
 
 	renderDebugWaveButtons(graphic);
 	renderGoldText(graphic, gold);
@@ -95,9 +108,20 @@ void GameSceneUI::Render(Graphic& graphic, bool isDraggingTower, TowerType dragg
 	if (selection.isSelected)
 		renderTowerSelectionPanel(graphic, selection);
 
+	_obstacleSellButton->SetActive(obstacleSelection.isSelected);
+	if (obstacleSelection.isSelected)
+		renderObstacleSelectionPanel(graphic, obstacleSelection);
+
 	_restartButton->SetActive(isGameOver);
 	if (isGameOver)
 		renderGameOverPopup(graphic);
+}
+
+void GameSceneUI::drawObstacleIcon(Graphic& graphic, const Vector& pos, float scale) const
+{
+	const ObstacleStat& stat = GetObstacleStat(ObstacleType::BananaFarmTree);
+	if (const CellInfo* cell = _sprite->GetCell(stat.cellName.c_str()))
+		_inGameBg->DrawSprite(graphic, pos.x, pos.y, *cell, scale, 0.0f);
 }
 
 void GameSceneUI::renderGameOverPopup(Graphic& graphic) const
@@ -133,6 +157,7 @@ void GameSceneUI::drawRangePreview(Graphic& graphic, const Vector& pos, TowerTyp
 void GameSceneUI::drawTowerIcon(Graphic& graphic, const Vector& pos, TowerType type, float scale) const
 {
 	const TowerVisual& visual = GetTowerVisual(type);
+
 	if (visual.useBakedImage)
 	{
 		ResourceManager::GetInstance().GetImage(visual.bakedImageKey.c_str()).Draw(graphic, pos.x, pos.y, scale, 0.0f);
@@ -205,6 +230,30 @@ void GameSceneUI::renderTowerSelectionPanel(Graphic& graphic, const TowerSelecti
 	wchar_t levelText[32];
 	swprintf_s(levelText, L"레벨 %d", selection.grade);
 	graphic.DrawTextW(levelText, D2D1::RectF(1450.0f, 600.0f, 1740.0f, 640.0f),
+		FONT_20, D2D1::ColorF(D2D1::ColorF::White), DWRITE_TEXT_ALIGNMENT_CENTER);
+}
+
+void GameSceneUI::renderObstacleSelectionPanel(Graphic& graphic, const ObstacleSelectionInfo& selection) const
+{
+	ID2D1HwndRenderTarget* renderTarget = graphic.GetRenderTarget();
+	if (renderTarget == nullptr)
+		return;
+
+	ID2D1SolidColorBrush* bgBrush = graphic.GetBrush(D2D1::ColorF(D2D1::ColorF::DarkSlateGray, 0.85f));
+	const Vector pos = _obstacleSellButton->GetPos();
+	const Vector size = _obstacleSellButton->GetSize();
+	if (bgBrush != nullptr)
+	{
+		renderTarget->FillRectangle(D2D1::RectF(
+			pos.x - size.x * 0.5f, pos.y - size.y * 0.5f,
+			pos.x + size.x * 0.5f, pos.y + size.y * 0.5f), bgBrush);
+	}
+
+	wchar_t sellText[32];
+	swprintf_s(sellText, L"판매: %d", selection.sellPrice);
+	graphic.DrawTextW(sellText, D2D1::RectF(
+		pos.x - size.x * 0.5f, pos.y - size.y * 0.5f,
+		pos.x + size.x * 0.5f, pos.y + size.y * 0.5f),
 		FONT_20, D2D1::ColorF(D2D1::ColorF::White), DWRITE_TEXT_ALIGNMENT_CENTER);
 }
 

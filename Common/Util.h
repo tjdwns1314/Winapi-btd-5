@@ -8,6 +8,7 @@ enum class RenderLayer
 	Bloon,
 	Projectile,
 	Tower,
+	Obstacle,
 	Effect,
 
 	Count,

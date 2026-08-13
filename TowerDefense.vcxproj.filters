@@ -160,6 +160,15 @@
     <ClInclude Include="Client\Object\Tower.h">
       <Filter>Client\Object</Filter>
     </ClInclude>
+    <ClInclude Include="Client\Object\Obstacle.h">
+      <Filter>Client\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\Object\ObstacleType.h">
+      <Filter>Client\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\Object\ObstacleFactory.h">
+      <Filter>Client\Object</Filter>
+    </ClInclude>
     <ClInclude Include="Client\Core\TowerDefense.h">
       <Filter>Client\Core</Filter>
     </ClInclude>
@@ -301,6 +310,15 @@
       <Filter>Client\Object</Filter>
     </ClCompile>
     <ClCompile Include="Client\Object\TowerFireBehavior.cpp">
+      <Filter>Client\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\Object\Obstacle.cpp">
+      <Filter>Client\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\Object\ObstacleType.cpp">
+      <Filter>Client\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\Object\ObstacleFactory.cpp">
       <Filter>Client\Object</Filter>
     </ClCompile>
     <ClCompile Include="Client\Core\TowerDefense.cpp">

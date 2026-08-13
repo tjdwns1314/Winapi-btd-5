@@ -72,10 +72,10 @@ const TowerVisual& GetTowerVisual(TowerType type)
 	// TODO: 스탯(공속/데미지 등)까지 필요해지면 BloonType처럼 JSON(Resource\Data\TowerType.json)으로 옮긴다.
 	static const unordered_map<TowerType, TowerVisual> table =
 	{
-		{ TowerType::DartMonkey,  TowerVisual{ true,  L"dart_monkey_baked", "" } },
-		{ TowerType::TackShooter, TowerVisual{ true,  L"tack_shooter_baked", "" } },
-		{ TowerType::SniperMonkey, TowerVisual{ true, L"sniper_monkey_baked", "" } },
-		{ TowerType::BombTower, TowerVisual{ true,  L"bomb_tower_baked", "" } },
+		{ TowerType::DartMonkey,   TowerVisual{ true,  L"dart_monkey_baked", ""} },
+		{ TowerType::TackShooter,  TowerVisual{ true,  L"tack_shooter_baked", "" } },
+		{ TowerType::SniperMonkey, TowerVisual{ true,  L"sniper_monkey_baked", "" } },
+		{ TowerType::BombTower,    TowerVisual{ true,  L"bomb_tower_baked", "" } },
 	};
 	return table.at(type);
 }
