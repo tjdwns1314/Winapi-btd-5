@@ -20,21 +20,24 @@ namespace
 		for (const auto& entry : root.at("towers"))
 		{
 			TowerStat stat;
-			stat.type =
-				ParseTowerTypeName(entry.at("type").get<string>());
-			stat.damage = entry.at("damage").get<int32>();
-			stat.attackRange = entry.at("attackRange").get<float>();
-			stat.attackSpeed = entry.at("attackSpeed").get<float>();
-			stat.projectileSpeed = entry.at("projectileSpeed").get<float>();
+			stat.type = ParseTowerTypeName(entry.at("type").get<string>());
 			stat.rotatesToTarget = entry.at("rotatesToTarget").get<bool>();
-			stat.attackCount = entry.at("attackCount").get<int32>();
 			stat.projectileKey = entry.at("projectileKey").get<string>();
-			stat.splashRadius = entry.at("splashRadius").get<float>();
 			stat.basePrice = entry.at("basePrice").get<int32>();
 			stat.refundPrice = entry.at("refundPrice").get<int32>();
-
-			for (const auto& cost : entry.at("upgradeCosts"))
-				stat.upgradeCosts.push_back(cost.get <int32>());
+			for (const auto& g : entry.at("grades"))
+			{
+				TowerGradeStat grade;
+				grade.cost = g.at("cost").get<int32>();
+				grade.damage = g.at("damage").get<int32>();
+				grade.attackRange = g.at("attackRange").get<float>();
+				grade.attackSpeed = g.at("attackSpeed").get<float>();
+				grade.projectileSpeed = g.at("projectileSpeed").get<float>();
+				grade.attackCount = g.at("attackCount").get<int32>();
+				grade.pierceCount = g.value("pierceCount", 1);
+				grade.splashRadius = g.value("splashRadius", 0.f);
+				stat.grades.push_back(grade);
+			}
 
 			stats.push_back(std::move(stat));
 		}

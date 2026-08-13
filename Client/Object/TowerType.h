@@ -9,20 +9,26 @@ enum class TowerType
 	BombTower,
 };
 
-struct TowerStat
+struct TowerGradeStat
 {
-	TowerType type;
+	int32 cost;
 	int32 damage;
 	float attackRange;
 	float attackSpeed;
 	float projectileSpeed;
-	bool rotatesToTarget;
 	int32 attackCount;
+	int32 pierceCount = 1;
+	float splashRadius = 0.f;
+};
+
+struct TowerStat
+{
+	TowerType type;
+	bool rotatesToTarget;
 	string projectileKey;
-	float splashRadius;
 	int32 basePrice;
 	int32 refundPrice;
-	vector<int32> upgradeCosts;
+	vector<TowerGradeStat> grades;
 };
 
 const TowerStat& GetTowerStat(TowerType type);

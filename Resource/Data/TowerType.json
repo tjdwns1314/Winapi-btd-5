@@ -2,59 +2,59 @@
     "towers" :[
         {
             "type" : "DartMonkey",
-            "damage" : 1,
-            "attackRange" : 200,
-            "attackSpeed" : 1.0,
-            "projectileSpeed" : 500,
             "rotatesToTarget" : true,
-            "attackCount" : 1,
             "projectileKey" : "dart_monkey_dart",
-            "splashRadius" : 0,
             "basePrice" : 200,
             "refundPrice" : 140,
-            "upgradeCosts" : [100,250,500,1000]
+            "grades" : [
+                { "cost": 0,   "damage": 1, "attackRange": 200, "attackSpeed": 1.0, "projectileSpeed": 500, "attackCount": 1, "pierceCount": 1 },
+                { "cost": 100, "damage": 1, "attackRange": 240, "attackSpeed": 1.0, "projectileSpeed": 500, "attackCount": 1, "pierceCount": 1 },
+                { "cost": 250, "damage": 1, "attackRange": 240, "attackSpeed": 1.0, "projectileSpeed": 500, "attackCount": 1, "pierceCount": 2 },
+                { "cost": 350, "damage": 1, "attackRange": 240, "attackSpeed": 1.0, "projectileSpeed": 500, "attackCount": 1, "pierceCount": 3 },
+                { "cost": 500, "damage": 1, "attackRange": 240, "attackSpeed": 1.0, "projectileSpeed": 500, "attackCount": 3, "pierceCount": 3 }
+            ]
         },
         {
             "type": "TackShooter",
-            "damage": 1,
-            "attackRange": 150,
-            "attackSpeed": 3,
-            "projectileSpeed": 350,
             "rotatesToTarget": false,
-            "attackCount": 8,
             "projectileKey": "tack_shooter_tack",
-            "splashRadius": 0,
-            "basePrice": 260,
+            "basePrice": 350,
             "refundPrice": 182,
-           "upgradeCosts": [150, 300, 600, 1200]
+            "grades": [
+                { "cost": 0,   "damage": 1, "attackRange": 150, "attackSpeed": 3.0, "projectileSpeed": 350, "attackCount": 8 },
+                { "cost": 200, "damage": 1, "attackRange": 150, "attackSpeed": 2.3, "projectileSpeed": 350, "attackCount": 8 },
+                { "cost": 300, "damage": 1, "attackRange": 150, "attackSpeed": 2.3, "projectileSpeed": 450, "attackCount": 8 },
+                { "cost": 600, "damage": 1, "attackRange": 190, "attackSpeed": 2.3, "projectileSpeed": 450, "attackCount": 8 },
+                { "cost": 800, "damage": 1, "attackRange": 190, "attackSpeed": 2.3, "projectileSpeed": 450, "attackCount": 16 }
+            ]
         },
         {
             "type": "SniperMonkey",
-            "damage": 1,
-            "attackRange": 2000,
-            "attackSpeed": 3,
-            "projectileSpeed": 0,
             "rotatesToTarget": true,
-            "attackCount": 1,
             "projectileKey": "",
-            "splashRadius": 0,
-            "basePrice": 350,
+            "basePrice": 300,
             "refundPrice": 245,
-            "upgradeCosts": [200, 400, 800, 1600]
+            "grades": [
+                { "cost": 0,   "damage": 1,  "attackRange": 2000, "attackSpeed": 3.0, "projectileSpeed": 0, "attackCount": 1 },
+                { "cost": 150, "damage": 4,  "attackRange": 2000, "attackSpeed": 3.0, "projectileSpeed": 0, "attackCount": 1 },
+                { "cost": 300, "damage": 4,  "attackRange": 2000, "attackSpeed": 2.0, "projectileSpeed": 0, "attackCount": 1 },
+                { "cost": 500, "damage": 7,  "attackRange": 2000, "attackSpeed": 2.0, "projectileSpeed": 0, "attackCount": 1 },
+                { "cost": 800, "damage": 18, "attackRange": 2000, "attackSpeed": 2.0, "projectileSpeed": 0, "attackCount": 1 }
+            ]
         },
         {
             "type": "BombTower",
-            "damage": 1,
-            "attackRange": 250,
-            "attackSpeed": 3,
-            "projectileSpeed": 150,
             "rotatesToTarget": true,
-            "attackCount": 1,
             "projectileKey": "bomb_tower_bomb_01",
-            "splashRadius": 120,
-            "basePrice": 425,
+            "basePrice": 500,
             "refundPrice": 297,
-            "upgradeCosts": [250, 500, 1000, 2000]
+            "grades": [
+                { "cost": 0,    "damage": 1, "attackRange": 250, "attackSpeed": 3.0, "projectileSpeed": 150, "attackCount": 1, "splashRadius": 120 },
+                { "cost": 200,  "damage": 1, "attackRange": 300, "attackSpeed": 3.0, "projectileSpeed": 150, "attackCount": 1, "splashRadius": 120 },
+                { "cost": 400,  "damage": 1, "attackRange": 300, "attackSpeed": 2.0, "projectileSpeed": 150, "attackCount": 1, "splashRadius": 120 },
+                { "cost": 800,  "damage": 2, "attackRange": 300, "attackSpeed": 2.0, "projectileSpeed": 150, "attackCount": 1, "splashRadius": 160 },
+                { "cost": 1000, "damage": 2, "attackRange": 350, "attackSpeed": 1.5, "projectileSpeed": 220, "attackCount": 1, "splashRadius": 160 }
+            ]
         }
     ]
 }

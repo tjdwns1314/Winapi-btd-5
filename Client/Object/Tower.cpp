@@ -37,7 +37,7 @@ void Tower::Update(float deltaTime)
 	if (_target == nullptr)
 		_target = findTarget();
 
-	if (_stat.rotatesToTarget && _target != nullptr)
+	if (_towerData->rotatesToTarget && _target != nullptr)
 	{
 		Vector dir = _target->GetPos() - GetPos();
 		if (dir.Length() >= SMALL_NUMBER)
@@ -122,18 +122,22 @@ int32 Tower::GetNextUpgradeCost() const
 	if (!_canUpgrade)
 		return 0;
 
-	const int32 upgradeIndex = _grade - 1;
-	if (upgradeIndex < 0 || upgradeIndex >= static_cast<int32>(_stat.upgradeCosts.size()))
+	const int32 targetIndex = _grade;  
+	if (targetIndex < 0 || targetIndex >= static_cast<int32>(_towerData->grades.size()))
 		return 0;
-	return _stat.upgradeCosts[upgradeIndex];
+	return _towerData->grades[targetIndex].cost;
 }
 
 void Tower::ApplyUpgrade()
 {
 	if (!_canUpgrade)
 		return;
+	const int32 targetIndex = _grade;
+	if (targetIndex < 0 || targetIndex >= static_cast<int32>(_towerData->grades.size()))
+		return;
+	_stat = _towerData->grades[targetIndex];
 	++_grade;
-	_canUpgrade = (_grade - 1) < static_cast<int32>(_stat.upgradeCosts.size());
+	_canUpgrade = _grade < static_cast<int32>(_towerData->grades.size());
 }
 
 GameScene* Tower::GetGameScene() const
