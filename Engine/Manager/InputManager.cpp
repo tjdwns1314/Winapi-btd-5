@@ -12,7 +12,22 @@ void InputManager::Update()
 	POINT pt;
 	::GetCursorPos(&pt);
 	::ScreenToClient(_hwnd, &pt);
-	_mousePos = Vector(static_cast<float>(pt.x), static_cast<float>(pt.y));
+
+	RECT rc;
+	::GetClientRect(_hwnd, &rc);
+	const float cw = static_cast<float>(rc.right - rc.left);
+	const float ch = static_cast<float>(rc.bottom - rc.top);
+	if (cw > 0.f && ch > 0.f)
+	{
+		const float sx = cw / static_cast<float>(GWinSizeX);
+		const float sy = ch / static_cast<float>(GWinSizeY);
+		const float scale = (sx < sy) ? sx : sy;
+		const float offsetX = (cw - static_cast<float>(GWinSizeX) * scale) * 0.5f;
+		const float offsetY = (ch - static_cast<float>(GWinSizeY) * scale) * 0.5f;
+		_mousePos = Vector((pt.x - offsetX) / scale, (pt.y - offsetY) / scale);
+	}
+	else
+		_mousePos = Vector(static_cast<float>(pt.x), static_cast<float>(pt.y));
 }
 
 bool InputManager::GetButtonDown(KeyType key) const
