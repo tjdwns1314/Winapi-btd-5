@@ -142,6 +142,9 @@
     <ClInclude Include="Client\Core\Game.h">
       <Filter>Client\Core</Filter>
     </ClInclude>
+    <ClInclude Include="Client\Core\GameAssets.h">
+      <Filter>Client\Core</Filter>
+    </ClInclude>
     <ClInclude Include="Client\Core\EconomyManager.h">
       <Filter>Client\Core</Filter>
     </ClInclude>
@@ -225,9 +228,6 @@
     <ClCompile Include="Engine\Core\Grid.cpp">
       <Filter>Engine\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Core\Scene.cpp">
-      <Filter>Engine\Core</Filter>
-    </ClCompile>
     <ClCompile Include="Engine\Graphics\Graphic.cpp">
       <Filter>Engine\Graphics</Filter>
     </ClCompile>
@@ -292,6 +292,9 @@
       <Filter>Client\Algorithm</Filter>
     </ClCompile>
     <ClCompile Include="Client\Core\Game.cpp">
+      <Filter>Client\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\Core\GameAssets.cpp">
       <Filter>Client\Core</Filter>
     </ClCompile>
     <ClCompile Include="Client\Core\EconomyManager.cpp">
@@ -370,6 +373,9 @@
     </ClCompile>
     <ClCompile Include="Client\Scene\EditorScene.cpp">
       <Filter>Client\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Core\Scene.cpp">
+      <Filter>Engine\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
