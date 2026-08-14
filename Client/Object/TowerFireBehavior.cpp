@@ -5,21 +5,31 @@
 
 namespace
 {
-	// 다트원숭이: 타겟 방향으로 1발, attackCount가 3 이상이면 좌우 10도씩 추가로 2발 더 발사.
-	void fireDartMonkey(Tower& tower)
+	bool prepareDirectedFire(Tower& tower, GameScene*& owner, Vector& dir)
 	{
 		Bloon* target = tower.GetTarget();
 		if (target == nullptr)
-			return;
+			return false;
 
-		GameScene* owner = tower.GetGameScene();
+		owner = tower.GetGameScene();
 		if (owner == nullptr)
-			return;
+			return false;
 
-		Vector dir = target->GetPos() - tower.GetPos();
+		dir = target->GetPos() - tower.GetPos();
 		if (dir.Length() < SMALL_NUMBER)
-			return;
+			return false;
+
 		dir.Normalize();
+		return true;
+	}
+
+	// 다트원숭이: 타겟 방향으로 1발, attackCount가 3 이상이면 좌우 10도씩 추가로 2발 더 발사.
+	void fireDartMonkey(Tower& tower)
+	{
+		GameScene* owner = nullptr;
+		Vector dir;
+		if (prepareDirectedFire(tower, owner, dir) == false)
+			return;
 
 		const auto spawnDart = [&](const Vector& d)
 		{
@@ -53,29 +63,22 @@ namespace
 			const float rad = DegreeToRadian(360.0f / directionCount * i);
 			const Vector dir(sinf(rad), -cosf(rad));
 			owner->SpawnProjectile(tower.GetPos(), dir, static_cast<float>(tower.GetStat().damage),
-				tower.GetTowerData().projectileKey, tower.GetStat().projectileSpeed);
+				tower.GetTowerData().projectileKey, tower.GetStat().projectileSpeed,
+				0.f, tower.GetStat().pierceCount);
 		}
 	}
 
 	// 폭탄타워: 타겟 방향으로 발사, 명중 지점 splashRadius 안의 풍선에게 전부 데미지.
 	void fireBombTower(Tower& tower)
 	{
-		Bloon* target = tower.GetTarget();
-		if (target == nullptr)
+		GameScene* owner = nullptr;
+		Vector dir;
+		if (prepareDirectedFire(tower, owner, dir) == false)
 			return;
 
-		GameScene* owner = tower.GetGameScene();
-		if (owner == nullptr)
-			return;
-
-		Vector dir = target->GetPos() - tower.GetPos();
-		if (dir.Length() < SMALL_NUMBER)
-			return;
-
-		dir.Normalize();
 		owner->SpawnProjectile(tower.GetPos(), dir, static_cast<float>(tower.GetStat().damage),
 			tower.GetTowerData().projectileKey, tower.GetStat().projectileSpeed,
-			tower.GetStat().splashRadius);
+			tower.GetStat().splashRadius, tower.GetStat().pierceCount);
 	}
 
 	// 저격원숭이: 히트스캔(투사체 없이 즉시 타겟에게 데미지).
