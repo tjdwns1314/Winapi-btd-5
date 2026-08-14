@@ -133,6 +133,9 @@
     <ClInclude Include="Client\Map\TileMap.h">
       <Filter>Client\Map</Filter>
     </ClInclude>
+    <ClInclude Include="Client\Map\MapSystem.h">
+      <Filter>Client\Map</Filter>
+    </ClInclude>
     <ClInclude Include="Client\Algorithm\PathFinder.h">
       <Filter>Client\Algorithm</Filter>
     </ClInclude>
@@ -274,6 +277,9 @@
       <Filter>Client\Object</Filter>
     </ClCompile>
     <ClCompile Include="Client\Map\TileMap.cpp">
+      <Filter>Client\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\Map\MapSystem.cpp">
       <Filter>Client\Map</Filter>
     </ClCompile>
     <ClCompile Include="Client\Algorithm\PathFinder.cpp">

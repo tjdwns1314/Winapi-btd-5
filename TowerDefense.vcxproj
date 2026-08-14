@@ -158,6 +158,7 @@
     <ClInclude Include="Client\Object\Bloon.h" />
     <ClInclude Include="Client\Object\BloonType.h" />
     <ClInclude Include="Client\Map\TileMap.h" />
+    <ClInclude Include="Client\Map\MapSystem.h" />
     <ClInclude Include="Client\Algorithm\PathFinder.h" />
     <ClInclude Include="Common\framework.h" />
     <ClInclude Include="Client\Core\Game.h" />
@@ -218,6 +219,7 @@
     <ClCompile Include="Engine\Core\Scene.cpp" />
     <ClCompile Include="Client\Object\Bloon.cpp" />
     <ClCompile Include="Client\Map\TileMap.cpp" />
+    <ClCompile Include="Client\Map\MapSystem.cpp" />
     <ClCompile Include="Client\Algorithm\PathFinder.cpp" />
     <ClCompile Include="Client\Core\Game.cpp" />
     <ClCompile Include="Client\Core\EconomyManager.cpp" />
