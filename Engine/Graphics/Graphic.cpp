@@ -87,9 +87,9 @@ IDWriteTextFormat*Graphic::GetTextFormat(FontSize size)
 	return format;
 }
 
-void Graphic::DrawText(const wchar_t* text, 
-	D2D1_RECT_F layoutRect, 
-	FontSize size, 
+void Graphic::DrawString(const wchar_t* text,
+	D2D1_RECT_F layoutRect,
+	FontSize size,
 	D2D1::ColorF color,
 	DWRITE_TEXT_ALIGNMENT align)
 {
@@ -123,9 +123,29 @@ ID2D1BitmapRenderTarget* Graphic::CreateOffscreenRenderTarget(D2D1_SIZE_F size)
 	return target;
 }
 
-void Graphic::BeginDraw() { _renderTarget->BeginDraw(); }
+void Graphic::BeginDraw()
+{
+	_renderTarget->BeginDraw();
+
+	const D2D1_SIZE_F size = _renderTarget->GetSize();
+	const float sx = size.width / static_cast<float>(GWinSizeX);
+	const float sy = size.height / static_cast<float>(GWinSizeY);
+	const float scale = (sx < sy) ? sx : sy;
+	const float offsetX = (size.width - static_cast<float>(GWinSizeX) * scale) * 0.5f;
+	const float offsetY = (size.height - static_cast<float>(GWinSizeY) * scale) * 0.5f;
+
+	_renderTarget->SetTransform(
+		D2D1::Matrix3x2F::Scale(scale, scale) * D2D1::Matrix3x2F::Translation(offsetX, offsetY));
+}
 void Graphic::EndDraw() { _renderTarget->EndDraw(); }
 void Graphic::Clear(D2D1::ColorF color) { _renderTarget->Clear(color); }
+
+void Graphic::Resize(uint32 width, uint32 height)
+{
+	if (_renderTarget == nullptr || width == 0 || height == 0)
+		return;
+	_renderTarget->Resize(D2D1::SizeU(width, height));
+}
 
 void Graphic::Cleanup()
 {

@@ -54,7 +54,7 @@ void EditorScene::Render(Graphic& graphic)
 
 
 
-	graphic.DrawTextW(L"안녕하세요", 
+	graphic.DrawString(L"안녕하세요", 
 		D2D1::RectF(50.0f, 50.0f, 400.0f, 100.0f), 
 		FONT_30, 
 		D2D1::ColorF(D2D1::ColorF::White));

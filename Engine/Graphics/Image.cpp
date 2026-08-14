@@ -37,11 +37,14 @@ void Image::Draw(Graphic& graphic, float centerX, float centerY, float scale, fl
 	D2D1_RECT_F rect = D2D1::RectF(x, y, x + width, y + height);
 
 	ID2D1HwndRenderTarget* renderTarget = graphic.GetRenderTarget();
+
+	D2D1::Matrix3x2F prev;
+	renderTarget->GetTransform(&prev);
 	// (centerX, centerY)를 축으로 angle(도, 시계방향)만큼 회전시킨 뒤 그림
-	renderTarget->SetTransform(D2D1::Matrix3x2F::Rotation(angle, D2D1::Point2F(centerX, centerY)));
+	renderTarget->SetTransform(D2D1::Matrix3x2F::Rotation(angle, D2D1::Point2F(centerX, centerY)) * prev);
 	// RenderTarget에 비트맵 출력 (투명도가 들어간 PNG가 알아서 합성되어 출력됨!)
 	renderTarget->DrawBitmap(_bitmap, rect);
-	renderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
+	renderTarget->SetTransform(prev);
 }
 
 // [공용/임시 도화지용] 실제로 DrawBitmap을 호출하는 본체.
@@ -63,13 +66,16 @@ void Image::DrawSprite(ID2D1RenderTarget* renderTarget, float centerX, float cen
 
 	D2D1_RECT_F destRect = D2D1::RectF(drawX, drawY, drawX + cell.w * scale, drawY + cell.h * scale);
 
+	D2D1::Matrix3x2F prev;
+	renderTarget->GetTransform(&prev);
+
 	D2D1::Matrix3x2F transform = D2D1::Matrix3x2F::Identity();
 	if (flipX)
 		transform = transform *
 		D2D1::Matrix3x2F::Scale(D2D1::SizeF(-1.0f, 1.0f),
 			D2D1::Point2F(centerX, centerY));
 	transform = transform * D2D1::Matrix3x2F::Rotation(angle, D2D1::Point2F(centerX, centerY));
-	renderTarget->SetTransform(transform);
+	renderTarget->SetTransform(transform * prev);
 	renderTarget->DrawBitmap(
 		_bitmap,
 		destRect,
@@ -78,7 +84,7 @@ void Image::DrawSprite(ID2D1RenderTarget* renderTarget, float centerX, float cen
 		srcRect
 	);
 
-	renderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
+	renderTarget->SetTransform(prev);
 }
 
 void Image::Release()
