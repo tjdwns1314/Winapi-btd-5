@@ -187,10 +187,12 @@
     <ClInclude Include="Common\targetver.h" />
     <ClInclude Include="Engine\Manager\TimeManager.h" />
     <ClInclude Include="Client\Object\Tower.h" />
+    <ClInclude Include="Client\Object\TowerController.h" />
     <ClInclude Include="Client\Object\TowerType.h" />
     <ClInclude Include="Client\Object\TowerFactory.h" />
     <ClInclude Include="Client\Object\TowerFireBehavior.h" />
     <ClInclude Include="Client\Object\Obstacle.h" />
+    <ClInclude Include="Client\Object\ObstacleController.h" />
     <ClInclude Include="Client\Object\ObstacleType.h" />
     <ClInclude Include="Client\Object\ObstacleFactory.h" />
     <ClInclude Include="Client\Core\TowerDefense.h" />
@@ -204,6 +206,7 @@
     <ClCompile Include="Client\Object\TowerType.cpp" />
     <ClCompile Include="Client\Object\TowerFactory.cpp" />
     <ClCompile Include="Client\Object\Obstacle.cpp" />
+    <ClCompile Include="Client\Object\ObstacleController.cpp" />
     <ClCompile Include="Client\Object\ObstacleType.cpp" />
     <ClCompile Include="Client\Object\ObstacleFactory.cpp" />
     <ClCompile Include="Client\Object\TowerFireBehavior.cpp" />
@@ -246,6 +249,7 @@
     <ClCompile Include="Engine\Manager\InputManager.cpp" />
     <ClCompile Include="Engine\Manager\TimeManager.cpp" />
     <ClCompile Include="Client\Object\Tower.cpp" />
+    <ClCompile Include="Client\Object\TowerController.cpp" />
     <ClCompile Include="Client\Core\TowerDefense.cpp" />
     <ClCompile Include="Common\Util.cpp" />
     <ClCompile Include="Client\Object\PoolManager.cpp" />

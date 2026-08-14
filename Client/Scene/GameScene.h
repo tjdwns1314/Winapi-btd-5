@@ -3,9 +3,7 @@
 #include "Scene.h"
 #include "Image.h"
 #include "SpriteAtlas.h"
-#include "Grid.h"
-#include "TileMap.h"
-#include "PathFinder.h"
+#include "MapSystem.h"
 #include "ResourceManager.h"
 #include "BloonFactory.h"
 #include "GameSceneUI.h"
@@ -14,7 +12,9 @@
 #include "ProjectileFactory.h"
 #include "Projectile.h"
 #include "TowerType.h"
+#include "TowerController.h"
 #include "ObstacleType.h"
+#include "ObstacleController.h"
 #include "HealthManager.h"
 #include "EconomyManager.h"
 
@@ -54,11 +54,7 @@ protected:
 	virtual void CreateUI() override;
 
 private:
-	// 디버그 & 맵 렌더링 헬퍼
-	void renderTileMap(Graphic& graphic);
-	void renderGrid(Graphic& graphic);
-	void renderStartEndDebug(Graphic& graphic);
-	void renderPathDebug(Graphic& graphic);
+	// 디버그 서클 렌더 헬퍼
 	void renderDebugCircles(Graphic& graphic);
 
 	struct DebugCircle
@@ -74,23 +70,7 @@ private:
 	// 내부 로직 헬퍼
 	void onStartButtonClick();
 	float getTimeScale() const;
-	void updateTowerDrag();
-	void updateObstacleDrag();
 	void updateDebugWaveTitle();
-	void tryStartTowerDrag(TowerType type);
-	void tryStartObstacleDrag();
-
-	void updateTowerSelect();
-	void updateObstacleSelect();
-	void sellSelectedTower();
-	void sellSelectedObstacle();
-	void upgradeSelectedTower();
-
-	// 설치/선택/판매 공통 뼈대. Tower/Obstacle이 "가격"과 "뭘 만들지"만 넘겨서 재사용한다.
-	bool isCellOccupied(const Cell& cell) const;
-	bool tryPlaceOnGrid(int32 price, const function<Actor* (const Vector&)>& createFn);
-	Actor* findActorAt(const Vector& pos, RenderLayer layer) const;
-	void clearTileAndRepath(const Vector& pos);
 
 	// 게임오버 후 재시작 버튼을 누르면 호출된다. Cleanup() 후 Init()을 다시 실행해 전부 초기화한다.
 	void Restart();
@@ -109,30 +89,20 @@ private:
 	// 스프라이트 및 이미지 리소스
 	Image*       _inGameBg           = nullptr;
 	Image*       _monkeyLaneBg       = nullptr; // 기존 _RealGameBG 대체
-	Image*       _tile1Img           = nullptr;
-	Image*       _tile2Img           = nullptr;
 	Image*       _hudImg             = nullptr; // in_game_hud.png (시험용)
-	Image*       _blueImg            = nullptr; // [임시 테스트] Blue.png
 	SpriteAtlas* _sprite             = nullptr; // InGame.xml
 	SpriteAtlas* _monkeyLaneSprite   = nullptr; // monkey_lane.xml
 	SpriteAtlas* _hudSprite          = nullptr; // in_game_hud.xml (시험용)
 
-	// 맵 / 경로 데이터
-	Grid           _grid;
-	TileMap        _tileMap;
-	vector<Vector> _path;
-	Vector         _bloonSpawnPos;
+	// 맵 / 경로
+	MapSystem _map;
 
-	// UI 및 타워 드래그 상태
+	// UI 및 타워/장애물 컨트롤러
 	GameSceneUI _ui;
-	bool _isDraggingTower = false;
-	TowerType _draggingTowerType = TowerType::DartMonkey;
-	Tower* _selectedTower = nullptr;
-	bool _isDraggingObstacle = false;
-	Obstacle* _selectedObstacle = nullptr;
+	TowerController _towerController;
+	ObstacleController _obstacleController;
 
 	// 디버그 타이틀바 표시용 캐시 (값이 바뀔 때만 SetWindowText 호출)
 	int32 _lastTitleCurrentRound = -1;
 	int32 _lastTitleNextRound    = -1;
 };
-
