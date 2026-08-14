@@ -61,6 +61,7 @@ void TowerController::UpdateDrag(Scene& scene, MapSystem& map, EconomyManager& e
 	if (tower != nullptr)
 	{
 		scene.AddActor(tower);
+		_selected = tower;
 	}
 	else
 	{
