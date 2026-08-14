@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "GameSceneUI.h"
 #include "UIManager.h"
 #include "ResourceManager.h"
@@ -37,12 +37,12 @@ void GameSceneUI::Init(
 
 	// 타워 선택 패널: 상점 버튼(y=550)과 웨이브 버튼(y=900) 사이 빈 공간에 고정 배치.
 	// 위치/크기는 임시값 — 빌드 후 눈으로 보고 조정할 것.
-	_sellButton = createButton(Vector(1512.5f, 700.0f), Vector(109.0f, 60.0f), onSellClick);
-	_upgradeButton = createButton(Vector(1675.0f, 700.0f), Vector(109.0f, 60.0f), onUpgradeClick);
+	_sellButton = createButton(Vector(1512.5f, 800.0f), Vector(109.0f, 60.0f), onSellClick);
+	_upgradeButton = createButton(Vector(1675.0f, 800.0f), Vector(109.0f, 60.0f), onUpgradeClick);
 	_sellButton->SetActive(false);
 	_upgradeButton->SetActive(false);
 
-	_obstacleSellButton = createButton(Vector(1837.5f, 700.0f), Vector(109.0f, 60.0f), onObstacleSellClick);
+	_obstacleSellButton = createButton(Vector(1837.5f, 800.0f), Vector(109.0f, 60.0f), onObstacleSellClick);
 	_obstacleSellButton->SetActive(false);
 
 	// 게임오버 팝업의 재시작 버튼. baked 이미지(131x137) 크기에 맞춰 게임 영역 정중앙에 둔다.
@@ -229,7 +229,7 @@ void GameSceneUI::renderTowerSelectionPanel(Graphic& graphic, const TowerSelecti
 	// 공용 브러시 색이 White로 바뀌어서 sell/upgrade 배경이 흰색으로 칠해지는 버그가 생긴다.
 	wchar_t levelText[32];
 	swprintf_s(levelText, L"레벨 %d", selection.grade);
-	graphic.DrawString(levelText, D2D1::RectF(1450.0f, 600.0f, 1740.0f, 640.0f),
+	graphic.DrawString(levelText, D2D1::RectF(1450.0f, 600.0f, 1740.0f, 800.0f),
 		FONT_20, D2D1::ColorF(D2D1::ColorF::White), DWRITE_TEXT_ALIGNMENT_CENTER);
 }
 
