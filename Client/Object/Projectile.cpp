@@ -4,7 +4,6 @@
 #include "Scene.h"
 #include "Bloon.h"
 #include "ColliderCircle.h"
-#include "GameScene.h"
 
 void Projectile::Init()
 {
@@ -43,7 +42,6 @@ void Projectile::OnEnter(Actor* other)
 	if (_splashRadius > 0.f)
 	{
 		const Vector center = GetPos();
-		static_cast<GameScene*>(GetOwner())->AddDebugCircle(center, _splashRadius, 1.f);
 		const vector<Actor*> bloons = GetOwner()->GetActors(RenderLayer::Bloon);
 		for (Actor* actor : bloons)
 		{
