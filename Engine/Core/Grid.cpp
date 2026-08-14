@@ -28,8 +28,8 @@ const Grid::GridInfo& Grid::GetGridInfo(const Cell& cell) const
 
 void Grid::UpdateGrid(Actor* actor, const Vector& prevPos)
 {
-	Cell prevCell = Cell::ConvertToCEll(prevPos, _gridSize);
-	Cell curCell = Cell::ConvertToCEll(actor->GetPos(), _gridSize);
+	Cell prevCell = Cell::ConvertToCell(prevPos, _gridSize);
+	Cell curCell = Cell::ConvertToCell(actor->GetPos(), _gridSize);
 
 	if (prevCell.iX == curCell.iX && prevCell.iY == curCell.iY)
 		return;
