@@ -15,7 +15,6 @@ public:
 
 private :
 	bool isValidCell(int32 x, int32 y) const;
-	vector<Cell> collectBorderCells() const;
 
 	int32 _gridCountX = 0;
 	int32 _gridCountY = 0;

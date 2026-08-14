@@ -49,25 +49,6 @@ void TileMap::GenerateRandomStartEndPoint()
 	}
 }
 
-vector<Cell>TileMap::collectBorderCells() const
-{
-	vector<Cell> border;
-
-	for (int32 x = 0; x < _gridCountX; ++x)
-	{
-		border.push_back(Cell{ x,0 });
-		border.push_back(Cell{ x,_gridCountY - 1 });
-	}
-
-	for (int32 y = 1; y < _gridCountY - 1; ++y)
-	{
-		border.push_back(Cell{ 0,y });
-		border.push_back(Cell{ _gridCountX - 1,y });
-	}
-
-	return border;
-}
-
 bool TileMap::isValidCell(int32 x, int32 y) const
 {
 	return x >= 0 && x < _gridCountX && y >= 0 && y < _gridCountY;
