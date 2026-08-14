@@ -23,6 +23,9 @@ void Tower::Init()
 	Super::Init();
 	SetActorType(ActorType::Tower);
 	SetLayer(RenderLayer::Tower);
+	_target = nullptr;
+	_grade = 1;
+	_canUpgrade = true;
 	_fireTimer = _stat.attackSpeed;	// 처음 타겟이 잡히면 쿨타임 대기 없이 바로 쏘도록 미리 채워둔다.
 }
 

@@ -52,7 +52,13 @@ namespace
 const TowerStat& GetTowerStat(TowerType type)
 {
 	static const vector<TowerStat> stats = loadTowerStats();
-	return stats[static_cast<size_t>(type)];
+	const size_t index = static_cast<size_t>(type);
+	if (index >= stats.size())
+	{
+		static const TowerStat fallback{};
+		return fallback;
+	}
+	return stats[index];
 }
 
 TowerType ParseTowerTypeName(const string& name)
@@ -64,7 +70,8 @@ TowerType ParseTowerTypeName(const string& name)
 		{"SniperMonkey", TowerType::SniperMonkey},
 		{"BombTower", TowerType::BombTower},
 	};
-	return table.at(name);
+	auto it = table.find(name);
+	return it != table.end() ? it->second : TowerType::DartMonkey;
 }
 
 const TowerVisual& GetTowerVisual(TowerType type)
