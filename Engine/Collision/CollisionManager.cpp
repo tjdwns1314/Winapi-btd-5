@@ -64,6 +64,13 @@ void CollisionManager::checkLayer(Scene& scene, RenderLayer a, RenderLayer b)
 	}
 }
 
+void CollisionManager::Reset()
+{
+	_layerPairs.clear();
+	_prevPairs.clear();
+	_currPairs.clear();
+}
+
 void CollisionManager::RemoveActor(Actor* actor)
 {
 	std::erase_if(_prevPairs, [actor](const pair<Actor*, Actor*>& p)
