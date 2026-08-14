@@ -154,6 +154,7 @@
     <ClInclude Include="Engine\Collision\CollisionManager.h" />
     <ClInclude Include="Engine\Core\Actor.h" />
     <ClInclude Include="Engine\Core\Grid.h" />
+    <ClInclude Include="Engine\Core\Scene.h" />
     <ClInclude Include="Client\Object\Bloon.h" />
     <ClInclude Include="Client\Object\BloonType.h" />
     <ClInclude Include="Client\Map\TileMap.h" />
@@ -165,7 +166,6 @@
     <ClInclude Include="Client\Scene\GameScene.h" />
     <ClInclude Include="Client\Scene\MainScene.h" />
     <ClInclude Include="Client\Scene\LobbyScene.h" />
-    <ClInclude Include="Client\Scene\Scene.h" />
     <ClInclude Include="Engine\Graphics\Graphic.h" />
     <ClInclude Include="Engine\Graphics\Image.h" />
     <ClInclude Include="Engine\Graphics\SpriteBaker.h" />
@@ -215,6 +215,7 @@
     <ClCompile Include="Engine\Collision\CollisionManager.cpp" />
     <ClCompile Include="Engine\Core\Actor.cpp" />
     <ClCompile Include="Engine\Core\Grid.cpp" />
+    <ClCompile Include="Engine\Core\Scene.cpp" />
     <ClCompile Include="Client\Object\Bloon.cpp" />
     <ClCompile Include="Client\Map\TileMap.cpp" />
     <ClCompile Include="Client\Algorithm\PathFinder.cpp" />
@@ -224,7 +225,6 @@
     <ClCompile Include="Client\Scene\GameScene.cpp" />
     <ClCompile Include="Client\Scene\MainScene.cpp" />
     <ClCompile Include="Client\Scene\LobbyScene.cpp" />
-    <ClCompile Include="Client\Scene\Scene.cpp" />
     <ClCompile Include="Engine\Graphics\Graphic.cpp" />
     <ClCompile Include="Engine\Graphics\Image.cpp" />
     <ClCompile Include="Engine\Graphics\SpriteBaker.cpp" />
