@@ -28,6 +28,7 @@ Tower* TowerFactory::Create(ObjectPool<Tower>& pool, TowerType type, const Vecto
 
 	tower->SetTowerData(GetTowerStat(type));
 	tower->SetFireBehavior(GetFireBehavior(type));
+	tower->SetFrameKeyFn(GetTowerFrameKeyFn(type));
 
 	tower->Init();
 	return tower;

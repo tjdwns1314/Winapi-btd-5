@@ -54,33 +54,18 @@ void GameAssets::Load(Graphic& graphic)
 		{ .cellName = "bomb_tower_01", .anchor = BakeAnchor::Right, .flipX = true },
 	});
 
-	//	baker.Bake(res, graphic, L"dart_monkey_baked", { 125.0f, 140.0f }, {
-	//{.cellName = "dart_monkey_arm_01",.offset = {2.0f,0.0f} },
-	//{.cellName = "dart_monkey_body",.offset = {7.5f,10.0f} },
-	//{.cellName = "red_bandana",.offset = {0.0f,-11.0f}},
-	//		});
-
-//	baker.Bake(res, graphic, L"dart_monkey_baked", { 125.0f, 140.0f }, {
-//{.cellName = "dart_monkey_arm_01",.offset = {2.0f,0.0f} },
-//{.cellName = "dart_monkey_body",.offset = {7.5f,10.0f} },
-//{.cellName = "triple_darts_bandana",.offset = {-9.5f,10.0f}},
-//		});
-
-
-
-		
-		auto bakeDartMonkeyThrow = [&](const wchar_t* keyPrefix, const char* bandanaCell, D2D1_POINT_2F bandanaOffset = { 0.0f, 0.0f })
+	auto bakeDartMonkeyThrow = [&](const wchar_t* keyPrefix, const char* bandanaCell, D2D1_POINT_2F bandanaOffset = { 0.0f, 0.0f })
 		{
 			std::vector<BakeFrame> frames;
+			char armCells[3][32];
 			for (int i = 1; i <= 3; ++i)
 			{
-				char armCell[32];
-				sprintf_s(armCell, "dart_monkey_arm_%02d", i);
+				sprintf_s(armCells[i - 1], "dart_monkey_arm_%02d", i);
 
-				BakeFrame frame = 
+				BakeFrame frame =
 				{
+				{.cellName = armCells[i - 1],.offset = {2.0f,0.0f} },
 				{.cellName = "dart_monkey_body",.offset = {7.5f,10.0f} },
-				{.cellName = armCell,.offset = {2.0f,0.0f} },
 				};
 				if (bandanaCell != nullptr)
 						
