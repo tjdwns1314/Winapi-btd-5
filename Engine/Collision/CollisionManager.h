@@ -10,6 +10,7 @@ class CollisionManager
 public:
 	void RegisterLayer(RenderLayer a, RenderLayer b);
 	void Update(Scene& scene);
+	void Reset();
 	CollisionManager() = default;
 	~CollisionManager() = default;
 	// Scene::PostUpdate가 액터를 delete/Pool 반환하기 직전에 호출한다.
