@@ -79,10 +79,43 @@ const TowerVisual& GetTowerVisual(TowerType type)
 	// TODO: 스탯(공속/데미지 등)까지 필요해지면 BloonType처럼 JSON(Resource\Data\TowerType.json)으로 옮긴다.
 	static const unordered_map<TowerType, TowerVisual> table =
 	{
-		{ TowerType::DartMonkey,   TowerVisual{ true,  L"dart_monkey_baked", ""} },
+		{ TowerType::DartMonkey,   TowerVisual{ true,  L"dart_monkey_base_baked_01", ""} },
 		{ TowerType::TackShooter,  TowerVisual{ true,  L"tack_shooter_baked", "" } },
 		{ TowerType::SniperMonkey, TowerVisual{ true,  L"sniper_monkey_baked", "" } },
 		{ TowerType::BombTower,    TowerVisual{ true,  L"bomb_tower_baked", "" } },
 	};
 	return table.at(type);
+}
+
+namespace
+{
+	// 1등급=base, 2=red, 3=blue, 4=green, 5=triple.
+	const wchar_t* dartMonkeyAnimKeyPrefix(int32 grade)
+	{
+		static const wchar_t* prefixes[] =
+		{
+			L"dart_monkey_base_baked",
+			L"dart_monkey_red_baked",
+			L"dart_monkey_blue_baked",
+			L"dart_monkey_green_baked",
+			L"dart_monkey_triple_baked",
+		};
+		const int32 index = std::clamp(grade - 1, 0, static_cast<int32>(std::size(prefixes)) - 1);
+		return prefixes[index];
+	}
+
+	void dartMonkeyFrameKey(int32 grade, int32 animFrame, wchar_t* outKey, size_t outKeySize)
+	{
+		swprintf_s(outKey, outKeySize, L"%s_%02d", dartMonkeyAnimKeyPrefix(grade), animFrame + 1);
+	}
+}
+
+TowerFrameKeyFn GetTowerFrameKeyFn(TowerType type)
+{
+	static const unordered_map<TowerType, TowerFrameKeyFn> table =
+	{
+		{ TowerType::DartMonkey, &dartMonkeyFrameKey },
+	};
+	auto it = table.find(type);
+	return it != table.end() ? it->second : nullptr; // 등록 안 된 타워는 애니메이션 없음.
 }

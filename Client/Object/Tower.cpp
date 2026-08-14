@@ -3,9 +3,22 @@
 #include "GameScene.h"
 #include "Collider.h"
 #include "ColliderCircle.h"
+#include "ResourceManager.h"
 
 namespace
 {
+	constexpr float kThrowFrameDuration = 0.08f; // 프레임당 재생 시간(초). 시각 확인 후 조정 필요(미검증)
+	constexpr int32 kThrowFrameCount = 3;
+
+	// 손(투사체 발사 지점)의 로컬 오프셋. 캔버스({125,140}) 중심 기준, 프레임(arm_01~03)별.
+	// TODO(미검증): 실제 스프라이트를 보고 값 조정 필요. 지금은 placeholder로 baseline offset을 그대로 씀.
+	const Vector kDartHandLocalOffset[kThrowFrameCount] =
+	{
+		{ 2.0f, 0.0f },
+		{ 2.0f, 0.0f },
+		{ 2.0f, 0.0f },
+	};
+
 	float GetColliderRadius(const Actor* actor)
 	{
 		if (actor == nullptr)
@@ -26,6 +39,9 @@ void Tower::Init()
 	_target = nullptr;
 	_grade = 1;
 	_canUpgrade = true;
+	_isThrowing = false;
+	_animFrame = 0;
+	_animTimer = 0.f;
 	_fireTimer = _stat.attackSpeed;	// 처음 타겟이 잡히면 쿨타임 대기 없이 바로 쏘도록 미리 채워둔다.
 }
 
@@ -47,13 +63,47 @@ void Tower::Update(float deltaTime)
 			SetRotation(RadianToDegree(atan2f(dir.x, -dir.y)));
 	}
 
+	if (_isThrowing)
+	{
+		updateThrowAnimation(deltaTime);
+		return; // 던지는 도중에는 쿨타임을 새로 세지 않는다.
+	}
+
 	// 타겟 유무와 상관없이 쿨타임은 계속 흐른다. 발사 자체만 타겟이 있을 때로 제한한다.
 	_fireTimer += deltaTime;
 	if (_target == nullptr || _fireTimer < _stat.attackSpeed)
 		return;
 
 	_fireTimer = 0.f;
+
+	if (_frameKeyFn != nullptr)
+	{
+		_isThrowing = true;
+		_animFrame = 0;
+		_animTimer = 0.f;
+	}
+	else
+	{
+		fire();
+	}
+}
+
+void Tower::updateThrowAnimation(float deltaTime)
+{
+	_animTimer += deltaTime;
+	if (_animTimer < kThrowFrameDuration)
+		return;
+
+	_animTimer = 0.f;
+	++_animFrame;
+
+	if (_animFrame < kThrowFrameCount)
+		return; // 다음 프레임으로 넘어감
+
+	// 마지막 프레임까지 재생이 끝난 시점에 실제로 투사체를 발사한다.
 	fire();
+	_isThrowing = false;
+	_animFrame = 0;
 }
 
 void Tower::Render(Graphic& graphic)
@@ -62,7 +112,13 @@ void Tower::Render(Graphic& graphic)
 	const Vector pos = GetPos();
 	const Vector scale = GetScale();
 
-	if (_bakedImage != nullptr)
+	if (_frameKeyFn != nullptr)
+	{
+		wchar_t key[128];
+		_frameKeyFn(_grade, _animFrame, key, std::size(key));
+		ResourceManager::GetInstance().GetImage(key).Draw(graphic, pos.x, pos.y, scale.x, GetRotation());
+	}
+	else if (_bakedImage != nullptr)
 		_bakedImage->Draw(graphic, pos.x, pos.y, scale.x, GetRotation());
 	else if (_image != nullptr && _cell != nullptr)
 		_image->DrawSprite(graphic, pos.x, pos.y, *_cell, scale.x, GetRotation());
@@ -70,6 +126,20 @@ void Tower::Render(Graphic& graphic)
 		return;
 
 	RenderRange(graphic);
+}
+
+Vector Tower::getHandLocalOffset() const
+{
+	const int32 frame = std::clamp(_animFrame, 0, kThrowFrameCount - 1);
+	return kDartHandLocalOffset[frame];
+}
+
+Vector Tower::GetFirePos() const
+{
+	if (_frameKeyFn == nullptr)
+		return GetPos();
+
+	return GetPos() + getHandLocalOffset().Rotate(DegreeToRadian(GetRotation())) * GetScale().x;
 }
 
 void Tower::RenderRange(Graphic& graphic) const

@@ -31,9 +31,10 @@ namespace
 		if (prepareDirectedFire(tower, owner, dir) == false)
 			return;
 
+		const Vector spawnPos = tower.GetFirePos();
 		const auto spawnDart = [&](const Vector& d)
 		{
-			owner->SpawnProjectile(tower.GetPos(), d, static_cast<float>(tower.GetStat().damage),
+			owner->SpawnProjectile(spawnPos, d, static_cast<float>(tower.GetStat().damage),
 				tower.GetTowerData().projectileKey, tower.GetStat().projectileSpeed,
 				0.f, tower.GetStat().pierceCount);
 		};
