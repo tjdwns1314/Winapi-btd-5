@@ -54,10 +54,59 @@ void GameAssets::Load(Graphic& graphic)
 		{ .cellName = "bomb_tower_01", .anchor = BakeAnchor::Right, .flipX = true },
 	});
 
-	baker.Bake(res, graphic, L"dart_monkey_baked", { 123.0f, 115.0f }, {
-	{.cellName = "dart_monkey_arm_01" },
-	{.cellName = "dart_monkey_body" },
-	});
+	//	baker.Bake(res, graphic, L"dart_monkey_baked", { 125.0f, 140.0f }, {
+	//{.cellName = "dart_monkey_arm_01",.offset = {2.0f,0.0f} },
+	//{.cellName = "dart_monkey_body",.offset = {7.5f,10.0f} },
+	//{.cellName = "red_bandana",.offset = {0.0f,-11.0f}},
+	//		});
+
+//	baker.Bake(res, graphic, L"dart_monkey_baked", { 125.0f, 140.0f }, {
+//{.cellName = "dart_monkey_arm_01",.offset = {2.0f,0.0f} },
+//{.cellName = "dart_monkey_body",.offset = {7.5f,10.0f} },
+//{.cellName = "triple_darts_bandana",.offset = {-9.5f,10.0f}},
+//		});
+
+
+
+		
+		auto bakeDartMonkeyThrow = [&](const wchar_t* keyPrefix, const char* bandanaCell, D2D1_POINT_2F bandanaOffset = { 0.0f, 0.0f })
+		{
+			std::vector<BakeFrame> frames;
+			for (int i = 1; i <= 3; ++i)
+			{
+				char armCell[32];
+				sprintf_s(armCell, "dart_monkey_arm_%02d", i);
+
+				BakeFrame frame = 
+				{
+				{.cellName = "dart_monkey_body",.offset = {7.5f,10.0f} },
+				{.cellName = armCell,.offset = {2.0f,0.0f} },
+				};
+				if (bandanaCell != nullptr)
+						
+				frame.push_back({ .cellName = bandanaCell,.offset = bandanaOffset });
+
+				frames.push_back(std::move(frame));
+				}
+			
+				baker.BakeAnimation(res, graphic, keyPrefix, { 125.0f, 140.0f }, frames);
+			};
+
+		bakeDartMonkeyThrow(L"dart_monkey_base_baked", nullptr);
+		bakeDartMonkeyThrow(L"dart_monkey_red_baked", "red_bandana", { 0.0f, -11.0f });
+		bakeDartMonkeyThrow(L"dart_monkey_blue_baked", "blue_bandana", { 0.0f, -11.0f });
+		bakeDartMonkeyThrow(L"dart_monkey_green_baked", "green_bandana", { 0.0f, -11.0f });
+		bakeDartMonkeyThrow(L"dart_monkey_triple_baked", "triple_darts_bandana", { -9.5f, 10.0f });
+
+
+
+
+
+
+
+
+
+
 
 	baker.Bake(res, graphic, L"sniper_monkey_baked", { 140.0f, 230.0f }, {
 	{.cellName = "sniper_arm",         .offset = {-5.0f, -60.0f} },
