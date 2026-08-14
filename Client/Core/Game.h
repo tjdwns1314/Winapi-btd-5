@@ -18,8 +18,9 @@ class Game : public Singleton<Game>
 public:
 	void Init(HWND hwnd);
 	void Cleanup();
-	void Update();
+	void Update(float deltaTime);
 	void Render();
+	void OnResize(uint32 width, uint32 height);
 
 	HWND GetHwnd() const { return _hwnd; }
 	

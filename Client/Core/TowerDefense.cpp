@@ -54,7 +54,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     ::QueryPerformanceFrequency(&frequency);
     ::QueryPerformanceCounter(&prev);
 
-    const float targetFrameTime = 1000.0f / 120.f;
+    // 게임 로직은 프레임레이트와 무관하게 고정 시간 간격(틱)으로 진행한다.
+    const float fixedDt = 1.0f / 120.0f; // 초 단위 고정 틱
+    float accumulator = 0.f;
 
     while (msg.message != WM_QUIT)
     {
@@ -66,17 +68,23 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         else
         {
             ::QueryPerformanceCounter(&now);
-            float elapsed = (now.QuadPart - prev.QuadPart) / static_cast<float>(frequency.QuadPart) * 1000.0f;
+            float frameTime = (now.QuadPart - prev.QuadPart) / static_cast<float>(frequency.QuadPart);
+            prev = now;
 
-            // 120FPS 에 맞춰서 호출
-            if (elapsed >= targetFrameTime)
+            // 중단점/멈춤 후 누적 시간이 폭주하는 것을 막는다.
+            if (frameTime > 0.25f)
+                frameTime = 0.25f;
+
+            accumulator += frameTime;
+
+            // 밀린 만큼 고정 틱을 여러 번 돌려 시뮬레이션 속도를 일정하게 유지한다.
+            while (accumulator >= fixedDt)
             {
-                // 아무런 메세지가 없다면, 그냥 게임 로직 처리
-                game.Update();  // 모든 업데이트가 끝나고 나서,
-                game.Render();  // 최종 데이터 기준으로 렌더링
-
-                prev = now;
+                game.Update(fixedDt);
+                accumulator -= fixedDt;
             }
+
+            game.Render();
         }
     }
     // 프로그램 종료
@@ -188,6 +196,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 return DefWindowProc(hWnd, message, wParam, lParam);
             }
         }
+        break;
+    case WM_SIZE:
+        Game::GetInstance().OnResize(LOWORD(lParam), HIWORD(lParam));
         break;
     case WM_PAINT:
         {

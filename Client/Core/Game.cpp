@@ -45,13 +45,12 @@ void Game::Cleanup()
 	
 }
 
-void Game::Update()
+void Game::Update(float deltaTime)
 {
-	TimeManager& timeManager = TimeManager::GetInstance();
-	timeManager.Update();
+	TimeManager::GetInstance().Update(deltaTime);
 	InputManager::GetInstance().Update();
 
-	SceneManager::GetInstance().Update(timeManager.GetDT());
+	SceneManager::GetInstance().Update(deltaTime);
 
 	if (InputManager::GetInstance().GetButtonDown(KeyType::F1))
 	{
@@ -72,4 +71,9 @@ void Game::Render()
 	SceneManager::GetInstance().Render(_graphic);
 
 	_graphic.EndDraw();
+}
+
+void Game::OnResize(uint32 width, uint32 height)
+{
+	_graphic.Resize(width, height);
 }

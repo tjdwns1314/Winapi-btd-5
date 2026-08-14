@@ -18,6 +18,7 @@ private:
 	TimerFunc _func;
 	float _sumTime = 0;     // 지금까지 경과시간 0..
 	float _interval = 0;	// 알람 울릴 시간. 2초
+	bool _expired = false;
 };
 
 class TimeManager : public Singleton<TimeManager>
@@ -27,7 +28,7 @@ class TimeManager : public Singleton<TimeManager>
 
 public:
 	void Init();
-	void Update();
+	void Update(float deltaTime);
 
 	uint32 GetFPS() { return _fps; }
 

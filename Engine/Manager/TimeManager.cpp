@@ -11,13 +11,9 @@ void TimeManager::Init()
 	::QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER*>(&_prevCount)); // CPU 클럭
 }
 
-void TimeManager::Update()
+void TimeManager::Update(float deltaTime)
 {
-	uint64 currentCount;
-	::QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER*>(&currentCount));
-
-	_deltaTime = (currentCount - _prevCount) / static_cast<float>(_frequency);
-	_prevCount = currentCount;
+	_deltaTime = deltaTime;
 
 	// 프레임율(FPS 계산을 위해)
 	_frameCount++;
@@ -43,8 +39,8 @@ void TimeManager::Update()
 	// 타이머의 고유한 Id 값을 가지고 있다.
 	// set에 추가된 Id의 타이머를 모두 제거한다.
 	_timers.erase(std::remove_if(_timers.begin(), _timers.end(),
-		[&](const Timer& timer) {
-			return _removeTimers.find(timer.GetId()) != _removeTimers.end();
+		[&](Timer& timer) {
+			return timer.IsExpired() || _removeTimers.find(timer.GetId()) != _removeTimers.end();
 		}), _timers.end());
 	_removeTimers.clear();
 
@@ -77,6 +73,9 @@ void TimeManager::Remove(int32 id)
 //----------------------------------
 void Timer::Update(float deltaTime)
 {
+	if (_expired)
+		return;
+
 	_sumTime += deltaTime;
 
 	// 알람이 울릴 시간만큼 충분히 지낫다.
@@ -86,14 +85,13 @@ void Timer::Update(float deltaTime)
 		_func();
 
 		if (_loop)
-		{
 			_sumTime -= _interval;
-		}
+		else
+			_expired = true;
 	}
 }
 
 bool Timer::IsExpired()
 {
-	// 타이머의 누적시간이 알람 울려야하는 시간보다 넘어섯다면 만료된것
-	return (_sumTime >= _interval);
+	return _expired;
 }
