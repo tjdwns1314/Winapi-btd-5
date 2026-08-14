@@ -8,6 +8,7 @@ public :
 	void BeginDraw();
 	void EndDraw();
 	void Clear(D2D1::ColorF color);
+	void Resize(uint32 width, uint32 height);
 	ID2D1HwndRenderTarget* GetRenderTarget() {return _renderTarget;}
 
 	// 브러시는 생성 비용이 크므로 하나만 만들어두고 색만 바꿔 재사용한다.
@@ -18,7 +19,7 @@ public :
 	// 여기에 스프라이트를 미리 합성해두면, 이후에는 완성된 비트맵 하나만 그리면 된다.
 	ID2D1BitmapRenderTarget* CreateOffscreenRenderTarget(D2D1_SIZE_F size);
 
-	void DrawText(const wchar_t* text, D2D1_RECT_F layoutRect, FontSize size,
+	void DrawString(const wchar_t* text, D2D1_RECT_F layoutRect, FontSize size,
 		D2D1::ColorF color, DWRITE_TEXT_ALIGNMENT align =
 		DWRITE_TEXT_ALIGNMENT_LEADING);
 

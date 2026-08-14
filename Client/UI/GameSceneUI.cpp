@@ -135,7 +135,7 @@ void GameSceneUI::renderGameOverPopup(Graphic& graphic) const
 			static_cast<float>(GameAreaWidth), static_cast<float>(GameAreaHeight)), dimBrush);
 	}
 
-	graphic.DrawTextW(L"GAME OVER",
+	graphic.DrawString(L"GAME OVER",
 		D2D1::RectF(0.0f, GameAreaCenterY - 160.0f, static_cast<float>(GameAreaWidth), GameAreaCenterY - 80.0f),
 		FONT_30, D2D1::ColorF(D2D1::ColorF::Red), DWRITE_TEXT_ALIGNMENT_CENTER);
 
@@ -173,7 +173,7 @@ void GameSceneUI::renderGoldText(Graphic& graphic, int32 gold) const
 	wchar_t text[32];
 	swprintf_s(text, L"Gold: %d", gold);
 
-	graphic.DrawTextW(text, D2D1::RectF(1440.0f, 20.0f, 1760.0f, 60.0f),
+	graphic.DrawString(text, D2D1::RectF(1440.0f, 20.0f, 1760.0f, 60.0f),
 		FONT_30, D2D1::ColorF(D2D1::ColorF::Gold), DWRITE_TEXT_ALIGNMENT_CENTER);
 }
 
@@ -182,7 +182,7 @@ void GameSceneUI::renderHpText(Graphic& graphic, int32 hp) const
 	wchar_t text[32];
 	swprintf_s(text, L"HP: %d", hp);
 
-	graphic.DrawTextW(text, D2D1::RectF(1440.0f, 60.0f, 1760.0f, 100.0f),
+	graphic.DrawString(text, D2D1::RectF(1440.0f, 60.0f, 1760.0f, 100.0f),
 		FONT_30, D2D1::ColorF(D2D1::ColorF::Red), DWRITE_TEXT_ALIGNMENT_CENTER);
 }
 
@@ -206,7 +206,7 @@ void GameSceneUI::renderTowerSelectionPanel(Graphic& graphic, const TowerSelecti
 	{
 		const Vector pos = button->GetPos();
 		const Vector size = button->GetSize();
-		graphic.DrawTextW(text, D2D1::RectF(
+		graphic.DrawString(text, D2D1::RectF(
 			pos.x - size.x * 0.5f, pos.y - size.y * 0.5f,
 			pos.x + size.x * 0.5f, pos.y + size.y * 0.5f),
 			FONT_20, D2D1::ColorF(D2D1::ColorF::White), DWRITE_TEXT_ALIGNMENT_CENTER);
@@ -229,7 +229,7 @@ void GameSceneUI::renderTowerSelectionPanel(Graphic& graphic, const TowerSelecti
 	// 공용 브러시 색이 White로 바뀌어서 sell/upgrade 배경이 흰색으로 칠해지는 버그가 생긴다.
 	wchar_t levelText[32];
 	swprintf_s(levelText, L"레벨 %d", selection.grade);
-	graphic.DrawTextW(levelText, D2D1::RectF(1450.0f, 600.0f, 1740.0f, 640.0f),
+	graphic.DrawString(levelText, D2D1::RectF(1450.0f, 600.0f, 1740.0f, 640.0f),
 		FONT_20, D2D1::ColorF(D2D1::ColorF::White), DWRITE_TEXT_ALIGNMENT_CENTER);
 }
 
@@ -251,7 +251,7 @@ void GameSceneUI::renderObstacleSelectionPanel(Graphic& graphic, const ObstacleS
 
 	wchar_t sellText[32];
 	swprintf_s(sellText, L"판매: %d", selection.sellPrice);
-	graphic.DrawTextW(sellText, D2D1::RectF(
+	graphic.DrawString(sellText, D2D1::RectF(
 		pos.x - size.x * 0.5f, pos.y - size.y * 0.5f,
 		pos.x + size.x * 0.5f, pos.y + size.y * 0.5f),
 		FONT_20, D2D1::ColorF(D2D1::ColorF::White), DWRITE_TEXT_ALIGNMENT_CENTER);
