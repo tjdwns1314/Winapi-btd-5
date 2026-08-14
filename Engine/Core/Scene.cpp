@@ -26,7 +26,11 @@ void Scene::Cleanup()
     {
         for (Actor* actor : _actors[layer])
         {
-            if (actor->GetPool() == nullptr)
+            actor->Destroy();
+
+            if (IObjectPool* pool = actor->GetPool())
+                pool->Return(actor);
+            else
                 delete actor;
         }
 
@@ -34,6 +38,7 @@ void Scene::Cleanup()
     }
 
     _postUpdateActions.clear();
+    _collisionManager.Reset();
 }
 
 void Scene::Update(float deltaTime)

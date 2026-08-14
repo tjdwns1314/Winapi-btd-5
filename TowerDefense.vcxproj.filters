@@ -55,6 +55,9 @@
     <ClInclude Include="Engine\Core\Grid.h">
       <Filter>Engine\Core</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Core\Scene.h">
+      <Filter>Engine\Core</Filter>
+    </ClInclude>
     <ClInclude Include="Engine\Graphics\Graphic.h">
       <Filter>Engine\Graphics</Filter>
     </ClInclude>
@@ -151,9 +154,6 @@
     <ClInclude Include="Client\Scene\LobbyScene.h">
       <Filter>Client\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Client\Scene\Scene.h">
-      <Filter>Client\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Client\Object\Projectile.h">
       <Filter>Client\Object</Filter>
     </ClInclude>
@@ -214,6 +214,9 @@
       <Filter>Engine\Core</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Core\Grid.cpp">
+      <Filter>Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Core\Scene.cpp">
       <Filter>Engine\Core</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Graphics\Graphic.cpp">
@@ -292,9 +295,6 @@
       <Filter>Client\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Client\Scene\LobbyScene.cpp">
-      <Filter>Client\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Client\Scene\Scene.cpp">
       <Filter>Client\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Client\Object\Projectile.cpp">
