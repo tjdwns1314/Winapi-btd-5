@@ -60,7 +60,13 @@ namespace
 const BloonStat& GetBloonStat(BloonColor color)
 {
     static const vector<BloonStat> stats = loadBloonStats();
-    return stats[static_cast<size_t>(color)];
+    const size_t index = static_cast<size_t>(color);
+    if (index >= stats.size())
+    {
+        static const BloonStat fallback{};
+        return fallback;
+    }
+    return stats[index];
 }
 
 BloonColor ParseBloonColorName(const string& name)
@@ -80,5 +86,6 @@ BloonColor ParseBloonColorName(const string& name)
         {"Rainbow",BloonColor::Rainbow},
         {"Ceramic",BloonColor::Ceramic},
     };
-    return table.at(name);
+    auto it = table.find(name);
+    return it != table.end() ? it->second : BloonColor::Red;
 }

@@ -123,6 +123,12 @@ void WaveManager::Update(float deltaTime)
 
 void WaveManager::spawnNext()
 {
+	if (_pool == nullptr || _spawnIndex < 0 || _spawnIndex >= static_cast<int32>(_currentRound.spawnOrder.size()))
+	{
+		_state = WaveState::WaitingClear;
+		return;
+	}
+
 	const BloonColor color =
 		_currentRound.spawnOrder[_spawnIndex];
 
