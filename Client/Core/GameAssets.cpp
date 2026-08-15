@@ -83,16 +83,6 @@ void GameAssets::Load(Graphic& graphic)
 		bakeDartMonkeyThrow(L"dart_monkey_green_baked", "green_bandana", { 0.0f, -11.0f });
 		bakeDartMonkeyThrow(L"dart_monkey_triple_baked", "triple_darts_bandana", { -9.5f, 10.0f });
 
-
-
-
-
-
-
-
-
-
-
 	baker.Bake(res, graphic, L"sniper_monkey_baked", { 140.0f, 230.0f }, {
 	{.cellName = "sniper_arm",         .offset = {-5.0f, -60.0f} },
 	{.cellName = "dart_monkey_body" },

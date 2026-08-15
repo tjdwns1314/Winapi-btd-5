@@ -45,14 +45,14 @@ void EditorScene::Render(Graphic& graphic)
 	{
 		_inGameBg->DrawSprite(graphic, 100.0f, 100.0f, *cell, 1.0f, 0.0f);
 	}
-	//if (const CellInfo* cell = _sprite->GetCell("dart_monkey_arm_02"))
-	//{
-	//	_inGameBg->DrawSprite(graphic, 200.0f, 100.0f, *cell, 1.0f, 0.0f);
-	//}
-	//if (const CellInfo* cell = _sprite->GetCell("dart_monkey_arm_03"))
-	//{
-	//	_inGameBg->DrawSprite(graphic, 300.0f, 100.0f, *cell, 1.0f, 0.0f);
-	//}
+	if (const CellInfo* cell = _sprite->GetCell("dart_monkey_arm_02"))
+	{
+		_inGameBg->DrawSprite(graphic, 200.0f, 100.0f, *cell, 1.0f, 0.0f);
+	}
+	if (const CellInfo* cell = _sprite->GetCell("dart_monkey_arm_03"))
+	{
+		_inGameBg->DrawSprite(graphic, 300.0f, 100.0f, *cell, 1.0f, 0.0f);
+	}
 
 	// 원숭이 업그레이드 두건
 
