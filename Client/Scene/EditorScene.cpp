@@ -93,7 +93,11 @@ void EditorScene::Render(Graphic& graphic)
 	{
 		_inGameBg->DrawSprite(graphic, 400.0f, 300.0f, *cell, 1.0f, 0.0f);
 	}
-
+	if (const CellInfo* cell = _sprite->GetCell("tack_shooter_even_faster_logo"))
+	{
+		_inGameBg->DrawSprite(graphic, 450.0f, 300.0f, *cell, 1.0f, 0.0f);
+	}
+	
 
 	if (const CellInfo* cell = _sprite->GetCell("tack_shooter_sprayer_01"))
 	{

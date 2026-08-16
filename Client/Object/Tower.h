@@ -81,6 +81,7 @@ private:
 
 	// 프레임 애니메이션 재생 상태. _frameKeyFn이 nullptr인 타워는 사용하지 않는다.
 	bool _isThrowing = false;
-	int32 _animFrame = 0;		// 0~2 (arm_01~03)
+	int32 _animFrame = 0;		// 0 ~ (_throwFrameCount - 1). 프레임 이름 규칙은 타워 타입마다 다름(_frameKeyFn 참고).
 	float _animTimer = 0.f;
+	int32 _throwFrameCount = 1;	// 현재 던지기 사이클의 총 프레임 수. _isThrowing 시작 시점에 _frameKeyFn 반환값으로 캐싱.
 };
