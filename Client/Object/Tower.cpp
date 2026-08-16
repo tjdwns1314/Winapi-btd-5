@@ -8,11 +8,11 @@
 namespace
 {
 	constexpr float kThrowFrameDuration = 0.08f; // 프레임당 재생 시간(초). 시각 확인 후 조정 필요(미검증)
-	constexpr int32 kThrowFrameCount = 3;
 
-	// 손(투사체 발사 지점)의 로컬 오프셋. 캔버스({125,140}) 중심 기준, 프레임(arm_01~03)별.
+	// 손(투사체 발사 지점)의 로컬 오프셋. 다트원숭이 전용(arm_01~03, 캔버스 {125,140} 중심 기준).
+	// 압정 다트는 GetFirePos()를 쓰지 않고 GetPos()를 직접 쓰므로(TowerFireBehavior::fireTackShooter) 이 테이블과 무관.
 	// TODO(미검증): 실제 스프라이트를 보고 값 조정 필요. 지금은 placeholder로 baseline offset을 그대로 씀.
-	const Vector kDartHandLocalOffset[kThrowFrameCount] =
+	const Vector kDartHandLocalOffset[] =
 	{
 		{ 2.0f, 0.0f },
 		{ 2.0f, 0.0f },
@@ -42,6 +42,11 @@ void Tower::Init()
 	_isThrowing = false;
 	_animFrame = 0;
 	_animTimer = 0.f;
+	_throwFrameCount = 1;
+
+	const float gradeScale = GetTowerGradeScale(_type, _grade);
+	SetScale(Vector(gradeScale, gradeScale));
+
 	_fireTimer = _stat.attackSpeed;	// 처음 타겟이 잡히면 쿨타임 대기 없이 바로 쏘도록 미리 채워둔다.
 }
 
@@ -81,6 +86,11 @@ void Tower::Update(float deltaTime)
 		_isThrowing = true;
 		_animFrame = 0;
 		_animTimer = 0.f;
+
+		wchar_t unusedKey[128];
+		_throwFrameCount = _frameKeyFn(_grade, _animFrame, unusedKey, std::size(unusedKey));
+		if (_throwFrameCount <= 0)
+			_throwFrameCount = 1; // 방어적 fallback: 구현 실수로 0 이하가 와도 무한 대기하지 않도록.
 	}
 	else
 	{
@@ -97,7 +107,7 @@ void Tower::updateThrowAnimation(float deltaTime)
 	_animTimer = 0.f;
 	++_animFrame;
 
-	if (_animFrame < kThrowFrameCount)
+	if (_animFrame < _throwFrameCount)
 		return; // 다음 프레임으로 넘어감
 
 	// 마지막 프레임까지 재생이 끝난 시점에 실제로 투사체를 발사한다.
@@ -130,7 +140,7 @@ void Tower::Render(Graphic& graphic)
 
 Vector Tower::getHandLocalOffset() const
 {
-	const int32 frame = std::clamp(_animFrame, 0, kThrowFrameCount - 1);
+	const int32 frame = std::clamp(_animFrame, 0, static_cast<int32>(std::size(kDartHandLocalOffset)) - 1);
 	return kDartHandLocalOffset[frame];
 }
 
@@ -211,6 +221,9 @@ void Tower::ApplyUpgrade()
 	_stat = _towerData->grades[targetIndex];
 	++_grade;
 	_canUpgrade = _grade < static_cast<int32>(_towerData->grades.size());
+
+	const float gradeScale = GetTowerGradeScale(_type, _grade);
+	SetScale(Vector(gradeScale, gradeScale));
 }
 
 GameScene* Tower::GetGameScene() const

@@ -80,7 +80,7 @@ const TowerVisual& GetTowerVisual(TowerType type)
 	static const unordered_map<TowerType, TowerVisual> table =
 	{
 		{ TowerType::DartMonkey,   TowerVisual{ true,  L"dart_monkey_base_baked_01", ""} },
-		{ TowerType::TackShooter,  TowerVisual{ true,  L"tack_shooter_baked", "" } },
+		{ TowerType::TackShooter,  TowerVisual{ true,  L"tack_shooter_grade1_baked_01", "" } },
 		{ TowerType::SniperMonkey, TowerVisual{ true,  L"sniper_monkey_baked", "" } },
 		{ TowerType::BombTower,    TowerVisual{ true,  L"bomb_tower_baked", "" } },
 	};
@@ -103,11 +103,41 @@ namespace
 		const int32 index = std::clamp(grade - 1, 0, static_cast<int32>(std::size(prefixes)) - 1);
 		return prefixes[index];
 	}
+	constexpr int32 kDartMonkeyThrowFrameCount = 3;
 
-	void dartMonkeyFrameKey(int32 grade, int32 animFrame, wchar_t* outKey, size_t outKeySize)
+	int32 dartMonkeyFrameKey(int32 grade, int32 animFrame, wchar_t* outKey, size_t outKeySize)
 	{
 		swprintf_s(outKey, outKeySize, L"%s_%02d", dartMonkeyAnimKeyPrefix(grade), animFrame + 1);
+		return kDartMonkeyThrowFrameCount;
 	}
+
+	constexpr int32 kTackShooterThrowFrameCount = 2;
+
+	// 1등급=firing+tack_logo 좌우대칭, 2등급=firing 유지+로고만 even_faster로 교체,
+	// 3등급=2등급과 소스 셀이 완전히 동일 → 같은 baked 키 재사용(렌더 크기 차이는 GetTowerGradeScale로 처리),
+	// 4등급=faster_firing 셀, 5등급=sprayer 셀.
+	const wchar_t* tackShooterAnimKeyPrefix(int32 grade)
+	{
+		static const wchar_t* prefixes[] =
+		{
+			L"tack_shooter_grade1_baked",
+			L"tack_shooter_grade2_baked",
+			L"tack_shooter_grade2_baked", // 3등급: 2등급과 동일 이미지
+			L"tack_shooter_grade4_baked",
+			L"tack_shooter_grade5_baked",
+		};
+		const int32 index = std::clamp(grade - 1, 0, static_cast<int32>(std::size(prefixes)) - 1);
+		return prefixes[index];
+	}
+
+	int32 tackShooterFrameKey(int32 grade, int32 animFrame, wchar_t* outKey, size_t outKeySize)
+	{
+		swprintf_s(outKey, outKeySize, L"%s_%02d", tackShooterAnimKeyPrefix(grade), animFrame + 1);
+		return kTackShooterThrowFrameCount;
+	}
+
+	// TODO(미검증): 압정 다트 3등급부터 커지는 배율. 실제 렌더링 확인 후 조정 필요.
+	constexpr float kTackShooterBiggerScale = 1.3f;
 }
 
 TowerFrameKeyFn GetTowerFrameKeyFn(TowerType type)
@@ -115,7 +145,15 @@ TowerFrameKeyFn GetTowerFrameKeyFn(TowerType type)
 	static const unordered_map<TowerType, TowerFrameKeyFn> table =
 	{
 		{ TowerType::DartMonkey, &dartMonkeyFrameKey },
+		{ TowerType::TackShooter, &tackShooterFrameKey },
 	};
 	auto it = table.find(type);
-	return it != table.end() ? it->second : nullptr; // 등록 안 된 타워는 애니메이션 없음.
+	return it != table.end() ? it->second : nullptr;
+}
+
+float GetTowerGradeScale(TowerType type, int32 grade)
+{
+	if (type == TowerType::TackShooter && grade >= 3)
+		return kTackShooterBiggerScale;
+	return 1.0f;
 }
