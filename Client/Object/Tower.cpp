@@ -88,9 +88,12 @@ void Tower::Update(float deltaTime)
 		_animTimer = 0.f;
 
 		wchar_t unusedKey[128];
-		_throwFrameCount = _frameKeyFn(_grade, _animFrame, unusedKey, std::size(unusedKey));
+		_throwFrameCount = _frameKeyFn(_grade, _animFrame, _isThrowing, unusedKey, std::size(unusedKey));
 		if (_throwFrameCount <= 0)
 			_throwFrameCount = 1; // 방어적 fallback: 구현 실수로 0 이하가 와도 무한 대기하지 않도록.
+
+		if (GetTowerFiresAtAnimStart(_type))
+			fire(); // 스나이퍼처럼 "먼저 쏘고 재장전 연출"인 타워는 애니메이션 시작 시점에 발사.
 	}
 	else
 	{
@@ -110,8 +113,9 @@ void Tower::updateThrowAnimation(float deltaTime)
 	if (_animFrame < _throwFrameCount)
 		return; // 다음 프레임으로 넘어감
 
-	// 마지막 프레임까지 재생이 끝난 시점에 실제로 투사체를 발사한다.
-	fire();
+	// 애니메이션 시작 시점에 이미 발사한 타워(GetTowerFiresAtAnimStart)는 여기서 다시 쏘지 않는다.
+	if (!GetTowerFiresAtAnimStart(_type))
+		fire(); // 마지막 프레임까지 재생이 끝난 시점에 실제로 투사체를 발사한다.
 	_isThrowing = false;
 	_animFrame = 0;
 }
@@ -125,7 +129,7 @@ void Tower::Render(Graphic& graphic)
 	if (_frameKeyFn != nullptr)
 	{
 		wchar_t key[128];
-		_frameKeyFn(_grade, _animFrame, key, std::size(key));
+		_frameKeyFn(_grade, _animFrame, _isThrowing, key, std::size(key));
 		ResourceManager::GetInstance().GetImage(key).Draw(graphic, pos.x, pos.y, scale.x, GetRotation());
 	}
 	else if (_bakedImage != nullptr)

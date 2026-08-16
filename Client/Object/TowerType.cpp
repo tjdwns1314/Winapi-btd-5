@@ -81,7 +81,7 @@ const TowerVisual& GetTowerVisual(TowerType type)
 	{
 		{ TowerType::DartMonkey,   TowerVisual{ true,  L"dart_monkey_base_baked_01", ""} },
 		{ TowerType::TackShooter,  TowerVisual{ true,  L"tack_shooter_grade1_baked_01", "" } },
-		{ TowerType::SniperMonkey, TowerVisual{ true,  L"sniper_monkey_baked", "" } },
+		{ TowerType::SniperMonkey, TowerVisual{ true,  L"sniper_grade1_baked_idle", "" } },
 		{ TowerType::BombTower,    TowerVisual{ true,  L"bomb_tower_baked", "" } },
 	};
 	return table.at(type);
@@ -105,7 +105,7 @@ namespace
 	}
 	constexpr int32 kDartMonkeyThrowFrameCount = 3;
 
-	int32 dartMonkeyFrameKey(int32 grade, int32 animFrame, wchar_t* outKey, size_t outKeySize)
+	int32 dartMonkeyFrameKey(int32 grade, int32 animFrame, bool isThrowing, wchar_t* outKey, size_t outKeySize)
 	{
 		swprintf_s(outKey, outKeySize, L"%s_%02d", dartMonkeyAnimKeyPrefix(grade), animFrame + 1);
 		return kDartMonkeyThrowFrameCount;
@@ -130,10 +130,38 @@ namespace
 		return prefixes[index];
 	}
 
-	int32 tackShooterFrameKey(int32 grade, int32 animFrame, wchar_t* outKey, size_t outKeySize)
+	int32 tackShooterFrameKey(int32 grade, int32 animFrame, bool isThrowing, wchar_t* outKey, size_t outKeySize)
 	{
 		swprintf_s(outKey, outKeySize, L"%s_%02d", tackShooterAnimKeyPrefix(grade), animFrame + 1);
 		return kTackShooterThrowFrameCount;
+	}
+
+	// 저격원숭이: 정지 시 bolt_action(볼트액션) 정적 포즈, 발사 시 arm_01~05 애니메이션.
+	// 발사 프레임 1~4에는 튕겨나오는 탄피(casing_01~04)가 같이 붙고, 마지막 프레임(05)엔 탄피 없음.
+	// 등급별로 액세서리(모자/선글라스/고글/불구화 로고)만 바뀌고 나머지 파츠는 동일 → 등급마다 idle 1장 + 발사 5장 = 6장.
+	constexpr int32 kSniperMonkeyThrowFrameCount = 5;
+
+	const wchar_t* sniperMonkeyAnimKeyPrefix(int32 grade)
+	{
+		static const wchar_t* prefixes[] =
+		{
+			L"sniper_grade1_baked",
+			L"sniper_grade2_baked",
+			L"sniper_grade3_baked",
+			L"sniper_grade4_baked",
+			L"sniper_grade5_baked",
+		};
+		const int32 index = std::clamp(grade - 1, 0, static_cast<int32>(std::size(prefixes)) - 1);
+		return prefixes[index];
+	}
+
+	int32 sniperMonkeyFrameKey(int32 grade, int32 animFrame, bool isThrowing, wchar_t* outKey, size_t outKeySize)
+	{
+		if (isThrowing)
+			swprintf_s(outKey, outKeySize, L"%s_%02d", sniperMonkeyAnimKeyPrefix(grade), animFrame + 1);
+		else
+			swprintf_s(outKey, outKeySize, L"%s_idle", sniperMonkeyAnimKeyPrefix(grade));
+		return kSniperMonkeyThrowFrameCount;
 	}
 
 	// TODO(미검증): 압정 다트 3등급부터 커지는 배율. 실제 렌더링 확인 후 조정 필요.
@@ -146,6 +174,7 @@ TowerFrameKeyFn GetTowerFrameKeyFn(TowerType type)
 	{
 		{ TowerType::DartMonkey, &dartMonkeyFrameKey },
 		{ TowerType::TackShooter, &tackShooterFrameKey },
+		{ TowerType::SniperMonkey, &sniperMonkeyFrameKey },
 	};
 	auto it = table.find(type);
 	return it != table.end() ? it->second : nullptr;
@@ -156,4 +185,9 @@ float GetTowerGradeScale(TowerType type, int32 grade)
 	if (type == TowerType::TackShooter && grade >= 3)
 		return kTackShooterBiggerScale;
 	return 1.0f;
+}
+
+bool GetTowerFiresAtAnimStart(TowerType type)
+{
+	return type == TowerType::SniperMonkey;
 }
