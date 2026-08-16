@@ -116,65 +116,64 @@ void GameAssets::Load(Graphic& graphic)
 
 
 
-	//// 1단계
+	// 저격원숭이: 등급마다 idle(bolt_action) 1장 + 발사 애니메이션(arm_01~05, 01~04엔 탄피 동반) 5장을 굽는다.
+	auto bakeSniperMonkey = [&](const wchar_t* keyPrefix, const BakeFrame& accessories)
+	{
+		BakeFrame idleFrame =
+		{
+			{.cellName = "sniper_arm",         .offset = {-5.0f, -60.0f} },
+			{.cellName = "dart_monkey_body" },
+			{.cellName = "sniper_basic_rifle", .offset = {-25.0f, -70.0f} },
+			{.cellName = "sniper_basic_rifle_muzzle", .offset = {-25.0f, -110.0f} },
+			{.cellName = "sniper_bolt_action", .offset = {-38.0f, -58.0f} },
+		};
+		idleFrame.insert(idleFrame.end(), accessories.begin(), accessories.end());
 
-	//baker.Bake(res, graphic, L"sniper_monkey_baked", { 140.0f, 230.0f }, {
-	//{.cellName = "sniper_arm",         .offset = {-5.0f, -60.0f} },
-	//{.cellName = "dart_monkey_body" }, 
-	//
-	//{.cellName = "sniper_basic_rifle", .offset = {-25.0f, -70.0f} },
-	// {.cellName = "sniper_bolt_action", .offset = {-38.0f, -58.0f} },
-	// {.cellName = "sniper_green_hat",   .offset = {-5.0f, -5.0f} },
-	//});
-	// 2단계
-	 	baker.Bake(res, graphic, L"sniper_monkey_baked", { 140.0f, 230.0f }, {
-	{.cellName = "sniper_arm",         .offset = {-5.0f, -60.0f} },
-	{.cellName = "dart_monkey_body" }, 
-	{.cellName = "sniper_basic_rifle", .offset = {-25.0f, -70.0f} },
-	{.cellName = "sniper_bolt_action", .offset = {-38.0f, -58.0f} },
-	{ .cellName = "sniper_deadly_precision", .offset = { -5.0f, -5.0f } },
+		wchar_t idleKey[128];
+		swprintf_s(idleKey, L"%s_idle", keyPrefix);
+		baker.Bake(res, graphic, idleKey, { 140.0f, 230.0f }, idleFrame);
+
+		std::vector<BakeFrame> throwFrames;
+		char armCells[5][32];
+		char casingCells[4][32]; // 루프 밖 선언 필수 — cellName은 포인터만 저장하므로 dangling 방지.
+
+		for (int i = 1; i <= 5; ++i)
+		{
+			sprintf_s(armCells[i - 1], "sniper_arm_%02d", i);
+
+			BakeFrame frame =
+			{
+				{.cellName = armCells[i - 1], .offset = {-37.0f, -40.0f} }, // TODO(미검증): 전 프레임 동일 오프셋, 실제 확인 후 조정
+				{.cellName = "dart_monkey_body" },
+				{.cellName = "sniper_basic_rifle", .offset = {-25.0f, -70.0f} },
+			};
+			frame.insert(frame.end(), accessories.begin(), accessories.end());
+
+			if (i >= 2) // 쏘는 순간(arm_01)엔 탄피가 아직 안 나오므로 arm_02부터 casing_01 시작.
+			{
+				sprintf_s(casingCells[i - 2], "sniper_casing_%02d", i - 1);
+				frame.push_back({ .cellName = casingCells[i - 2], .offset = {-75.0f, -50.0f} }); // TODO(미검증): 전 프레임 동일 오프셋, 탄피 궤적 확인 후 조정
+			}
+
+			throwFrames.push_back(std::move(frame));
+		}
+		baker.BakeAnimation(res, graphic, keyPrefix, { 140.0f, 230.0f }, throwFrames);
+	};
+
+	bakeSniperMonkey(L"sniper_grade1_baked", { {.cellName = "sniper_green_hat", .offset = {-5.0f, -5.0f} } });
+	bakeSniperMonkey(L"sniper_grade2_baked", { {.cellName = "sniper_deadly_precision", .offset = {-5.0f, -5.0f} } });
+	bakeSniperMonkey(L"sniper_grade3_baked", {
+		{.cellName = "sniper_shades",            .offset = {-5.0f, 2.0f} },
+		{.cellName = "sniper_deadly_precision",  .offset = {-5.0f, -5.0f} },
 	});
-	// 
-	// 3단계
-	baker.Bake(res, graphic, L"sniper_monkey_baked", { 140.0f, 230.0f }, {
-{.cellName = "sniper_arm",         .offset = {-5.0f, -60.0f} },
-{.cellName = "dart_monkey_body" },
-{.cellName = "sniper_basic_rifle", .offset = {-25.0f, -70.0f} },
-{.cellName = "sniper_bolt_action", .offset = {-38.0f, -58.0f} },
- {.cellName = "sniper_shades",   .offset = {-5.0f, 2.0f} },
- 	{.cellName = "sniper_deadly_precision",   .offset = {-5.0f, -5.0f} },
-		});
-	//
-
- //4단계
-		baker.Bake(res, graphic, L"sniper_monkey_baked", { 140.0f, 230.0f }, {
-{.cellName = "sniper_arm",         .offset = {-5.0f, -60.0f} },
-//{.cellName = "sniper_arm_01",         .offset = {-37.0f, -40.0f} },
-{.cellName = "dart_monkey_body" },
-{.cellName = "sniper_basic_rifle", .offset = {-25.0f, -70.0f} },
-{.cellName = "sniper_bolt_action", .offset = {-38.0f, -58.0f} },
-{.cellName = "sniper_goggles",   .offset = {-7.0f, -27.0f} },
-{.cellName = "sniper_deadly_precision",   .offset = {-5.0f, -5.0f} },
-		});
-	 
-	 //5단계
-		baker.Bake(res, graphic, L"sniper_monkey_baked", { 140.0f, 230.0f }, {
-{.cellName = "sniper_arm",         .offset = {-5.0f, -60.0f} },
-{.cellName = "dart_monkey_body" },
-{.cellName = "sniper_basic_rifle", .offset = {-25.0f, -70.0f} },
-{.cellName = "sniper_basic_rifle_muzzle",  .offset = {-25.0f, -115.0f} },
-{.cellName = "sniper_bolt_action", .offset = {-38.0f, -58.0f} },
-{.cellName = "sniper_goggles",   .offset = {-7.0f, -27.0f} },
-{.cellName = "sniper_cripple_moab",   .offset = {-5.0f, 25.0f} },
-		});
-
-		// 스나이퍼 원숭이 애니메이션은 먼저 총을 쏜 후
-		// {.cellName = "sniper_bolt_action", .offset = {-38.0f, -58.0f} },의 볼트액션 스프라이트가 사라진채로 
-		// 
-		// 이 오프셋 값에서 _01,_02,_03,_04,_05가 애니메이션 실행되어야함
-		//{ .cellName = "sniper_arm_01", .offset = { -37.0f, -40.0f } },
-		// 그리고 다시 {.cellName = "sniper_bolt_action", .offset = {-38.0f, -58.0f} },가 생겨야함
-		// {.cellName = "muzzle_flash",   .offset = {-5.0f, 25.0f} } // 저격총 이펙트
+	bakeSniperMonkey(L"sniper_grade4_baked", {
+		{.cellName = "sniper_goggles",           .offset = {-7.0f, -27.0f} },
+		{.cellName = "sniper_deadly_precision",  .offset = {-5.0f, -5.0f} },
+	});
+	bakeSniperMonkey(L"sniper_grade5_baked", {
+		{.cellName = "sniper_goggles",            .offset = {-7.0f, -27.0f} },
+		{.cellName = "sniper_cripple_moab",       .offset = {-5.0f, 25.0f} },
+	});
 
 	baker.Bake(res, graphic, L"bomb_tower_baked", { 200.0f, 150.0f }, {
 		{.cellName = "bomb_tower_wheel", .anchor = BakeAnchor::Left,  .offset = {-30.0f, 15.0f} },

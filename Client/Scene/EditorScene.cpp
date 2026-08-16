@@ -113,7 +113,7 @@ void EditorScene::Render(Graphic& graphic)
 	//{
 	//	_inGameBg->DrawSprite(graphic, 100.0f, 500.0f, *cell, 1.0f, 0.0f);
 	//}
-	if (const CellInfo* cell = _sprite->GetCell("sniper_deadly_precision"))
+	if (const CellInfo* cell = _sprite->GetCell("sniper_basic_rifle_muzzle"))
 	{
 		_inGameBg->DrawSprite(graphic, 200.0f, 500.0f, *cell, 1.0f, 0.0f);
 	}
