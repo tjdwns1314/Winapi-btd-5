@@ -28,10 +28,10 @@ void GameSceneUI::Init(
 	_startButton = createButton(Vector(1512.5f, 950.0f), Vector(128.0f, 129.0f), onStartWave);
 	_dartMonkeyShopButton = createButton(Vector(1512.5f, 350.0f), Vector(109.0f, 113.0f), onDartShopClick);
 	_tackShooterShopButton = createButton(Vector(1675.0f, 350.0f), Vector(52.0f, 104.0f), onTackShopClick);
-	_sniperMonkeyShopButton = createButton(Vector(1512.5f, 520.0f), Vector(109.0f, 113.0f), onSniperShopClick);
-	_bombTowerShopButton = createButton(Vector(1675.0f, 520.0f), Vector(109.0f, 113.0f), onBombShopClick);
+	_sniperMonkeyShopButton = createButton(Vector(1512.5f, 570.0f), Vector(109.0f, 113.0f), onSniperShopClick);
+	_bombTowerShopButton = createButton(Vector(1675.0f, 570.0f), Vector(109.0f, 113.0f), onBombShopClick);
 	// 위치는 임시값 — 빌드 후 눈으로 보고 조정할 것.
-	_obstacleShopButton = createButton(Vector(1675.0f, 700.0f), Vector(109.0f, 113.0f), onObstacleShopClick);
+	_obstacleShopButton = createButton(Vector(1675.0f, 750.0f), Vector(109.0f, 113.0f), onObstacleShopClick);
 	_waveUpButton = createButton(Vector(1720.0f, 950.0f), Vector(40.0f, 40.0f), onWaveUp);
 	_waveDownButton = createButton(Vector(1720.0f, 900.0f), Vector(40.0f, 40.0f), onWaveDown);
 

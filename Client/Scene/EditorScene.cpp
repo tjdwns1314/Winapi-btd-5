@@ -108,19 +108,31 @@ void EditorScene::Render(Graphic& graphic)
 		_inGameBg->DrawSprite(graphic, 600.0f, 300.0f, *cell, 1.0f, 0.0f);
 	}
 
-	// 저격총 원숭이 얘는 틴트 기능 넣어야함
-	if (const CellInfo* cell = _sprite->GetCell("sniper_goggles"))
-	{
-		_inGameBg->DrawSprite(graphic, 100.0f, 500.0f, *cell, 1.0f, 0.0f);
-	}
-	if (const CellInfo* cell = _sprite->GetCell("sniper_shades"))
+	//// 저격총 원숭이 얘는 틴트 기능 넣어야함
+	//if (const CellInfo* cell = _sprite->GetCell("sniper_goggles"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 100.0f, 500.0f, *cell, 1.0f, 0.0f);
+	//}
+	if (const CellInfo* cell = _sprite->GetCell("sniper_deadly_precision"))
 	{
 		_inGameBg->DrawSprite(graphic, 200.0f, 500.0f, *cell, 1.0f, 0.0f);
 	}
+	// sniper_laser
+	// sniper_deadly_precision
+	// sniper_semi_auto
+	// sniper_full_metal_jacket
+
+	//if (const CellInfo* cell = _sprite->GetCell("sniper_cripple_moab"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 200.0f, 500.0f, *cell, 1.0f, 0.0f);
+	//}
+
 	if (const CellInfo* cell = _sprite->GetCell("sniper_green_hat"))
 	{
 		_inGameBg->DrawSprite(graphic, 300.0f, 500.0f, *cell, 1.0f, 0.0f);
 	}
+
+
 	// 저격총 애니메이션
 	if (const CellInfo* cell = _sprite->GetCell("sniper_arm_01"))
 	{
