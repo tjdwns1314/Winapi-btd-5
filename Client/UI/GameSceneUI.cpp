@@ -32,10 +32,11 @@ void GameSceneUI::Init(
 	_startButton = createButton(Vector(1512.5f, 950.0f), Vector(128.0f, 129.0f), onStartWave);
 
 	// 타워 상점 버튼: 스크롤 패널(y=270~518) 안에 2x2 그리드로 배치.
-	_dartMonkeyShopButton = createButton(Vector(1520.0f, 332.0f), Vector(76.3f, 79.1f), onDartShopClick);
-	_tackShooterShopButton = createButton(Vector(1680.0f, 332.0f), Vector(36.4f, 72.8f), onTackShopClick);
-	_sniperMonkeyShopButton = createButton(Vector(1520.0f, 456.0f), Vector(76.3f, 79.1f), onSniperShopClick);
-	_bombTowerShopButton = createButton(Vector(1680.0f, 456.0f), Vector(76.3f, 79.1f), onBombShopClick);
+	// 클릭 판정 크기는 실제로 그려지는 tower_thumbs_box 배경(113x93, renderTowerShopBoxes 참고)과 맞춘다.
+	_dartMonkeyShopButton = createButton(Vector(1520.0f, 332.0f), Vector(113.0f, 93.0f), onDartShopClick);
+	_tackShooterShopButton = createButton(Vector(1680.0f, 332.0f), Vector(113.0f, 93.0f), onTackShopClick);
+	_sniperMonkeyShopButton = createButton(Vector(1520.0f, 456.0f), Vector(113.0f, 93.0f), onSniperShopClick);
+	_bombTowerShopButton = createButton(Vector(1680.0f, 456.0f), Vector(113.0f, 93.0f), onBombShopClick);
 	// 위치는 임시값 — 빌드 후 눈으로 보고 조정할 것.
 	_obstacleShopButton = createButton(Vector(1675.0f, 900.0f), Vector(109.0f, 113.0f), onObstacleShopClick);
 
