@@ -121,11 +121,11 @@ void GameAssets::Load(Graphic& graphic)
 	{
 		BakeFrame idleFrame =
 		{
-			{.cellName = "sniper_arm",         .offset = {-5.0f, -60.0f} },
-			{.cellName = "dart_monkey_body" },
-			{.cellName = "sniper_basic_rifle", .offset = {-25.0f, -70.0f} },
-			{.cellName = "sniper_basic_rifle_muzzle", .offset = {-25.0f, -110.0f} },
-			{.cellName = "sniper_bolt_action", .offset = {-38.0f, -58.0f} },
+			{.cellName = "sniper_arm",         .offset = {2.0f, -50.0f} },
+			{.cellName = "dart_monkey_body", .offset = {7.0f,10.0f} },
+			{.cellName = "sniper_basic_rifle", .offset = {-18.0f, -60.0f} },
+			{.cellName = "sniper_basic_rifle_muzzle", .offset = {-18.0f, -100.0f} },
+			{.cellName = "sniper_bolt_action", .offset = {-31.0f, -48.0f} },
 		};
 		idleFrame.insert(idleFrame.end(), accessories.begin(), accessories.end());
 
@@ -143,16 +143,16 @@ void GameAssets::Load(Graphic& graphic)
 
 			BakeFrame frame =
 			{
-				{.cellName = armCells[i - 1], .offset = {-37.0f, -40.0f} }, // TODO(미검증): 전 프레임 동일 오프셋, 실제 확인 후 조정
-				{.cellName = "dart_monkey_body" },
-				{.cellName = "sniper_basic_rifle", .offset = {-25.0f, -70.0f} },
+				{.cellName = armCells[i - 1], .offset = {-30.0f, -30.0f} }, // TODO(미검증): 전 프레임 동일 오프셋, 실제 확인 후 조정
+				{.cellName = "dart_monkey_body", .offset = {7.0f, 10.0f} },
+				{.cellName = "sniper_basic_rifle", .offset = {-18.0f, -60.0f} },
 			};
 			frame.insert(frame.end(), accessories.begin(), accessories.end());
 
 			if (i >= 2) // 쏘는 순간(arm_01)엔 탄피가 아직 안 나오므로 arm_02부터 casing_01 시작.
 			{
 				sprintf_s(casingCells[i - 2], "sniper_casing_%02d", i - 1);
-				frame.push_back({ .cellName = casingCells[i - 2], .offset = {-75.0f, -50.0f} }); // TODO(미검증): 전 프레임 동일 오프셋, 탄피 궤적 확인 후 조정
+				frame.push_back({ .cellName = casingCells[i - 2], .offset = {-68.0f, -40.0f} }); // TODO(미검증): 전 프레임 동일 오프셋, 탄피 궤적 확인 후 조정
 			}
 
 			throwFrames.push_back(std::move(frame));
@@ -160,19 +160,19 @@ void GameAssets::Load(Graphic& graphic)
 		baker.BakeAnimation(res, graphic, keyPrefix, { 140.0f, 230.0f }, throwFrames);
 	};
 
-	bakeSniperMonkey(L"sniper_grade1_baked", { {.cellName = "sniper_green_hat", .offset = {-5.0f, -5.0f} } });
-	bakeSniperMonkey(L"sniper_grade2_baked", { {.cellName = "sniper_deadly_precision", .offset = {-5.0f, -5.0f} } });
+	bakeSniperMonkey(L"sniper_grade1_baked", { {.cellName = "sniper_green_hat", .offset = {2.0f, 5.0f} } });
+	bakeSniperMonkey(L"sniper_grade2_baked", { {.cellName = "sniper_deadly_precision", .offset = {2.0f, 5.0f} } });
 	bakeSniperMonkey(L"sniper_grade3_baked", {
-		{.cellName = "sniper_shades",            .offset = {-5.0f, 2.0f} },
-		{.cellName = "sniper_deadly_precision",  .offset = {-5.0f, -5.0f} },
+		{.cellName = "sniper_shades",            .offset = {2.0f, 12.0f} },
+		{.cellName = "sniper_deadly_precision",  .offset = {2.0f, 5.0f} },
 	});
 	bakeSniperMonkey(L"sniper_grade4_baked", {
-		{.cellName = "sniper_goggles",           .offset = {-7.0f, -27.0f} },
-		{.cellName = "sniper_deadly_precision",  .offset = {-5.0f, -5.0f} },
+		{.cellName = "sniper_goggles",           .offset = {0.0f, -17.0f} },
+		{.cellName = "sniper_deadly_precision",  .offset = {2.0f, 5.0f} },
 	});
 	bakeSniperMonkey(L"sniper_grade5_baked", {
-		{.cellName = "sniper_goggles",            .offset = {-7.0f, -27.0f} },
-		{.cellName = "sniper_cripple_moab",       .offset = {-5.0f, 25.0f} },
+		{.cellName = "sniper_goggles",            .offset = {0.0f, -17.0f} },
+		{.cellName = "sniper_cripple_moab",       .offset = {2.0f, 35.0f} },
 	});
 
 
