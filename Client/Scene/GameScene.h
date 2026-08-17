@@ -49,6 +49,8 @@ public:
 	HealthManager& GetHealthManager() { return _healthManager; }
 	// 골드도 마찬가지로 싱글톤이 아니라 GameScene이 소유한다.
 	EconomyManager& GetEconomyManager() { return _economyManager; }
+	// Tower가 자신이 선택된 타워인지 확인하기 위해 (RenderRange 표시 여부 판단용).
+	const TowerController& GetTowerController() const { return _towerController; }
 
 protected:
 	virtual void CreateUI() override;
