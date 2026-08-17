@@ -36,22 +36,25 @@ void EditorScene::Render(Graphic& graphic)
 
 
 
-
-
-
-
-	// 원숭이 팔 애니메이션 
-	if (const CellInfo* cell = _sprite->GetCell("dart_monkey_arm_01"))
+	// 확보된 거)
+	//if (const CellInfo* cell = _hudSprite->GetCell("side_hud_bg_01"))
+	//{
+	//	_hudImg->DrawSprite(graphic, 300.0f, 200.0f, *cell, 1.0f, 0.0f);
+	//}
+	// side_hud_bg_02
+	//side_hud_scroll
+	// "sell_box"
+	// upgrade_box_buy
+	// upgrade_box_cant
+	// tower_thumbs_box
+	if (const CellInfo* cell = _hudSprite->GetCell("lower_hud_bg_01"))
 	{
-		_inGameBg->DrawSprite(graphic, 100.0f, 100.0f, *cell, 1.0f, 0.0f);
+		_hudImg->DrawSprite(graphic, 300.0f, 400.0f, *cell, 1.0f, 0.0f);
 	}
-	if (const CellInfo* cell = _sprite->GetCell("dart_monkey_arm_02"))
+
+	if (const CellInfo* cell = _hudSprite->GetCell("lower_hud_bg_02"))
 	{
-		_inGameBg->DrawSprite(graphic, 200.0f, 100.0f, *cell, 1.0f, 0.0f);
-	}
-	if (const CellInfo* cell = _sprite->GetCell("dart_monkey_arm_03"))
-	{
-		_inGameBg->DrawSprite(graphic, 300.0f, 100.0f, *cell, 1.0f, 0.0f);
+		_hudImg->DrawSprite(graphic, 300.0f, 100.0f, *cell, 1.0f, 0.0f);
 	}
 
 	// 원숭이 업그레이드 두건
@@ -332,15 +335,15 @@ void EditorScene::Render(Graphic& graphic)
 		_inGameBg->DrawSprite(graphic, 1600.0f, 700.0f, *cell, 1.0f, 0.0f);
 	}
 
-	if (const CellInfo* cell = _sprite->GetCell("bomb_tower_red_ring_01"))
+	if (const CellInfo* cell = _sprite->GetCell("bomb_tower_cluster_01"))
 	{
 		_inGameBg->DrawSprite(graphic, 100.0f, 700.0f, *cell, 1.0f, 0.0f);
 	}
-	if (const CellInfo* cell = _sprite->GetCell("bomb_tower_red_ring_02"))
+	if (const CellInfo* cell = _sprite->GetCell("bomb_tower_impact_01"))
 	{
 		_inGameBg->DrawSprite(graphic, 200.0f, 700.0f, *cell, 1.0f, 0.0f);
 	}
-	if (const CellInfo* cell = _sprite->GetCell("bomb_tower_red_ring_03"))
+	if (const CellInfo* cell = _sprite->GetCell("bomb_tower_missile_01"))
 	{
 		_inGameBg->DrawSprite(graphic, 300.0f, 700.0f, *cell, 1.0f, 0.0f);
 	}
