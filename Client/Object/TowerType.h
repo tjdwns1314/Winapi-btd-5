@@ -43,6 +43,9 @@ struct TowerVisual
 
 const TowerVisual& GetTowerVisual(TowerType type);
 
+// 선택 패널 등 UI에 표시할 한글 이름.
+const wchar_t* GetTowerDisplayName(TowerType type);
+
 // outKey에 이미지 키를 채우고, 그 타워의 던지기 애니메이션 총 프레임 수를 반환한다.
 // GetTowerFrameKeyFn이 nullptr을 반환하면 그 타워는 애니메이션 없이 TowerVisual::bakedImageKey 한 장만 쓴다.
 using TowerFrameKeyFn = int32(*)(int32 grade, int32 animFrame, bool isThrowing, wchar_t* outKey, size_t outKeySize);
