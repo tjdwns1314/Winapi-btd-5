@@ -20,7 +20,7 @@ void GameScene::Init(Graphic& graphic)
 	_inGameBg = &res.GetImage(L"Resource\\Sprite\\InGame.png");
 	_sprite = &res.GetAtlas(L"Resource\\Sprite\\InGame.xml");
 
-	_map.SetTileImages(&res.GetImage(L"Resource\\Tile\\Tile1.png"), &res.GetImage(L"Resource\\Tile\\Tile2.png"));
+	_map.SetTileImages(&res.GetImage(L"Resource\\Tile\\Tile1_pipo.png"), &res.GetImage(L"Resource\\Tile\\Tile2_pipo.png"));
 	_map.Init();
 
 	PoolManager::GetInstance().Init(200, 200, 50, 50); // obstacleSize=50: 임시값

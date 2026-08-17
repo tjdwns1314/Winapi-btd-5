@@ -13,8 +13,8 @@ void GameAssets::Load(Graphic& graphic)
 	res.LoadImage(graphic, L"Resource\\Sprite\\InGame.png");
 	res.LoadAtlas(L"Resource\\Sprite\\InGame.xml");
 
-	res.LoadImage(graphic, L"Resource\\Tile\\Tile1.png");
-	res.LoadImage(graphic, L"Resource\\Tile\\Tile2.png");
+	res.LoadImage(graphic, L"Resource\\Tile\\Tile1_pipo.png");
+	res.LoadImage(graphic, L"Resource\\Tile\\Tile2_pipo.png");
 
 	res.LoadImage(graphic, L"Resource\\Sprite\\in_game_hud.png");
 	res.LoadAtlas(L"Resource\\Sprite\\in_game_hud.xml");
