@@ -15,6 +15,7 @@ void TowerController::TryStartDrag(TowerType type, EconomyManager& economy)
 
 	_isDragging = true;
 	_draggingType = type;
+	_selected = nullptr; // 새 타워를 드래그로 배치하려는 순간, 기존에 선택돼 있던 타워는 해제한다.
 }
 
 void TowerController::UpdateDrag(Scene& scene, MapSystem& map, EconomyManager& economy, bool waveActive)
