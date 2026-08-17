@@ -75,6 +75,7 @@ private:
 	//  타워/장애물 상점
 	// --------------------------------------------------
 	void drawTowerIcon(Graphic& graphic, const Vector& pos, TowerType type, float scale) const;
+	void renderTowerShopBoxes(Graphic& graphic) const;
 	void drawObstacleIcon(Graphic& graphic, const Vector& pos, float scale) const;
 	void drawRangePreview(Graphic& graphic, const Vector& pos, TowerType type) const;
 

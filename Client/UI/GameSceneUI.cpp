@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "GameSceneUI.h"
 #include "UIManager.h"
 #include "ResourceManager.h"
@@ -31,13 +31,13 @@ void GameSceneUI::Init(
 	// 웨이브 시작 버튼
 	_startButton = createButton(Vector(1512.5f, 950.0f), Vector(128.0f, 129.0f), onStartWave);
 
-	// 타워 상점 버튼
-	_dartMonkeyShopButton = createButton(Vector(1512.5f, 350.0f), Vector(76.3f, 79.1f), onDartShopClick);
-	_tackShooterShopButton = createButton(Vector(1675.0f, 350.0f), Vector(36.4f, 72.8f), onTackShopClick);
-	_sniperMonkeyShopButton = createButton(Vector(1512.5f, 570.0f), Vector(76.3f, 79.1f), onSniperShopClick);
-	_bombTowerShopButton = createButton(Vector(1675.0f, 570.0f), Vector(76.3f, 79.1f), onBombShopClick);
+	// 타워 상점 버튼: 스크롤 패널(y=270~518) 안에 2x2 그리드로 배치.
+	_dartMonkeyShopButton = createButton(Vector(1520.0f, 332.0f), Vector(76.3f, 79.1f), onDartShopClick);
+	_tackShooterShopButton = createButton(Vector(1680.0f, 332.0f), Vector(36.4f, 72.8f), onTackShopClick);
+	_sniperMonkeyShopButton = createButton(Vector(1520.0f, 456.0f), Vector(76.3f, 79.1f), onSniperShopClick);
+	_bombTowerShopButton = createButton(Vector(1680.0f, 456.0f), Vector(76.3f, 79.1f), onBombShopClick);
 	// 위치는 임시값 — 빌드 후 눈으로 보고 조정할 것.
-	_obstacleShopButton = createButton(Vector(1675.0f, 750.0f), Vector(109.0f, 113.0f), onObstacleShopClick);
+	_obstacleShopButton = createButton(Vector(1675.0f, 900.0f), Vector(109.0f, 113.0f), onObstacleShopClick);
 
 	// 디버그 웨이브 +/- 버튼
 	_waveUpButton = createButton(Vector(1720.0f, 950.0f), Vector(40.0f, 40.0f), onWaveUp);
@@ -80,6 +80,8 @@ void GameSceneUI::Render(Graphic& graphic, bool isDraggingTower, TowerType dragg
 
 	renderStartButton(graphic, isWaveActive, isSpeedEnabled);
 
+	renderTowerShopBoxes(graphic);
+
 	if (_dartMonkeyShopButton != nullptr) drawTowerIcon(graphic, _dartMonkeyShopButton->GetPos(), TowerType::DartMonkey, 0.7f);
 	if (_tackShooterShopButton != nullptr) drawTowerIcon(graphic, _tackShooterShopButton->GetPos(), TowerType::TackShooter, 0.7f);
 	if (_sniperMonkeyShopButton != nullptr) drawTowerIcon(graphic, _sniperMonkeyShopButton->GetPos(), TowerType::SniperMonkey, 0.7f);
@@ -119,16 +121,24 @@ void GameSceneUI::Render(Graphic& graphic, bool isDraggingTower, TowerType dragg
 // 오른쪽 UI 영역(전체 가로 - 게임 영역)에 정확히 맞춰 가로폭을 늘려서 그린다.
 void GameSceneUI::renderHudBackgroundPanel(Graphic& graphic) const
 {
-	const CellInfo* cell = _hudSprite->GetCell("side_hud_bg_01");
-	if (cell == nullptr)
-		return;
-
 	constexpr float kUiPanelWidth = static_cast<float>(GWinSizeX - GameAreaWidth);
-	constexpr float kPanelCenterY = 135.0f;
-	const float scaleX = kUiPanelWidth / cell->aw;
 	const float centerX = static_cast<float>(GameAreaWidth) + kUiPanelWidth * 0.5f;
 
-	_hudImg->DrawSprite(graphic, centerX, kPanelCenterY, *cell, scaleX, 0.0f, false, 1.0f);
+	// 1. 상단 배경(side_hud_bg_01, 높이 270)
+	if (const CellInfo* cell = _hudSprite->GetCell("side_hud_bg_01"))
+	{
+		constexpr float kPanelCenterY = 135.0f;
+		const float scaleX = kUiPanelWidth / cell->aw;
+		_hudImg->DrawSprite(graphic, centerX, kPanelCenterY, *cell, scaleX, 0.0f, false, 1.0f);
+	}
+
+	// 2. 그 아래 이어지는 스크롤 배경(side_hud_scroll, 높이 248)
+	if (const CellInfo* cell = _hudSprite->GetCell("side_hud_scroll"))
+	{
+		constexpr float kScrollCenterY = 270.0f + 248.0f * 0.5f; // 상단 배경 높이(270) + 이 패널 높이(248)/2
+		const float scaleX = kUiPanelWidth / cell->aw;
+		_hudImg->DrawSprite(graphic, centerX, kScrollCenterY, *cell, scaleX, 0.0f, false, 1.0f);
+	}
 }
 
 void GameSceneUI::renderGoldText(Graphic& graphic, int32 gold) const
@@ -231,6 +241,27 @@ void GameSceneUI::drawTowerIcon(Graphic& graphic, const Vector& pos, TowerType t
 		if (const CellInfo* cell = _sprite->GetCell(visual.cellName.c_str()))
 			_inGameBg->DrawSprite(graphic, pos.x, pos.y, *cell, scale, 0.0f);
 	}
+}
+
+// 타워 상점 버튼 4개 자리에 tower_thumbs_box 배경을 2x2로 깔아준다(아이콘보다 먼저 그려야 함).
+void GameSceneUI::renderTowerShopBoxes(Graphic& graphic) const
+{
+	const CellInfo* cell = _hudSprite->GetCell("tower_thumbs_box");
+	if (cell == nullptr)
+		return;
+
+	auto drawBox = [&](UIButton* button)
+	{
+		if (button == nullptr)
+			return;
+		const Vector pos = button->GetPos();
+		_hudImg->DrawSprite(graphic, pos.x, pos.y, *cell, 1.0f, 0.0f);
+	};
+
+	drawBox(_dartMonkeyShopButton);
+	drawBox(_tackShooterShopButton);
+	drawBox(_sniperMonkeyShopButton);
+	drawBox(_bombTowerShopButton);
 }
 
 void GameSceneUI::drawObstacleIcon(Graphic& graphic, const Vector& pos, float scale) const
