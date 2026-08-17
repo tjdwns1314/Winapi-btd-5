@@ -15,10 +15,11 @@ public:
 	void Release();
 
 	// [실제 화면용] 매 프레임 화면(HWND 렌더타깃)에 스프라이트를 그릴 때 사용.
-	void DrawSprite(Graphic& graphic, float centerX, float centerY, const CellInfo& cell, float scale = 1.0f, float angle = 0.0f, bool flipX = false);
+	// scaleY를 지정하지 않으면(-1) scale을 가로/세로에 동일 적용한다.
+	void DrawSprite(Graphic& graphic, float centerX, float centerY, const CellInfo& cell, float scale = 1.0f, float angle = 0.0f, bool flipX = false, float scaleY = -1.0f);
 	// [공용/임시 도화지용] 화면이든 임시 오프스크린 텍스처든, 렌더타깃을 직접 지정해서 그릴 때 사용.
 	// 위 Graphic& 버전이 내부적으로 이 함수를 호출한다.
-	void DrawSprite(ID2D1RenderTarget* renderTarget, float centerX, float centerY, const CellInfo& cell, float scale = 1.0f, float angle = 0.0f, bool flipX = false);
+	void DrawSprite(ID2D1RenderTarget* renderTarget, float centerX, float centerY, const CellInfo& cell, float scale = 1.0f, float angle = 0.0f, bool flipX = false, float scaleY = -1.0f);
 	D2D1_SIZE_F GetSize() const { return _size; }
 private:
 	// 변환이 완료된 Direct2D 그래픽 데이터(비트맵) 주소입니다.

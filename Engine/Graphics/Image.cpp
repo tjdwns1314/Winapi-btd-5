@@ -1,4 +1,4 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "Image.h"
 void Image::Load(Graphic& graphic, const wchar_t* fileName)
 {
@@ -19,14 +19,15 @@ void Image::LoadFromBitmap(ID2D1Bitmap* bitmap)
 }
 
 // [실제 화면용] 화면 렌더타깃을 꺼내서 아래 공용 버전으로 위임한다.
-void Image::DrawSprite(Graphic& graphic, float centerX, float centerY, const CellInfo& cell, float scale, float angle, bool flipX)
+void Image::DrawSprite(Graphic& graphic, float centerX, float centerY, const CellInfo& cell, float scale, float angle, bool flipX, float scaleY)
 {
-	DrawSprite(graphic.GetRenderTarget(), centerX, centerY, cell, scale, angle, flipX);
+	if (this == nullptr) return;
+	DrawSprite(graphic.GetRenderTarget(), centerX, centerY, cell, scale, angle, flipX, scaleY);
 }
 
 void Image::Draw(Graphic& graphic, float centerX, float centerY, float scale, float angle)
 {
-	if (!_bitmap) return;
+	if (this == nullptr || !_bitmap) return;
 
 	// (centerX, centerY)를 이미지 중심으로 삼아 scale만큼 확대/축소해서 그림
 	const float width = _size.width * scale;
@@ -37,6 +38,7 @@ void Image::Draw(Graphic& graphic, float centerX, float centerY, float scale, fl
 	D2D1_RECT_F rect = D2D1::RectF(x, y, x + width, y + height);
 
 	ID2D1HwndRenderTarget* renderTarget = graphic.GetRenderTarget();
+	if (renderTarget == nullptr) return;
 
 	D2D1::Matrix3x2F prev;
 	renderTarget->GetTransform(&prev);
@@ -50,9 +52,12 @@ void Image::Draw(Graphic& graphic, float centerX, float centerY, float scale, fl
 // [공용/임시 도화지용] 실제로 DrawBitmap을 호출하는 본체.
 // renderTarget으로 화면(ID2D1HwndRenderTarget)과 임시 텍스처(ID2D1BitmapRenderTarget)를
 // 구분 없이 받을 수 있어서, BakeImage로 굽는 용도로도 그대로 재사용된다.
-void Image::DrawSprite(ID2D1RenderTarget* renderTarget, float centerX, float centerY, const CellInfo& cell, float scale, float angle, bool flipX)
+void Image::DrawSprite(ID2D1RenderTarget* renderTarget, float centerX, float centerY, const CellInfo& cell, float scale, float angle, bool flipX, float scaleY)
 {
-	if (!_bitmap) return;
+	if (this == nullptr || renderTarget == nullptr || !_bitmap) return;
+
+	// scaleY 미지정(-1) 시 기존처럼 scale을 가로/세로에 동일 적용(균일 스케일).
+	const float sy = (scaleY < 0.f) ? scale : scaleY;
 
 	// 아틀라스 원본 이미지에서 잘라올 영역
 	D2D1_RECT_F srcRect = D2D1::RectF(cell.x, cell.y, cell.x + cell.w, cell.y + cell.h);
@@ -60,11 +65,11 @@ void Image::DrawSprite(ID2D1RenderTarget* renderTarget, float centerX, float cen
 	// 트림 전 원본 스프라이트 크기(aw, ah) 기준으로 중심을 잡고,
 	// 트림 오프셋(ax, ay)만큼 되돌려서 실제 그릴 위치를 구한다.
 	const float originX = centerX - cell.aw * scale * 0.5f;
-	const float originY = centerY - cell.ah * scale * 0.5f;
+	const float originY = centerY - cell.ah * sy * 0.5f;
 	const float drawX = originX + cell.ax * scale;
-	const float drawY = originY + cell.ay * scale;
+	const float drawY = originY + cell.ay * sy;
 
-	D2D1_RECT_F destRect = D2D1::RectF(drawX, drawY, drawX + cell.w * scale, drawY + cell.h * scale);
+	D2D1_RECT_F destRect = D2D1::RectF(drawX, drawY, drawX + cell.w * scale, drawY + cell.h * sy);
 
 	D2D1::Matrix3x2F prev;
 	renderTarget->GetTransform(&prev);

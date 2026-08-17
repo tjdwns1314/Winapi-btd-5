@@ -1,4 +1,4 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "GameSceneUI.h"
 #include "UIManager.h"
 #include "ResourceManager.h"
@@ -18,20 +18,28 @@ void GameSceneUI::Init(
 	function<void()> onRestartClick)
 {
 	ResourceManager& res = ResourceManager::GetInstance();
+	// HUD 배경 패널
 	_hudImg = &res.GetImage(L"Resource\\Sprite\\in_game_hud.png");
 	_hudSprite = &res.GetAtlas(L"Resource\\Sprite\\in_game_hud.xml");
+	// 타워/장애물 상점 아이콘
 	_inGameBg = &res.GetImage(L"Resource\\Sprite\\InGame.png");
 	_sprite = &res.GetAtlas(L"Resource\\Sprite\\InGame.xml");
+	// 게임오버 팝업
 	_popupImg = &res.GetImage(L"Resource\\Sprite\\game_over_popup.png");
 	_popupSprite = &res.GetAtlas(L"Resource\\Sprite\\game_over_popup.xml");
 
+	// 웨이브 시작 버튼
 	_startButton = createButton(Vector(1512.5f, 950.0f), Vector(128.0f, 129.0f), onStartWave);
+
+	// 타워 상점 버튼
 	_dartMonkeyShopButton = createButton(Vector(1512.5f, 350.0f), Vector(76.3f, 79.1f), onDartShopClick);
 	_tackShooterShopButton = createButton(Vector(1675.0f, 350.0f), Vector(36.4f, 72.8f), onTackShopClick);
 	_sniperMonkeyShopButton = createButton(Vector(1512.5f, 570.0f), Vector(76.3f, 79.1f), onSniperShopClick);
 	_bombTowerShopButton = createButton(Vector(1675.0f, 570.0f), Vector(76.3f, 79.1f), onBombShopClick);
 	// 위치는 임시값 — 빌드 후 눈으로 보고 조정할 것.
 	_obstacleShopButton = createButton(Vector(1675.0f, 750.0f), Vector(109.0f, 113.0f), onObstacleShopClick);
+
+	// 디버그 웨이브 +/- 버튼
 	_waveUpButton = createButton(Vector(1720.0f, 950.0f), Vector(40.0f, 40.0f), onWaveUp);
 	_waveDownButton = createButton(Vector(1720.0f, 900.0f), Vector(40.0f, 40.0f), onWaveDown);
 
@@ -61,19 +69,6 @@ UIButton* GameSceneUI::createButton(const Vector& pos, const Vector& size, funct
 	return button;
 }
 
-void GameSceneUI::renderStartButton(Graphic& graphic, bool isWaveActive, bool isSpeedEnabled) const
-{
-	const char* cellName = "play_icon";
-	if (isWaveActive)
-		cellName = isSpeedEnabled ? "ff_icon_red" : "ff_icon";
-
-	const CellInfo* cell = _hudSprite->GetCell(cellName);
-	if (cell == nullptr) return;
-
-	const Vector pos = _startButton->GetPos(); 
-	_hudImg->DrawSprite(graphic, pos.x, pos.y, *cell, 1.0f, 0.0f);
-}
-
 void GameSceneUI::Render(Graphic& graphic, bool isDraggingTower, TowerType draggingTowerType,
 	bool isDraggingObstacle,
 	const Vector& dragPreviewPos, const TowerSelectionInfo& selection,
@@ -81,13 +76,15 @@ void GameSceneUI::Render(Graphic& graphic, bool isDraggingTower, TowerType dragg
 	int32 hp, int32 gold, bool isWaveActive, bool isSpeedEnabled,
 	bool isGameOver)
 {
+	renderHudBackgroundPanel(graphic);
+
 	renderStartButton(graphic, isWaveActive, isSpeedEnabled);
 
-	drawTowerIcon(graphic, _dartMonkeyShopButton->GetPos(), TowerType::DartMonkey, 0.7f);
-	drawTowerIcon(graphic, _tackShooterShopButton->GetPos(), TowerType::TackShooter, 0.7f);
-	drawTowerIcon(graphic, _sniperMonkeyShopButton->GetPos(), TowerType::SniperMonkey, 0.7f);
-	drawTowerIcon(graphic, _bombTowerShopButton->GetPos(), TowerType::BombTower, 0.7f);
-	drawObstacleIcon(graphic, _obstacleShopButton->GetPos(), 1.0f);
+	if (_dartMonkeyShopButton != nullptr) drawTowerIcon(graphic, _dartMonkeyShopButton->GetPos(), TowerType::DartMonkey, 0.7f);
+	if (_tackShooterShopButton != nullptr) drawTowerIcon(graphic, _tackShooterShopButton->GetPos(), TowerType::TackShooter, 0.7f);
+	if (_sniperMonkeyShopButton != nullptr) drawTowerIcon(graphic, _sniperMonkeyShopButton->GetPos(), TowerType::SniperMonkey, 0.7f);
+	if (_bombTowerShopButton != nullptr) drawTowerIcon(graphic, _bombTowerShopButton->GetPos(), TowerType::BombTower, 0.7f);
+	if (_obstacleShopButton != nullptr) drawObstacleIcon(graphic, _obstacleShopButton->GetPos(), 1.0f);
 
 	if (isDraggingTower)
 	{
@@ -101,69 +98,37 @@ void GameSceneUI::Render(Graphic& graphic, bool isDraggingTower, TowerType dragg
 	renderGoldText(graphic, gold);
 	renderHpText(graphic, hp);
 
-	_sellButton->SetActive(selection.isSelected);
-	_upgradeButton->SetActive(selection.isSelected && selection.canUpgrade);
+	if (_sellButton != nullptr) _sellButton->SetActive(selection.isSelected);
+	if (_upgradeButton != nullptr) _upgradeButton->SetActive(selection.isSelected && selection.canUpgrade);
 	if (selection.isSelected)
 		renderTowerSelectionPanel(graphic, selection);
 
-	_obstacleSellButton->SetActive(obstacleSelection.isSelected);
+	if (_obstacleSellButton != nullptr) _obstacleSellButton->SetActive(obstacleSelection.isSelected);
 	if (obstacleSelection.isSelected)
 		renderObstacleSelectionPanel(graphic, obstacleSelection);
 
-	_restartButton->SetActive(isGameOver);
+	if (_restartButton != nullptr) _restartButton->SetActive(isGameOver);
 	if (isGameOver)
 		renderGameOverPopup(graphic);
 }
 
-void GameSceneUI::drawObstacleIcon(Graphic& graphic, const Vector& pos, float scale) const
+// --------------------------------------------------
+//  HUD 배경 패널 / 골드·HP 텍스트
+// --------------------------------------------------
+
+// 오른쪽 UI 영역(전체 가로 - 게임 영역)에 정확히 맞춰 가로폭을 늘려서 그린다.
+void GameSceneUI::renderHudBackgroundPanel(Graphic& graphic) const
 {
-	const ObstacleStat& stat = GetObstacleStat(ObstacleType::BananaFarmTree);
-	if (const CellInfo* cell = _sprite->GetCell(stat.cellName.c_str()))
-		_inGameBg->DrawSprite(graphic, pos.x, pos.y, *cell, scale, 0.0f);
-}
-
-void GameSceneUI::renderGameOverPopup(Graphic& graphic) const
-{
-	ID2D1HwndRenderTarget* renderTarget = graphic.GetRenderTarget();
-	ID2D1SolidColorBrush* dimBrush = graphic.GetBrush(D2D1::ColorF(D2D1::ColorF::Black, 0.6f));
-	if (renderTarget != nullptr && dimBrush != nullptr)
-	{
-		// game_over_popup.xml에는 배경 패널 셀이 없어서, 게임 영역 전체를 어둡게 깔아 팝업처럼 보이게 한다.
-		renderTarget->FillRectangle(D2D1::RectF(0.0f, 0.0f,
-			static_cast<float>(GameAreaWidth), static_cast<float>(GameAreaHeight)), dimBrush);
-	}
-
-	graphic.DrawString(L"GAME OVER",
-		D2D1::RectF(0.0f, GameAreaCenterY - 160.0f, static_cast<float>(GameAreaWidth), GameAreaCenterY - 80.0f),
-		FONT_30, D2D1::ColorF(D2D1::ColorF::Red), DWRITE_TEXT_ALIGNMENT_CENTER);
-
-	ResourceManager::GetInstance().GetImage(L"restart_button_baked")
-		.Draw(graphic, GameAreaCenterX, GameAreaCenterY, 1.0f, 0.0f);
-}
-
-void GameSceneUI::drawRangePreview(Graphic& graphic, const Vector& pos, TowerType type) const
-{
-	ID2D1HwndRenderTarget* renderTarget = graphic.GetRenderTarget();
-	ID2D1SolidColorBrush* brush = graphic.GetBrush(D2D1::ColorF(D2D1::ColorF::White, 0.5f));
-	if (renderTarget == nullptr || brush == nullptr)
+	const CellInfo* cell = _hudSprite->GetCell("side_hud_bg_01");
+	if (cell == nullptr)
 		return;
 
-	const float range = GetTowerStat(type).grades.front().attackRange;
-	renderTarget->DrawEllipse(D2D1::Ellipse(D2D1::Point2F(pos.x, pos.y), range, range), brush, 2.f);
-}
+	constexpr float kUiPanelWidth = static_cast<float>(GWinSizeX - GameAreaWidth);
+	constexpr float kPanelCenterY = 135.0f;
+	const float scaleX = kUiPanelWidth / cell->aw;
+	const float centerX = static_cast<float>(GameAreaWidth) + kUiPanelWidth * 0.5f;
 
-void GameSceneUI::drawTowerIcon(Graphic& graphic, const Vector& pos, TowerType type, float scale) const
-{
-	const TowerVisual& visual = GetTowerVisual(type);
-
-	if (visual.useBakedImage)
-	{
-		ResourceManager::GetInstance().GetImage(visual.bakedImageKey.c_str()).Draw(graphic, pos.x, pos.y, scale, 0.0f);
-		return;
-	}
-
-	if (const CellInfo* cell = _sprite->GetCell(visual.cellName.c_str()))
-		_inGameBg->DrawSprite(graphic, pos.x, pos.y, *cell, scale, 0.0f);
+	_hudImg->DrawSprite(graphic, centerX, kPanelCenterY, *cell, scaleX, 0.0f, false, 1.0f);
 }
 
 void GameSceneUI::renderGoldText(Graphic& graphic, int32 gold) const
@@ -183,6 +148,115 @@ void GameSceneUI::renderHpText(Graphic& graphic, int32 hp) const
 	graphic.DrawString(text, D2D1::RectF(1440.0f, 60.0f, 1760.0f, 100.0f),
 		FONT_30, D2D1::ColorF(D2D1::ColorF::Red), DWRITE_TEXT_ALIGNMENT_CENTER);
 }
+
+// --------------------------------------------------
+//  웨이브 시작 / 디버그 웨이브 조절
+// --------------------------------------------------
+
+void GameSceneUI::renderStartButton(Graphic& graphic, bool isWaveActive, bool isSpeedEnabled) const
+{
+	const char* cellName = "play_icon";
+	if (isWaveActive)
+		cellName = isSpeedEnabled ? "ff_icon_red" : "ff_icon";
+
+	const CellInfo* cell = _hudSprite->GetCell(cellName);
+	if (cell == nullptr) return;
+
+	const Vector pos = _startButton->GetPos();
+	_hudImg->DrawSprite(graphic, pos.x, pos.y, *cell, 1.0f, 0.0f);
+}
+
+void GameSceneUI::renderDebugWaveButtons(Graphic& graphic) const
+{
+	ID2D1HwndRenderTarget* renderTarget = graphic.GetRenderTarget();
+	if (renderTarget == nullptr)
+		return;
+
+	auto drawButton = [&](UIButton* button, bool isPlus)
+	{
+		if (button == nullptr)
+			return;
+
+		const Vector pos = button->GetPos();
+		const Vector size = button->GetSize();
+		const D2D1_RECT_F rect = D2D1::RectF(
+			pos.x - size.x * 0.5f,
+			pos.y - size.y * 0.5f,
+			pos.x + size.x * 0.5f,
+			pos.y + size.y * 0.5f);
+
+		ID2D1SolidColorBrush* bgBrush = graphic.GetBrush(D2D1::ColorF(D2D1::ColorF::DarkGray, 0.8f));
+		if (bgBrush != nullptr)
+			renderTarget->FillRectangle(rect, bgBrush);
+
+		const float cx = pos.x;
+		const float cy = pos.y;
+		const float half = size.x * 0.3f;
+		const float thickness = 4.0f;
+
+		ID2D1SolidColorBrush* markBrush = graphic.GetBrush(D2D1::ColorF(D2D1::ColorF::White));
+		if (markBrush == nullptr)
+			return;
+
+		renderTarget->FillRectangle(
+			D2D1::RectF(cx - half, cy - thickness * 0.5f, cx + half, cy + thickness * 0.5f), markBrush);
+
+		if (isPlus)
+		{
+			renderTarget->FillRectangle(
+				D2D1::RectF(cx - thickness * 0.5f, cy - half, cx + thickness * 0.5f, cy + half), markBrush);
+		}
+	};
+
+	drawButton(_waveUpButton, true);
+	drawButton(_waveDownButton, false);
+}
+
+// --------------------------------------------------
+//  타워/장애물 상점
+// --------------------------------------------------
+
+void GameSceneUI::drawTowerIcon(Graphic& graphic, const Vector& pos, TowerType type, float scale) const
+{
+	const TowerVisual& visual = GetTowerVisual(type);
+
+	if (visual.useBakedImage)
+	{
+		ResourceManager::GetInstance().GetImage(visual.bakedImageKey.c_str()).Draw(graphic, pos.x, pos.y, scale, 0.0f);
+		return;
+	}
+
+	if (_sprite != nullptr && _inGameBg != nullptr)
+	{
+		if (const CellInfo* cell = _sprite->GetCell(visual.cellName.c_str()))
+			_inGameBg->DrawSprite(graphic, pos.x, pos.y, *cell, scale, 0.0f);
+	}
+}
+
+void GameSceneUI::drawObstacleIcon(Graphic& graphic, const Vector& pos, float scale) const
+{
+	if (_sprite == nullptr || _inGameBg == nullptr)
+		return;
+
+	const ObstacleStat& stat = GetObstacleStat(ObstacleType::BananaFarmTree);
+	if (const CellInfo* cell = _sprite->GetCell(stat.cellName.c_str()))
+		_inGameBg->DrawSprite(graphic, pos.x, pos.y, *cell, scale, 0.0f);
+}
+
+void GameSceneUI::drawRangePreview(Graphic& graphic, const Vector& pos, TowerType type) const
+{
+	ID2D1HwndRenderTarget* renderTarget = graphic.GetRenderTarget();
+	ID2D1SolidColorBrush* brush = graphic.GetBrush(D2D1::ColorF(D2D1::ColorF::White, 0.5f));
+	if (renderTarget == nullptr || brush == nullptr)
+		return;
+
+	const float range = GetTowerStat(type).grades.front().attackRange;
+	renderTarget->DrawEllipse(D2D1::Ellipse(D2D1::Point2F(pos.x, pos.y), range, range), brush, 2.f);
+}
+
+// --------------------------------------------------
+//  선택된 타워/장애물 패널 (판매/업그레이드)
+// --------------------------------------------------
 
 void GameSceneUI::renderTowerSelectionPanel(Graphic& graphic, const TowerSelectionInfo& selection) const
 {
@@ -255,48 +329,25 @@ void GameSceneUI::renderObstacleSelectionPanel(Graphic& graphic, const ObstacleS
 		FONT_20, D2D1::ColorF(D2D1::ColorF::White), DWRITE_TEXT_ALIGNMENT_CENTER);
 }
 
-void GameSceneUI::renderDebugWaveButtons(Graphic& graphic) const
+// --------------------------------------------------
+//  게임오버 팝업
+// --------------------------------------------------
+
+void GameSceneUI::renderGameOverPopup(Graphic& graphic) const
 {
 	ID2D1HwndRenderTarget* renderTarget = graphic.GetRenderTarget();
-	if (renderTarget == nullptr)
-		return;
-
-	auto drawButton = [&](UIButton* button, bool isPlus)
+	ID2D1SolidColorBrush* dimBrush = graphic.GetBrush(D2D1::ColorF(D2D1::ColorF::Black, 0.6f));
+	if (renderTarget != nullptr && dimBrush != nullptr)
 	{
-		if (button == nullptr)
-			return;
+		// game_over_popup.xml에는 배경 패널 셀이 없어서, 게임 영역 전체를 어둡게 깔아 팝업처럼 보이게 한다.
+		renderTarget->FillRectangle(D2D1::RectF(0.0f, 0.0f,
+			static_cast<float>(GameAreaWidth), static_cast<float>(GameAreaHeight)), dimBrush);
+	}
 
-		const Vector pos = button->GetPos();
-		const Vector size = button->GetSize();
-		const D2D1_RECT_F rect = D2D1::RectF(
-			pos.x - size.x * 0.5f,
-			pos.y - size.y * 0.5f,
-			pos.x + size.x * 0.5f,
-			pos.y + size.y * 0.5f);
+	graphic.DrawString(L"GAME OVER",
+		D2D1::RectF(0.0f, GameAreaCenterY - 160.0f, static_cast<float>(GameAreaWidth), GameAreaCenterY - 80.0f),
+		FONT_30, D2D1::ColorF(D2D1::ColorF::Red), DWRITE_TEXT_ALIGNMENT_CENTER);
 
-		ID2D1SolidColorBrush* bgBrush = graphic.GetBrush(D2D1::ColorF(D2D1::ColorF::DarkGray, 0.8f));
-		if (bgBrush != nullptr)
-			renderTarget->FillRectangle(rect, bgBrush);
-
-		const float cx = pos.x;
-		const float cy = pos.y;
-		const float half = size.x * 0.3f;
-		const float thickness = 4.0f;
-
-		ID2D1SolidColorBrush* markBrush = graphic.GetBrush(D2D1::ColorF(D2D1::ColorF::White));
-		if (markBrush == nullptr)
-			return;
-
-		renderTarget->FillRectangle(
-			D2D1::RectF(cx - half, cy - thickness * 0.5f, cx + half, cy + thickness * 0.5f), markBrush);
-
-		if (isPlus)
-		{
-			renderTarget->FillRectangle(
-				D2D1::RectF(cx - thickness * 0.5f, cy - half, cx + thickness * 0.5f, cy + half), markBrush);
-		}
-	};
-
-	drawButton(_waveUpButton, true);
-	drawButton(_waveDownButton, false);
+	ResourceManager::GetInstance().GetImage(L"restart_button_baked")
+		.Draw(graphic, GameAreaCenterX, GameAreaCenterY, 1.0f, 0.0f);
 }
