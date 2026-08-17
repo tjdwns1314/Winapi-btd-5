@@ -167,6 +167,7 @@ namespace
 
 	// TODO(미검증): 압정 다트 3등급부터 커지는 배율. 실제 렌더링 확인 후 조정 필요.
 	constexpr float kTackShooterBiggerScale = 1.3f;
+	constexpr float kTowerBaseScale = 0.7f;
 
 	// 폭탄타워 1~4등급: 4프레임 공용 프리픽스 테이블. 5등급(미사일)은 idle/발사 시퀀스가 완전히 달라 별도 처리한다.
 	const wchar_t* bombTowerAnimKeyPrefix(int32 grade)
@@ -219,8 +220,8 @@ TowerFrameKeyFn GetTowerFrameKeyFn(TowerType type)
 float GetTowerGradeScale(TowerType type, int32 grade)
 {
 	if (type == TowerType::TackShooter && grade >= 3)
-		return kTackShooterBiggerScale;
-	return 1.0f;
+		return kTackShooterBiggerScale * kTowerBaseScale;
+	return kTowerBaseScale;
 }
 
 bool GetTowerFiresAtAnimStart(TowerType type, int32 grade)

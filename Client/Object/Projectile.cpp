@@ -5,6 +5,11 @@
 #include "Bloon.h"
 #include "ColliderCircle.h"
 
+namespace
+{
+	constexpr float kProjectileBaseScale = 0.7f;
+}
+
 void Projectile::Init()
 {
 	Super::Init();
@@ -15,11 +20,12 @@ void Projectile::Init()
 
 	_cell = res.GetAtlas(L"Resource\\Sprite\\InGame.xml").GetCell(_spriteKey);
 
+	SetScale(Vector(kProjectileBaseScale, kProjectileBaseScale));
 
 	_traveledDistance = 0.f;	// 풀에서 재사용될 때 이전 비행 거리가 남지 않도록 초기화
 	_pierceRemaining = _pierceCount;
 	SetMoveSpeed(_speed);
-	SetCollider(new ColliderCircle(this, 20.f));
+	SetCollider(new ColliderCircle(this, 20.f * kProjectileBaseScale));
 	const Vector dir = GetDir();
 	SetRotation(RadianToDegree(atan2f(dir.x, -dir.y)));
 }
