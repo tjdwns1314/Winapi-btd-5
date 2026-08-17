@@ -103,6 +103,7 @@ void GameScene::Render(Graphic& graphic)
 	if (selectedTower != nullptr)
 	{
 		selection.isSelected = true;
+		selection.name = GetTowerDisplayName(selectedTower->GetType());
 		selection.grade = selectedTower->GetGrade();
 		selection.sellPrice = selectedTower->GetSellPrice();
 		selection.canUpgrade = selectedTower->CanUpgrade();

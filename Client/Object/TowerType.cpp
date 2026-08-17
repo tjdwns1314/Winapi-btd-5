@@ -87,6 +87,19 @@ const TowerVisual& GetTowerVisual(TowerType type)
 	return table.at(type);
 }
 
+const wchar_t* GetTowerDisplayName(TowerType type)
+{
+	static const unordered_map<TowerType, const wchar_t*> table =
+	{
+		{ TowerType::DartMonkey,   L"다트 원숭이" },
+		{ TowerType::TackShooter,  L"압정 슈터" },
+		{ TowerType::SniperMonkey, L"저격 원숭이" },
+		{ TowerType::BombTower,    L"폭탄 타워" },
+	};
+	auto it = table.find(type);
+	return it != table.end() ? it->second : L"";
+}
+
 namespace
 {
 	// 1등급=base, 2=red, 3=blue, 4=green, 5=triple.
