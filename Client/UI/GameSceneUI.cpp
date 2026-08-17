@@ -3,6 +3,21 @@
 #include "UIManager.h"
 #include "ResourceManager.h"
 
+namespace
+{
+	// 오른쪽 상단 골드/HP 아이콘+숫자 배치. 임시값 — 빌드 후 눈으로 보고 조정 필요(미검증).
+	constexpr float kHudIconCenterX = 1520.0f;
+	constexpr float kHudTextLeft = 1575.0f;
+	constexpr float kHudTextRight = 1745.0f;
+	constexpr float kGoldIconCenterY = 100.0f;
+	constexpr float kHpIconCenterY = 200.0f;
+	const D2D1::ColorF kHudTextColor = D2D1::ColorF(D2D1::ColorF::White);
+
+	// 상단 HUD 패널(side_hud_bg_01, side_hud_scroll) 가로 폭(px). 이 값만 바꾸면 두 패널 폭이 함께 조절됨.
+	// 원본 폭 274px, UI 영역 왼쪽 끝에서부터 이 폭만큼만 그려짐(끝까지 채우려면 kUiPanelWidth와 동일한 320으로).
+	constexpr float kHudPanelWidth = 300.0f;
+}
+
 void GameSceneUI::Init(
 	function<void()> onStartWave,
 	function<void()> onDartShopClick,
@@ -119,45 +134,64 @@ void GameSceneUI::Render(Graphic& graphic, bool isDraggingTower, TowerType dragg
 //  HUD 배경 패널 / 골드·HP 텍스트
 // --------------------------------------------------
 
-// 오른쪽 UI 영역(전체 가로 - 게임 영역)에 정확히 맞춰 가로폭을 늘려서 그린다.
+// 오른쪽 UI 영역 배경. 맨 아래에 하단 배경을 깔고, 그 위에 상단 패널들을 겹쳐 그린다.
 void GameSceneUI::renderHudBackgroundPanel(Graphic& graphic) const
 {
 	constexpr float kUiPanelWidth = static_cast<float>(GWinSizeX - GameAreaWidth);
 	const float centerX = static_cast<float>(GameAreaWidth) + kUiPanelWidth * 0.5f;
 
-	// 1. 상단 배경(side_hud_bg_01, 높이 270)
+	// 1. 맨 아래 깔리는 하단 배경(lower_hud_bg_01, 90도 회전). 가로폭에 맞춰 비율 유지로
+	//    스케일(찌그러짐 없음)한 뒤 화면 맨 아래에 붙인다. 이미지 자체 높이가 남는 공간보다
+	//    커서 1장으로 바닥까지 닿고, 위쪽 남는 부분은 2/3번 패널에 가려진다.
+	if (const CellInfo* cell = _hudSprite->GetCell("lower_hud_bg_01"))
+	{
+		const float scale = kUiPanelWidth / cell->ah; // 회전 전 세로(ah=256, 회전 후 가로가 됨)를 UI 패널 가로폭에 맞춤
+		const float tileHeight = cell->aw * scale;    // 회전 전 가로(aw=1774, 회전 후 세로가 됨)
+		const float centerY = static_cast<float>(GWinSizeY) - tileHeight * 0.5f;
+		_hudImg->DrawSprite(graphic, centerX, centerY, *cell, scale, 90.0f);
+	}
+
+	// 2. 상단 배경(side_hud_bg_01, 높이 270) — kHudPanelWidth만큼 UI 영역 왼쪽 끝에 붙인다.
 	if (const CellInfo* cell = _hudSprite->GetCell("side_hud_bg_01"))
 	{
 		constexpr float kPanelCenterY = 135.0f;
-		const float scaleX = kUiPanelWidth / cell->aw;
-		_hudImg->DrawSprite(graphic, centerX, kPanelCenterY, *cell, scaleX, 0.0f, false, 1.0f);
+		const float panelCenterX = static_cast<float>(GameAreaWidth) + kHudPanelWidth * 0.5f;
+		const float scaleX = kHudPanelWidth / cell->aw;
+		_hudImg->DrawSprite(graphic, panelCenterX, kPanelCenterY, *cell, scaleX, 0.0f, false, 1.0f);
 	}
 
-	// 2. 그 아래 이어지는 스크롤 배경(side_hud_scroll, 높이 248)
+	// 3. 그 아래 이어지는 스크롤 배경(side_hud_scroll, 높이 248) — kHudPanelWidth만큼 UI 영역 왼쪽 끝에 붙인다.
 	if (const CellInfo* cell = _hudSprite->GetCell("side_hud_scroll"))
 	{
 		constexpr float kScrollCenterY = 270.0f + 248.0f * 0.5f; // 상단 배경 높이(270) + 이 패널 높이(248)/2
-		const float scaleX = kUiPanelWidth / cell->aw;
-		_hudImg->DrawSprite(graphic, centerX, kScrollCenterY, *cell, scaleX, 0.0f, false, 1.0f);
+		const float panelCenterX = static_cast<float>(GameAreaWidth) + kHudPanelWidth * 0.5f;
+		const float scaleX = kHudPanelWidth / cell->aw;
+		_hudImg->DrawSprite(graphic, panelCenterX, kScrollCenterY, *cell, scaleX, 0.0f, false, 1.0f);
 	}
 }
 
 void GameSceneUI::renderGoldText(Graphic& graphic, int32 gold) const
 {
-	wchar_t text[32];
-	swprintf_s(text, L"Gold: %d", gold);
+	if (const CellInfo* cell = _hudSprite->GetCell("cash_icon"))
+		_hudImg->DrawSprite(graphic, kHudIconCenterX, kGoldIconCenterY, *cell);
 
-	graphic.DrawString(text, D2D1::RectF(1440.0f, 20.0f, 1760.0f, 60.0f),
-		FONT_30, D2D1::ColorF(D2D1::ColorF::Gold), DWRITE_TEXT_ALIGNMENT_CENTER);
+	wchar_t text[32];
+	swprintf_s(text, L"%d", gold);
+
+	graphic.DrawString(text, D2D1::RectF(kHudTextLeft, kGoldIconCenterY - 25.0f, kHudTextRight, kGoldIconCenterY + 25.0f),
+		FONT_30, kHudTextColor, DWRITE_TEXT_ALIGNMENT_LEADING);
 }
 
 void GameSceneUI::renderHpText(Graphic& graphic, int32 hp) const
 {
-	wchar_t text[32];
-	swprintf_s(text, L"HP: %d", hp);
+	if (const CellInfo* cell = _hudSprite->GetCell("lives_icon"))
+		_hudImg->DrawSprite(graphic, kHudIconCenterX, kHpIconCenterY, *cell);
 
-	graphic.DrawString(text, D2D1::RectF(1440.0f, 60.0f, 1760.0f, 100.0f),
-		FONT_30, D2D1::ColorF(D2D1::ColorF::Red), DWRITE_TEXT_ALIGNMENT_CENTER);
+	wchar_t text[32];
+	swprintf_s(text, L"%d", hp);
+
+	graphic.DrawString(text, D2D1::RectF(kHudTextLeft, kHpIconCenterY - 25.0f, kHudTextRight, kHpIconCenterY + 25.0f),
+		FONT_30, kHudTextColor, DWRITE_TEXT_ALIGNMENT_LEADING);
 }
 
 // --------------------------------------------------
