@@ -130,6 +130,10 @@ void GameScene::Render(Graphic& graphic)
 		_speedEnabled,
 		_healthManager.IsGameOver());
 
+	// 모든 타워를 그리기 전에 선택된 타워의 사거리부터 그려서, 다른 타워를 덮지 않도록 함.
+	if (selectedTower != nullptr && selectedTower->GetType() != TowerType::SniperMonkey)
+		selectedTower->RenderRange(graphic);
+
 	Super::Render(graphic);
 }
 
