@@ -49,6 +49,8 @@ public:
 	// 발사 함수(TowerFireBehavior.cpp)가 접근해야 하는 것들.
 	Bloon* GetTarget() const { return _target; }
 	GameScene* GetGameScene() const;
+	// 등급별 오버라이드가 있으면 그걸, 없으면 타워 공용 projectileKey를 반환한다.
+	const string& GetProjectileKey() const;
 	// 애니메이션이 있는 타워는 던지기 도중인 손 위치, 없는 타워는 중심 위치를 반환한다.
 	Vector GetFirePos() const;
 

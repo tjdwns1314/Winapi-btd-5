@@ -175,13 +175,109 @@ void GameAssets::Load(Graphic& graphic)
 		{.cellName = "sniper_cripple_moab",       .offset = {-5.0f, 25.0f} },
 	});
 
-	baker.Bake(res, graphic, L"bomb_tower_baked", { 200.0f, 150.0f }, {
-		{.cellName = "bomb_tower_wheel", .anchor = BakeAnchor::Left,  .offset = {-30.0f, 15.0f} },
-		{.cellName = "bomb_tower_wheel", .anchor = BakeAnchor::Right, .offset = { 30.0f, 15.0f}, .flipX = true },
-		{ .cellName = "bomb_tower_01", .anchor = BakeAnchor::Left },
-		{ .cellName = "bomb_tower_01", .anchor = BakeAnchor::Right, .flipX = true },
-	});
 
+	// 폭탄타워: 등급마다 bomb_tower_XX 애니메이션이 재생되고, 마지막 프레임이 끝나면 발사된다(Tower::updateThrowAnimation).
+	auto bakeBombTowerFrames = [&](const wchar_t* keyPrefix, D2D1_SIZE_F size, float wheelOffsetX,
+		const char* bodyCellPrefix, D2D1_POINT_2F bodyOffset,
+		const char* overlayCellPrefix, D2D1_POINT_2F overlayOffset)
+		{
+			std::vector<BakeFrame> frames;
+			char bodyCells[4][32];
+			char overlayCells[4][32]; // 루프 밖 선언 필수 — cellName은 포인터만 저장하므로 dangling 방지.
+
+			for (int i = 1; i <= 4; ++i)
+			{
+				sprintf_s(bodyCells[i - 1], "%s_%02d", bodyCellPrefix, i);
+
+				BakeFrame frame =
+				{
+					{ .cellName = "bomb_tower_wheel", .anchor = BakeAnchor::Left,  .offset = {-wheelOffsetX, 15.0f} },
+					{ .cellName = "bomb_tower_wheel", .anchor = BakeAnchor::Right, .offset = { wheelOffsetX, 15.0f}, .flipX = true },
+					{ .cellName = bodyCells[i - 1], .anchor = BakeAnchor::Left,  .offset = bodyOffset },
+					{ .cellName = bodyCells[i - 1], .anchor = BakeAnchor::Right, .offset = bodyOffset, .flipX = true },
+				};
+
+				if (overlayCellPrefix != nullptr)
+				{
+					sprintf_s(overlayCells[i - 1], "%s_%02d", overlayCellPrefix, i);
+					frame.push_back({ .cellName = overlayCells[i - 1], .anchor = BakeAnchor::Left,  .offset = overlayOffset });
+					frame.push_back({ .cellName = overlayCells[i - 1], .anchor = BakeAnchor::Right, .offset = overlayOffset, .flipX = true });
+				}
+
+				frames.push_back(std::move(frame));
+			}
+			baker.BakeAnimation(res, graphic, keyPrefix, size, frames);
+		};
+
+	// 1등급: 문양 없는 기본형.
+	bakeBombTowerFrames(L"bomb_tower_grade1_baked", { 200.0f, 150.0f }, 30.0f,
+		"bomb_tower", { 0.0f, 0.0f }, nullptr, { 0.0f, 0.0f });
+	// 2등급: frag 오버레이 추가.
+	bakeBombTowerFrames(L"bomb_tower_grade2_baked", { 200.0f, 150.0f }, 30.0f,
+		"bomb_tower", { 0.0f, 0.0f }, "bomb_tower_frag", { 0.0f, -10.0f });
+	// 3등급: impact 셀 자체에 몸통이 포함되어 있어 베이스 오버레이 없이 단독 사용.
+	bakeBombTowerFrames(L"bomb_tower_grade3_baked", { 200.0f, 150.0f }, 40.0f,
+		"bomb_tower_impact", { 0.0f, 0.0f }, nullptr, { 0.0f, 0.0f });
+	// 4등급: cluster 셀도 impact와 동일하게 단독 사용.
+	bakeBombTowerFrames(L"bomb_tower_grade4_baked", { 200.0f, 150.0f }, 40.0f,
+		"bomb_tower_cluster", { 0.0f, 0.0f }, nullptr, { 0.0f, 0.0f });
+
+	// 5등급: idle엔 완전체 미사일을 들고 있다가, 발사가 시작되면 사일로 문이 01→06으로 열리며(문02~04에서 새
+	// 미사일이 01→03으로 자라나고 문05부터 완전체로 바뀐 채 유지된다) 다시 06→01로 닫히고, 문이 완전히 닫힌
+	// 시점(마지막 프레임이 끝나는 시점)에 그 완전체 미사일이 실제로 발사된다.
+	// TODO(미검증): 실제 렌더링 확인 후 프레임 대응 관계 조정 필요.
+	{
+		baker.Bake(res, graphic, L"bomb_tower_grade5_baked_idle", { 200.0f, 180.0f }, {
+			{ .cellName = "bomb_tower_wheel", .anchor = BakeAnchor::Left,  .offset = {-40.0f, 15.0f} },
+			{ .cellName = "bomb_tower_wheel", .anchor = BakeAnchor::Right, .offset = { 40.0f, 15.0f}, .flipX = true },
+			{ .cellName = "bomb_tower_silo",  .anchor = BakeAnchor::Left },
+			{ .cellName = "bomb_tower_silo",  .anchor = BakeAnchor::Right, .flipX = true },
+			{ .cellName = "bomb_tower_silo_doors_01", .anchor = BakeAnchor::Left },
+			{ .cellName = "bomb_tower_silo_doors_01", .anchor = BakeAnchor::Right, .flipX = true },
+			{ .cellName = "bomb_tower_missile_full" },
+			});
+
+		// 문 시퀀스: 01,02,03,04,05,06, 05,04,03,02,01 (열림 6 + 닫힘 5 = 11프레임)
+		const int32 doorSeq[] = { 1,2,3,4,5,6,5,4,3,2,1 };
+		std::vector<BakeFrame> silo5Frames;
+		char doorCells[11][32];
+		char missileCells[11][32];
+
+		for (int32 i = 0; i < static_cast<int32>(std::size(doorSeq)); ++i)
+		{
+			sprintf_s(doorCells[i], "bomb_tower_silo_doors_%02d", doorSeq[i]);
+
+			BakeFrame frame =
+			{
+				{ .cellName = "bomb_tower_wheel", .anchor = BakeAnchor::Left,  .offset = {-40.0f, 15.0f} },
+				{ .cellName = "bomb_tower_wheel", .anchor = BakeAnchor::Right, .offset = { 40.0f, 15.0f}, .flipX = true },
+				{ .cellName = "bomb_tower_silo",  .anchor = BakeAnchor::Left },
+				{ .cellName = "bomb_tower_silo",  .anchor = BakeAnchor::Right, .flipX = true },
+				{ .cellName = doorCells[i],       .anchor = BakeAnchor::Left },
+				{ .cellName = doorCells[i],       .anchor = BakeAnchor::Right, .flipX = true },
+			};
+
+			// 문이 열리기 시작한 뒤(i>=1)부터 발사 직전(마지막 프레임)까지 새 미사일이 계속 보인다.
+			// 문02~04(i=1~3)는 좌우 실로에서 함께 자라나는 missile_01~03(양쪽), 문05부터 닫힘 끝까지(i=4~10)는
+			// 두 실로가 합쳐진 완전체 미사일 하나(중앙)로 유지된다.
+			if (i >= 1)
+			{
+				if (i <= 3)
+				{
+					sprintf_s(missileCells[i], "bomb_tower_missile_%02d", i);
+					frame.push_back({ .cellName = missileCells[i], .anchor = BakeAnchor::Left });
+					frame.push_back({ .cellName = missileCells[i], .anchor = BakeAnchor::Right, .flipX = true });
+				}
+				else
+				{
+					frame.push_back({ .cellName = "bomb_tower_missile_full" });
+				}
+			}
+
+			silo5Frames.push_back(std::move(frame));
+		}
+		baker.BakeAnimation(res, graphic, L"bomb_tower_grade5_baked", { 200.0f, 180.0f }, silo5Frames);
+	}
 
 
 

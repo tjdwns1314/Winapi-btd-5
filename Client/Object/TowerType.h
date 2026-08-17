@@ -19,6 +19,7 @@ struct TowerGradeStat
 	int32 attackCount;
 	int32 pierceCount = 1;
 	float splashRadius = 0.f;
+	string projectileKey; // 비어있으면 TowerStat::projectileKey를 그대로 쓴다. 등급마다 다른 투사체가 필요할 때만 채운다(예: 폭탄타워 5등급 미사일).
 };
 
 struct TowerStat
@@ -53,4 +54,4 @@ float GetTowerGradeScale(TowerType type, int32 grade);
 
 // true면 던지기/발사 애니메이션의 첫 프레임 진입 시점에 곧바로 발사하고, 이후 프레임은 순수 연출(예: 스나이퍼의 재장전 모션)이다.
 // false(기본)면 기존처럼 애니메이션이 다 끝난 시점에 발사한다(다트/압정처럼 던지는 동작 끝에 투사체가 나가는 경우).
-bool GetTowerFiresAtAnimStart(TowerType type);
+bool GetTowerFiresAtAnimStart(TowerType type, int32 grade);
