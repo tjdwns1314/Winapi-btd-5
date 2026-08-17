@@ -15,9 +15,6 @@ void MovableActor::Update(float deltaTime)
 void MovableActor::Render(Graphic& graphic)
 {
 	Super::Render(graphic);
-
-	if (_collider != nullptr)
-		_collider->Render(graphic);
 }
 
 void MovableActor::Move(float deltaTime)

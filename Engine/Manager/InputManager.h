@@ -6,6 +6,7 @@ enum class KeyType
 	LeftMouse,
 	RightMouse,
 	F1,
+	F2,
 };
 
 class InputManager : public Singleton<InputManager>
@@ -26,6 +27,6 @@ private:
 
 	HWND _hwnd = nullptr;
 	Vector _mousePos;
-	bool _prevPressed[3] = {};
-	bool _currPressed[3] = {};
+	bool _prevPressed[4] = {};
+	bool _currPressed[4] = {};
 };

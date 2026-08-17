@@ -6,6 +6,7 @@
 #include "Obstacle.h"
 #include "PoolManager.h"
 #include "Game.h"
+#include "Collider.h"
 
 void GameScene::Init(Graphic& graphic)
 {
@@ -44,6 +45,9 @@ void GameScene::Cleanup()
 
 void GameScene::Update(float deltaTime)
 {
+	if (InputManager::GetInstance().GetButtonDown(KeyType::F2))
+		_debugOverlayEnabled = !_debugOverlayEnabled;
+
 	if (_healthManager.IsGameOver())
 	{
 		for (Actor* actor : GetActors(RenderLayer::Bloon))
@@ -93,9 +97,13 @@ void GameScene::Render(Graphic& graphic)
 {
 	_map.RenderTiles(graphic);
 
-	_map.RenderGrid(graphic);
-	_map.RenderPathDebug(graphic);
-	_map.RenderStartEndDebug(graphic);
+	if (_debugOverlayEnabled)
+	{
+		_map.RenderGrid(graphic);
+		_map.RenderPathDebug(graphic);
+		_map.RenderStartEndDebug(graphic);
+		renderColliderDebug(graphic);
+	}
 	renderDebugCircles(graphic);
 
 	Tower* selectedTower = _towerController.GetSelected();
@@ -207,6 +215,16 @@ void GameScene::updateDebugWaveTitle()
 		swprintf_s(title, L"TowerDefense - 다음 시작 웨이브: %d", nextRound);
 
 	SetWindowText(Game::GetInstance().GetHwnd(), title);
+}
+
+void GameScene::renderColliderDebug(Graphic& graphic)
+{
+	for (Actor* actor : GetActors(RenderLayer::Bloon))
+	{
+		Collider* collider = actor->GetCollider();
+		if (collider != nullptr)
+			collider->Render(graphic);
+	}
 }
 
 void GameScene::renderDebugCircles(Graphic& graphic)
