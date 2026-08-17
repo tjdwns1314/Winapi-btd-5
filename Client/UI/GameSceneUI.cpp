@@ -276,13 +276,16 @@ void GameSceneUI::drawObstacleIcon(Graphic& graphic, const Vector& pos, float sc
 
 void GameSceneUI::drawRangePreview(Graphic& graphic, const Vector& pos, TowerType type) const
 {
+	if (type == TowerType::SniperMonkey)
+		return;
+
 	ID2D1HwndRenderTarget* renderTarget = graphic.GetRenderTarget();
-	ID2D1SolidColorBrush* brush = graphic.GetBrush(D2D1::ColorF(D2D1::ColorF::White, 0.5f));
+	ID2D1SolidColorBrush* brush = graphic.GetBrush(D2D1::ColorF(D2D1::ColorF::Black, 0.35f));
 	if (renderTarget == nullptr || brush == nullptr)
 		return;
 
 	const float range = GetTowerStat(type).grades.front().attackRange;
-	renderTarget->DrawEllipse(D2D1::Ellipse(D2D1::Point2F(pos.x, pos.y), range, range), brush, 2.f);
+	renderTarget->FillEllipse(D2D1::Ellipse(D2D1::Point2F(pos.x, pos.y), range, range), brush);
 }
 
 // --------------------------------------------------

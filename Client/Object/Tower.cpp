@@ -128,6 +128,10 @@ void Tower::Render(Graphic& graphic)
 	const Vector pos = GetPos();
 	const Vector scale = GetScale();
 
+	const GameScene* owner = GetGameScene();
+	if (_type != TowerType::SniperMonkey && owner != nullptr && owner->GetTowerController().GetSelected() == this)
+		RenderRange(graphic);
+
 	if (_frameKeyFn != nullptr)
 	{
 		wchar_t key[128];
@@ -140,8 +144,6 @@ void Tower::Render(Graphic& graphic)
 		_image->DrawSprite(graphic, pos.x, pos.y, *_cell, scale.x, GetRotation());
 	else
 		return;
-
-	RenderRange(graphic);
 }
 
 Vector Tower::getHandLocalOffset() const
@@ -161,11 +163,11 @@ Vector Tower::GetFirePos() const
 void Tower::RenderRange(Graphic& graphic) const
 {
 	ID2D1HwndRenderTarget* renderTarget = graphic.GetRenderTarget();
-	ID2D1SolidColorBrush* brush = graphic.GetBrush(D2D1::ColorF(D2D1::ColorF::White, 0.5f));
+	ID2D1SolidColorBrush* brush = graphic.GetBrush(D2D1::ColorF(D2D1::ColorF::Black, 0.35f));
 	if (renderTarget == nullptr || brush == nullptr)
 		return;
 	const Vector pos = GetPos();
-	renderTarget->DrawEllipse(D2D1::Ellipse(D2D1::Point2F(pos.x, pos.y), _stat.attackRange, _stat.attackRange), brush, 2.f);
+	renderTarget->FillEllipse(D2D1::Ellipse(D2D1::Point2F(pos.x, pos.y), _stat.attackRange, _stat.attackRange), brush);
 }
 
 bool Tower::isInRange(const Actor* target) const
