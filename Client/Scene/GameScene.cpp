@@ -20,9 +20,6 @@ void GameScene::Init(Graphic& graphic)
 	_inGameBg = &res.GetImage(L"Resource\\Sprite\\InGame.png");
 	_sprite = &res.GetAtlas(L"Resource\\Sprite\\InGame.xml");
 
-	_hudImg = &res.GetImage(L"Resource\\Sprite\\in_game_hud.png");
-	_hudSprite = &res.GetAtlas(L"Resource\\Sprite\\in_game_hud.xml");
-
 	_map.SetTileImages(&res.GetImage(L"Resource\\Tile\\Tile1.png"), &res.GetImage(L"Resource\\Tile\\Tile2.png"));
 	_map.Init();
 
@@ -95,12 +92,6 @@ void GameScene::AddDebugCircle(const Vector& pos, float radius, float duration)
 void GameScene::Render(Graphic& graphic)
 {
 	_map.RenderTiles(graphic);
-
-	const CellInfo* thumbBoxCell = _hudSprite->GetCell("side_hud_bg_01");
-	if (thumbBoxCell)
-	{
-		_hudImg->DrawSprite(graphic, 1575.0f, 135.0f, *thumbBoxCell, 1.0f);
-	}
 
 	_map.RenderGrid(graphic);
 	_map.RenderPathDebug(graphic);
