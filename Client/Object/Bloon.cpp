@@ -4,6 +4,11 @@
 #include "Projectile.h"
 
 
+namespace
+{
+	constexpr float kBloonBaseScale = 0.7f;
+}
+
 void Bloon::Init()
 {
 	Super::Init();
@@ -11,9 +16,9 @@ void Bloon::Init()
 	if (_image == nullptr)
 		return;
 	const D2D1_SIZE_F size = _image->GetSize();
-	const float scale = static_cast<float>(BLOCK_SIZE) / size.width;
+	const float scale = static_cast<float>(BLOCK_SIZE) / size.width * kBloonBaseScale;
 	SetScale(Vector(scale, scale));
-	SetCollider(new ColliderCircle(this, static_cast<float>(BLOCK_SIZE) / 2.f));
+	SetCollider(new ColliderCircle(this, static_cast<float>(BLOCK_SIZE) / 2.f * kBloonBaseScale));
 	SetLayer(RenderLayer::Bloon);
 }
 

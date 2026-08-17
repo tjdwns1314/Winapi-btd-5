@@ -26,10 +26,10 @@ void GameSceneUI::Init(
 	_popupSprite = &res.GetAtlas(L"Resource\\Sprite\\game_over_popup.xml");
 
 	_startButton = createButton(Vector(1512.5f, 950.0f), Vector(128.0f, 129.0f), onStartWave);
-	_dartMonkeyShopButton = createButton(Vector(1512.5f, 350.0f), Vector(109.0f, 113.0f), onDartShopClick);
-	_tackShooterShopButton = createButton(Vector(1675.0f, 350.0f), Vector(52.0f, 104.0f), onTackShopClick);
-	_sniperMonkeyShopButton = createButton(Vector(1512.5f, 570.0f), Vector(109.0f, 113.0f), onSniperShopClick);
-	_bombTowerShopButton = createButton(Vector(1675.0f, 570.0f), Vector(109.0f, 113.0f), onBombShopClick);
+	_dartMonkeyShopButton = createButton(Vector(1512.5f, 350.0f), Vector(76.3f, 79.1f), onDartShopClick);
+	_tackShooterShopButton = createButton(Vector(1675.0f, 350.0f), Vector(36.4f, 72.8f), onTackShopClick);
+	_sniperMonkeyShopButton = createButton(Vector(1512.5f, 570.0f), Vector(76.3f, 79.1f), onSniperShopClick);
+	_bombTowerShopButton = createButton(Vector(1675.0f, 570.0f), Vector(76.3f, 79.1f), onBombShopClick);
 	// 위치는 임시값 — 빌드 후 눈으로 보고 조정할 것.
 	_obstacleShopButton = createButton(Vector(1675.0f, 750.0f), Vector(109.0f, 113.0f), onObstacleShopClick);
 	_waveUpButton = createButton(Vector(1720.0f, 950.0f), Vector(40.0f, 40.0f), onWaveUp);
@@ -83,18 +83,16 @@ void GameSceneUI::Render(Graphic& graphic, bool isDraggingTower, TowerType dragg
 {
 	renderStartButton(graphic, isWaveActive, isSpeedEnabled);
 
-	drawTowerIcon(graphic, _dartMonkeyShopButton->GetPos(), TowerType::DartMonkey, 1.0f);
-	// 상점 박스가 작아서(52x104) 베이크 텍스처(200x200)를 그대로 넣을 수 없어 축소해서 그린다.
-	// 0.5는 임시값 — 빌드 후 눈으로 보고 조정할 것.
-	drawTowerIcon(graphic, _tackShooterShopButton->GetPos(), TowerType::TackShooter, 1.0f);
-	drawTowerIcon(graphic, _sniperMonkeyShopButton->GetPos(), TowerType::SniperMonkey, 1.0f);
-	drawTowerIcon(graphic, _bombTowerShopButton->GetPos(), TowerType::BombTower, 1.0f);
+	drawTowerIcon(graphic, _dartMonkeyShopButton->GetPos(), TowerType::DartMonkey, 0.7f);
+	drawTowerIcon(graphic, _tackShooterShopButton->GetPos(), TowerType::TackShooter, 0.7f);
+	drawTowerIcon(graphic, _sniperMonkeyShopButton->GetPos(), TowerType::SniperMonkey, 0.7f);
+	drawTowerIcon(graphic, _bombTowerShopButton->GetPos(), TowerType::BombTower, 0.7f);
 	drawObstacleIcon(graphic, _obstacleShopButton->GetPos(), 1.0f);
 
 	if (isDraggingTower)
 	{
 		drawRangePreview(graphic, dragPreviewPos, draggingTowerType);
-		drawTowerIcon(graphic, dragPreviewPos, draggingTowerType, 1.0f);
+		drawTowerIcon(graphic, dragPreviewPos, draggingTowerType, 0.7f);
 	}
 	if (isDraggingObstacle)
 		drawObstacleIcon(graphic, dragPreviewPos, 1.0f);
