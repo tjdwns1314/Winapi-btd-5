@@ -128,10 +128,6 @@ void Tower::Render(Graphic& graphic)
 	const Vector pos = GetPos();
 	const Vector scale = GetScale();
 
-	const GameScene* owner = GetGameScene();
-	if (_type != TowerType::SniperMonkey && owner != nullptr && owner->GetTowerController().GetSelected() == this)
-		RenderRange(graphic);
-
 	if (_frameKeyFn != nullptr)
 	{
 		wchar_t key[128];
@@ -142,8 +138,6 @@ void Tower::Render(Graphic& graphic)
 		_bakedImage->Draw(graphic, pos.x, pos.y, scale.x, GetRotation());
 	else if (_image != nullptr && _cell != nullptr)
 		_image->DrawSprite(graphic, pos.x, pos.y, *_cell, scale.x, GetRotation());
-	else
-		return;
 }
 
 Vector Tower::getHandLocalOffset() const

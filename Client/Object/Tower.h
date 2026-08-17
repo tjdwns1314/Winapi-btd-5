@@ -54,8 +54,10 @@ public:
 	// 애니메이션이 있는 타워는 던지기 도중인 손 위치, 없는 타워는 중심 위치를 반환한다.
 	Vector GetFirePos() const;
 
-private:
+	// GameScene이 모든 타워를 그리기 전에 선택된 타워의 사거리를 한 번만 그리기 위해 공개.
 	void RenderRange(Graphic& graphic) const;
+
+private:
 	bool isInRange(const Actor* target) const;
 	Bloon* findTarget() const;
 	void fire();
