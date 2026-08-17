@@ -368,13 +368,10 @@ void GameSceneUI::renderTowerSelectionPanel(Graphic& graphic, const TowerSelecti
 
 	// 배경 브러시(bgBrush)를 다 쓴 뒤 맨 마지막에 그린다 — 그 전에 그리면
 	// 공용 브러시 색이 White로 바뀌어서 sell/upgrade 배경이 흰색으로 칠해지는 버그가 생긴다.
-	graphic.DrawString(selection.name, D2D1::RectF(1450.0f, 560.0f, 1740.0f, 600.0f),
-		FONT_20, D2D1::ColorF(D2D1::ColorF::White), DWRITE_TEXT_ALIGNMENT_CENTER);
-
-	wchar_t levelText[32];
-	swprintf_s(levelText, L"레벨 %d", selection.grade);
-	graphic.DrawString(levelText, D2D1::RectF(1450.0f, 600.0f, 1740.0f, 800.0f),
-		FONT_20, D2D1::ColorF(D2D1::ColorF::White), DWRITE_TEXT_ALIGNMENT_CENTER);
+	wchar_t nameLevelText[64];
+	swprintf_s(nameLevelText, L"%s 레벨 %d", selection.name, selection.grade);
+	graphic.DrawString(nameLevelText, D2D1::RectF(1450.0f, 560.0f, 1740.0f, 600.0f),
+		FONT_20, D2D1::ColorF(D2D1::ColorF::Yellow), DWRITE_TEXT_ALIGNMENT_CENTER);
 }
 
 void GameSceneUI::renderObstacleSelectionPanel(Graphic& graphic, const ObstacleSelectionInfo& selection) const
