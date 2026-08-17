@@ -5,7 +5,6 @@
             "rotatesToTarget" : true,
             "projectileKey" : "dart_monkey_dart",
             "basePrice" : 200,
-            "refundPrice" : 140,
             "grades" : [
                 { "cost": 0,   "damage": 1, "attackRange": 200, "attackSpeed": 0.5, "projectileSpeed": 1000, "attackCount": 1, "pierceCount": 1 },
                 { "cost": 100, "damage": 1, "attackRange": 240, "attackSpeed": 0.5, "projectileSpeed": 1050, "attackCount": 1, "pierceCount": 1 },
@@ -19,7 +18,6 @@
             "rotatesToTarget": false,
             "projectileKey": "tack_shooter_tack",
             "basePrice": 350,
-            "refundPrice": 182,
             "grades": [
                 { "cost": 0,   "damage": 1, "attackRange": 150, "attackSpeed": 2.0, "projectileSpeed": 800, "attackCount": 8 },
                 { "cost": 200, "damage": 1, "attackRange": 150, "attackSpeed": 1.8, "projectileSpeed": 850, "attackCount": 8 },
@@ -33,7 +31,6 @@
             "rotatesToTarget": true,
             "projectileKey": "",
             "basePrice": 300,
-            "refundPrice": 245,
             "grades": [
                 { "cost": 0,   "damage": 1,  "attackRange": 2000, "attackSpeed": 2.0, "projectileSpeed": 0, "attackCount": 1 },
                 { "cost": 150, "damage": 4,  "attackRange": 2000, "attackSpeed": 1.8, "projectileSpeed": 0, "attackCount": 1 },
@@ -47,7 +44,6 @@
             "rotatesToTarget": true,
             "projectileKey": "bomb_tower_bomb_01",
             "basePrice": 500,
-            "refundPrice": 297,
             "grades": [
                 { "cost": 0,    "damage": 1, "attackRange": 250, "attackSpeed": 2.0, "projectileSpeed": 800, "attackCount": 1, "splashRadius": 120 },
                 { "cost": 200,  "damage": 1, "attackRange": 300, "attackSpeed": 1.8, "projectileSpeed": 900, "attackCount": 1, "splashRadius": 120 },

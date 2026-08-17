@@ -35,7 +35,7 @@ public:
 
 	int32 GetGrade() const { return _grade; }
 	bool CanUpgrade() const { return _canUpgrade; }
-	int32 GetSellPrice() const { return _towerData->refundPrice; }
+	int32 GetSellPrice() const;
 	int32 GetNextUpgradeCost() const;
 	void ApplyUpgrade();
 

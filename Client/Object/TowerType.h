@@ -28,7 +28,6 @@ struct TowerStat
 	bool rotatesToTarget;
 	string projectileKey;
 	int32 basePrice;
-	int32 refundPrice;
 	vector<TowerGradeStat> grades;
 };
 

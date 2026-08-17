@@ -8,6 +8,7 @@
 namespace
 {
 	constexpr float kThrowFrameDuration = 0.08f; // 프레임당 재생 시간(초). 시각 확인 후 조정 필요(미검증)
+	constexpr float kSellRefundRate = 0.7f; // 판매가 = 지금까지 투입한 총 비용(설치비+업그레이드비) * 이 배율
 
 	// 손(투사체 발사 지점)의 로컬 오프셋. 다트원숭이 전용(arm_01~03, 캔버스 {125,140} 중심 기준).
 	// 압정 다트는 GetFirePos()를 쓰지 않고 GetPos()를 직접 쓰므로(TowerFireBehavior::fireTackShooter) 이 테이블과 무관.
@@ -200,6 +201,14 @@ Bloon* Tower::findTarget() const
 		nearestDistSq = distSq;
 	}
 	return nearest;
+}
+
+int32 Tower::GetSellPrice() const
+{
+	int32 totalInvested = _towerData->basePrice;
+	for (int32 i = 1; i < _grade; ++i)
+		totalInvested += _towerData->grades[i].cost;
+	return static_cast<int32>(totalInvested * kSellRefundRate);
 }
 
 int32 Tower::GetNextUpgradeCost() const
