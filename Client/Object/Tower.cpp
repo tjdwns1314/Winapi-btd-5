@@ -71,7 +71,9 @@ void Tower::Update(float deltaTime)
 	if (_isThrowing)
 	{
 		updateThrowAnimation(deltaTime);
-		return; // 던지는 도중에는 쿨타임을 새로 세지 않는다.
+		if (GetTowerFiresAtAnimStart(_type, _grade))
+			_fireTimer += deltaTime; // 이미 발사한 뒤의 순수 연출 구간이므로 쿨타임이 계속 흐른다.
+		return; // 아직 발사 전(fire-at-end)인 타워는 이 구간 동안 쿨타임을 세지 않는다.
 	}
 
 	// 타겟 유무와 상관없이 쿨타임은 계속 흐른다. 발사 자체만 타겟이 있을 때로 제한한다.
@@ -92,7 +94,7 @@ void Tower::Update(float deltaTime)
 		if (_throwFrameCount <= 0)
 			_throwFrameCount = 1; // 방어적 fallback: 구현 실수로 0 이하가 와도 무한 대기하지 않도록.
 
-		if (GetTowerFiresAtAnimStart(_type))
+		if (GetTowerFiresAtAnimStart(_type, _grade))
 			fire(); // 스나이퍼처럼 "먼저 쏘고 재장전 연출"인 타워는 애니메이션 시작 시점에 발사.
 	}
 	else
@@ -114,7 +116,7 @@ void Tower::updateThrowAnimation(float deltaTime)
 		return; // 다음 프레임으로 넘어감
 
 	// 애니메이션 시작 시점에 이미 발사한 타워(GetTowerFiresAtAnimStart)는 여기서 다시 쏘지 않는다.
-	if (!GetTowerFiresAtAnimStart(_type))
+	if (!GetTowerFiresAtAnimStart(_type, _grade))
 		fire(); // 마지막 프레임까지 재생이 끝난 시점에 실제로 투사체를 발사한다.
 	_isThrowing = false;
 	_animFrame = 0;
@@ -233,6 +235,11 @@ void Tower::ApplyUpgrade()
 GameScene* Tower::GetGameScene() const
 {
 	return static_cast<GameScene*>(GetOwner());
+}
+
+const string& Tower::GetProjectileKey() const
+{
+	return _stat.projectileKey.empty() ? _towerData->projectileKey : _stat.projectileKey;
 }
 
 void Tower::fire()

@@ -36,6 +36,7 @@ namespace
 				grade.attackCount = g.at("attackCount").get<int32>();
 				grade.pierceCount = g.value("pierceCount", 1);
 				grade.splashRadius = g.value("splashRadius", 0.f);
+				grade.projectileKey = g.value("projectileKey", string());
 				stat.grades.push_back(grade);
 			}
 
@@ -82,7 +83,7 @@ const TowerVisual& GetTowerVisual(TowerType type)
 		{ TowerType::DartMonkey,   TowerVisual{ true,  L"dart_monkey_base_baked_01", ""} },
 		{ TowerType::TackShooter,  TowerVisual{ true,  L"tack_shooter_grade1_baked_01", "" } },
 		{ TowerType::SniperMonkey, TowerVisual{ true,  L"sniper_grade1_baked_idle", "" } },
-		{ TowerType::BombTower,    TowerVisual{ true,  L"bomb_tower_baked", "" } },
+		{ TowerType::BombTower,    TowerVisual{ true,  L"bomb_tower_grade1_baked_01", "" } },
 	};
 	return table.at(type);
 }
@@ -166,6 +167,40 @@ namespace
 
 	// TODO(미검증): 압정 다트 3등급부터 커지는 배율. 실제 렌더링 확인 후 조정 필요.
 	constexpr float kTackShooterBiggerScale = 1.3f;
+
+	// 폭탄타워 1~4등급: 4프레임 공용 프리픽스 테이블. 5등급(미사일)은 idle/발사 시퀀스가 완전히 달라 별도 처리한다.
+	const wchar_t* bombTowerAnimKeyPrefix(int32 grade)
+	{
+		static const wchar_t* prefixes[] =
+		{
+			L"bomb_tower_grade1_baked",
+			L"bomb_tower_grade2_baked",
+			L"bomb_tower_grade3_baked",
+			L"bomb_tower_grade4_baked",
+		};
+		const int32 index = std::clamp(grade - 1, 0, static_cast<int32>(std::size(prefixes)) - 1);
+		return prefixes[index];
+	}
+	constexpr int32 kBombTowerBaseFrameCount = 4;
+
+	// 5등급: idle엔 완전체 미사일을 들고 있다가, 발사가 시작되면 사일로 문이 01→06으로 열리며(문02~04에서 새
+	// 미사일이 01→03으로 자라나고 문05부터 완전체로 바뀐 채 유지) 06→01로 다시 닫힌다. 문이 완전히 닫힌
+	// 시점(=애니메이션 마지막 프레임이 끝나는 시점, GetTowerFiresAtAnimStart=false 기본 규칙)에 발사된다.
+	constexpr int32 kBombTowerGrade5FrameCount = 11; // 열림 6(01~06) + 닫힘 5(05~01)
+
+	int32 bombTowerFrameKey(int32 grade, int32 animFrame, bool isThrowing, wchar_t* outKey, size_t outKeySize)
+	{
+		if (grade >= 5)
+		{
+			if (!isThrowing)
+				swprintf_s(outKey, outKeySize, L"bomb_tower_grade5_baked_idle");
+			else
+				swprintf_s(outKey, outKeySize, L"bomb_tower_grade5_baked_%02d", animFrame + 1);
+			return kBombTowerGrade5FrameCount;
+		}
+		swprintf_s(outKey, outKeySize, L"%s_%02d", bombTowerAnimKeyPrefix(grade), animFrame + 1);
+		return kBombTowerBaseFrameCount;
+	}
 }
 
 TowerFrameKeyFn GetTowerFrameKeyFn(TowerType type)
@@ -175,6 +210,7 @@ TowerFrameKeyFn GetTowerFrameKeyFn(TowerType type)
 		{ TowerType::DartMonkey, &dartMonkeyFrameKey },
 		{ TowerType::TackShooter, &tackShooterFrameKey },
 		{ TowerType::SniperMonkey, &sniperMonkeyFrameKey },
+		{ TowerType::BombTower, &bombTowerFrameKey },
 	};
 	auto it = table.find(type);
 	return it != table.end() ? it->second : nullptr;
@@ -187,7 +223,11 @@ float GetTowerGradeScale(TowerType type, int32 grade)
 	return 1.0f;
 }
 
-bool GetTowerFiresAtAnimStart(TowerType type)
+bool GetTowerFiresAtAnimStart(TowerType type, int32 grade)
 {
-	return type == TowerType::SniperMonkey;
+	if (type == TowerType::SniperMonkey)
+		return true;
+	if (type == TowerType::BombTower && grade >= 5)
+		return true; // 사일로 문 애니메이션은 발사 이후의 "재장전" 연출일 뿐, 발사 자체는 쿨타임이 차자마자 즉시 일어난다.
+	return false;
 }

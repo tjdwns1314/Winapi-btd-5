@@ -35,7 +35,7 @@ namespace
 		const auto spawnDart = [&](const Vector& d)
 		{
 			owner->SpawnProjectile(spawnPos, d, static_cast<float>(tower.GetStat().damage),
-				tower.GetTowerData().projectileKey, tower.GetStat().projectileSpeed,
+				tower.GetProjectileKey(), tower.GetStat().projectileSpeed,
 				0.f, tower.GetStat().pierceCount);
 		};
 
@@ -64,7 +64,7 @@ namespace
 			const float rad = DegreeToRadian(360.0f / directionCount * i);
 			const Vector dir(sinf(rad), -cosf(rad));
 			owner->SpawnProjectile(tower.GetPos(), dir, static_cast<float>(tower.GetStat().damage),
-				tower.GetTowerData().projectileKey, tower.GetStat().projectileSpeed,
+				tower.GetProjectileKey(), tower.GetStat().projectileSpeed,
 				0.f, tower.GetStat().pierceCount);
 		}
 	}
@@ -78,7 +78,7 @@ namespace
 			return;
 
 		owner->SpawnProjectile(tower.GetPos(), dir, static_cast<float>(tower.GetStat().damage),
-			tower.GetTowerData().projectileKey, tower.GetStat().projectileSpeed,
+			tower.GetProjectileKey(), tower.GetStat().projectileSpeed,
 			tower.GetStat().splashRadius, tower.GetStat().pierceCount);
 	}
 

@@ -6,10 +6,10 @@ enum class RenderLayer
 {
 	Background,
 	Bloon,
-	Projectile,
 	Tower,
 	Obstacle,
 	Effect,
+	Projectile,
 
 	Count,
 };
