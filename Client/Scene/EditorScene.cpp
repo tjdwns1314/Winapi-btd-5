@@ -47,7 +47,7 @@ void EditorScene::Render(Graphic& graphic)
 	// upgrade_box_buy
 	// upgrade_box_cant
 	// tower_thumbs_box
-	if (const CellInfo* cell = _hudSprite->GetCell("lower_hud_bg_01"))
+	if (const CellInfo* cell = _hudSprite->GetCell("pause_icon"))
 	{
 		_hudImg->DrawSprite(graphic, 300.0f, 400.0f, *cell, 1.0f, 0.0f);
 	}

@@ -16,6 +16,12 @@ namespace
 	// 상단 HUD 패널(side_hud_bg_01, side_hud_scroll) 가로 폭(px). 이 값만 바꾸면 두 패널 폭이 함께 조절됨.
 	// 원본 폭 274px, UI 영역 왼쪽 끝에서부터 이 폭만큼만 그려짐(끝까지 채우려면 kUiPanelWidth와 동일한 320으로).
 	constexpr float kHudPanelWidth = 300.0f;
+
+	// 플레이(웨이브 시작) 버튼과 그 옆 설정 아이콘 크기 배율.
+	constexpr float kPlayButtonScale = 0.7f;
+	// 설정 아이콘(pause_icon) 표시 위치 — 플레이 버튼(1512.5, 950) 옆에 나란히. 임시값(미검증).
+	constexpr float kSettingsIconCenterX = 1612.5f;
+	constexpr float kSettingsIconCenterY = 950.0f;
 }
 
 void GameSceneUI::Init(
@@ -44,7 +50,7 @@ void GameSceneUI::Init(
 	_popupSprite = &res.GetAtlas(L"Resource\\Sprite\\game_over_popup.xml");
 
 	// 웨이브 시작 버튼
-	_startButton = createButton(Vector(1512.5f, 950.0f), Vector(128.0f, 129.0f), onStartWave);
+	_startButton = createButton(Vector(1512.5f, 950.0f), Vector(128.0f * kPlayButtonScale, 129.0f * kPlayButtonScale), onStartWave);
 
 	// 타워 상점 버튼: 스크롤 패널(y=270~518) 안에 2x2 그리드로 배치.
 	// 클릭 판정 크기는 실제로 그려지는 tower_thumbs_box 배경(113x93, renderTowerShopBoxes 참고)과 맞춘다.
@@ -204,11 +210,15 @@ void GameSceneUI::renderStartButton(Graphic& graphic, bool isWaveActive, bool is
 	if (isWaveActive)
 		cellName = isSpeedEnabled ? "ff_icon_red" : "ff_icon";
 
-	const CellInfo* cell = _hudSprite->GetCell(cellName);
-	if (cell == nullptr) return;
+	if (const CellInfo* cell = _hudSprite->GetCell(cellName))
+	{
+		const Vector pos = _startButton->GetPos();
+		_hudImg->DrawSprite(graphic, pos.x, pos.y, *cell, kPlayButtonScale, 0.0f);
+	}
 
-	const Vector pos = _startButton->GetPos();
-	_hudImg->DrawSprite(graphic, pos.x, pos.y, *cell, 1.0f, 0.0f);
+	// 설정 아이콘(pause_icon). 플레이 버튼 옆에 나란히 같은 배율로 표시만 한다(클릭 동작 없음).
+	if (const CellInfo* cell = _hudSprite->GetCell("pause_icon"))
+		_hudImg->DrawSprite(graphic, kSettingsIconCenterX, kSettingsIconCenterY, *cell, kPlayButtonScale, 0.0f);
 }
 
 void GameSceneUI::renderDebugWaveButtons(Graphic& graphic) const
