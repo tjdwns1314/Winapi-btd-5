@@ -6,11 +6,11 @@
             "projectileKey" : "dart_monkey_dart",
             "basePrice" : 200,
             "grades" : [
-                { "cost": 0,   "damage": 1, "attackRange": 200, "attackSpeed": 0.5, "projectileSpeed": 1000, "attackCount": 1, "pierceCount": 1 },
-                { "cost": 100, "damage": 1, "attackRange": 240, "attackSpeed": 0.5, "projectileSpeed": 1050, "attackCount": 1, "pierceCount": 1 },
-                { "cost": 250, "damage": 1, "attackRange": 240, "attackSpeed": 0.5, "projectileSpeed": 1100, "attackCount": 1, "pierceCount": 2 },
-                { "cost": 350, "damage": 1, "attackRange": 240, "attackSpeed": 0.5, "projectileSpeed": 1150, "attackCount": 1, "pierceCount": 3 },
-                { "cost": 500, "damage": 1, "attackRange": 240, "attackSpeed": 0.5, "projectileSpeed": 1200, "attackCount": 3, "pierceCount": 3 }
+                { "name": "",              "upgradeIconKey": "",                                    "cost": 0,   "damage": 1, "attackRange": 200, "attackSpeed": 0.5, "projectileSpeed": 1000, "attackCount": 1, "pierceCount": 1 },
+                { "name": "장거리 다트",       "upgradeIconKey": "dart_monkey_longer_range_icon",      "cost": 100, "damage": 1, "attackRange": 240, "attackSpeed": 0.5, "projectileSpeed": 1000, "attackCount": 1, "pierceCount": 1 },
+                { "name": "날카로운 사격",     "upgradeIconKey": "dart_monkey_enhanced_eyesight_icon", "cost": 250, "damage": 1, "attackRange": 240, "attackSpeed": 0.5, "projectileSpeed": 1000, "attackCount": 1, "pierceCount": 2 },
+                { "name": "아주 날카로운 사격", "upgradeIconKey": "dart_monkey_sharp_shots_icon",       "cost": 350, "damage": 1, "attackRange": 280, "attackSpeed": 0.5, "projectileSpeed": 1000, "attackCount": 1, "pierceCount": 4 },
+                { "name": "트리플 다트",       "upgradeIconKey": "dart_monkey_triple_icon",            "cost": 500, "damage": 1, "attackRange": 280, "attackSpeed": 0.5, "projectileSpeed": 1000, "attackCount": 3, "pierceCount": 4 }
             ]
         },
         {
@@ -19,11 +19,11 @@
             "projectileKey": "tack_shooter_tack",
             "basePrice": 350,
             "grades": [
-                { "cost": 0,   "damage": 1, "attackRange": 150, "attackSpeed": 2.0, "projectileSpeed": 800, "attackCount": 8 },
-                { "cost": 200, "damage": 1, "attackRange": 150, "attackSpeed": 1.8, "projectileSpeed": 850, "attackCount": 8 },
-                { "cost": 300, "damage": 1, "attackRange": 150, "attackSpeed": 1.6, "projectileSpeed": 900, "attackCount": 8 },
-                { "cost": 600, "damage": 1, "attackRange": 190, "attackSpeed": 1.4, "projectileSpeed": 950, "attackCount": 8 },
-                { "cost": 800, "damage": 1, "attackRange": 190, "attackSpeed": 1.0, "projectileSpeed": 1000, "attackCount": 16 }
+                { "name": "",              "upgradeIconKey": "",                                   "cost": 0,   "damage": 1, "attackRange": 150, "attackSpeed": 2.0, "projectileSpeed": 800, "attackCount": 8 },
+                { "name": "더 빠른 발사",      "upgradeIconKey": "tack_shooter_faster_firing_icon",      "cost": 200, "damage": 1, "attackRange": 150, "attackSpeed": 1.8, "projectileSpeed": 800, "attackCount": 8 },
+                { "name": "광역 압정",        "upgradeIconKey": "tack_shooter_super_range_icon",        "cost": 300, "damage": 1, "attackRange": 190, "attackSpeed": 1.8, "projectileSpeed": 800, "attackCount": 8 },
+                { "name": "훨씬 더 빠른 발사",  "upgradeIconKey": "tack_shooter_even_faster_firing_icon", "cost": 600, "damage": 1, "attackRange": 190, "attackSpeed": 1.4, "projectileSpeed": 800, "attackCount": 8 },
+                { "name": "압정 살포기",       "upgradeIconKey": "tack_shooter_blade_icon",              "cost": 800, "damage": 1, "attackRange": 190, "attackSpeed": 1.4, "projectileSpeed": 800, "attackCount": 16 }
             ]
         },
         {
@@ -32,11 +32,11 @@
             "projectileKey": "",
             "basePrice": 300,
             "grades": [
-                { "cost": 0,   "damage": 1,  "attackRange": 2000, "attackSpeed": 2.0, "projectileSpeed": 0, "attackCount": 1 },
-                { "cost": 150, "damage": 4,  "attackRange": 2000, "attackSpeed": 1.8, "projectileSpeed": 0, "attackCount": 1 },
-                { "cost": 300, "damage": 4,  "attackRange": 2000, "attackSpeed": 1.6, "projectileSpeed": 0, "attackCount": 1 },
-                { "cost": 500, "damage": 7,  "attackRange": 2000, "attackSpeed": 1.4, "projectileSpeed": 0, "attackCount": 1 },
-                { "cost": 800, "damage": 18, "attackRange": 2000, "attackSpeed": 1.0, "projectileSpeed": 0, "attackCount": 1 }
+                { "name": "",            "upgradeIconKey": "",                       "cost": 0,   "damage": 1,  "attackRange": 2000, "attackSpeed": 2.0, "projectileSpeed": 0, "attackCount": 1 },
+                { "name": "풀 메탈 재킷",   "upgradeIconKey": "sniper_full_metal_icon",   "cost": 150, "damage": 3,  "attackRange": 2000, "attackSpeed": 2.0, "projectileSpeed": 0, "attackCount": 1 },
+                { "name": "빠른 저격",     "upgradeIconKey": "sniper_faster_firing_icon", "cost": 300, "damage": 3,  "attackRange": 2000, "attackSpeed": 1.6, "projectileSpeed": 0, "attackCount": 1 },
+                { "name": "야간 투시경",    "upgradeIconKey": "sniper_nvg_icon",           "cost": 500, "damage": 5,  "attackRange": 2000, "attackSpeed": 1.6, "projectileSpeed": 0, "attackCount": 1 },
+                { "name": "치명적인 정밀함", "upgradeIconKey": "sniper_cripple_moab_icon",  "cost": 800, "damage": 15, "attackRange": 2000, "attackSpeed": 1.6, "projectileSpeed": 0, "attackCount": 1 }
             ]
         },
         {
@@ -45,11 +45,11 @@
             "projectileKey": "bomb_tower_bomb_01",
             "basePrice": 500,
             "grades": [
-                { "cost": 0,    "damage": 1, "attackRange": 250, "attackSpeed": 2.0, "projectileSpeed": 800, "attackCount": 1, "splashRadius": 120 },
-                { "cost": 200,  "damage": 1, "attackRange": 300, "attackSpeed": 1.8, "projectileSpeed": 900, "attackCount": 1, "splashRadius": 120 },
-                { "cost": 400,  "damage": 1, "attackRange": 300, "attackSpeed": 1.6, "projectileSpeed": 1000, "attackCount": 1, "splashRadius": 120 },
-                { "cost": 800,  "damage": 2, "attackRange": 300, "attackSpeed": 1.4, "projectileSpeed": 1100, "attackCount": 1, "splashRadius": 160 },
-                { "cost": 1000, "damage": 2, "attackRange": 350, "attackSpeed": 1.0, "projectileSpeed": 1200, "attackCount": 1, "splashRadius": 160, "projectileKey": "bomb_tower_missile_full" }
+                { "name": "",          "upgradeIconKey": "",                "cost": 0,    "damage": 1, "attackRange": 250, "attackSpeed": 2.0, "projectileSpeed": 800, "attackCount": 1, "splashRadius": 120 },
+                { "name": "추가 사거리",  "upgradeIconKey": "bomb_extra_range_icon", "cost": 200,  "damage": 1, "attackRange": 300, "attackSpeed": 2.0, "projectileSpeed": 800, "attackCount": 1, "splashRadius": 120 },
+                { "name": "거대 폭탄",   "upgradeIconKey": "bomb_bigger_icon",      "cost": 400,  "damage": 1, "attackRange": 300, "attackSpeed": 2.0, "projectileSpeed": 800, "attackCount": 1, "splashRadius": 160 },
+                { "name": "풍선 충격",   "upgradeIconKey": "bomb_frag_icon",        "cost": 800,  "damage": 3, "attackRange": 300, "attackSpeed": 2.0, "projectileSpeed": 800, "attackCount": 1, "splashRadius": 160 },
+                { "name": "미사일 발사대", "upgradeIconKey": "bomb_missile_icon",     "cost": 1000, "damage": 3, "attackRange": 350, "attackSpeed": 1.0, "projectileSpeed": 800, "attackCount": 1, "splashRadius": 200, "projectileKey": "bomb_tower_missile_full" }
             ]
         }
     ]
