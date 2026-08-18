@@ -5,16 +5,18 @@
 #include "Projectile.h"
 #include "Tower.h"
 #include "Obstacle.h"
+#include "Effect.h"
 class PoolManager : public Singleton<PoolManager>
 {
 	friend Singleton<PoolManager>;
 
 public:
-	void Init(size_t bloonSize, size_t projectileSize, size_t towerSize, size_t obstacleSize);
+	void Init(size_t bloonSize, size_t projectileSize, size_t towerSize, size_t obstacleSize, size_t effectSize);
 	ObjectPool<Bloon>& GetBloonPool() { return _bloonPool; }
 	ObjectPool<Projectile>& GetProjectilePool() { return _projectilePool; }
 	ObjectPool<Tower>& GetTowerPool() { return _towerPool; }
 	ObjectPool<Obstacle>& GetObstaclePool() { return _obstaclePool; }
+	ObjectPool<Effect>& GetEffectPool() { return _effectPool; }
 
 private:
 	PoolManager() = default;
@@ -24,5 +26,6 @@ private:
 	ObjectPool<Projectile> _projectilePool;
 	ObjectPool<Tower> _towerPool;
 	ObjectPool<Obstacle> _obstaclePool;
+	ObjectPool<Effect> _effectPool;
 };
 

@@ -4,6 +4,9 @@
 #include "Scene.h"
 #include "Bloon.h"
 #include "ColliderCircle.h"
+#include "PoolManager.h"
+#include "Effect.h"
+#include "EffectFactory.h"
 
 namespace
 {
@@ -56,6 +59,10 @@ void Projectile::OnEnter(Actor* other)
 			if ((actor->GetPos() - center).Length() <= _splashRadius)
 				static_cast<Bloon*>(actor)->ApplyDamage(_damage);
 		}
+
+		Effect* explosion = EffectFactory::Create(PoolManager::GetInstance().GetEffectPool(), center, EffectType::Explosion);
+		if (explosion != nullptr)
+			GetOwner()->AddActor(explosion);
 	}
 	if (--_pierceRemaining <= 0)
 		SetPendingKill();

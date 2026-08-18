@@ -112,6 +112,15 @@
     <ClInclude Include="Client\Object\BloonFactory.h">
       <Filter>Client\Object</Filter>
     </ClInclude>
+    <ClInclude Include="Client\Object\EffectType.h">
+      <Filter>Client\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\Object\Effect.h">
+      <Filter>Client\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\Object\EffectFactory.h">
+      <Filter>Client\Object</Filter>
+    </ClInclude>
     <ClInclude Include="Client\Object\TowerType.h">
       <Filter>Client\Object</Filter>
     </ClInclude>
@@ -274,6 +283,15 @@
       <Filter>Client\Object</Filter>
     </ClCompile>
     <ClCompile Include="Client\Object\BloonFactory.cpp">
+      <Filter>Client\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\Object\EffectType.cpp">
+      <Filter>Client\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\Object\Effect.cpp">
+      <Filter>Client\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\Object\EffectFactory.cpp">
       <Filter>Client\Object</Filter>
     </ClCompile>
     <ClCompile Include="Client\Object\WaveManager.cpp">

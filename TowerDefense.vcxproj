@@ -144,6 +144,9 @@
   <ItemGroup>
     <ClInclude Include="Client\Object\BloonPopResolver.h" />
     <ClInclude Include="Client\Object\BloonFactory.h" />
+    <ClInclude Include="Client\Object\EffectType.h" />
+    <ClInclude Include="Client\Object\Effect.h" />
+    <ClInclude Include="Client\Object\EffectFactory.h" />
     <ClInclude Include="Client\Object\WaveManager.h" />
     <ClInclude Include="Client\Object\ProjectileFactory.h" />
     <ClInclude Include="Client\Scene\EditorScene.h" />
@@ -204,6 +207,9 @@
   <ItemGroup>
     <ClCompile Include="Client\Object\BloonPopResolver.cpp" />
     <ClCompile Include="Client\Object\BloonFactory.cpp" />
+    <ClCompile Include="Client\Object\EffectType.cpp" />
+    <ClCompile Include="Client\Object\Effect.cpp" />
+    <ClCompile Include="Client\Object\EffectFactory.cpp" />
     <ClCompile Include="Client\Object\BloonType.cpp" />
     <ClCompile Include="Client\Object\TowerType.cpp" />
     <ClCompile Include="Client\Object\TowerFactory.cpp" />
