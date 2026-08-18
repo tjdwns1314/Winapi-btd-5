@@ -64,9 +64,9 @@ void GameAssets::Load(Graphic& graphic)
 			};
 
 		bakeDartMonkeyThrow(L"dart_monkey_base_baked", nullptr);
-		bakeDartMonkeyThrow(L"dart_monkey_red_baked", "red_bandana", { 0.0f, -11.0f });
 		bakeDartMonkeyThrow(L"dart_monkey_blue_baked", "blue_bandana", { 0.0f, -11.0f });
 		bakeDartMonkeyThrow(L"dart_monkey_green_baked", "green_bandana", { 0.0f, -11.0f });
+		bakeDartMonkeyThrow(L"dart_monkey_red_baked", "red_bandana", { 0.0f, -11.0f });
 		bakeDartMonkeyThrow(L"dart_monkey_triple_baked", "triple_darts_bandana", { -9.5f, 10.0f });
 
 	// 압정 다트 던지기 애니메이션: firing 셀이 _01→_02로 바뀌는 게 애니메이션이고,

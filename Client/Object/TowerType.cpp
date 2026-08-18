@@ -104,15 +104,15 @@ const wchar_t* GetTowerDisplayName(TowerType type)
 
 namespace
 {
-	// 1등급=base, 2=red, 3=blue, 4=green, 5=triple.
+	// 1등급=base, 2=blue, 3=green, 4=red, 5=triple.
 	const wchar_t* dartMonkeyAnimKeyPrefix(int32 grade)
 	{
 		static const wchar_t* prefixes[] =
 		{
 			L"dart_monkey_base_baked",
-			L"dart_monkey_red_baked",
 			L"dart_monkey_blue_baked",
 			L"dart_monkey_green_baked",
+			L"dart_monkey_red_baked",
 			L"dart_monkey_triple_baked",
 		};
 		const int32 index = std::clamp(grade - 1, 0, static_cast<int32>(std::size(prefixes)) - 1);
