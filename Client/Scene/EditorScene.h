@@ -39,5 +39,12 @@ private :
 	Image* _nukkiResumeImg = nullptr;
 	Image* _nukkiSfxImg = nullptr;
 	Image* _nukkiXImg = nullptr;
+	Image* _nukkiCircleImg = nullptr;
+	Image* _nukkiTwoCircleImg = nullptr;
+	Image* _nukkiSmallCircleImg = nullptr;
+	Image* _nukkiCogwheelImg = nullptr;
+
+	Image* _loadingScreenImg = nullptr;      // loading_screen.png
+	SpriteAtlas* _loadingScreenSprite = nullptr; // loading_screen.xml
 };
 
