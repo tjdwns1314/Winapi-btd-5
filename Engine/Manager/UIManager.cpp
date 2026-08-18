@@ -24,8 +24,11 @@ void UIManager::Update(float deltaTime)
 {
 	for (Widget* widget : _widgets)
 	{
-		if (widget->IsActive())
-			widget->Update(deltaTime);
+		if (widget->IsActive() == false)
+			continue;
+		if (_isInputLocked && widget->IgnoresModalLock() == false)
+			continue;
+		widget->Update(deltaTime);
 	}
 }
 

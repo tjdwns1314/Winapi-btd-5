@@ -71,6 +71,7 @@ private:
 	HealthManager _healthManager;
 	EconomyManager _economyManager;
 	bool _speedEnabled = false; // 2배속 on/off. 웨이브가 끝나도 리셋하지 않고 유지한다.
+	bool _isSettingsOpen = false; // 설정 팝업이 열려 있는 동안 게임 로직 전체를 정지시킨다.
 
 	// Restart()에서 Init()을 다시 호출하기 위해 보관해둔다. Game이 소유한 Graphic이라 수명은 항상 유효하다.
 	Graphic* _graphicRef = nullptr;
