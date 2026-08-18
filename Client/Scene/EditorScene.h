@@ -28,5 +28,16 @@ private :
 
 	Image* _upgradeIconsImg = nullptr;      // upgrade_icons.png
 	SpriteAtlas* _upgradeIconsSprite = nullptr; // upgrade_icons.xml
+
+	Image* _sharedSheetImg = nullptr;      // shared_sheet.png
+	SpriteAtlas* _sharedSheetSprite = nullptr; // shared_sheet.xml
+
+	// Resource/Sprite/nukki/ 개별 아이콘(아틀라스 없이 낱개 PNG)
+	Image* _nukkiAutoplayImg = nullptr;
+	Image* _nukkiMusicImg = nullptr;
+	Image* _nukkiReplayImg = nullptr;
+	Image* _nukkiResumeImg = nullptr;
+	Image* _nukkiSfxImg = nullptr;
+	Image* _nukkiXImg = nullptr;
 };
 

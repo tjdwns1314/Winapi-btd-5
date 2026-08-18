@@ -25,6 +25,16 @@ void GameAssets::Load(Graphic& graphic)
 	res.LoadImage(graphic, L"Resource\\Sprite\\upgrade_icons.png");
 	res.LoadAtlas(L"Resource\\Sprite\\upgrade_icons.xml");
 
+	res.LoadImage(graphic, L"Resource\\Sprite\\shared_sheet.png");
+	res.LoadAtlas(L"Resource\\Sprite\\shared_sheet.xml");
+
+	res.LoadImage(graphic, L"Resource\\Sprite\\nukki\\autoplay.png");
+	res.LoadImage(graphic, L"Resource\\Sprite\\nukki\\music.png");
+	res.LoadImage(graphic, L"Resource\\Sprite\\nukki\\replay.png");
+	res.LoadImage(graphic, L"Resource\\Sprite\\nukki\\resume.png");
+	res.LoadImage(graphic, L"Resource\\Sprite\\nukki\\sfx.png");
+	res.LoadImage(graphic, L"Resource\\Sprite\\nukki\\x.png");
+
 	res.LoadImage(graphic, L"Resource\\Red.png");
 	res.LoadImage(graphic, L"Resource\\Blue.png");
 	res.LoadImage(graphic, L"Resource\\Green.png");

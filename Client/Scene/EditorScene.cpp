@@ -16,6 +16,16 @@ void EditorScene::Init(Graphic& graphic)
 
 	_upgradeIconsImg = &res.GetImage(L"Resource\\Sprite\\upgrade_icons.png");
 	_upgradeIconsSprite = &res.GetAtlas(L"Resource\\Sprite\\upgrade_icons.xml");
+
+	_sharedSheetImg = &res.GetImage(L"Resource\\Sprite\\shared_sheet.png");
+	_sharedSheetSprite = &res.GetAtlas(L"Resource\\Sprite\\shared_sheet.xml");
+
+	_nukkiAutoplayImg = &res.GetImage(L"Resource\\Sprite\\nukki\\autoplay.png");
+	_nukkiMusicImg = &res.GetImage(L"Resource\\Sprite\\nukki\\music.png");
+	_nukkiReplayImg = &res.GetImage(L"Resource\\Sprite\\nukki\\replay.png");
+	_nukkiResumeImg = &res.GetImage(L"Resource\\Sprite\\nukki\\resume.png");
+	_nukkiSfxImg = &res.GetImage(L"Resource\\Sprite\\nukki\\sfx.png");
+	_nukkiXImg = &res.GetImage(L"Resource\\Sprite\\nukki\\x.png");
 }
 
 void EditorScene::Cleanup()
@@ -50,12 +60,12 @@ void EditorScene::Render(Graphic& graphic)
 	// upgrade_box_buy
 	// upgrade_box_cant
 	// tower_thumbs_box
-	if (const CellInfo* cell = _hudSprite->GetCell("upgrade_box_buy"))
+	if (const CellInfo* cell = _hudSprite->GetCell("tower_thumbs_box"))
 	{
 		_hudImg->DrawSprite(graphic, 300.0f, 400.0f, *cell, 1.0f, 0.0f);
 	}
 
-	if (const CellInfo* cell = _hudSprite->GetCell("upgrade_box_cant"))
+	if (const CellInfo* cell = _hudSprite->GetCell("tower_profile_pic_box"))
 	{
 		_hudImg->DrawSprite(graphic, 300.0f, 100.0f, *cell, 1.0f, 0.0f);
 	}
@@ -114,29 +124,29 @@ void EditorScene::Render(Graphic& graphic)
 	//	_inGameBg->DrawSprite(graphic, 600.0f, 300.0f, *cell, 1.0f, 0.0f);
 	//}
 
-	////// 저격총 원숭이 얘는 틴트 기능 넣어야함
-	////if (const CellInfo* cell = _sprite->GetCell("sniper_goggles"))
-	////{
-	////	_inGameBg->DrawSprite(graphic, 100.0f, 500.0f, *cell, 1.0f, 0.0f);
-	////}
-	//if (const CellInfo* cell = _sprite->GetCell("sniper_basic_rifle_muzzle"))
+	//// 저격총 원숭이 얘는 틴트 기능 넣어야함
+	//if (const CellInfo* cell = _sprite->GetCell("sniper_goggles"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 100.0f, 500.0f, *cell, 1.0f, 0.0f);
+	//}
+	if (const CellInfo* cell = _sprite->GetCell("sniper_full_metal_jacket"))
+	{
+		_inGameBg->DrawSprite(graphic, 200.0f, 500.0f, *cell, 1.0f, 0.0f);
+	}
+	// sniper_laser
+	// sniper_deadly_precision
+	// sniper_semi_auto
+	// sniper_full_metal_jacket
+
+	//if (const CellInfo* cell = _sprite->GetCell("sniper_cripple_moab"))
 	//{
 	//	_inGameBg->DrawSprite(graphic, 200.0f, 500.0f, *cell, 1.0f, 0.0f);
 	//}
-	//// sniper_laser
-	//// sniper_deadly_precision
-	//// sniper_semi_auto
-	//// sniper_full_metal_jacket
 
-	////if (const CellInfo* cell = _sprite->GetCell("sniper_cripple_moab"))
-	////{
-	////	_inGameBg->DrawSprite(graphic, 200.0f, 500.0f, *cell, 1.0f, 0.0f);
-	////}
-
-	//if (const CellInfo* cell = _sprite->GetCell("sniper_green_hat"))
-	//{
-	//	_inGameBg->DrawSprite(graphic, 300.0f, 500.0f, *cell, 1.0f, 0.0f);
-	//}
+	if (const CellInfo* cell = _sprite->GetCell("sniper_green_hat"))
+	{
+		_inGameBg->DrawSprite(graphic, 300.0f, 500.0f, *cell, 1.0f, 0.0f);
+	}
 
 
 	//// 저격총 애니메이션
@@ -467,5 +477,30 @@ void EditorScene::Render(Graphic& graphic)
 
 	//ResourceManager::GetInstance().GetImage(L"restart_button_baked").Draw(graphic, 1650.0f, 200.0f, 1.0f, 0.0f);
 
+	// shared_sheet 아이콘 확인용 (임시)
+	auto drawSharedIcon = [&](const char* cellName, float x, float y)
+		{
+			if (const CellInfo* cell = _sharedSheetSprite->GetCell(cellName))
+			{
+				_sharedSheetImg->DrawSprite(graphic, x, y, *cell, 1.0f, 0.0f);
+			}
+		};
+
+	drawSharedIcon("resume", 100.0f, 100.0f);
+	drawSharedIcon("double_mm_icon_small", 200.0f, 100.0f);
+	drawSharedIcon("sound", 300.0f, 100.0f);
+	drawSharedIcon("info", 400.0f, 100.0f);
+	drawSharedIcon("home", 500.0f, 100.0f);
+	drawSharedIcon("music", 600.0f, 100.0f);
+	drawSharedIcon("stroke", 700.0f, 100.0f);
+	drawSharedIcon("load_icon_shared", 800.0f, 100.0f);
+
+	// nukki 아이콘 확인용 (임시, 아틀라스 없이 낱개 이미지)
+	_nukkiAutoplayImg->Draw(graphic, 100.0f, 200.0f, 1.0f, 0.0f);
+	_nukkiMusicImg->Draw(graphic, 200.0f, 200.0f, 1.0f, 0.0f);
+	_nukkiReplayImg->Draw(graphic, 300.0f, 200.0f, 1.0f, 0.0f);
+	_nukkiResumeImg->Draw(graphic, 400.0f, 200.0f, 1.0f, 0.0f);
+	_nukkiSfxImg->Draw(graphic, 500.0f, 200.0f, 1.0f, 0.0f);
+	_nukkiXImg->Draw(graphic, 600.0f, 200.0f, 0.25f, 0.0f);
 }
 
