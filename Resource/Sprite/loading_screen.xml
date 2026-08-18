@@ -1,0 +1,20 @@
+<SpriteInformation>
+<FrameInformation name="loading_screen" texw="3488" texh="1996" type="jpng">
+<Cell name="btd5_text_lower" x="1427" y="675" w="1211" h="278" ax="0" ay="0" aw="1211" ah="278"/>
+<Cell name="btd5_text_upper" x="2275" y="1" w="1211" h="278" ax="0" ay="0" aw="1211" ah="278"/>
+<Cell name="double_cog_pocket" x="1" y="675" w="1424" h="1252" ax="0" ay="0" aw="1424" ah="1252"/>
+<Cell name="grain_01" x="1" y="1967" w="718" h="28" ax="0" ay="0" aw="718" ah="28"/>
+<Cell name="grain_02" x="1" y="1929" w="1328" h="36" ax="0" ay="0" aw="1328" ah="36"/>
+<Cell name="grain_03" x="1" y="636" w="1720" h="37" ax="0" ay="0" aw="1720" ah="37"/>
+<Cell name="grain_04" x="2275" y="342" w="557" h="39" ax="0" ay="0" aw="557" ah="39"/>
+<Cell name="grain_05" x="2275" y="281" w="776" h="59" ax="0" ay="0" aw="776" ah="59"/>
+<Cell name="leaves" x="1427" y="955" w="1045" h="479" ax="0" ay="0" aw="1045" ah="479"/>
+<Cell name="loading_screen_cog" x="1427" y="1436" w="386" h="386" ax="0" ay="0" aw="386" ah="386"/>
+<Cell name="loading_screen_cog_pocket" x="2474" y="955" w="878" h="878" ax="0" ay="0" aw="878" ah="878"/>
+<Cell name="loading_screen_cog_shadow" x="2834" y="342" w="386" h="386" ax="0" ay="0" aw="386" ah="386"/>
+<Cell name="loading_spinner" x="1815" y="1436" w="205" h="205" ax="0" ay="0" aw="205" ah="205"/>
+<Cell name="spinner_bg" x="2275" y="383" w="275" h="276" ax="0" ay="0" aw="275" ah="276"/>
+<Cell name="vines" x="1" y="1" w="2272" h="633" ax="0" ay="0" aw="2272" ah="633"/>
+<Cell name="wooden_slat" x="2552" y="383" w="260" h="176" ax="0" ay="0" aw="260" ah="176"/>
+</FrameInformation>
+</SpriteInformation>
