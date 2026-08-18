@@ -91,11 +91,13 @@ void Graphic::DrawString(const wchar_t* text,
 	D2D1_RECT_F layoutRect,
 	FontSize size,
 	D2D1::ColorF color,
-	DWRITE_TEXT_ALIGNMENT align)
+	DWRITE_TEXT_ALIGNMENT align,
+	DWRITE_PARAGRAPH_ALIGNMENT vAlign)
 {
 	IDWriteTextFormat* format = GetTextFormat(size);
 	if (format == nullptr) return;
 	format->SetTextAlignment(align);
+	format->SetParagraphAlignment(vAlign);
 
 	ID2D1SolidColorBrush* brush = GetBrush(color);
 	if (brush == nullptr) return;
