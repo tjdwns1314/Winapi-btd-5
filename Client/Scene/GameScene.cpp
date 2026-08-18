@@ -104,6 +104,12 @@ void GameScene::Render(Graphic& graphic)
 		_map.RenderStartEndDebug(graphic);
 		renderColliderDebug(graphic);
 	}
+	else if (_towerController.IsDragging() || _obstacleController.IsDragging())
+	{
+		_map.RenderGrid(graphic, D2D1::ColorF(D2D1::ColorF::Black, 0.8f));
+		_map.RenderPathDebug(graphic);
+		_map.RenderStartEndDebug(graphic);
+	}
 	renderDebugCircles(graphic);
 
 	Tower* selectedTower = _towerController.GetSelected();

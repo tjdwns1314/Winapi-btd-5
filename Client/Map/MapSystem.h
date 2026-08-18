@@ -26,7 +26,7 @@ public:
 
 	void SetTileImages(Image* tile1, Image* tile2) { _tile1Img = tile1; _tile2Img = tile2; }
 	void RenderTiles(Graphic& graphic) const;
-	void RenderGrid(Graphic& graphic) const;
+	void RenderGrid(Graphic& graphic, const D2D1::ColorF& color = D2D1::ColorF(D2D1::ColorF::Gray, 0.5f)) const;
 	void RenderPathDebug(Graphic& graphic) const;
 	void RenderStartEndDebug(Graphic& graphic) const;
 

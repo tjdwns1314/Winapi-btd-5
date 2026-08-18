@@ -109,10 +109,10 @@ void MapSystem::RenderTiles(Graphic& graphic) const
 	}
 }
 
-void MapSystem::RenderGrid(Graphic& graphic) const
+void MapSystem::RenderGrid(Graphic& graphic, const D2D1::ColorF& color) const
 {
 	ID2D1HwndRenderTarget* renderTarget = graphic.GetRenderTarget();
-	ID2D1SolidColorBrush* brush = graphic.GetBrush(D2D1::ColorF(D2D1::ColorF::Gray, 0.5f));
+	ID2D1SolidColorBrush* brush = graphic.GetBrush(color);
 	if (renderTarget == nullptr || brush == nullptr)
 		return;
 
