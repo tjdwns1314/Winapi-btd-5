@@ -5,6 +5,8 @@
 #include "PoolManager.h"
 #include "Scene.h"
 #include "GameScene.h"
+#include "Effect.h"
+#include "EffectFactory.h"
 
 int32 BloonPopResolver::GetLayerHp(BloonColor color)
 {
@@ -65,6 +67,10 @@ void BloonPopResolver::HandleHit(Bloon& bloon, float damage)
 	Scene* owner = bloon.GetOwner();
 	if (owner == nullptr)
 		return;
+
+	Effect* effect = EffectFactory::Create(PoolManager::GetInstance().GetEffectPool(), bloon.GetPos(), EffectType::Pop);
+	if (effect != nullptr)
+		owner->AddActor(effect);
 
 	// Bloon은 GameScene에서만 생성되므로 안전하게 다운캐스팅한다. (HandleLeak과 동일한 패턴)
 	GameScene* gameScene = static_cast<GameScene*>(owner);
