@@ -13,6 +13,9 @@ void EditorScene::Init(Graphic& graphic)
 
 	_popupImg = &res.GetImage(L"Resource\\Sprite\\game_over_popup.png");
 	_popupSprite = &res.GetAtlas(L"Resource\\Sprite\\game_over_popup.xml");
+
+	_upgradeIconsImg = &res.GetImage(L"Resource\\Sprite\\upgrade_icons.png");
+	_upgradeIconsSprite = &res.GetAtlas(L"Resource\\Sprite\\upgrade_icons.xml");
 }
 
 void EditorScene::Cleanup()

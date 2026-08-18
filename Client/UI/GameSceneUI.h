@@ -18,6 +18,7 @@ struct TowerSelectionInfo
 	int32 sellPrice = 0;
 	int32 upgradePrice = 0;
 	bool canUpgrade = false;
+	string upgradeIconKey;
 };
 
 struct ObstacleSelectionInfo
@@ -118,4 +119,8 @@ private:
 	Image* _popupImg = nullptr;
 	SpriteAtlas* _popupSprite = nullptr;
 	UIButton* _restartButton = nullptr;
+
+	// 업그레이드 패널 아이콘
+	Image* _upgradeIconsImg = nullptr;
+	SpriteAtlas* _upgradeIconsSprite = nullptr;
 };

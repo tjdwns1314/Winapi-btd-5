@@ -37,6 +37,7 @@ public:
 	bool CanUpgrade() const { return _canUpgrade; }
 	int32 GetSellPrice() const;
 	int32 GetNextUpgradeCost() const;
+	const string& GetNextUpgradeIconKey() const;
 	void ApplyUpgrade();
 
 

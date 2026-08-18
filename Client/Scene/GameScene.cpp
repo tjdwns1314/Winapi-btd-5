@@ -104,6 +104,7 @@ void GameScene::Render(Graphic& graphic)
 		selection.sellPrice = selectedTower->GetSellPrice();
 		selection.canUpgrade = selectedTower->CanUpgrade();
 		selection.upgradePrice = selectedTower->GetNextUpgradeCost();
+		selection.upgradeIconKey = selectedTower->GetNextUpgradeIconKey();
 	}
 
 	Obstacle* selectedObstacle = _obstacleController.GetSelected();

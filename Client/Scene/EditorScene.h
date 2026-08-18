@@ -25,5 +25,8 @@ private :
 
 	Image* _popupImg = nullptr;      // game_over_popup.png
 	SpriteAtlas* _popupSprite = nullptr; // game_over_popup.xml
+
+	Image* _upgradeIconsImg = nullptr;      // upgrade_icons.png
+	SpriteAtlas* _upgradeIconsSprite = nullptr; // upgrade_icons.xml
 };
 

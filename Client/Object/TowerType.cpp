@@ -36,6 +36,7 @@ namespace
 				grade.pierceCount = g.value("pierceCount", 1);
 				grade.splashRadius = g.value("splashRadius", 0.f);
 				grade.projectileKey = g.value("projectileKey", string());
+				grade.upgradeIconKey = g.value("upgradeIconKey", string());
 				stat.grades.push_back(grade);
 			}
 
