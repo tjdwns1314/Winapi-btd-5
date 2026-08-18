@@ -104,6 +104,29 @@ namespace
 	const D2D1::ColorF kGameOverDimColor = D2D1::ColorF(D2D1::ColorF::Black, 0.6f);
 	constexpr float kGameOverTextTopOffset = -160.0f;
 	constexpr float kGameOverTextBottomOffset = -80.0f;
+
+	// --------------------------------------------------
+	//  설정 팝업 (오륜기 배치)
+	// --------------------------------------------------
+	// plain_button(131x137) 5개를 오륜기처럼 배치: 위 3개, 아래 2개(위 버튼 사이 아래에 걸치도록).
+	// 배열 순서: 0,1,2 = 위쪽 왼→오, 3,4 = 아래쪽 왼→오. 0번(위 왼쪽)이 재개(닫기) 버튼.
+	// 위치는 게임 영역 정중앙 기준 임시값 — 빌드 후 눈으로 보고 조정할 것(미검증).
+	// 각 버튼 아이콘 파일(Resource/Sprite/nukki). 순서: 0 재개, 1 리플레이, 2 자동진행, 3 음악, 4 효과음.
+	const wchar_t* const kSettingsIconFiles[5] = {
+		L"Resource\\Sprite\\nukki\\resume.png",
+		L"Resource\\Sprite\\nukki\\replay.png",
+		L"Resource\\Sprite\\nukki\\autoplay.png",
+		L"Resource\\Sprite\\nukki\\music.png",
+		L"Resource\\Sprite\\nukki\\sfx.png",
+	};
+	constexpr float kSettingsIconScale = 1.0f; // 아이콘 원본 크기 배율. 버튼(plain_button, kSettingsRingScale 적용) 안에 들어오도록 임시값 — 눈으로 보고 조정할 것(미검증).
+	constexpr float kSettingsButtonBaseWidth = 128.0f;  // plain_button 원본 스프라이트 가로 크기(px). 클릭 판정 크기 계산에 사용.
+	constexpr float kSettingsButtonBaseHeight = 129.0f; // plain_button 원본 스프라이트 세로 크기(px). 클릭 판정 크기 계산에 사용.
+	constexpr float kSettingsRingSpacingX = 250.0f;     // 위쪽 3개 버튼 사이 가로 간격, 아래쪽 2개 버튼 가로 오프셋(간격의 절반)에도 쓰임.
+	constexpr float kSettingsRingSpacingY = 200.0f;     // 위쪽 줄과 아래쪽 줄 사이 세로 간격.
+	constexpr float kSettingsRingScale = 1.5f;          // 버튼 원본 크기(128x129)에 곱하는 배율 — 실제 그려지는 크기 + 클릭 판정 크기가 함께 커진다.
+	constexpr float kSettingsRingCenterOffsetY = -150.0f;  // 5개 버튼 그룹 전체를 위(-)/아래(+)로 한 번에 밀 때 쓰는 값. 게임 영역 정중앙(GameAreaCenterY) 기준.
+	const D2D1::ColorF kSettingsDimColor = D2D1::ColorF(D2D1::ColorF::Black, 0.6f);
 }
 
 void GameSceneUI::Init(
@@ -118,7 +141,9 @@ void GameSceneUI::Init(
 	function<void()> onSellClick,
 	function<void()> onUpgradeClick,
 	function<void()> onObstacleSellClick,
-	function<void()> onRestartClick)
+	function<void()> onRestartClick,
+	function<void()> onSettingsClick,
+	function<void()> onSettingsCloseClick)
 {
 	ResourceManager& res = ResourceManager::GetInstance();
 	// HUD 배경 패널
@@ -136,6 +161,11 @@ void GameSceneUI::Init(
 
 	// 웨이브 시작 버튼
 	_startButton = createButton(kStartButtonPos, Vector(kStartButtonBaseWidth * kPlayButtonScale, kStartButtonBaseHeight * kPlayButtonScale), onStartWave);
+
+	// 설정(톱니바퀴) 버튼. 플레이 버튼 옆에 나란히, 클릭 시 설정 팝업 토글.
+	_settingsButton = createButton(Vector(kSettingsIconCenterX, kSettingsIconCenterY),
+		Vector(kStartButtonBaseWidth * kPlayButtonScale, kStartButtonBaseHeight * kPlayButtonScale), onSettingsClick);
+	_settingsButton->SetIgnoresModalLock(true); // 설정창이 열려 있어도(입력 잠금) 이 버튼 자체는 계속 눌려야 닫을 수 있다.
 
 	// 타워 상점 버튼: 스크롤 패널(y=270~518) 안에 2x2 그리드로 배치.
 	// 클릭 판정 크기는 실제로 그려지는 tower_thumbs_box 배경(113x93, renderTowerShopBoxes 참고)과 맞춘다.
@@ -174,6 +204,25 @@ void GameSceneUI::Init(
 	// 게임오버 팝업의 재시작 버튼. baked 이미지(131x137) 크기에 맞춰 게임 영역 정중앙에 둔다.
 	_restartButton = createButton(Vector(GameAreaCenterX, GameAreaCenterY), kRestartButtonSize, onRestartClick);
 	_restartButton->SetActive(false);
+
+	// 설정 팝업 버튼 5개: 오륜기 배치. 게임 영역 정중앙 기준.
+	const Vector settingsButtonSize(kSettingsButtonBaseWidth * kSettingsRingScale, kSettingsButtonBaseHeight * kSettingsRingScale);
+	const Vector ringOffsets[5] = {
+		Vector(-kSettingsRingSpacingX, 0.0f),                          // 0: 위 왼쪽
+		Vector(0.0f, 0.0f),                                            // 1: 위 가운데
+		Vector(kSettingsRingSpacingX, 0.0f),                           // 2: 위 오른쪽
+		Vector(-kSettingsRingSpacingX * 0.5f, kSettingsRingSpacingY),  // 3: 아래 왼쪽
+		Vector(kSettingsRingSpacingX * 0.5f, kSettingsRingSpacingY),   // 4: 아래 오른쪽
+	};
+	for (int32 i = 0; i < 5; ++i)
+	{
+		const Vector pos = Vector(GameAreaCenterX + ringOffsets[i].x, GameAreaCenterY + kSettingsRingCenterOffsetY + ringOffsets[i].y);
+		function<void()> onClick = (i == 0) ? onSettingsCloseClick : function<void()>([]() {}); // 0번(위 왼쪽) = 재개
+		_settingsMenuButtons[i] = createButton(pos, settingsButtonSize, onClick);
+		_settingsMenuButtons[i]->SetActive(false);
+		_settingsMenuButtons[i]->SetIgnoresModalLock(true); // 설정창 자신의 버튼들이라 입력 잠금 대상에서 제외.
+		_settingsIconImgs[i] = &res.GetImage(kSettingsIconFiles[i]);
+	}
 }
 
 UIButton* GameSceneUI::createButton(const Vector& pos, const Vector& size, function<void()> onClick)
@@ -230,6 +279,15 @@ void GameSceneUI::Render(Graphic& graphic, bool isDraggingTower, TowerType dragg
 	if (_restartButton != nullptr) _restartButton->SetActive(isGameOver);
 	if (isGameOver)
 		renderGameOverPopup(graphic);
+}
+
+void GameSceneUI::RenderModalOverlay(Graphic& graphic, bool isSettingsOpen) const
+{
+	for (UIButton* button : _settingsMenuButtons)
+		if (button != nullptr) button->SetActive(isSettingsOpen);
+
+	if (isSettingsOpen)
+		renderSettingsPopup(graphic);
 }
 
 // --------------------------------------------------
@@ -312,9 +370,12 @@ void GameSceneUI::renderStartButton(Graphic& graphic, bool isWaveActive, bool is
 		_hudImg->DrawSprite(graphic, pos.x, pos.y, *cell, kPlayButtonScale, 0.0f);
 	}
 
-	// 설정 아이콘(pause_icon). 플레이 버튼 옆에 나란히 같은 배율로 표시만 한다(클릭 동작 없음).
+	// 설정 아이콘(pause_icon). 플레이 버튼 옆에 나란히 같은 배율로 표시하며, 클릭하면 설정 팝업이 열린다.
 	if (const CellInfo* cell = _hudSprite->GetCell("pause_icon"))
-		_hudImg->DrawSprite(graphic, kSettingsIconCenterX, kSettingsIconCenterY, *cell, kPlayButtonScale, 0.0f);
+	{
+		const Vector pos = _settingsButton->GetPos();
+		_hudImg->DrawSprite(graphic, pos.x, pos.y, *cell, kPlayButtonScale, 0.0f);
+	}
 }
 
 void GameSceneUI::renderDebugWaveButtons(Graphic& graphic) const
@@ -561,4 +622,36 @@ void GameSceneUI::renderGameOverPopup(Graphic& graphic) const
 
 	ResourceManager::GetInstance().GetImage(L"restart_button_baked")
 		.Draw(graphic, GameAreaCenterX, GameAreaCenterY, 1.0f, 0.0f);
+}
+
+// --------------------------------------------------
+//  설정 팝업
+// --------------------------------------------------
+
+void GameSceneUI::renderSettingsPopup(Graphic& graphic) const
+{
+	ID2D1HwndRenderTarget* renderTarget = graphic.GetRenderTarget();
+	ID2D1SolidColorBrush* dimBrush = graphic.GetBrush(kSettingsDimColor);
+	if (renderTarget != nullptr && dimBrush != nullptr)
+	{
+		// 게임 필드뿐 아니라 오른쪽 상점 HUD까지 포함해 화면 전체를 어둡게 덮는다.
+		renderTarget->FillRectangle(D2D1::RectF(0.0f, 0.0f,
+			static_cast<float>(GWinSizeX), static_cast<float>(GWinSizeY)), dimBrush);
+	}
+
+	const CellInfo* cell = _hudSprite->GetCell("plain_button");
+	if (cell == nullptr)
+		return;
+
+	for (int32 i = 0; i < 5; ++i)
+	{
+		UIButton* button = _settingsMenuButtons[i];
+		if (button == nullptr)
+			continue;
+		const Vector pos = button->GetPos();
+		_hudImg->DrawSprite(graphic, pos.x, pos.y, *cell, kSettingsRingScale, 0.0f);
+
+		if (_settingsIconImgs[i] != nullptr)
+			_settingsIconImgs[i]->Draw(graphic, pos.x, pos.y, kSettingsIconScale, 0.0f);
+	}
 }

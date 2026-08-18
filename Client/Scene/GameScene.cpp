@@ -47,6 +47,13 @@ void GameScene::Update(float deltaTime)
 	if (InputManager::GetInstance().GetButtonDown(KeyType::F2))
 		_debugOverlay.Toggle();
 
+	if (InputManager::GetInstance().GetButtonDown(KeyType::Escape) && _healthManager.IsGameOver() == false)
+		_isSettingsOpen = !_isSettingsOpen;
+
+	// 설정창이 열려 있는 동안, 설정 버튼 5개(+톱니바퀴)를 제외한 모든 UI 버튼의 클릭을 막는다.
+	// SetActive를 쓰지 않으므로 다른 버튼들은 계속 보이고, 클릭만 안 먹힌다.
+	UIManager::GetInstance().SetInputLocked(_isSettingsOpen);
+
 	if (_healthManager.IsGameOver())
 	{
 		for (Actor* actor : GetActors(RenderLayer::Bloon))
@@ -54,6 +61,13 @@ void GameScene::Update(float deltaTime)
 			if (actor->IsActive() && actor->IsPendingKill() == false)
 				actor->Update(deltaTime);
 		}
+		UIManager::GetInstance().Update(deltaTime);
+		return;
+	}
+
+	if (_isSettingsOpen)
+	{
+		// 설정 팝업이 열려 있는 동안은 게임 로직을 완전히 멈추고, 버튼 클릭만 받는다.
 		UIManager::GetInstance().Update(deltaTime);
 		return;
 	}
@@ -134,6 +148,9 @@ void GameScene::Render(Graphic& graphic)
 		selectedTower->RenderRange(graphic);
 
 	Super::Render(graphic);
+
+	// 액터/버튼까지 전부 그려진 뒤 맨 마지막에 덧그려야 설정 팝업이 항상 최상단에 보인다.
+	_ui.RenderModalOverlay(graphic, _isSettingsOpen);
 }
 
 void GameScene::CreateUI()
@@ -150,7 +167,9 @@ void GameScene::CreateUI()
 		[this]() { _towerController.SellSelected(_map, _economyManager); },
 		[this]() { _towerController.UpgradeSelected(_economyManager); },
 		[this]() { _obstacleController.SellSelected(_map, _economyManager); },
-		[this]() { Restart(); });
+		[this]() { Restart(); },
+		[this]() { _isSettingsOpen = !_isSettingsOpen; },
+		[this]() { _isSettingsOpen = false; });
 	updateDebugWaveTitle();
 }
 

@@ -10,6 +10,7 @@ void InputManager::Update()
 	_currPressed[static_cast<int32>(KeyType::RightMouse)] = (::GetAsyncKeyState(VK_RBUTTON) & 0x8000) != 0;
 	_currPressed[static_cast<int32>(KeyType::F1)] = (::GetAsyncKeyState(VK_F1) & 0x8000) != 0;
 	_currPressed[static_cast<int32>(KeyType::F2)] = (::GetAsyncKeyState(VK_F2) & 0x8000) != 0;
+	_currPressed[static_cast<int32>(KeyType::Escape)] = (::GetAsyncKeyState(VK_ESCAPE) & 0x8000) != 0;
 	POINT pt;
 	::GetCursorPos(&pt);
 	::ScreenToClient(_hwnd, &pt);

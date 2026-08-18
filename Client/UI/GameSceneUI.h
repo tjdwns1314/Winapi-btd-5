@@ -45,7 +45,9 @@ public:
 		function<void()> onSellClick,
 		function<void()> onUpgradeClick,
 		function<void()> onObstacleSellClick,
-		function<void()> onRestartClick);
+		function<void()> onRestartClick,
+		function<void()> onSettingsClick,
+		function<void()> onSettingsCloseClick);
 
 	void Render(Graphic& graphic,
 		bool isDraggingTower,
@@ -58,6 +60,10 @@ public:
 		int32 gold, bool isWaveActive,
 		bool isSpeedEnabled,
 		bool isGameOver);
+
+	// 설정 팝업 전용. 다른 모든 그리기(액터, HUD, 다른 팝업)가 끝난 뒤 프레임 맨 마지막에 호출해야
+	// 액터/버튼에 가려지지 않고 항상 최상단에 딤+버튼이 그려진다.
+	void RenderModalOverlay(Graphic& graphic, bool isSettingsOpen) const;
 private:
 	UIButton* createButton(const Vector& pos, const Vector& size, function<void()> onClick);
 
@@ -93,12 +99,18 @@ private:
 	// --------------------------------------------------
 	void renderGameOverPopup(Graphic& graphic) const;
 
+	// --------------------------------------------------
+	//  설정 팝업
+	// --------------------------------------------------
+	void renderSettingsPopup(Graphic& graphic) const;
+
 	// HUD 배경 패널 / 골드·HP 텍스트
 	Image* _hudImg = nullptr;
 	SpriteAtlas* _hudSprite = nullptr;
 
 	// 웨이브 시작 / 디버그 웨이브 조절
 	UIButton* _startButton = nullptr;
+	UIButton* _settingsButton = nullptr; // 설정(톱니바퀴) 아이콘. 플레이 버튼 옆, 클릭 시 설정 팝업 토글.
 	UIButton* _waveUpButton = nullptr;   // 디버그용: 시작 라운드를 +/-로 조절(정식 스프라이트 없이 도형으로 그림)
 	UIButton* _waveDownButton = nullptr;
 
@@ -120,6 +132,11 @@ private:
 	Image* _popupImg = nullptr;
 	SpriteAtlas* _popupSprite = nullptr;
 	UIButton* _restartButton = nullptr;
+
+	// 설정 팝업: 오륜기 배치(위 3개 + 아래 2개). 아래 왼쪽 버튼이 닫기, 나머지는 아직 자리만 잡음(레이아웃만 구현).
+	UIButton* _settingsMenuButtons[5] = {};
+	// 각 버튼 가운데 그려질 아이콘(nukki 폴더, 개별 PNG). 순서는 _settingsMenuButtons와 동일: 0 재개, 1 리플레이, 2 자동진행, 3 음악, 4 효과음.
+	Image* _settingsIconImgs[5] = {};
 
 	// 업그레이드 패널 아이콘
 	Image* _upgradeIconsImg = nullptr;
