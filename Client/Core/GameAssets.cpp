@@ -34,6 +34,13 @@ void GameAssets::Load(Graphic& graphic)
 	res.LoadImage(graphic, L"Resource\\Sprite\\nukki\\resume.png");
 	res.LoadImage(graphic, L"Resource\\Sprite\\nukki\\sfx.png");
 	res.LoadImage(graphic, L"Resource\\Sprite\\nukki\\x.png");
+	res.LoadImage(graphic, L"Resource\\Sprite\\nukki\\circle_nukki.png");
+	res.LoadImage(graphic, L"Resource\\Sprite\\nukki\\twocircle_nukki.png");
+	res.LoadImage(graphic, L"Resource\\Sprite\\nukki\\smallcircle_nukki.png");
+	res.LoadImage(graphic, L"Resource\\Sprite\\nukki\\cogwheel_nukki.png");
+
+	res.LoadImage(graphic, L"Resource\\Sprite\\loading_screen.png");
+	res.LoadAtlas(L"Resource\\Sprite\\loading_screen.xml");
 
 	res.LoadImage(graphic, L"Resource\\Red.png");
 	res.LoadImage(graphic, L"Resource\\Blue.png");
