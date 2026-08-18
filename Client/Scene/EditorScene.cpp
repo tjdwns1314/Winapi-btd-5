@@ -50,332 +50,375 @@ void EditorScene::Render(Graphic& graphic)
 	// upgrade_box_buy
 	// upgrade_box_cant
 	// tower_thumbs_box
-	if (const CellInfo* cell = _hudSprite->GetCell("sell_box"))
+	if (const CellInfo* cell = _hudSprite->GetCell("upgrade_box_buy"))
 	{
 		_hudImg->DrawSprite(graphic, 300.0f, 400.0f, *cell, 1.0f, 0.0f);
 	}
 
-	if (const CellInfo* cell = _hudSprite->GetCell("lower_hud_bg_02"))
+	if (const CellInfo* cell = _hudSprite->GetCell("upgrade_box_cant"))
 	{
 		_hudImg->DrawSprite(graphic, 300.0f, 100.0f, *cell, 1.0f, 0.0f);
 	}
 
-	// 원숭이 업그레이드 두건
+	//// 원숭이 업그레이드 두건
 
-	if (const CellInfo* cell = _sprite->GetCell("red_bandana"))
-	{
-		_inGameBg->DrawSprite(graphic, 400.0f, 100.0f, *cell, 1.0f, 0.0f);
-	}
-	if (const CellInfo* cell = _sprite->GetCell("blue_bandana"))
-	{
-		_inGameBg->DrawSprite(graphic, 500.0f, 100.0f, *cell, 1.0f, 0.0f);
-	}
-	if (const CellInfo* cell = _sprite->GetCell("green_bandana"))
-	{
-		_inGameBg->DrawSprite(graphic, 600.0f, 100.0f, *cell, 1.0f, 0.0f);
-	}
-	if (const CellInfo* cell = _sprite->GetCell("triple_darts_bandana"))
-	{
-		_inGameBg->DrawSprite(graphic, 700.0f, 100.0f, *cell, 1.0f, 0.0f);
-	}
-
-
-	// 압정 타워 애니메이션
-
-	if (const CellInfo* cell = _sprite->GetCell("tack_shooter_firing_01"))
-	{
-		_inGameBg->DrawSprite(graphic, 100.0f, 300.0f, *cell, 1.0f, 0.0f);
-	}
-	if (const CellInfo* cell = _sprite->GetCell("tack_shooter_firing_02"))
-	{
-		_inGameBg->DrawSprite(graphic, 200.0f, 300.0f, *cell, 1.0f, 0.0f);
-	}
-
-	if (const CellInfo* cell = _sprite->GetCell("tack_shooter_faster_firing_01"))
-	{
-		_inGameBg->DrawSprite(graphic, 300.0f, 300.0f, *cell, 1.0f, 0.0f);
-	}
-	if (const CellInfo* cell = _sprite->GetCell("tack_shooter_faster_firing_02"))
-	{
-		_inGameBg->DrawSprite(graphic, 400.0f, 300.0f, *cell, 1.0f, 0.0f);
-	}
-	if (const CellInfo* cell = _sprite->GetCell("tack_shooter_even_faster_logo"))
-	{
-		_inGameBg->DrawSprite(graphic, 450.0f, 300.0f, *cell, 1.0f, 0.0f);
-	}
-	
-
-	if (const CellInfo* cell = _sprite->GetCell("tack_shooter_sprayer_01"))
-	{
-		_inGameBg->DrawSprite(graphic, 500.0f, 300.0f, *cell, 1.0f, 0.0f);
-	}
-	if (const CellInfo* cell = _sprite->GetCell("tack_shooter_sprayer_02"))
-	{
-		_inGameBg->DrawSprite(graphic, 600.0f, 300.0f, *cell, 1.0f, 0.0f);
-	}
-
-	//// 저격총 원숭이 얘는 틴트 기능 넣어야함
-	//if (const CellInfo* cell = _sprite->GetCell("sniper_goggles"))
+	//if (const CellInfo* cell = _sprite->GetCell("red_bandana"))
 	//{
-	//	_inGameBg->DrawSprite(graphic, 100.0f, 500.0f, *cell, 1.0f, 0.0f);
+	//	_inGameBg->DrawSprite(graphic, 400.0f, 100.0f, *cell, 1.0f, 0.0f);
 	//}
-	if (const CellInfo* cell = _sprite->GetCell("sniper_basic_rifle_muzzle"))
-	{
-		_inGameBg->DrawSprite(graphic, 200.0f, 500.0f, *cell, 1.0f, 0.0f);
-	}
-	// sniper_laser
-	// sniper_deadly_precision
-	// sniper_semi_auto
-	// sniper_full_metal_jacket
+	//if (const CellInfo* cell = _sprite->GetCell("blue_bandana"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 500.0f, 100.0f, *cell, 1.0f, 0.0f);
+	//}
+	//if (const CellInfo* cell = _sprite->GetCell("green_bandana"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 600.0f, 100.0f, *cell, 1.0f, 0.0f);
+	//}
+	//if (const CellInfo* cell = _sprite->GetCell("triple_darts_bandana"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 700.0f, 100.0f, *cell, 1.0f, 0.0f);
+	//}
 
-	//if (const CellInfo* cell = _sprite->GetCell("sniper_cripple_moab"))
+
+	//// 압정 타워 애니메이션
+
+	//if (const CellInfo* cell = _sprite->GetCell("tack_shooter_firing_01"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 100.0f, 300.0f, *cell, 1.0f, 0.0f);
+	//}
+	//if (const CellInfo* cell = _sprite->GetCell("tack_shooter_firing_02"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 200.0f, 300.0f, *cell, 1.0f, 0.0f);
+	//}
+
+	//if (const CellInfo* cell = _sprite->GetCell("tack_shooter_faster_firing_01"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 300.0f, 300.0f, *cell, 1.0f, 0.0f);
+	//}
+	//if (const CellInfo* cell = _sprite->GetCell("tack_shooter_faster_firing_02"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 400.0f, 300.0f, *cell, 1.0f, 0.0f);
+	//}
+	//if (const CellInfo* cell = _sprite->GetCell("tack_shooter_even_faster_logo"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 450.0f, 300.0f, *cell, 1.0f, 0.0f);
+	//}
+	//
+
+	//if (const CellInfo* cell = _sprite->GetCell("tack_shooter_sprayer_01"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 500.0f, 300.0f, *cell, 1.0f, 0.0f);
+	//}
+	//if (const CellInfo* cell = _sprite->GetCell("tack_shooter_sprayer_02"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 600.0f, 300.0f, *cell, 1.0f, 0.0f);
+	//}
+
+	////// 저격총 원숭이 얘는 틴트 기능 넣어야함
+	////if (const CellInfo* cell = _sprite->GetCell("sniper_goggles"))
+	////{
+	////	_inGameBg->DrawSprite(graphic, 100.0f, 500.0f, *cell, 1.0f, 0.0f);
+	////}
+	//if (const CellInfo* cell = _sprite->GetCell("sniper_basic_rifle_muzzle"))
 	//{
 	//	_inGameBg->DrawSprite(graphic, 200.0f, 500.0f, *cell, 1.0f, 0.0f);
 	//}
+	//// sniper_laser
+	//// sniper_deadly_precision
+	//// sniper_semi_auto
+	//// sniper_full_metal_jacket
 
-	if (const CellInfo* cell = _sprite->GetCell("sniper_green_hat"))
-	{
-		_inGameBg->DrawSprite(graphic, 300.0f, 500.0f, *cell, 1.0f, 0.0f);
-	}
+	////if (const CellInfo* cell = _sprite->GetCell("sniper_cripple_moab"))
+	////{
+	////	_inGameBg->DrawSprite(graphic, 200.0f, 500.0f, *cell, 1.0f, 0.0f);
+	////}
 
-
-	// 저격총 애니메이션
-	if (const CellInfo* cell = _sprite->GetCell("sniper_arm_01"))
-	{
-		_inGameBg->DrawSprite(graphic, 400.0f, 500.0f, *cell, 1.0f, 0.0f);
-	}
-
-	if (const CellInfo* cell = _sprite->GetCell("sniper_arm_02"))
-	{
-		_inGameBg->DrawSprite(graphic, 500.0f, 500.0f, *cell, 1.0f, 0.0f);
-	}
-
-	if (const CellInfo* cell = _sprite->GetCell("sniper_arm_03"))
-	{
-		_inGameBg->DrawSprite(graphic, 600.0f, 500.0f, *cell, 1.0f, 0.0f);
-	}
-
-	if (const CellInfo* cell = _sprite->GetCell("sniper_arm_04"))
-	{
-		_inGameBg->DrawSprite(graphic, 700.0f, 500.0f, *cell, 1.0f, 0.0f);
-	}
-
-	if (const CellInfo* cell = _sprite->GetCell("sniper_arm_05"))
-	{
-		_inGameBg->DrawSprite(graphic, 800.0f, 500.0f, *cell, 1.0f, 0.0f);
-	}
+	//if (const CellInfo* cell = _sprite->GetCell("sniper_green_hat"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 300.0f, 500.0f, *cell, 1.0f, 0.0f);
+	//}
 
 
-	// 저격총 탄피 애니메이션
-	if (const CellInfo* cell = _sprite->GetCell("sniper_casing_01"))
-	{
-		_inGameBg->DrawSprite(graphic, 900.0f, 500.0f, *cell, 1.0f, 0.0f);
-	}
+	//// 저격총 애니메이션
+	//if (const CellInfo* cell = _sprite->GetCell("sniper_arm_01"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 400.0f, 500.0f, *cell, 1.0f, 0.0f);
+	//}
 
-	if (const CellInfo* cell = _sprite->GetCell("sniper_casing_02"))
-	{
-		_inGameBg->DrawSprite(graphic, 1000.0f, 500.0f, *cell, 1.0f, 0.0f);
-	}
+	//if (const CellInfo* cell = _sprite->GetCell("sniper_arm_02"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 500.0f, 500.0f, *cell, 1.0f, 0.0f);
+	//}
 
-	if (const CellInfo* cell = _sprite->GetCell("sniper_casing_03"))
-	{
-		_inGameBg->DrawSprite(graphic, 1100.0f, 500.0f, *cell, 1.0f, 0.0f);
-	}
+	//if (const CellInfo* cell = _sprite->GetCell("sniper_arm_03"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 600.0f, 500.0f, *cell, 1.0f, 0.0f);
+	//}
 
-	if (const CellInfo* cell = _sprite->GetCell("sniper_casing_04"))
-	{
-		_inGameBg->DrawSprite(graphic, 1200.0f, 500.0f, *cell, 1.0f, 0.0f);
-	}
+	//if (const CellInfo* cell = _sprite->GetCell("sniper_arm_04"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 700.0f, 500.0f, *cell, 1.0f, 0.0f);
+	//}
 
-
-
-
-
-	// 폭탄 애니메이션
-
-	if (const CellInfo* cell = _sprite->GetCell("bomb_tower_01"))
-	{
-		_inGameBg->DrawSprite(graphic, 100.0f, 900.0f, *cell, 1.0f, 0.0f);
-	}
-	if (const CellInfo* cell = _sprite->GetCell("bomb_tower_02"))
-	{
-		_inGameBg->DrawSprite(graphic, 200.0f, 900.0f, *cell, 1.0f, 0.0f);
-	}
-	if (const CellInfo* cell = _sprite->GetCell("bomb_tower_03"))
-	{
-		_inGameBg->DrawSprite(graphic, 300.0f, 900.0f, *cell, 1.0f, 0.0f);
-	}
-	if (const CellInfo* cell = _sprite->GetCell("bomb_tower_04"))
-	{
-		_inGameBg->DrawSprite(graphic, 400.0f, 900.0f, *cell, 1.0f, 0.0f);
-	}
-	if (const CellInfo* cell = _sprite->GetCell("bomb_tower_silo"))
-	{
-		_inGameBg->DrawSprite(graphic, 500.0f, 900.0f, *cell, 1.0f, 0.0f);
-	}
-	if (const CellInfo* cell = _sprite->GetCell("bomb_tower_missile_full"))
-	{
-		_inGameBg->DrawSprite(graphic, 600.0f, 900.0f, *cell, 1.0f, 0.0f);
-	}
+	//if (const CellInfo* cell = _sprite->GetCell("sniper_arm_05"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 800.0f, 500.0f, *cell, 1.0f, 0.0f);
+	//}
 
 
-	if (const CellInfo* cell = _sprite->GetCell("bomb_tower_cluster_01"))
-	{
-		_inGameBg->DrawSprite(graphic, 700.0f, 900.0f, *cell, 1.0f, 0.0f);
-	}
-	if (const CellInfo* cell = _sprite->GetCell("bomb_tower_cluster_02"))
-	{
-		_inGameBg->DrawSprite(graphic, 800.0f, 900.0f, *cell, 1.0f, 0.0f);
-	}
-	if (const CellInfo* cell = _sprite->GetCell("bomb_tower_cluster_03"))
-	{
-		_inGameBg->DrawSprite(graphic, 900.0f, 900.0f, *cell, 1.0f, 0.0f);
-	}
-	if (const CellInfo* cell = _sprite->GetCell("bomb_tower_cluster_04"))
-	{
-		_inGameBg->DrawSprite(graphic, 1000.0f, 900.0f, *cell, 1.0f, 0.0f);
-	}
-	// 폭탄 타워 미사일 애니메이션
-	if (const CellInfo* cell = _sprite->GetCell("bomb_tower_missile_01"))
-	{
-		_inGameBg->DrawSprite(graphic, 1100.0f, 900.0f, *cell, 1.0f, 0.0f);
-	}
+	//// 저격총 탄피 애니메이션
+	//if (const CellInfo* cell = _sprite->GetCell("sniper_casing_01"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 900.0f, 500.0f, *cell, 1.0f, 0.0f);
+	//}
 
-	if (const CellInfo* cell = _sprite->GetCell("bomb_tower_missile_02"))
-	{
-		_inGameBg->DrawSprite(graphic, 1200.0f, 900.0f, *cell, 1.0f, 0.0f);
-	}
+	//if (const CellInfo* cell = _sprite->GetCell("sniper_casing_02"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 1000.0f, 500.0f, *cell, 1.0f, 0.0f);
+	//}
 
-	if (const CellInfo* cell = _sprite->GetCell("bomb_tower_missile_03"))
-	{
-		_inGameBg->DrawSprite(graphic, 1300.0f, 900.0f, *cell, 1.0f, 0.0f);
-	}
-	// 폭탄 타워 사일로 문 애니메이션
-	if (const CellInfo* cell = _sprite->GetCell("bommb_tower_silo_doors_01"))
-	{
-		_inGameBg->DrawSprite(graphic, 100.0f, 700.0f, *cell, 1.0f, 0.0f);
-	}
+	//if (const CellInfo* cell = _sprite->GetCell("sniper_casing_03"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 1100.0f, 500.0f, *cell, 1.0f, 0.0f);
+	//}
 
-	if (const CellInfo* cell = _sprite->GetCell("bommb_tower_silo_doors_02"))
-	{
-		_inGameBg->DrawSprite(graphic, 200.0f, 700.0f, *cell, 1.0f, 0.0f);
-	}
-
-	if (const CellInfo* cell = _sprite->GetCell("bommb_tower_silo_doors_03"))
-	{
-		_inGameBg->DrawSprite(graphic, 300.0f, 700.0f, *cell, 1.0f, 0.0f);
-	}
-
-	if (const CellInfo* cell = _sprite->GetCell("bommb_tower_silo_doors_04"))
-	{
-		_inGameBg->DrawSprite(graphic, 400.0f, 700.0f, *cell, 1.0f, 0.0f);
-	}
-
-	if (const CellInfo* cell = _sprite->GetCell("bommb_tower_silo_doors_05"))
-	{
-		_inGameBg->DrawSprite(graphic, 500.0f, 700.0f, *cell, 1.0f, 0.0f);
-	}
-
-	if (const CellInfo* cell = _sprite->GetCell("bommb_tower_silo_doors_06"))
-	{
-		_inGameBg->DrawSprite(graphic, 600.0f, 700.0f, *cell, 1.0f, 0.0f);
-	}
-	// 폭탄 타워 총구 연기 애니메이션
-	if (const CellInfo* cell = _sprite->GetCell("bomb_tower_muzzle_smoke_01"))
-	{
-		_inGameBg->DrawSprite(graphic, 600.0f, 700.0f, *cell, 1.0f, 0.0f);
-	}
-
-	if (const CellInfo* cell = _sprite->GetCell("bomb_tower_muzzle_smoke_02"))
-	{
-		_inGameBg->DrawSprite(graphic, 700.0f, 700.0f, *cell, 1.0f, 0.0f);
-	}
-
-	if (const CellInfo* cell = _sprite->GetCell("bomb_tower_muzzle_smoke_03"))
-	{
-		_inGameBg->DrawSprite(graphic, 800.0f, 700.0f, *cell, 1.0f, 0.0f);
-	}
-
-	if (const CellInfo* cell = _sprite->GetCell("bomb_tower_muzzle_smoke_04"))
-	{
-		_inGameBg->DrawSprite(graphic, 900.0f, 700.0f, *cell, 1.0f, 0.0f);
-	}
-
-	// 폭탄 타워 폭탄 애니메이션
-	if (const CellInfo* cell = _sprite->GetCell("bomb_tower_bomb_01"))
-	{
-		_inGameBg->DrawSprite(graphic, 1000.0f, 700.0f, *cell, 1.0f, 0.0f);
-	}
-
-	if (const CellInfo* cell = _sprite->GetCell("bomb_tower_bomb_02"))
-	{
-		_inGameBg->DrawSprite(graphic, 1100.0f, 700.0f, *cell, 1.0f, 0.0f);
-	}
-
-	if (const CellInfo* cell = _sprite->GetCell("bomb_tower_bomb_03"))
-	{
-		_inGameBg->DrawSprite(graphic, 1200.0f, 700.0f, *cell, 1.0f, 0.0f);
-	}
-
-	// explosion 애니메이션
-	if (const CellInfo* cell = _sprite->GetCell("explosion_01"))
-	{
-		_inGameBg->DrawSprite(graphic, 1300.0f, 700.0f, *cell, 1.0f, 0.0f);
-	}
-
-	if (const CellInfo* cell = _sprite->GetCell("explosion_02"))
-	{
-		_inGameBg->DrawSprite(graphic, 1400.0f, 700.0f, *cell, 1.0f, 0.0f);
-	}
-
-	if (const CellInfo* cell = _sprite->GetCell("explosion_05"))
-	{
-		_inGameBg->DrawSprite(graphic, 1500.0f, 700.0f, *cell, 1.0f, 0.0f);
-	}
-
-	if (const CellInfo* cell = _sprite->GetCell("explosion_06"))
-	{
-		_inGameBg->DrawSprite(graphic, 1600.0f, 700.0f, *cell, 1.0f, 0.0f);
-	}
-
-	if (const CellInfo* cell = _sprite->GetCell("bomb_tower_cluster_01"))
-	{
-		_inGameBg->DrawSprite(graphic, 100.0f, 700.0f, *cell, 1.0f, 0.0f);
-	}
-	if (const CellInfo* cell = _sprite->GetCell("bomb_tower_impact_01"))
-	{
-		_inGameBg->DrawSprite(graphic, 200.0f, 700.0f, *cell, 1.0f, 0.0f);
-	}
-	if (const CellInfo* cell = _sprite->GetCell("bomb_tower_missile_01"))
-	{
-		_inGameBg->DrawSprite(graphic, 300.0f, 700.0f, *cell, 1.0f, 0.0f);
-	}
-	if (const CellInfo* cell = _sprite->GetCell("bomb_tower_red_ring_04"))
-	{
-		_inGameBg->DrawSprite(graphic, 400.0f, 700.0f, *cell, 1.0f, 0.0f);
-	}
-
-	// 별모양 bomb_tower_frag (애니메이션, bomb_tower_frag_01 ~ _04)
-	if (const CellInfo* cell = _sprite->GetCell("bomb_tower_frag_01"))
-	{
-		_inGameBg->DrawSprite(graphic, 1000.0f, 100.0f, *cell, 1.0f, 0.0f);
-	}
-	if (const CellInfo* cell = _sprite->GetCell("bomb_tower_frag_02"))
-	{
-		_inGameBg->DrawSprite(graphic, 1100.0f, 100.0f, *cell, 1.0f, 0.0f);
-	}
-	if (const CellInfo* cell = _sprite->GetCell("bomb_tower_frag_03"))
-	{
-		_inGameBg->DrawSprite(graphic, 1200.0f, 100.0f, *cell, 1.0f, 0.0f);
-	}
-	if (const CellInfo* cell = _sprite->GetCell("bomb_tower_frag_04"))
-	{
-		_inGameBg->DrawSprite(graphic, 1300.0f, 100.0f, *cell, 1.0f, 0.0f);
-	}
+	//if (const CellInfo* cell = _sprite->GetCell("sniper_casing_04"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 1200.0f, 500.0f, *cell, 1.0f, 0.0f);
+	//}
 
 
 
 
+
+	//// 폭탄 애니메이션
+
+	//if (const CellInfo* cell = _sprite->GetCell("bomb_tower_01"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 100.0f, 900.0f, *cell, 1.0f, 0.0f);
+	//}
+	//if (const CellInfo* cell = _sprite->GetCell("bomb_tower_02"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 200.0f, 900.0f, *cell, 1.0f, 0.0f);
+	//}
+	//if (const CellInfo* cell = _sprite->GetCell("bomb_tower_03"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 300.0f, 900.0f, *cell, 1.0f, 0.0f);
+	//}
+	//if (const CellInfo* cell = _sprite->GetCell("bomb_tower_04"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 400.0f, 900.0f, *cell, 1.0f, 0.0f);
+	//}
+	//if (const CellInfo* cell = _sprite->GetCell("bomb_tower_silo"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 500.0f, 900.0f, *cell, 1.0f, 0.0f);
+	//}
+	//if (const CellInfo* cell = _sprite->GetCell("bomb_tower_missile_full"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 600.0f, 900.0f, *cell, 1.0f, 0.0f);
+	//}
+
+
+	//if (const CellInfo* cell = _sprite->GetCell("bomb_tower_cluster_01"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 700.0f, 900.0f, *cell, 1.0f, 0.0f);
+	//}
+	//if (const CellInfo* cell = _sprite->GetCell("bomb_tower_cluster_02"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 800.0f, 900.0f, *cell, 1.0f, 0.0f);
+	//}
+	//if (const CellInfo* cell = _sprite->GetCell("bomb_tower_cluster_03"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 900.0f, 900.0f, *cell, 1.0f, 0.0f);
+	//}
+	//if (const CellInfo* cell = _sprite->GetCell("bomb_tower_cluster_04"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 1000.0f, 900.0f, *cell, 1.0f, 0.0f);
+	//}
+	//// 폭탄 타워 미사일 애니메이션
+	//if (const CellInfo* cell = _sprite->GetCell("bomb_tower_missile_01"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 1100.0f, 900.0f, *cell, 1.0f, 0.0f);
+	//}
+
+	//if (const CellInfo* cell = _sprite->GetCell("bomb_tower_missile_02"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 1200.0f, 900.0f, *cell, 1.0f, 0.0f);
+	//}
+
+	//if (const CellInfo* cell = _sprite->GetCell("bomb_tower_missile_03"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 1300.0f, 900.0f, *cell, 1.0f, 0.0f);
+	//}
+	//// 폭탄 타워 사일로 문 애니메이션
+	//if (const CellInfo* cell = _sprite->GetCell("bommb_tower_silo_doors_01"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 100.0f, 700.0f, *cell, 1.0f, 0.0f);
+	//}
+
+	//if (const CellInfo* cell = _sprite->GetCell("bommb_tower_silo_doors_02"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 200.0f, 700.0f, *cell, 1.0f, 0.0f);
+	//}
+
+	//if (const CellInfo* cell = _sprite->GetCell("bommb_tower_silo_doors_03"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 300.0f, 700.0f, *cell, 1.0f, 0.0f);
+	//}
+
+	//if (const CellInfo* cell = _sprite->GetCell("bommb_tower_silo_doors_04"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 400.0f, 700.0f, *cell, 1.0f, 0.0f);
+	//}
+
+	//if (const CellInfo* cell = _sprite->GetCell("bommb_tower_silo_doors_05"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 500.0f, 700.0f, *cell, 1.0f, 0.0f);
+	//}
+
+	//if (const CellInfo* cell = _sprite->GetCell("bommb_tower_silo_doors_06"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 600.0f, 700.0f, *cell, 1.0f, 0.0f);
+	//}
+	//// 폭탄 타워 총구 연기 애니메이션
+	//if (const CellInfo* cell = _sprite->GetCell("bomb_tower_muzzle_smoke_01"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 600.0f, 700.0f, *cell, 1.0f, 0.0f);
+	//}
+
+	//if (const CellInfo* cell = _sprite->GetCell("bomb_tower_muzzle_smoke_02"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 700.0f, 700.0f, *cell, 1.0f, 0.0f);
+	//}
+
+	//if (const CellInfo* cell = _sprite->GetCell("bomb_tower_muzzle_smoke_03"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 800.0f, 700.0f, *cell, 1.0f, 0.0f);
+	//}
+
+	//if (const CellInfo* cell = _sprite->GetCell("bomb_tower_muzzle_smoke_04"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 900.0f, 700.0f, *cell, 1.0f, 0.0f);
+	//}
+
+	//// 폭탄 타워 폭탄 애니메이션
+	//if (const CellInfo* cell = _sprite->GetCell("bomb_tower_bomb_01"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 1000.0f, 700.0f, *cell, 1.0f, 0.0f);
+	//}
+
+	//if (const CellInfo* cell = _sprite->GetCell("bomb_tower_bomb_02"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 1100.0f, 700.0f, *cell, 1.0f, 0.0f);
+	//}
+
+	//if (const CellInfo* cell = _sprite->GetCell("bomb_tower_bomb_03"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 1200.0f, 700.0f, *cell, 1.0f, 0.0f);
+	//}
+
+	//// explosion 애니메이션
+	//if (const CellInfo* cell = _sprite->GetCell("explosion_01"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 1300.0f, 700.0f, *cell, 1.0f, 0.0f);
+	//}
+
+	//if (const CellInfo* cell = _sprite->GetCell("explosion_02"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 1400.0f, 700.0f, *cell, 1.0f, 0.0f);
+	//}
+
+	//if (const CellInfo* cell = _sprite->GetCell("explosion_05"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 1500.0f, 700.0f, *cell, 1.0f, 0.0f);
+	//}
+
+	//if (const CellInfo* cell = _sprite->GetCell("explosion_06"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 1600.0f, 700.0f, *cell, 1.0f, 0.0f);
+	//}
+
+	//if (const CellInfo* cell = _sprite->GetCell("bomb_tower_cluster_01"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 100.0f, 700.0f, *cell, 1.0f, 0.0f);
+	//}
+	//if (const CellInfo* cell = _sprite->GetCell("bomb_tower_impact_01"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 200.0f, 700.0f, *cell, 1.0f, 0.0f);
+	//}
+	//if (const CellInfo* cell = _sprite->GetCell("bomb_tower_missile_01"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 300.0f, 700.0f, *cell, 1.0f, 0.0f);
+	//}
+	//if (const CellInfo* cell = _sprite->GetCell("bomb_tower_red_ring_04"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 400.0f, 700.0f, *cell, 1.0f, 0.0f);
+	//}
+
+	//// 별모양 bomb_tower_frag (애니메이션, bomb_tower_frag_01 ~ _04)
+	//if (const CellInfo* cell = _sprite->GetCell("bomb_tower_frag_01"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 1000.0f, 100.0f, *cell, 1.0f, 0.0f);
+	//}
+	//if (const CellInfo* cell = _sprite->GetCell("bomb_tower_frag_02"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 1100.0f, 100.0f, *cell, 1.0f, 0.0f);
+	//}
+	//if (const CellInfo* cell = _sprite->GetCell("bomb_tower_frag_03"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 1200.0f, 100.0f, *cell, 1.0f, 0.0f);
+	//}
+	//if (const CellInfo* cell = _sprite->GetCell("bomb_tower_frag_04"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 1300.0f, 100.0f, *cell, 1.0f, 0.0f);
+	//}
+
+
+
+
+
+	// 다트 원숭이 업그레이드 아이콘: 1경로(위쪽 행) / 2경로(아래쪽 행), 티어 1~4가 왼쪽에서 오른쪽으로 진행
+	auto drawUpgradeIcon = [&](const char* cellName, float x, float y)
+		{
+			if (const CellInfo* cell = _upgradeIconsSprite->GetCell(cellName))
+			{
+				_upgradeIconsImg->DrawSprite(graphic, x, y, *cell, 1.0f, 0.0f);
+			}
+		};
+
+	// 1경로: 날카로운 다트 -> 면도날 다트
+	drawUpgradeIcon("dart_monkey_sharp_shots_icon",     600.0f, 100.0f);
+	drawUpgradeIcon("dart_monkey_razor_icon",           700.0f, 100.0f);
+
+	// 2경로: 긴 사거리 다트 -> 강화된 시력 -> 트리플 다트
+	drawUpgradeIcon("dart_monkey_longer_range_icon",      600.0f, 200.0f);
+	drawUpgradeIcon("dart_monkey_enhanced_eyesight_icon", 700.0f, 200.0f);
+	drawUpgradeIcon("dart_monkey_triple_icon",            800.0f, 200.0f);
+
+	// 저격 원숭이: 1경로(풀 메탈 자켓 -> .50구경)
+	drawUpgradeIcon("sniper_full_metal_icon",        600.0f, 300.0f);
+	drawUpgradeIcon("sniper_point_50_icon",          700.0f, 300.0f);
+
+	// 저격 원숭이: 2경로(빠른 발사 -> 야간 투시경)
+	drawUpgradeIcon("sniper_faster_firing_icon",     600.0f, 400.0f);
+	drawUpgradeIcon("sniper_nvg_icon",               700.0f, 400.0f);
+
+	// 압정 슈터: 1경로(빠른 발사 -> 더 빠른 발사 -> 압정 분무기)
+	drawUpgradeIcon("tack_shooter_faster_firing_icon",      600.0f, 500.0f);
+	drawUpgradeIcon("tack_shooter_even_faster_firing_icon", 700.0f, 500.0f);
+	drawUpgradeIcon("tack_shooter_sprayer_icon",            800.0f, 500.0f);
+
+	// 압정 슈터: 2경로(사거리 증가 -> 슈퍼 사거리)
+	drawUpgradeIcon("tack_shooter_extra_range_icon",   600.0f, 600.0f);
+	drawUpgradeIcon("tack_shooter_super_range_icon",   700.0f, 600.0f);
+
+	// 폭탄 타워: 1경로(사거리 증가 -> 파편 폭탄)
+	drawUpgradeIcon("bomb_extra_range_icon", 600.0f, 700.0f);
+	drawUpgradeIcon("bomb_frag_icon",        700.0f, 700.0f);
+
+	// 폭탄 타워: 2경로(더 큰 폭탄 -> 미사일 발사기)
+	drawUpgradeIcon("bomb_bigger_icon",  600.0f, 800.0f);
+	drawUpgradeIcon("bomb_missile_icon", 700.0f, 800.0f);
 
 	/*if (const CellInfo* cell = _sprite->GetCell("banana_box"))
 {
