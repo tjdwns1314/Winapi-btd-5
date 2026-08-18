@@ -21,7 +21,8 @@ public :
 
 	void DrawString(const wchar_t* text, D2D1_RECT_F layoutRect, FontSize size,
 		D2D1::ColorF color, DWRITE_TEXT_ALIGNMENT align =
-		DWRITE_TEXT_ALIGNMENT_LEADING);
+		DWRITE_TEXT_ALIGNMENT_LEADING,
+		DWRITE_PARAGRAPH_ALIGNMENT vAlign = DWRITE_PARAGRAPH_ALIGNMENT_NEAR);
 
 
 private:
