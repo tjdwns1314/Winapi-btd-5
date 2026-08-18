@@ -19,6 +19,7 @@ struct TowerSelectionInfo
 	int32 upgradePrice = 0;
 	bool canUpgrade = false;
 	string upgradeIconKey;
+	string avatarKey;
 };
 
 struct ObstacleSelectionInfo
