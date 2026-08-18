@@ -6,7 +6,6 @@
 #include "Obstacle.h"
 #include "PoolManager.h"
 #include "Game.h"
-#include "Collider.h"
 
 void GameScene::Init(Graphic& graphic)
 {
@@ -40,13 +39,13 @@ void GameScene::Cleanup()
 	Super::Cleanup();
 	_towerController.Reset();
 	_obstacleController.Reset();
-	_debugCircles.clear();
+	_debugOverlay.Clear();
 }
 
 void GameScene::Update(float deltaTime)
 {
 	if (InputManager::GetInstance().GetButtonDown(KeyType::F2))
-		_debugOverlayEnabled = !_debugOverlayEnabled;
+		_debugOverlay.Toggle();
 
 	if (_healthManager.IsGameOver())
 	{
@@ -72,13 +71,7 @@ void GameScene::Update(float deltaTime)
 	GetCollisionManager().Update(*this);
 	updateDebugWaveTitle();
 
-	for (DebugCircle& circle : _debugCircles)
-		circle.remaining -= deltaTime;
-
-	std::erase_if(_debugCircles, [](const DebugCircle& circle)
-		{
-			return circle.remaining <= 0.f;
-		});
+	_debugOverlay.Update(deltaTime);
 }
 
 float GameScene::getTimeScale() const
@@ -90,27 +83,16 @@ float GameScene::getTimeScale() const
 
 void GameScene::AddDebugCircle(const Vector& pos, float radius, float duration)
 {
-	_debugCircles.push_back({ pos,radius,duration });
+	_debugOverlay.AddCircle(pos, radius, duration);
 }
 
 void GameScene::Render(Graphic& graphic)
 {
 	_map.RenderTiles(graphic);
 
-	if (_debugOverlayEnabled)
-	{
-		_map.RenderGrid(graphic);
-		_map.RenderPathDebug(graphic);
-		_map.RenderStartEndDebug(graphic);
-		renderColliderDebug(graphic);
-	}
-	else if (_towerController.IsDragging() || _obstacleController.IsDragging())
-	{
-		_map.RenderGrid(graphic, D2D1::ColorF(D2D1::ColorF::Black, 0.8f));
-		_map.RenderPathDebug(graphic);
-		_map.RenderStartEndDebug(graphic);
-	}
-	renderDebugCircles(graphic);
+	_debugOverlay.Render(graphic, _map,
+		_towerController.IsDragging() || _obstacleController.IsDragging(),
+		GetActors(RenderLayer::Bloon));
 
 	Tower* selectedTower = _towerController.GetSelected();
 	TowerSelectionInfo selection;
@@ -223,23 +205,3 @@ void GameScene::updateDebugWaveTitle()
 	SetWindowText(Game::GetInstance().GetHwnd(), title);
 }
 
-void GameScene::renderColliderDebug(Graphic& graphic)
-{
-	for (Actor* actor : GetActors(RenderLayer::Bloon))
-	{
-		Collider* collider = actor->GetCollider();
-		if (collider != nullptr)
-			collider->Render(graphic);
-	}
-}
-
-void GameScene::renderDebugCircles(Graphic& graphic)
-{
-	ID2D1HwndRenderTarget* renderTarget = graphic.GetRenderTarget();
-	ID2D1SolidColorBrush* brush = graphic.GetBrush(D2D1::ColorF(D2D1::ColorF::Yellow, 0.6f));
-	if (renderTarget == nullptr || brush == nullptr)
-		return;
-
-	for (const DebugCircle& circle : _debugCircles)
-		renderTarget->DrawEllipse(D2D1::Ellipse(D2D1::Point2F(circle.pos.x, circle.pos.y), circle.radius, circle.radius), brush, 2.f);
-}

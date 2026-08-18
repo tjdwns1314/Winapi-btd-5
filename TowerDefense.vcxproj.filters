@@ -154,6 +154,9 @@
     <ClInclude Include="Client\Scene\GameScene.h">
       <Filter>Client\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Client\Scene\DebugOverlay.h">
+      <Filter>Client\Scene</Filter>
+    </ClInclude>
     <ClInclude Include="Client\Scene\MainScene.h">
       <Filter>Client\Scene</Filter>
     </ClInclude>
@@ -304,6 +307,9 @@
       <Filter>Client\Core</Filter>
     </ClCompile>
     <ClCompile Include="Client\Scene\GameScene.cpp">
+      <Filter>Client\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\Scene\DebugOverlay.cpp">
       <Filter>Client\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Client\Scene\MainScene.cpp">
