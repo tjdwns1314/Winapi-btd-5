@@ -541,5 +541,32 @@ void EditorScene::Render(Graphic& graphic)
 
 	// btd5_text_upper
 	// btd5_text_lower
+
+	// InGame.xml 이펙트 스프라이트 전체 미리보기 (요청: 화면 제일 위에 그려서 모두 보이게)
+	auto drawEffectRow = [&](const std::vector<const char*>& cellNames, float y)
+		{
+			float x = 50.0f;
+			for (const char* cellName : cellNames)
+			{
+				if (const CellInfo* cell = _sprite->GetCell(cellName))
+				{
+					_inGameBg->DrawSprite(graphic, x, y, *cell, 1.0f, 0.0f);
+				}
+				x += 90.0f;
+			}
+		};
+
+	drawEffectRow({ "bomb_tower_muzzle_smoke_01", "bomb_tower_muzzle_smoke_02", "bomb_tower_muzzle_smoke_03", "bomb_tower_muzzle_smoke_04" }, 50.0f);
+	drawEffectRow({ "bomb_tower_bomb_01", "bomb_tower_bomb_02", "bomb_tower_bomb_03" }, 140.0f);
+	/*drawEffectRow({ "bomb_tower_missile_01", "bomb_tower_missile_02", "bomb_tower_missile_03" }, 230.0f);
+	drawEffectRow({ "bomb_tower_frag_01", "bomb_tower_frag_02", "bomb_tower_frag_03", "bomb_tower_frag_04" }, 320.0f);
+	drawEffectRow({ "bomb_tower_impact_01", "bomb_tower_impact_02", "bomb_tower_impact_03", "bomb_tower_impact_04" }, 410.0f);
+	drawEffectRow({ "bomb_tower_cluster_01", "bomb_tower_cluster_02", "bomb_tower_cluster_03", "bomb_tower_cluster_04" }, 500.0f);
+	drawEffectRow({ "bomb_tower_red_ring_01", "bomb_tower_red_ring_02", "bomb_tower_red_ring_03", "bomb_tower_red_ring_04" }, 590.0f);*/
+	//drawEffectRow({ "explosion_01", "explosion_02", "explosion_05", "explosion_06" }, 680.0f);
+	drawEffectRow({ "napalm_explosion_01", "napalm_explosion_02", "napalm_explosion_03", "napalm_explosion_04", "napalm_explosion_05" }, 770.0f);
+	//drawEffectRow({ "ice_explosion_01", "ice_explosion_02", "ice_explosion_03", "ice_explosion_04", "ice_explosion_05" }, 860.0f);
+	//drawEffectRow({ "smoke_01", "smoke_02", "smoke_03" }, 950.0f);
+	//drawEffectRow({ "pop" }, 1040.0f);
 }
 
