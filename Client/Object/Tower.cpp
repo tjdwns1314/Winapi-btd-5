@@ -222,6 +222,18 @@ int32 Tower::GetNextUpgradeCost() const
 	return _towerData->grades[targetIndex].cost;
 }
 
+const string& Tower::GetNextUpgradeIconKey() const
+{
+	static const string empty;
+	if (!_canUpgrade)
+		return empty;
+
+	const int32 targetIndex = _grade;
+	if (targetIndex < 0 || targetIndex >= static_cast<int32>(_towerData->grades.size()))
+		return empty;
+	return _towerData->grades[targetIndex].upgradeIconKey;
+}
+
 void Tower::ApplyUpgrade()
 {
 	if (!_canUpgrade)

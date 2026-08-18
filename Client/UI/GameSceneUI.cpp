@@ -67,14 +67,24 @@ namespace
 	const Vector kSellButtonPos = Vector(1600.0f, 900.0f);
 	const Vector kSellButtonFallbackSize = Vector(109.0f, 60.0f); // sell_box 셀을 못 찾았을 때 대비
 	const Vector kUpgradeButtonPos = Vector(1600.0f, 800.0f);
-	const Vector kUpgradeButtonSize = Vector(109.0f, 60.0f);
+	const Vector kUpgradeButtonFallbackSize = Vector(109.0f, 60.0f); // upgrade_box 셀을 못 찾았을 때 대비
 	const Vector kObstacleSellButtonPos = Vector(1837.5f, 800.0f);
+
+	// upgrade_box_buy/cant 배경(284x226, 정사각형에 가까움) 축소 배율.
+	// 이 값만 바꾸면 업그레이드 버튼 크기(시각+클릭 판정)가 함께 조절됨. 임시값 — 빌드 후 눈으로 보고 조정할 것.
+	constexpr float kUpgradeBoxScale = 0.6f;
+
+	// 업그레이드 아이콘은 박스 위쪽에, 가격 텍스트는 아래쪽 좁은 띠에. 임시값 — 빌드 후 눈으로 보고 조정할 것.
+	constexpr float kUpgradeIconOffsetY = -12.0f;
+	constexpr float kUpgradeIconScale = 0.9f;
+	constexpr float kUpgradePriceTextHeight = 24.0f;
 
 	// 선택 패널 문구 및 이름/레벨 텍스트 표시 영역·색상
 	const wchar_t* const kSellTextFormat = L"판매: %d";
-	const wchar_t* const kUpgradeTextFormat = L"업그레이드: %d";
+	const wchar_t* const kUpgradeTextFormat = L"%d"; // 가격 숫자만 표시
+	const wchar_t* const kUpgradeMaxedText = L"업그레이드 경로 달함"; // 최고 등급 도달 시 표시
 	const wchar_t* const kNameLevelTextFormat = L"%s 레벨 %d";
-	constexpr D2D1_RECT_F kNameLevelTextRect = { 1450.0f, 560.0f, 1740.0f, 600.0f };
+	constexpr D2D1_RECT_F kNameLevelTextRect = { 1450.0f, 520.0f, 1740.0f, 600.0f };
 	const D2D1::ColorF kNameLevelTextColor = D2D1::ColorF(D2D1::ColorF::Yellow);
 
 	// --------------------------------------------------
@@ -113,6 +123,9 @@ void GameSceneUI::Init(
 	// 게임오버 팝업
 	_popupImg = &res.GetImage(L"Resource\\Sprite\\game_over_popup.png");
 	_popupSprite = &res.GetAtlas(L"Resource\\Sprite\\game_over_popup.xml");
+	// 업그레이드 패널 아이콘
+	_upgradeIconsImg = &res.GetImage(L"Resource\\Sprite\\upgrade_icons.png");
+	_upgradeIconsSprite = &res.GetAtlas(L"Resource\\Sprite\\upgrade_icons.xml");
 
 	// 웨이브 시작 버튼
 	_startButton = createButton(kStartButtonPos, Vector(kStartButtonBaseWidth * kPlayButtonScale, kStartButtonBaseHeight * kPlayButtonScale), onStartWave);
@@ -137,8 +150,14 @@ void GameSceneUI::Init(
 	if (const CellInfo* sellBoxCell = _hudSprite->GetCell("sell_box"))
 		sellButtonSize = Vector(sellBoxCell->aw * kSellBoxScaleX, sellBoxCell->ah);
 
+	// 업그레이드 버튼도 sell_box와 동일하게, 실제로 그려지는 upgrade_box 스프라이트 크기(축소 배율 적용)와
+	// 클릭 판정 크기를 맞춘다.
+	Vector upgradeButtonSize = kUpgradeButtonFallbackSize;
+	if (const CellInfo* upgradeBoxCell = _hudSprite->GetCell("upgrade_box_buy"))
+		upgradeButtonSize = Vector(upgradeBoxCell->aw * kUpgradeBoxScale, upgradeBoxCell->ah * kUpgradeBoxScale);
+
 	_sellButton = createButton(kSellButtonPos, sellButtonSize, onSellClick);
-	_upgradeButton = createButton(kUpgradeButtonPos, kUpgradeButtonSize, onUpgradeClick);
+	_upgradeButton = createButton(kUpgradeButtonPos, upgradeButtonSize, onUpgradeClick);
 	_sellButton->SetActive(false);
 	_upgradeButton->SetActive(false);
 
@@ -409,20 +428,6 @@ void GameSceneUI::drawRangePreview(Graphic& graphic, const Vector& pos, TowerTyp
 
 void GameSceneUI::renderTowerSelectionPanel(Graphic& graphic, const TowerSelectionInfo& selection) const
 {
-	ID2D1HwndRenderTarget* renderTarget = graphic.GetRenderTarget();
-
-	auto drawButtonBg = [&](UIButton* button)
-	{
-			if (renderTarget == nullptr)
-			return;
-			ID2D1SolidColorBrush* bgBrush = graphic.GetBrush(D2D1::ColorF(D2D1::ColorF::DarkSlateGray, 0.85f));
-		const Vector pos = button->GetPos();
-		const Vector size = button->GetSize();
-		renderTarget->FillRectangle(D2D1::RectF(
-			pos.x - size.x * 0.5f, pos.y - size.y * 0.5f,
-			pos.x + size.x * 0.5f, pos.y + size.y * 0.5f), bgBrush);
-	};
-
 	// 판매 버튼 배경은 sell_box 스프라이트를 가로만 축소해서 그린다.
 	auto drawSellBoxBg = [&](UIButton* button)
 	{
@@ -430,6 +435,17 @@ void GameSceneUI::renderTowerSelectionPanel(Graphic& graphic, const TowerSelecti
 		{
 			const Vector pos = button->GetPos();
 			_hudImg->DrawSprite(graphic, pos.x, pos.y, *cell, kSellBoxScaleX, 0.0f, false, 1.0f);
+		}
+	};
+
+	// 업그레이드 버튼 배경: 돈이 되면 upgrade_box_buy, 안 되면 upgrade_box_cant.
+	auto drawUpgradeBoxBg = [&](UIButton* button, bool canUpgrade)
+	{
+		const char* cellName = canUpgrade ? "upgrade_box_buy" : "upgrade_box_cant";
+		if (const CellInfo* cell = _hudSprite->GetCell(cellName))
+		{
+			const Vector pos = button->GetPos();
+			_hudImg->DrawSprite(graphic, pos.x, pos.y, *cell, kUpgradeBoxScale, 0.0f);
 		}
 	};
 
@@ -449,16 +465,42 @@ void GameSceneUI::renderTowerSelectionPanel(Graphic& graphic, const TowerSelecti
 	swprintf_s(sellText, kSellTextFormat, selection.sellPrice);
 	drawPriceText(_sellButton, sellText);
 
+	drawUpgradeBoxBg(_upgradeButton, selection.canUpgrade);
+
 	if (selection.canUpgrade)
 	{
-		drawButtonBg(_upgradeButton);
+		// 다음 업그레이드 아이콘(위쪽)과 가격(아래쪽 좁은 띠)을 함께 보여준다.
+		if (!selection.upgradeIconKey.empty())
+		{
+			if (const CellInfo* iconCell = _upgradeIconsSprite->GetCell(selection.upgradeIconKey.c_str()))
+			{
+				const Vector pos = _upgradeButton->GetPos();
+				_upgradeIconsImg->DrawSprite(graphic, pos.x, pos.y + kUpgradeIconOffsetY, *iconCell, kUpgradeIconScale, 0.0f);
+			}
+		}
+
 		wchar_t upgradeText[32];
 		swprintf_s(upgradeText, kUpgradeTextFormat, selection.upgradePrice);
-		drawPriceText(_upgradeButton, upgradeText);
+		const Vector pos = _upgradeButton->GetPos();
+		const Vector size = _upgradeButton->GetSize();
+		graphic.DrawString(upgradeText, D2D1::RectF(
+			pos.x - size.x * 0.5f, pos.y + size.y * 0.5f - kUpgradePriceTextHeight,
+			pos.x + size.x * 0.5f, pos.y + size.y * 0.5f),
+			FONT_20, D2D1::ColorF(D2D1::ColorF::White), DWRITE_TEXT_ALIGNMENT_CENTER,
+			DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	}
+	else
+	{
+		// 최고 등급 도달 — 아이콘/가격 대신 박스 전체에 안내 문구를 표시.
+		const Vector pos = _upgradeButton->GetPos();
+		const Vector size = _upgradeButton->GetSize();
+		graphic.DrawString(kUpgradeMaxedText, D2D1::RectF(
+			pos.x - size.x * 0.5f, pos.y - size.y * 0.5f,
+			pos.x + size.x * 0.5f, pos.y + size.y * 0.5f),
+			FONT_12, D2D1::ColorF(D2D1::ColorF::White), DWRITE_TEXT_ALIGNMENT_CENTER,
+			DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
 	}
 
-	// 배경 브러시(bgBrush)를 다 쓴 뒤 맨 마지막에 그린다 — 그 전에 그리면
-	// 공용 브러시 색이 White로 바뀌어서 sell/upgrade 배경이 흰색으로 칠해지는 버그가 생긴다.
 	wchar_t nameLevelText[64];
 	swprintf_s(nameLevelText, kNameLevelTextFormat, selection.name, selection.grade);
 	graphic.DrawString(nameLevelText, kNameLevelTextRect,

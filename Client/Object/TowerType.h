@@ -20,6 +20,7 @@ struct TowerGradeStat
 	int32 pierceCount = 1;
 	float splashRadius = 0.f;
 	string projectileKey; // 비어있으면 TowerStat::projectileKey를 그대로 쓴다. 등급마다 다른 투사체가 필요할 때만 채운다(예: 폭탄타워 5등급 미사일).
+	string upgradeIconKey; // upgrade_icons.xml 셀 이름. 비어있으면(base grade) 표시할 아이콘 없음.
 };
 
 struct TowerStat

@@ -22,6 +22,9 @@ void GameAssets::Load(Graphic& graphic)
 	res.LoadImage(graphic, L"Resource\\Sprite\\game_over_popup.png");
 	res.LoadAtlas(L"Resource\\Sprite\\game_over_popup.xml");
 
+	res.LoadImage(graphic, L"Resource\\Sprite\\upgrade_icons.png");
+	res.LoadAtlas(L"Resource\\Sprite\\upgrade_icons.xml");
+
 	res.LoadImage(graphic, L"Resource\\Red.png");
 	res.LoadImage(graphic, L"Resource\\Blue.png");
 	res.LoadImage(graphic, L"Resource\\Green.png");
