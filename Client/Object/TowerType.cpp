@@ -37,6 +37,7 @@ namespace
 				grade.splashRadius = g.value("splashRadius", 0.f);
 				grade.projectileKey = g.value("projectileKey", string());
 				grade.upgradeIconKey = g.value("upgradeIconKey", string());
+				grade.avatarKey = g.value("avatarKey", string());
 				stat.grades.push_back(grade);
 			}
 
