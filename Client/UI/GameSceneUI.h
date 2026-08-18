@@ -137,6 +137,10 @@ private:
 	UIButton* _settingsMenuButtons[5] = {};
 	// 각 버튼 가운데 그려질 아이콘(nukki 폴더, 개별 PNG). 순서는 _settingsMenuButtons와 동일: 0 재개, 1 리플레이, 2 자동진행, 3 음악, 4 효과음.
 	Image* _settingsIconImgs[5] = {};
+	// 2(자동진행)/3(음악)/4(효과음) 버튼의 on/off 토글 상태. true면 꺼짐 — 버튼 위에 nukki/x.png를 겹쳐 그린다.
+	// 0(재개)/1(리플레이)는 토글이 아니라서 항상 false로 둔다.
+	bool _settingsToggleOff[5] = {};
+	Image* _settingsOffMarkImg = nullptr; // nukki/x.png, 꺼짐 표시용
 
 	// 업그레이드 패널 아이콘
 	Image* _upgradeIconsImg = nullptr;

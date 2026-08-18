@@ -120,6 +120,7 @@ namespace
 		L"Resource\\Sprite\\nukki\\sfx.png",
 	};
 	constexpr float kSettingsIconScale = 1.0f; // 아이콘 원본 크기 배율. 버튼(plain_button, kSettingsRingScale 적용) 안에 들어오도록 임시값 — 눈으로 보고 조정할 것(미검증).
+	constexpr float kSettingsOffMarkScale = 0.25f; // nukki/x.png 원본이 커서 축소. EditorScene 확인 코드에서 쓰던 값 그대로 가져옴(미검증).
 	constexpr float kSettingsButtonBaseWidth = 128.0f;  // plain_button 원본 스프라이트 가로 크기(px). 클릭 판정 크기 계산에 사용.
 	constexpr float kSettingsButtonBaseHeight = 129.0f; // plain_button 원본 스프라이트 세로 크기(px). 클릭 판정 크기 계산에 사용.
 	constexpr float kSettingsRingSpacingX = 250.0f;     // 위쪽 3개 버튼 사이 가로 간격, 아래쪽 2개 버튼 가로 오프셋(간격의 절반)에도 쓰임.
@@ -214,15 +215,25 @@ void GameSceneUI::Init(
 		Vector(-kSettingsRingSpacingX * 0.5f, kSettingsRingSpacingY),  // 3: 아래 왼쪽
 		Vector(kSettingsRingSpacingX * 0.5f, kSettingsRingSpacingY),   // 4: 아래 오른쪽
 	};
+	_settingsOffMarkImg = &res.GetImage(L"Resource\\Sprite\\nukki\\x.png");
+
 	for (int32 i = 0; i < 5; ++i)
 	{
 		const Vector pos = Vector(GameAreaCenterX + ringOffsets[i].x, GameAreaCenterY + kSettingsRingCenterOffsetY + ringOffsets[i].y);
-		function<void()> onClick = (i == 0) ? onSettingsCloseClick : function<void()>([]() {}); // 0번(위 왼쪽) = 재개
+		function<void()> onClick;
+		if (i == 0)
+			onClick = onSettingsCloseClick; // 0번(위 왼쪽) = 재개
+		else if (i == 2 || i == 3 || i == 4) // 2,3,4번 = 자동진행/음악/효과음 — 클릭할 때마다 on/off 토글
+			onClick = [this, i]() { _settingsToggleOff[i] = !_settingsToggleOff[i]; };
+		else
+			onClick = []() {};
 		_settingsMenuButtons[i] = createButton(pos, settingsButtonSize, onClick);
 		_settingsMenuButtons[i]->SetActive(false);
 		_settingsMenuButtons[i]->SetIgnoresModalLock(true); // 설정창 자신의 버튼들이라 입력 잠금 대상에서 제외.
 		_settingsIconImgs[i] = &res.GetImage(kSettingsIconFiles[i]);
 	}
+	// 자동진행(2번, 위 오른쪽)만 기본값이 꺼짐 상태 — 나머지 토글(음악/효과음)은 기본 켜짐.
+	_settingsToggleOff[2] = true;
 }
 
 UIButton* GameSceneUI::createButton(const Vector& pos, const Vector& size, function<void()> onClick)
@@ -653,5 +664,8 @@ void GameSceneUI::renderSettingsPopup(Graphic& graphic) const
 
 		if (_settingsIconImgs[i] != nullptr)
 			_settingsIconImgs[i]->Draw(graphic, pos.x, pos.y, kSettingsIconScale, 0.0f);
+
+		if (_settingsToggleOff[i] && _settingsOffMarkImg != nullptr)
+			_settingsOffMarkImg->Draw(graphic, pos.x, pos.y, kSettingsOffMarkScale, 0.0f);
 	}
 }
