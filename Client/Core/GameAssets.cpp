@@ -164,14 +164,14 @@ void GameAssets::Load(Graphic& graphic)
 	};
 
 	bakeSniperMonkey(L"sniper_grade1_baked", { {.cellName = "sniper_green_hat", .offset = {2.0f, 5.0f} } });
-	bakeSniperMonkey(L"sniper_grade2_baked", { {.cellName = "sniper_deadly_precision", .offset = {2.0f, 5.0f} } });
+	bakeSniperMonkey(L"sniper_grade2_baked", { {.cellName = "sniper_full_metal_jacket", .offset = {2.0f, 5.0f} } });
 	bakeSniperMonkey(L"sniper_grade3_baked", {
 		{.cellName = "sniper_shades",            .offset = {2.0f, 12.0f} },
 		{.cellName = "sniper_deadly_precision",  .offset = {2.0f, 5.0f} },
 	});
 	bakeSniperMonkey(L"sniper_grade4_baked", {
 		{.cellName = "sniper_goggles",           .offset = {0.0f, -17.0f} },
-		{.cellName = "sniper_deadly_precision",  .offset = {2.0f, 5.0f} },
+		{.cellName = "sniper_faster_firing",  .offset = {2.0f, 5.0f} },
 	});
 	bakeSniperMonkey(L"sniper_grade5_baked", {
 		{.cellName = "sniper_goggles",            .offset = {0.0f, -17.0f} },
