@@ -24,14 +24,14 @@ namespace
 	//  웨이브 시작 / 디버그 웨이브 조절
 	// --------------------------------------------------
 	// 웨이브 시작 버튼 위치 및 원본 스프라이트 크기(128x129)에 곱할 배율.
-	const Vector kStartButtonPos = Vector(1500.5f, 1000.0f);
+	const Vector kStartButtonPos = Vector(1485.0f, 1000.0f);
 	constexpr float kStartButtonBaseWidth = 128.0f;
 	constexpr float kStartButtonBaseHeight = 129.0f;
 	// 플레이(웨이브 시작) 버튼과 그 옆 설정 아이콘 크기 배율.
-	constexpr float kPlayButtonScale = 0.7f;
+	constexpr float kPlayButtonScale = 0.6f;
 	// 설정 아이콘(pause_icon) 표시 위치 — 플레이 버튼(1512.5, 950) 옆에 나란히. 임시값(미검증).
-	constexpr float kSettingsIconCenterX = 1612.5f;
-	constexpr float kSettingsIconCenterY = 950.0f;
+	constexpr float kSettingsIconCenterX = 1575.0f;
+	constexpr float kSettingsIconCenterY = 1000.0f;
 
 	// 디버그 웨이브 +/- 버튼 위치·크기 (정식 스프라이트 없이 도형으로 그림)
 	const Vector kWaveUpButtonPos = Vector(1720.0f, 1000.0f);
@@ -64,7 +64,7 @@ namespace
 
 	// 타워 선택 패널: 상점 버튼(y=550)과 웨이브 버튼(y=900) 사이 빈 공간에 고정 배치.
 	// 위치/크기는 임시값 — 빌드 후 눈으로 보고 조정할 것.
-	const Vector kSellButtonPos = Vector(1600.0f, 900.0f);
+	const Vector kSellButtonPos = Vector(1600.0f, 920.0f);
 	const Vector kSellButtonFallbackSize = Vector(109.0f, 60.0f); // sell_box 셀을 못 찾았을 때 대비
 	const Vector kUpgradeButtonPos = Vector(1600.0f, 800.0f);
 	const Vector kUpgradeButtonFallbackSize = Vector(109.0f, 60.0f); // upgrade_box 셀을 못 찾았을 때 대비
@@ -73,6 +73,13 @@ namespace
 	// upgrade_box_buy/cant 배경(284x226, 정사각형에 가까움) 축소 배율.
 	// 이 값만 바꾸면 업그레이드 버튼 크기(시각+클릭 판정)가 함께 조절됨. 임시값 — 빌드 후 눈으로 보고 조정할 것.
 	constexpr float kUpgradeBoxScale = 0.6f;
+
+	// 타워 이름 아래 등급별 초상화 박스(tower_profile_pic_box, 196x222) 위치·배율.
+	// 이름 텍스트(y=520~600)와 업그레이드 박스(y=800) 사이 빈 공간에 배치. 임시값 — 빌드 후 눈으로 보고 조정할 것.
+	const Vector kAvatarBoxPos = Vector(1600.0f, 640.0f);
+	constexpr float kAvatarBoxScale = 0.7f;
+	// 초상화(avatarKey) 자체의 배율. 박스보다 작게 그려서 프레임 안에 들어오도록. 임시값 — 빌드 후 눈으로 보고 조정할 것.
+	constexpr float kAvatarImageScale = 0.5f;
 
 	// 업그레이드 아이콘은 박스 위쪽에, 가격 텍스트는 아래쪽 좁은 띠에. 임시값 — 빌드 후 눈으로 보고 조정할 것.
 	constexpr float kUpgradeIconOffsetY = -12.0f;
@@ -499,6 +506,15 @@ void GameSceneUI::renderTowerSelectionPanel(Graphic& graphic, const TowerSelecti
 			pos.x + size.x * 0.5f, pos.y + size.y * 0.5f),
 			FONT_12, D2D1::ColorF(D2D1::ColorF::White), DWRITE_TEXT_ALIGNMENT_CENTER,
 			DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	}
+
+	if (const CellInfo* avatarBoxCell = _hudSprite->GetCell("tower_profile_pic_box"))
+		_hudImg->DrawSprite(graphic, kAvatarBoxPos.x, kAvatarBoxPos.y, *avatarBoxCell, kAvatarBoxScale, 0.0f);
+
+	if (!selection.avatarKey.empty())
+	{
+		if (const CellInfo* avatarCell = _hudSprite->GetCell(selection.avatarKey.c_str()))
+			_hudImg->DrawSprite(graphic, kAvatarBoxPos.x, kAvatarBoxPos.y, *avatarCell, kAvatarImageScale, 0.0f);
 	}
 
 	wchar_t nameLevelText[64];
