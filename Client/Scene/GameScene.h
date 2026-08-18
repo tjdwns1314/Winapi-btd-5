@@ -17,6 +17,7 @@
 #include "ObstacleController.h"
 #include "HealthManager.h"
 #include "EconomyManager.h"
+#include "DebugOverlay.h"
 
 class Tower;
 class Obstacle;
@@ -54,20 +55,7 @@ protected:
 	virtual void CreateUI() override;
 
 private:
-	// 디버그 서클 렌더 헬퍼
-	void renderDebugCircles(Graphic& graphic);
-	// 풍선 콜라이더 범위 디버그 렌더 헬퍼
-	void renderColliderDebug(Graphic& graphic);
-
-	struct DebugCircle
-	{
-		Vector pos;
-		float radius;
-		float remaining;
-	};
-	vector<DebugCircle> _debugCircles;
-
-
+	DebugOverlay _debugOverlay;
 
 	// 내부 로직 헬퍼
 	void onStartButtonClick();
@@ -83,7 +71,6 @@ private:
 	HealthManager _healthManager;
 	EconomyManager _economyManager;
 	bool _speedEnabled = false; // 2배속 on/off. 웨이브가 끝나도 리셋하지 않고 유지한다.
-	bool _debugOverlayEnabled = false; // F2로 그리드/경로/시작-끝/풍선 콜라이더 디버그 표시 on/off.
 
 	// Restart()에서 Init()을 다시 호출하기 위해 보관해둔다. Game이 소유한 Graphic이라 수명은 항상 유효하다.
 	Graphic* _graphicRef = nullptr;
