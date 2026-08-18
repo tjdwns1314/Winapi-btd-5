@@ -5,6 +5,9 @@
 
 namespace
 {
+	// --------------------------------------------------
+	//  HUD 배경 패널 / 골드·HP 텍스트
+	// --------------------------------------------------
 	// 오른쪽 상단 골드/HP 아이콘+숫자 배치. 임시값 — 빌드 후 눈으로 보고 조정 필요(미검증).
 	constexpr float kHudIconCenterX = 1520.0f;
 	constexpr float kHudTextLeft = 1575.0f;
@@ -17,11 +20,73 @@ namespace
 	// 원본 폭 274px, UI 영역 왼쪽 끝에서부터 이 폭만큼만 그려짐(끝까지 채우려면 kUiPanelWidth와 동일한 320으로).
 	constexpr float kHudPanelWidth = 300.0f;
 
+	// --------------------------------------------------
+	//  웨이브 시작 / 디버그 웨이브 조절
+	// --------------------------------------------------
+	// 웨이브 시작 버튼 위치 및 원본 스프라이트 크기(128x129)에 곱할 배율.
+	const Vector kStartButtonPos = Vector(1500.5f, 1000.0f);
+	constexpr float kStartButtonBaseWidth = 128.0f;
+	constexpr float kStartButtonBaseHeight = 129.0f;
 	// 플레이(웨이브 시작) 버튼과 그 옆 설정 아이콘 크기 배율.
 	constexpr float kPlayButtonScale = 0.7f;
 	// 설정 아이콘(pause_icon) 표시 위치 — 플레이 버튼(1512.5, 950) 옆에 나란히. 임시값(미검증).
 	constexpr float kSettingsIconCenterX = 1612.5f;
 	constexpr float kSettingsIconCenterY = 950.0f;
+
+	// 디버그 웨이브 +/- 버튼 위치·크기 (정식 스프라이트 없이 도형으로 그림)
+	const Vector kWaveUpButtonPos = Vector(1720.0f, 1000.0f);
+	const Vector kWaveDownButtonPos = Vector(1720.0f, 1050.0f);
+	const Vector kWaveButtonSize = Vector(40.0f, 40.0f);
+
+	// --------------------------------------------------
+	//  타워/장애물 상점
+	// --------------------------------------------------
+	// 타워 상점 버튼: 스크롤 패널(y=270~518) 안 2x2 그리드 위치. 클릭 판정 크기는
+	// tower_thumbs_box 배경(renderTowerShopBoxes)과 맞춘다.
+	const Vector kDartShopButtonPos = Vector(1520.0f, 332.0f);
+	const Vector kTackShopButtonPos = Vector(1680.0f, 332.0f);
+	const Vector kSniperShopButtonPos = Vector(1520.0f, 456.0f);
+	const Vector kBombShopButtonPos = Vector(1680.0f, 456.0f);
+	const Vector kTowerShopButtonSize = Vector(113.0f, 93.0f);
+	constexpr float kTowerIconScale = 0.7f;
+
+	// 장애물 상점 버튼 위치·크기 및 아이콘 배율. 위치는 임시값 — 빌드 후 눈으로 보고 조정할 것.
+	const Vector kObstacleShopButtonPos = Vector(1675.0f, 1000.0f);
+	const Vector kObstacleShopButtonSize = Vector(109.0f, 113.0f);
+	constexpr float kObstacleIconScale = 1.0f;
+
+	// --------------------------------------------------
+	//  선택된 타워/장애물 패널 (판매/업그레이드)
+	// --------------------------------------------------
+	// 판매 버튼 배경(sell_box) 가로 스케일. 원본이 288x76로 가로가 길어 오른쪽 UI 패널 폭에
+	// 맞추려면 가로만 축소해야 한다. 이 값만 바꾸면 판매 버튼 크기(시각+클릭 판정)가 함께 조절됨.
+	constexpr float kSellBoxScaleX = 0.7f;
+
+	// 타워 선택 패널: 상점 버튼(y=550)과 웨이브 버튼(y=900) 사이 빈 공간에 고정 배치.
+	// 위치/크기는 임시값 — 빌드 후 눈으로 보고 조정할 것.
+	const Vector kSellButtonPos = Vector(1600.0f, 900.0f);
+	const Vector kSellButtonFallbackSize = Vector(109.0f, 60.0f); // sell_box 셀을 못 찾았을 때 대비
+	const Vector kUpgradeButtonPos = Vector(1600.0f, 800.0f);
+	const Vector kUpgradeButtonSize = Vector(109.0f, 60.0f);
+	const Vector kObstacleSellButtonPos = Vector(1837.5f, 800.0f);
+
+	// 선택 패널 문구 및 이름/레벨 텍스트 표시 영역·색상
+	const wchar_t* const kSellTextFormat = L"판매: %d";
+	const wchar_t* const kUpgradeTextFormat = L"업그레이드: %d";
+	const wchar_t* const kNameLevelTextFormat = L"%s 레벨 %d";
+	constexpr D2D1_RECT_F kNameLevelTextRect = { 1450.0f, 560.0f, 1740.0f, 600.0f };
+	const D2D1::ColorF kNameLevelTextColor = D2D1::ColorF(D2D1::ColorF::Yellow);
+
+	// --------------------------------------------------
+	//  게임오버 팝업
+	// --------------------------------------------------
+	// 재시작 버튼: baked 이미지(131x137) 크기에 맞춰 게임 영역 정중앙에 둔다.
+	const Vector kRestartButtonSize = Vector(131.0f, 137.0f);
+	const wchar_t* const kGameOverText = L"GAME OVER";
+	const D2D1::ColorF kGameOverTextColor = D2D1::ColorF(D2D1::ColorF::Red);
+	const D2D1::ColorF kGameOverDimColor = D2D1::ColorF(D2D1::ColorF::Black, 0.6f);
+	constexpr float kGameOverTextTopOffset = -160.0f;
+	constexpr float kGameOverTextBottomOffset = -80.0f;
 }
 
 void GameSceneUI::Init(
@@ -50,33 +115,38 @@ void GameSceneUI::Init(
 	_popupSprite = &res.GetAtlas(L"Resource\\Sprite\\game_over_popup.xml");
 
 	// 웨이브 시작 버튼
-	_startButton = createButton(Vector(1512.5f, 950.0f), Vector(128.0f * kPlayButtonScale, 129.0f * kPlayButtonScale), onStartWave);
+	_startButton = createButton(kStartButtonPos, Vector(kStartButtonBaseWidth * kPlayButtonScale, kStartButtonBaseHeight * kPlayButtonScale), onStartWave);
 
 	// 타워 상점 버튼: 스크롤 패널(y=270~518) 안에 2x2 그리드로 배치.
 	// 클릭 판정 크기는 실제로 그려지는 tower_thumbs_box 배경(113x93, renderTowerShopBoxes 참고)과 맞춘다.
-	_dartMonkeyShopButton = createButton(Vector(1520.0f, 332.0f), Vector(113.0f, 93.0f), onDartShopClick);
-	_tackShooterShopButton = createButton(Vector(1680.0f, 332.0f), Vector(113.0f, 93.0f), onTackShopClick);
-	_sniperMonkeyShopButton = createButton(Vector(1520.0f, 456.0f), Vector(113.0f, 93.0f), onSniperShopClick);
-	_bombTowerShopButton = createButton(Vector(1680.0f, 456.0f), Vector(113.0f, 93.0f), onBombShopClick);
-	// 위치는 임시값 — 빌드 후 눈으로 보고 조정할 것.
-	_obstacleShopButton = createButton(Vector(1675.0f, 900.0f), Vector(109.0f, 113.0f), onObstacleShopClick);
+	_dartMonkeyShopButton = createButton(kDartShopButtonPos, kTowerShopButtonSize, onDartShopClick);
+	_tackShooterShopButton = createButton(kTackShopButtonPos, kTowerShopButtonSize, onTackShopClick);
+	_sniperMonkeyShopButton = createButton(kSniperShopButtonPos, kTowerShopButtonSize, onSniperShopClick);
+	_bombTowerShopButton = createButton(kBombShopButtonPos, kTowerShopButtonSize, onBombShopClick);
+	_obstacleShopButton = createButton(kObstacleShopButtonPos, kObstacleShopButtonSize, onObstacleShopClick);
 
 	// 디버그 웨이브 +/- 버튼
-	_waveUpButton = createButton(Vector(1720.0f, 950.0f), Vector(40.0f, 40.0f), onWaveUp);
-	_waveDownButton = createButton(Vector(1720.0f, 900.0f), Vector(40.0f, 40.0f), onWaveDown);
+	_waveUpButton = createButton(kWaveUpButtonPos, kWaveButtonSize, onWaveUp);
+	_waveDownButton = createButton(kWaveDownButtonPos, kWaveButtonSize, onWaveDown);
 
 	// 타워 선택 패널: 상점 버튼(y=550)과 웨이브 버튼(y=900) 사이 빈 공간에 고정 배치.
 	// 위치/크기는 임시값 — 빌드 후 눈으로 보고 조정할 것.
-	_sellButton = createButton(Vector(1512.5f, 800.0f), Vector(109.0f, 60.0f), onSellClick);
-	_upgradeButton = createButton(Vector(1675.0f, 800.0f), Vector(109.0f, 60.0f), onUpgradeClick);
+	// 클릭 판정 크기는 sell_box 스프라이트가 실제로 그려지는 크기(가로 kSellBoxScaleX 배율 적용)와
+	// 항상 같게 맞춘다 — kSellBoxScaleX를 바꾸면 시각 크기와 판정 크기가 함께 바뀐다.
+	Vector sellButtonSize = kSellButtonFallbackSize;
+	if (const CellInfo* sellBoxCell = _hudSprite->GetCell("sell_box"))
+		sellButtonSize = Vector(sellBoxCell->aw * kSellBoxScaleX, sellBoxCell->ah);
+
+	_sellButton = createButton(kSellButtonPos, sellButtonSize, onSellClick);
+	_upgradeButton = createButton(kUpgradeButtonPos, kUpgradeButtonSize, onUpgradeClick);
 	_sellButton->SetActive(false);
 	_upgradeButton->SetActive(false);
 
-	_obstacleSellButton = createButton(Vector(1837.5f, 800.0f), Vector(109.0f, 60.0f), onObstacleSellClick);
+	_obstacleSellButton = createButton(kObstacleSellButtonPos, sellButtonSize, onObstacleSellClick);
 	_obstacleSellButton->SetActive(false);
 
 	// 게임오버 팝업의 재시작 버튼. baked 이미지(131x137) 크기에 맞춰 게임 영역 정중앙에 둔다.
-	_restartButton = createButton(Vector(GameAreaCenterX, GameAreaCenterY), Vector(131.0f, 137.0f), onRestartClick);
+	_restartButton = createButton(Vector(GameAreaCenterX, GameAreaCenterY), kRestartButtonSize, onRestartClick);
 	_restartButton->SetActive(false);
 }
 
@@ -104,19 +174,19 @@ void GameSceneUI::Render(Graphic& graphic, bool isDraggingTower, TowerType dragg
 
 	renderTowerShopBoxes(graphic);
 
-	if (_dartMonkeyShopButton != nullptr) drawTowerIcon(graphic, _dartMonkeyShopButton->GetPos(), TowerType::DartMonkey, 0.7f);
-	if (_tackShooterShopButton != nullptr) drawTowerIcon(graphic, _tackShooterShopButton->GetPos(), TowerType::TackShooter, 0.7f);
-	if (_sniperMonkeyShopButton != nullptr) drawTowerIcon(graphic, _sniperMonkeyShopButton->GetPos(), TowerType::SniperMonkey, 0.7f);
-	if (_bombTowerShopButton != nullptr) drawTowerIcon(graphic, _bombTowerShopButton->GetPos(), TowerType::BombTower, 0.7f);
-	if (_obstacleShopButton != nullptr) drawObstacleIcon(graphic, _obstacleShopButton->GetPos(), 1.0f);
+	if (_dartMonkeyShopButton != nullptr) drawTowerIcon(graphic, _dartMonkeyShopButton->GetPos(), TowerType::DartMonkey, kTowerIconScale);
+	if (_tackShooterShopButton != nullptr) drawTowerIcon(graphic, _tackShooterShopButton->GetPos(), TowerType::TackShooter, kTowerIconScale);
+	if (_sniperMonkeyShopButton != nullptr) drawTowerIcon(graphic, _sniperMonkeyShopButton->GetPos(), TowerType::SniperMonkey, kTowerIconScale);
+	if (_bombTowerShopButton != nullptr) drawTowerIcon(graphic, _bombTowerShopButton->GetPos(), TowerType::BombTower, kTowerIconScale);
+	if (_obstacleShopButton != nullptr) drawObstacleIcon(graphic, _obstacleShopButton->GetPos(), kObstacleIconScale);
 
 	if (isDraggingTower)
 	{
 		drawRangePreview(graphic, dragPreviewPos, draggingTowerType);
-		drawTowerIcon(graphic, dragPreviewPos, draggingTowerType, 0.7f);
+		drawTowerIcon(graphic, dragPreviewPos, draggingTowerType, kTowerIconScale);
 	}
 	if (isDraggingObstacle)
-		drawObstacleIcon(graphic, dragPreviewPos, 1.0f);
+		drawObstacleIcon(graphic, dragPreviewPos, kObstacleIconScale);
 
 	renderDebugWaveButtons(graphic);
 	renderGoldText(graphic, gold);
@@ -353,6 +423,16 @@ void GameSceneUI::renderTowerSelectionPanel(Graphic& graphic, const TowerSelecti
 			pos.x + size.x * 0.5f, pos.y + size.y * 0.5f), bgBrush);
 	};
 
+	// 판매 버튼 배경은 sell_box 스프라이트를 가로만 축소해서 그린다.
+	auto drawSellBoxBg = [&](UIButton* button)
+	{
+		if (const CellInfo* cell = _hudSprite->GetCell("sell_box"))
+		{
+			const Vector pos = button->GetPos();
+			_hudImg->DrawSprite(graphic, pos.x, pos.y, *cell, kSellBoxScaleX, 0.0f, false, 1.0f);
+		}
+	};
+
 	auto drawPriceText = [&](UIButton* button, const wchar_t* text)
 	{
 		const Vector pos = button->GetPos();
@@ -360,52 +440,46 @@ void GameSceneUI::renderTowerSelectionPanel(Graphic& graphic, const TowerSelecti
 		graphic.DrawString(text, D2D1::RectF(
 			pos.x - size.x * 0.5f, pos.y - size.y * 0.5f,
 			pos.x + size.x * 0.5f, pos.y + size.y * 0.5f),
-			FONT_20, D2D1::ColorF(D2D1::ColorF::White), DWRITE_TEXT_ALIGNMENT_CENTER);
+			FONT_20, D2D1::ColorF(D2D1::ColorF::White), DWRITE_TEXT_ALIGNMENT_CENTER,
+			DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
 	};
 
-	drawButtonBg(_sellButton);
+	drawSellBoxBg(_sellButton);
 	wchar_t sellText[32];
-	swprintf_s(sellText, L"판매: %d", selection.sellPrice);
+	swprintf_s(sellText, kSellTextFormat, selection.sellPrice);
 	drawPriceText(_sellButton, sellText);
 
 	if (selection.canUpgrade)
 	{
 		drawButtonBg(_upgradeButton);
 		wchar_t upgradeText[32];
-		swprintf_s(upgradeText, L"업그레이드: %d", selection.upgradePrice);
+		swprintf_s(upgradeText, kUpgradeTextFormat, selection.upgradePrice);
 		drawPriceText(_upgradeButton, upgradeText);
 	}
 
 	// 배경 브러시(bgBrush)를 다 쓴 뒤 맨 마지막에 그린다 — 그 전에 그리면
 	// 공용 브러시 색이 White로 바뀌어서 sell/upgrade 배경이 흰색으로 칠해지는 버그가 생긴다.
 	wchar_t nameLevelText[64];
-	swprintf_s(nameLevelText, L"%s 레벨 %d", selection.name, selection.grade);
-	graphic.DrawString(nameLevelText, D2D1::RectF(1450.0f, 560.0f, 1740.0f, 600.0f),
-		FONT_20, D2D1::ColorF(D2D1::ColorF::Yellow), DWRITE_TEXT_ALIGNMENT_CENTER);
+	swprintf_s(nameLevelText, kNameLevelTextFormat, selection.name, selection.grade);
+	graphic.DrawString(nameLevelText, kNameLevelTextRect,
+		FONT_20, kNameLevelTextColor, DWRITE_TEXT_ALIGNMENT_CENTER);
 }
 
 void GameSceneUI::renderObstacleSelectionPanel(Graphic& graphic, const ObstacleSelectionInfo& selection) const
 {
-	ID2D1HwndRenderTarget* renderTarget = graphic.GetRenderTarget();
-	if (renderTarget == nullptr)
-		return;
-
-	ID2D1SolidColorBrush* bgBrush = graphic.GetBrush(D2D1::ColorF(D2D1::ColorF::DarkSlateGray, 0.85f));
 	const Vector pos = _obstacleSellButton->GetPos();
 	const Vector size = _obstacleSellButton->GetSize();
-	if (bgBrush != nullptr)
-	{
-		renderTarget->FillRectangle(D2D1::RectF(
-			pos.x - size.x * 0.5f, pos.y - size.y * 0.5f,
-			pos.x + size.x * 0.5f, pos.y + size.y * 0.5f), bgBrush);
-	}
+
+	if (const CellInfo* cell = _hudSprite->GetCell("sell_box"))
+		_hudImg->DrawSprite(graphic, pos.x, pos.y, *cell, kSellBoxScaleX, 0.0f, false, 1.0f);
 
 	wchar_t sellText[32];
-	swprintf_s(sellText, L"판매: %d", selection.sellPrice);
+	swprintf_s(sellText, kSellTextFormat, selection.sellPrice);
 	graphic.DrawString(sellText, D2D1::RectF(
 		pos.x - size.x * 0.5f, pos.y - size.y * 0.5f,
 		pos.x + size.x * 0.5f, pos.y + size.y * 0.5f),
-		FONT_20, D2D1::ColorF(D2D1::ColorF::White), DWRITE_TEXT_ALIGNMENT_CENTER);
+		FONT_20, D2D1::ColorF(D2D1::ColorF::White), DWRITE_TEXT_ALIGNMENT_CENTER,
+		DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
 }
 
 // --------------------------------------------------
@@ -415,7 +489,7 @@ void GameSceneUI::renderObstacleSelectionPanel(Graphic& graphic, const ObstacleS
 void GameSceneUI::renderGameOverPopup(Graphic& graphic) const
 {
 	ID2D1HwndRenderTarget* renderTarget = graphic.GetRenderTarget();
-	ID2D1SolidColorBrush* dimBrush = graphic.GetBrush(D2D1::ColorF(D2D1::ColorF::Black, 0.6f));
+	ID2D1SolidColorBrush* dimBrush = graphic.GetBrush(kGameOverDimColor);
 	if (renderTarget != nullptr && dimBrush != nullptr)
 	{
 		// game_over_popup.xml에는 배경 패널 셀이 없어서, 게임 영역 전체를 어둡게 깔아 팝업처럼 보이게 한다.
@@ -423,9 +497,9 @@ void GameSceneUI::renderGameOverPopup(Graphic& graphic) const
 			static_cast<float>(GameAreaWidth), static_cast<float>(GameAreaHeight)), dimBrush);
 	}
 
-	graphic.DrawString(L"GAME OVER",
-		D2D1::RectF(0.0f, GameAreaCenterY - 160.0f, static_cast<float>(GameAreaWidth), GameAreaCenterY - 80.0f),
-		FONT_30, D2D1::ColorF(D2D1::ColorF::Red), DWRITE_TEXT_ALIGNMENT_CENTER);
+	graphic.DrawString(kGameOverText,
+		D2D1::RectF(0.0f, GameAreaCenterY + kGameOverTextTopOffset, static_cast<float>(GameAreaWidth), GameAreaCenterY + kGameOverTextBottomOffset),
+		FONT_30, kGameOverTextColor, DWRITE_TEXT_ALIGNMENT_CENTER);
 
 	ResourceManager::GetInstance().GetImage(L"restart_button_baked")
 		.Draw(graphic, GameAreaCenterX, GameAreaCenterY, 1.0f, 0.0f);
