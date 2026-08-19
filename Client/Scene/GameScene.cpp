@@ -34,6 +34,8 @@ void GameScene::Init(Graphic& graphic)
 	GetCollisionManager().RegisterLayer(RenderLayer::Bloon, RenderLayer::Projectile);
 
 	_speedEnabled = false;
+	_isSettingsOpen = false;
+	AudioManager::GetInstance().SetBgmVolumeScale(1.0f);
 
 	AudioManager::GetInstance().PlayBgm(L"jazz");
 }
@@ -180,7 +182,8 @@ void GameScene::CreateUI()
 		[this]() { _obstacleController.SellSelected(_map, _economyManager); },
 		[this]() { Restart(); },
 		[this]() { _isSettingsOpen = !_isSettingsOpen; AudioManager::GetInstance().SetBgmVolumeScale(_isSettingsOpen ? 0.3f : 1.0f); },
-		[this]() { _isSettingsOpen = false; AudioManager::GetInstance().SetBgmVolumeScale(1.0f); });
+		[this]() { _isSettingsOpen = false; AudioManager::GetInstance().SetBgmVolumeScale(1.0f); },
+		[this]() { Restart(); });
 	updateDebugWaveTitle();
 }
 

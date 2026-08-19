@@ -49,7 +49,8 @@ public:
 		function<void()> onObstacleSellClick,
 		function<void()> onRestartClick,
 		function<void()> onSettingsClick,
-		function<void()> onSettingsCloseClick);
+		function<void()> onSettingsCloseClick,
+		function<void()> onSettingsReplayClick);
 
 	void Render(Graphic& graphic,
 		bool isDraggingTower,

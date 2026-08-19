@@ -185,7 +185,8 @@ void GameSceneUI::Init(
 	function<void()> onObstacleSellClick,
 	function<void()> onRestartClick,
 	function<void()> onSettingsClick,
-	function<void()> onSettingsCloseClick)
+	function<void()> onSettingsCloseClick,
+	function<void()> onSettingsReplayClick)
 {
 	ResourceManager& res = ResourceManager::GetInstance();
 	// HUD 배경 패널
@@ -264,6 +265,8 @@ void GameSceneUI::Init(
 		function<void()> onClick;
 		if (i == 0)
 			onClick = onSettingsCloseClick; // 0번(위 왼쪽) = 재개
+		else if (i == 1) // 1번(위 가운데) = 리플레이(게임 재시작)
+			onClick = onSettingsReplayClick;
 		else if (i == 3) // 3번(음악) — 클릭할 때마다 BGM 음소거 on/off (꺼짐→켜짐 시 처음부터 재생)
 			onClick = [this, i]() { _settingsToggleOff[i] = !_settingsToggleOff[i]; AudioManager::GetInstance().SetBgmMuted(_settingsToggleOff[i]); };
 		else if (i == 4) // 4번(효과음) — 클릭할 때마다 SFX 음소거 on/off
