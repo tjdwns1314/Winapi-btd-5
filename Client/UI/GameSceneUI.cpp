@@ -78,6 +78,7 @@ namespace
 	// --------------------------------------------------
 	constexpr float kTowerTooltipScaleX = 0.6f; // target_box 가로 배율(기존 1.0에서 0.4만큼 축소)
 	constexpr float kTowerTooltipScaleY = 2.4f; // target_box 세로 배율(기존 3.0에서 0.6만큼 축소)
+	constexpr float kUpgradeTooltipScaleY = 1.8f; // 업그레이드 버튼 툴팁은 타워 상점 툴팁보다 세로로 짧게.
 	constexpr float kTowerTooltipGapX = 15.0f;  // 오른쪽 HUD 패널 왼쪽 끝과 툴팁 사이 간격
 	// 채움 사각형은 테두리 스프라이트보다 살짝 작게(테두리 밖으로 삐져나오지 않도록) 축소.
 	constexpr float kTowerTooltipFillScaleX = 0.98f;
@@ -339,6 +340,7 @@ void GameSceneUI::Render(Graphic& graphic, bool isDraggingTower, TowerType dragg
 
 	// 다른 HUD 요소들 위에 그려져야 하므로 맨 마지막에.
 	renderTowerTooltip(graphic);
+	renderUpgradeTooltip(graphic, selection);
 }
 
 void GameSceneUI::RenderModalOverlay(Graphic& graphic, bool isSettingsOpen) const
@@ -540,6 +542,41 @@ void GameSceneUI::renderTowerShopBoxes(Graphic& graphic) const
 	drawBox(_bombTowerShopButton);
 }
 
+// target_box 배경을 그리고 텍스트 좌표를 반환하는 공용 함수. X는 오른쪽 HUD 패널 왼쪽 고정, Y는 mouseY를 따라간다.
+bool GameSceneUI::renderTooltipPanel(Graphic& graphic, float mouseY, float scaleY, TooltipLayout& outLayout) const
+{
+	const CellInfo* cell = _hudSprite->GetCell("target_box");
+	if (cell == nullptr)
+		return false;
+
+	// X: 오른쪽 HUD 패널(게임 영역 바로 오른쪽부터 시작) 왼쪽에 살짝 띄워 고정.
+	const float centerX = static_cast<float>(GameAreaWidth) - kTowerTooltipGapX - cell->aw * kTowerTooltipScaleX * 0.5f;
+	// Y: 마우스 위치를 그대로 따라간다.
+	const float centerY = mouseY;
+
+	const float panelWidth = cell->aw * kTowerTooltipScaleX * kTowerTooltipFillScaleX;
+	const float panelHeight = cell->ah * scaleY * kTowerTooltipFillScaleY;
+
+	// 테두리 안쪽 투명한 부분을 채울 배경 사각형을 먼저 그린다.
+	ID2D1HwndRenderTarget* renderTarget = graphic.GetRenderTarget();
+	ID2D1SolidColorBrush* fillBrush = graphic.GetBrush(kTowerTooltipFillColor);
+	if (renderTarget != nullptr && fillBrush != nullptr)
+	{
+		const D2D1_RECT_F fillRect = D2D1::RectF(
+			centerX - panelWidth * 0.5f, centerY - panelHeight * 0.5f,
+			centerX + panelWidth * 0.5f, centerY + panelHeight * 0.5f);
+		renderTarget->FillRectangle(fillRect, fillBrush);
+	}
+
+	_hudImg->DrawSprite(graphic, centerX, centerY, *cell, kTowerTooltipScaleX, 0.0f, false, scaleY);
+
+	outLayout.textLeft = centerX - panelWidth * 0.5f + kTowerTooltipTextSideGap;
+	outLayout.textRight = centerX + panelWidth * 0.5f - kTowerTooltipTextSideGap;
+	outLayout.textTop = centerY - panelHeight * 0.5f + kTowerTooltipNameTopGap;
+	outLayout.textBottom = centerY + panelHeight * 0.5f - kTowerTooltipTextSideGap;
+	return true;
+}
+
 // 타워 상점 버튼 4개 중 마우스가 올라간 버튼이 있으면 target_box 패널에 이름/가격/설명을 그린다.
 void GameSceneUI::renderTowerTooltip(Graphic& graphic) const
 {
@@ -566,36 +603,15 @@ void GameSceneUI::renderTowerTooltip(Graphic& graphic) const
 	if (!isHovering)
 		return;
 
-	const CellInfo* cell = _hudSprite->GetCell("target_box");
-	if (cell == nullptr)
+	TooltipLayout layout;
+	if (!renderTooltipPanel(graphic, mousePos.y, kTowerTooltipScaleY, layout))
 		return;
-
-	// X: 오른쪽 HUD 패널(게임 영역 바로 오른쪽부터 시작) 왼쪽에 살짝 띄워 고정.
-	const float centerX = static_cast<float>(GameAreaWidth) - kTowerTooltipGapX - cell->aw * kTowerTooltipScaleX * 0.5f;
-	// Y: 마우스 위치를 그대로 따라간다.
-	const float centerY = mousePos.y;
-
-	const float panelWidth = cell->aw * kTowerTooltipScaleX * kTowerTooltipFillScaleX;
-	const float panelHeight = cell->ah * kTowerTooltipScaleY * kTowerTooltipFillScaleY;
-
-	// 테두리 안쪽 투명한 부분을 채울 배경 사각형을 먼저 그린다.
-	ID2D1HwndRenderTarget* renderTarget = graphic.GetRenderTarget();
-	ID2D1SolidColorBrush* fillBrush = graphic.GetBrush(kTowerTooltipFillColor);
-	if (renderTarget != nullptr && fillBrush != nullptr)
-	{
-		const D2D1_RECT_F fillRect = D2D1::RectF(
-			centerX - panelWidth * 0.5f, centerY - panelHeight * 0.5f,
-			centerX + panelWidth * 0.5f, centerY + panelHeight * 0.5f);
-		renderTarget->FillRectangle(fillRect, fillBrush);
-	}
-
-	_hudImg->DrawSprite(graphic, centerX, centerY, *cell, kTowerTooltipScaleX, 0.0f, false, kTowerTooltipScaleY);
 
 	// 이름(노란색) → 가격(노란색) → 설명(하얀색) 순서로 위에서부터 채운다.
 	const TowerStat& stat = GetTowerStat(hoveredType);
-	const float textLeft = centerX - panelWidth * 0.5f + kTowerTooltipTextSideGap;
-	const float textRight = centerX + panelWidth * 0.5f - kTowerTooltipTextSideGap;
-	float textTop = centerY - panelHeight * 0.5f + kTowerTooltipNameTopGap;
+	const float textLeft = layout.textLeft;
+	const float textRight = layout.textRight;
+	float textTop = layout.textTop;
 
 	graphic.DrawString(stat.name.c_str(), D2D1::RectF(textLeft, textTop, textRight, textTop + kTowerTooltipNameHeight),
 		kTowerTooltipNameFontSize, kTowerTooltipNameColor, DWRITE_TEXT_ALIGNMENT_LEADING);
@@ -607,7 +623,28 @@ void GameSceneUI::renderTowerTooltip(Graphic& graphic) const
 		kTowerTooltipPriceFontSize, kTowerTooltipPriceColor, DWRITE_TEXT_ALIGNMENT_LEADING);
 	textTop += kTowerTooltipPriceHeight;
 
-	graphic.DrawString(stat.description.c_str(), D2D1::RectF(textLeft, textTop, textRight, centerY + panelHeight * 0.5f - kTowerTooltipTextSideGap),
+	graphic.DrawString(stat.description.c_str(), D2D1::RectF(textLeft, textTop, textRight, layout.textBottom),
+		kTowerTooltipDescFontSize, kTowerTooltipDescColor, DWRITE_TEXT_ALIGNMENT_LEADING);
+}
+
+// 업그레이드 버튼에 마우스를 올리면 다음 업그레이드 설명을 renderTooltipPanel 공용 패널로 보여준다.
+void GameSceneUI::renderUpgradeTooltip(Graphic& graphic, const TowerSelectionInfo& selection) const
+{
+	if (!selection.canUpgrade || selection.upgradeDescription.empty())
+		return;
+	if (_upgradeButton == nullptr || !_upgradeButton->IsActive())
+		return;
+
+	const Vector mousePos = InputManager::GetInstance().GetMousePos();
+	if (!_upgradeButton->ContainsPoint(mousePos))
+		return;
+
+	TooltipLayout layout;
+	if (!renderTooltipPanel(graphic, mousePos.y, kUpgradeTooltipScaleY, layout))
+		return;
+
+	graphic.DrawString(selection.upgradeDescription.c_str(),
+		D2D1::RectF(layout.textLeft, layout.textTop, layout.textRight, layout.textBottom),
 		kTowerTooltipDescFontSize, kTowerTooltipDescColor, DWRITE_TEXT_ALIGNMENT_LEADING);
 }
 

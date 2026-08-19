@@ -12,6 +12,7 @@ enum class TowerType
 struct TowerGradeStat
 {
 	wstring name; // 업그레이드 이름(한글). base grade(0등급)는 비어 있음.
+	wstring description; // 업그레이드 설명(한글). TowerType.json 각 grade의 "description" 필드. base grade는 비어 있음.
 	int32 cost;
 	int32 damage;
 	float attackRange;

@@ -20,6 +20,7 @@ struct TowerSelectionInfo
 	bool canUpgrade = false;
 	string upgradeIconKey;
 	wstring upgradeName; // 다음 업그레이드 이름(한글). 업그레이드 패널 아이콘 위쪽에 표시.
+	wstring upgradeDescription; // 다음 업그레이드 설명(한글). 업그레이드 버튼에 마우스 올리면 툴팁으로 표시.
 	string avatarKey;
 };
 
@@ -91,9 +92,26 @@ private:
 	void drawObstacleIcon(Graphic& graphic, const Vector& pos, float scale) const;
 	void drawRangePreview(Graphic& graphic, const Vector& pos, TowerType type) const;
 
+	// renderTooltipPanel()이 그려준 target_box 안에서 텍스트를 채울 수 있는 좌표.
+	struct TooltipLayout
+	{
+		float textLeft = 0.f;
+		float textRight = 0.f;
+		float textTop = 0.f;
+		float textBottom = 0.f;
+	};
+
+	// target_box 배경(사각형 채우기 + 스프라이트)을 그리고 텍스트 좌표를 outLayout에 채운다.
+	// X: 오른쪽 HUD 패널 왼쪽에 고정. Y: mouseY를 따라간다. target_box 셀이 없으면 false.
+	// renderTowerTooltip / renderUpgradeTooltip이 공용으로 쓰고, 텍스트만 각자 그린다.
+	bool renderTooltipPanel(Graphic& graphic, float mouseY, float scaleY, TooltipLayout& outLayout) const;
+
 	// 타워 상점 버튼에 마우스를 올리면 패널만 표시(1단계: 배경만, 텍스트는 다음 단계).
 	// target_box를 세로 1.5배로 그리며, X는 오른쪽 HUD 패널 왼쪽에 고정, Y는 마우스를 따라간다.
 	void renderTowerTooltip(Graphic& graphic) const;
+
+	// 업그레이드 버튼에 마우스를 올리면 다음 업그레이드 설명을 renderTooltipPanel 공용 패널로 보여준다.
+	void renderUpgradeTooltip(Graphic& graphic, const TowerSelectionInfo& selection) const;
 
 	// --------------------------------------------------
 	//  선택된 타워/장애물 패널 (판매/업그레이드)

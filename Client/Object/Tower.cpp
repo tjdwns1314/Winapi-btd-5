@@ -246,6 +246,18 @@ const wstring& Tower::GetNextUpgradeName() const
 	return _towerData->grades[targetIndex].name;
 }
 
+const wstring& Tower::GetNextUpgradeDescription() const
+{
+	static const wstring empty;
+	if (!_canUpgrade)
+		return empty;
+
+	const int32 targetIndex = _grade;
+	if (targetIndex < 0 || targetIndex >= static_cast<int32>(_towerData->grades.size()))
+		return empty;
+	return _towerData->grades[targetIndex].description;
+}
+
 void Tower::ApplyUpgrade()
 {
 	if (!_canUpgrade)

@@ -39,6 +39,7 @@ public:
 	int32 GetNextUpgradeCost() const;
 	const string& GetNextUpgradeIconKey() const;
 	const wstring& GetNextUpgradeName() const;
+	const wstring& GetNextUpgradeDescription() const;
 	void ApplyUpgrade();
 
 

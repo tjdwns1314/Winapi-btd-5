@@ -126,6 +126,7 @@ void GameScene::Render(Graphic& graphic)
 		selection.upgradePrice = selectedTower->GetNextUpgradeCost();
 		selection.upgradeIconKey = selectedTower->GetNextUpgradeIconKey();
 		selection.upgradeName = selectedTower->GetNextUpgradeName();
+		selection.upgradeDescription = selectedTower->GetNextUpgradeDescription();
 		selection.avatarKey = selectedTower->GetStat().avatarKey;
 	}
 

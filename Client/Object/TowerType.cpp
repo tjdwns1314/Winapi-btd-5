@@ -30,6 +30,7 @@ namespace
 			{
 				TowerGradeStat grade;
 				grade.name = Utf8ToWide(g.value("name", string()));
+				grade.description = Utf8ToWide(g.value("description", string()));
 				grade.cost = g.at("cost").get<int32>();
 				grade.damage = g.at("damage").get<int32>();
 				grade.attackRange = g.at("attackRange").get<float>();
