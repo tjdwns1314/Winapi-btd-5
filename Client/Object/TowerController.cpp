@@ -7,6 +7,7 @@
 #include "TowerFactory.h"
 #include "PoolManager.h"
 #include "InputManager.h"
+#include "AudioManager.h"
 
 void TowerController::TryStartDrag(TowerType type, EconomyManager& economy)
 {
@@ -63,6 +64,7 @@ void TowerController::UpdateDrag(Scene& scene, MapSystem& map, EconomyManager& e
 	{
 		scene.AddActor(tower);
 		_selected = tower;
+		AudioManager::GetInstance().PlaySfx(L"tower_place");
 	}
 	else
 	{
@@ -114,6 +116,8 @@ void TowerController::SellSelected(MapSystem& map, EconomyManager& economy)
 
 	_selected->SetPendingKill();
 	_selected = nullptr;
+
+	AudioManager::GetInstance().PlaySfx(L"sell_tower");
 }
 
 void TowerController::UpgradeSelected(EconomyManager& economy)
@@ -126,4 +130,5 @@ void TowerController::UpgradeSelected(EconomyManager& economy)
 		return; // 골드 부족
 
 	_selected->ApplyUpgrade();
+	AudioManager::GetInstance().PlaySfx(L"upgrade");
 }
