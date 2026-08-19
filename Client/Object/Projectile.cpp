@@ -7,6 +7,7 @@
 #include "PoolManager.h"
 #include "Effect.h"
 #include "EffectFactory.h"
+#include "AudioManager.h"
 
 namespace
 {
@@ -63,6 +64,8 @@ void Projectile::OnEnter(Actor* other)
 		Effect* explosion = EffectFactory::Create(PoolManager::GetInstance().GetEffectPool(), center, EffectType::Explosion);
 		if (explosion != nullptr)
 			GetOwner()->AddActor(explosion);
+
+		AudioManager::GetInstance().PlaySfx(L"explosion_small");
 	}
 	if (--_pierceRemaining <= 0)
 		SetPendingKill();
