@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "MainScene.h"
 
 void MainScene::Init(Graphic& graphic)

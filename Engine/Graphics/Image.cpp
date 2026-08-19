@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "Image.h"
 void Image::Load(Graphic& graphic, const wchar_t* fileName)
 {

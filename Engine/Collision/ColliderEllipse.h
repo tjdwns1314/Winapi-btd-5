@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Collider.h"
 
 // 타원형 충돌체. 보스 풍선처럼 진행 방향으로 길쭉한 모양이 필요할 때 사용한다.
