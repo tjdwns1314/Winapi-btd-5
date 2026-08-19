@@ -1,4 +1,4 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "GameAssets.h"
 #include "ResourceManager.h"
 #include "AudioManager.h"
@@ -31,6 +31,9 @@ void GameAssets::Load(Graphic& graphic)
 
 	res.LoadImage(graphic, L"Resource\\Sprite\\shared_sheet.png");
 	res.LoadAtlas(L"Resource\\Sprite\\shared_sheet.xml");
+
+	res.LoadImage(graphic, L"Resource\\Sprite\\newshared.png");
+	res.LoadAtlas(L"Resource\\Sprite\\newshared.xml");
 
 	res.LoadImage(graphic, L"Resource\\Sprite\\nukki\\autoplay.png");
 	res.LoadImage(graphic, L"Resource\\Sprite\\nukki\\music.png");
