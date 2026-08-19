@@ -203,9 +203,9 @@ void GameScene::onStartButtonClick()
 	_speedEnabled = !_speedEnabled;
 }
 
-Projectile* GameScene::SpawnProjectile(const Vector& pos,const Vector& dir, float damage, const string& spriteKey, float speed, float splashRadius, int32 pierceCount)
+Projectile* GameScene::SpawnProjectile(const Vector& pos,const Vector& dir, float damage, const string& spriteKey, float speed, float maxDistance, float splashRadius, int32 pierceCount)
 {
-	Projectile* projectile = ProjectileFactory::Create(PoolManager::GetInstance().GetProjectilePool(), pos, dir, damage, spriteKey, speed, splashRadius, pierceCount);
+	Projectile* projectile = ProjectileFactory::Create(PoolManager::GetInstance().GetProjectilePool(), pos, dir, damage, spriteKey, speed, maxDistance, splashRadius, pierceCount);
 	if (projectile != nullptr)
 		AddActor(projectile);
 
