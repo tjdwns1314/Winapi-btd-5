@@ -7,6 +7,33 @@
 #include "GameScene.h"
 #include "Effect.h"
 #include "EffectFactory.h"
+#include "AudioManager.h"
+#include <random>
+
+namespace
+{
+	// 풍선 종류별 터짐 효과음: 납은 metal, 세라믹은 ceramic, 나머지는 pop1~4 중 랜덤.
+	void playPopSound(BloonColor color)
+	{
+		AudioManager& audio = AudioManager::GetInstance();
+
+		if (color == BloonColor::Lead)
+		{
+			audio.PlaySfx(L"metal_bloon_hit");
+			return;
+		}
+		if (color == BloonColor::Ceramic)
+		{
+			audio.PlaySfx(L"ceramic_bloon_hit");
+			return;
+		}
+
+		static const wchar_t* popKeys[] = { L"pop1", L"pop2", L"pop3", L"pop4" };
+		static std::mt19937 rng{ std::random_device{}() };
+		std::uniform_int_distribution<int32> dist(0, 3);
+		audio.PlaySfx(popKeys[dist(rng)]);
+	}
+}
 
 int32 BloonPopResolver::GetLayerHp(BloonColor color)
 {
@@ -67,6 +94,8 @@ void BloonPopResolver::HandleHit(Bloon& bloon, float damage)
 	Scene* owner = bloon.GetOwner();
 	if (owner == nullptr)
 		return;
+
+	playPopSound(bloon.GetColor());
 
 	Effect* effect = EffectFactory::Create(PoolManager::GetInstance().GetEffectPool(), bloon.GetPos(), EffectType::Pop);
 	if (effect != nullptr)
