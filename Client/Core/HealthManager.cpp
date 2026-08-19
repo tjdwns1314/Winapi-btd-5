@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "HealthManager.h"
 
 void HealthManager::Init(int32 startHp)
