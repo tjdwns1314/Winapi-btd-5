@@ -260,7 +260,7 @@ void GameSceneUI::Init(
 
 	for (int32 i = 0; i < 5; ++i)
 	{
-		const Vector pos = Vector(GameAreaCenterX + ringOffsets[i].x, GameAreaCenterY + kSettingsRingCenterOffsetY + ringOffsets[i].y);
+		const Vector pos = Vector(static_cast<float>(GWinSizeX) * 0.5f + ringOffsets[i].x, GameAreaCenterY + kSettingsRingCenterOffsetY + ringOffsets[i].y);
 		function<void()> onClick;
 		if (i == 0)
 			onClick = onSettingsCloseClick; // 0번(위 왼쪽) = 재개
