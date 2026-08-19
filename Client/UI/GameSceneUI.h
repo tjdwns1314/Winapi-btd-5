@@ -50,7 +50,8 @@ public:
 		function<void()> onRestartClick,
 		function<void()> onSettingsClick,
 		function<void()> onSettingsCloseClick,
-		function<void()> onSettingsReplayClick);
+		function<void()> onSettingsReplayClick,
+		function<void(bool)> onAutoPlayToggle);
 
 	void Render(Graphic& graphic,
 		bool isDraggingTower,

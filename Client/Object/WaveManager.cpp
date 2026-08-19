@@ -42,6 +42,9 @@ namespace
 
 	// 라운드 종료 보너스 골드 공식: 99 + 클리어한 라운드 번호 (예: 40라운드 클리어 시 $139)
 	constexpr int32 kRoundClearBonusOffset = 99;
+
+	// 자동진행 켜짐 상태에서 웨이브 클리어 후 다음 웨이브 시작까지 대기하는 시간(초)
+	constexpr float kAutoStartDelay = 1.0f;
 }
 
 void WaveManager::Init(ObjectPool<Bloon>* pool, const Vector& spawnPos, const vector<Vector>* path, Scene* scene,
@@ -60,6 +63,8 @@ void WaveManager::Init(ObjectPool<Bloon>* pool, const Vector& spawnPos, const ve
 	_spawnIndex = 0;
 	_spawnTimer = 0.f;
 	_currentRound = WaveData{};
+	_autoPlayEnabled = false;
+	_autoStartTimer = -1.f;
 }
 
 bool WaveManager::StartNextWave()
@@ -101,6 +106,15 @@ void WaveManager::SetNextRound(int32 roundNumber)
 	_roundIndex = roundNumber - 1;
 }
 
+void WaveManager::SetAutoPlay(bool enabled)
+{
+	_autoPlayEnabled = enabled;
+	if (enabled && _state == WaveState::Idle)
+		_autoStartTimer = kAutoStartDelay; // 대기 중에 켰으면 바로 카운트다운 시작
+	else if (!enabled)
+		_autoStartTimer = -1.f; // 카운트다운 중이었다면 취소 — 다음 웨이브는 버튼으로
+}
+
 int32 WaveManager::GetTotalRoundNumber() const
 {
 	return kRoundCount;
@@ -108,9 +122,20 @@ int32 WaveManager::GetTotalRoundNumber() const
 
 void WaveManager::Update(float deltaTime)
 {
-	// 1. 대기 상태 (웨이브 시작 전)
+	// 1. 대기 상태 (웨이브 시작 전). 자동진행이 켜져 있으면 대기 타이머를 카운트다운하다 자동으로 다음 웨이브 시작.
 	if (_state == WaveState::Idle)
+	{
+		if (_autoStartTimer >= 0.f)
+		{
+			_autoStartTimer -= deltaTime;
+			if (_autoStartTimer <= 0.f)
+			{
+				_autoStartTimer = -1.f;
+				StartNextWave();
+			}
+		}
 		return;
+	}
 
 	// 2. 스폰 완료 후 필드의 모든 적 처치 대기 상태
 	if (_state == WaveState::WaitingClear)
@@ -120,6 +145,8 @@ void WaveManager::Update(float deltaTime)
 			_state = WaveState::Idle;
 			if (_onRoundClearBonus != nullptr)
 				_onRoundClearBonus(kRoundClearBonusOffset + _roundIndex);
+			if (_autoPlayEnabled)
+				_autoStartTimer = kAutoStartDelay;
 		}
 		return;
 	}

@@ -186,7 +186,8 @@ void GameSceneUI::Init(
 	function<void()> onRestartClick,
 	function<void()> onSettingsClick,
 	function<void()> onSettingsCloseClick,
-	function<void()> onSettingsReplayClick)
+	function<void()> onSettingsReplayClick,
+	function<void(bool)> onAutoPlayToggle)
 {
 	ResourceManager& res = ResourceManager::GetInstance();
 	// HUD 배경 패널
@@ -272,7 +273,12 @@ void GameSceneUI::Init(
 		else if (i == 4) // 4번(효과음) — 클릭할 때마다 SFX 음소거 on/off
 			onClick = [this, i]() { _settingsToggleOff[i] = !_settingsToggleOff[i]; AudioManager::GetInstance().SetSfxMuted(_settingsToggleOff[i]); };
 		else if (i == 2) // 2번(자동진행) — 오디오와 무관, on/off 상태만 토글
-			onClick = [this, i]() { _settingsToggleOff[i] = !_settingsToggleOff[i]; };
+			onClick = [this, i, onAutoPlayToggle]()
+			{
+				_settingsToggleOff[i] = !_settingsToggleOff[i];
+				if (onAutoPlayToggle != nullptr)
+					onAutoPlayToggle(!_settingsToggleOff[i]); // ToggleOff==false가 "켜짐"
+			};
 		else
 			onClick = []() {};
 		_settingsMenuButtons[i] = createButton(pos, settingsButtonSize, onClick);

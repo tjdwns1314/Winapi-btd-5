@@ -25,6 +25,9 @@ public:
 	void Update(float deltaTime);
 	bool IsWaveActive() const { return _state != WaveState::Idle; }
 
+	// 설정 팝업의 자동진행 토글과 연결. true면 웨이브 클리어 후 kAutoStartDelay(1초) 뒤 자동으로 다음 웨이브 시작.
+	void SetAutoPlay(bool enabled);
+
 	// 라운드 디버그
 	void SetNextRound(int32 roundNumber);
 	int32 GetNextRoundNumber() const { return _roundIndex + 1; }
@@ -66,4 +69,8 @@ private:
 	// 스폰 진행 상태
 	int32 _spawnIndex = 0;
 	float _spawnTimer = 0.f;
+
+	// 자동진행 상태 및 웨이브 클리어 후 다음 웨이브까지 남은 대기 시간(초). 음수면 대기 중 아님.
+	bool _autoPlayEnabled = false;
+	float _autoStartTimer = -1.f;
 };
