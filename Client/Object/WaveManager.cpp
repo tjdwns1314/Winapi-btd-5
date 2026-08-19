@@ -39,14 +39,19 @@ namespace
 		};
 		return table;
 	}
+
+	// 라운드 종료 보너스 골드 공식: 99 + 클리어한 라운드 번호 (예: 40라운드 클리어 시 $139)
+	constexpr int32 kRoundClearBonusOffset = 99;
 }
 
-void WaveManager::Init(ObjectPool<Bloon>* pool, const Vector& spawnPos, const vector<Vector>* path, Scene* scene)
+void WaveManager::Init(ObjectPool<Bloon>* pool, const Vector& spawnPos, const vector<Vector>* path, Scene* scene,
+	function<void(int32)> onRoundClearBonus)
 {
 	_pool = pool;
 	_spawnPos = spawnPos;
 	_path = path;
 	_scene = scene;
+	_onRoundClearBonus = onRoundClearBonus;
 
 	// 재시작 시 GameScene이 이 WaveManager 인스턴스를 재사용하므로,
 	// 이전 판의 라운드 진행 상태가 그대로 남지 않도록 여기서 리셋한다.
@@ -111,7 +116,11 @@ void WaveManager::Update(float deltaTime)
 	if (_state == WaveState::WaitingClear)
 	{
 		if (isFieldClear())
+		{
 			_state = WaveState::Idle;
+			if (_onRoundClearBonus != nullptr)
+				_onRoundClearBonus(kRoundClearBonusOffset + _roundIndex);
+		}
 		return;
 	}
 

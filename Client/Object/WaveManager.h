@@ -17,7 +17,8 @@ struct WaveData
 class WaveManager
 {
 public:
-	void Init(ObjectPool<Bloon>* pool, const Vector& spawnPos, const vector<Vector>* path, Scene* scene);
+	void Init(ObjectPool<Bloon>* pool, const Vector& spawnPos, const vector<Vector>* path, Scene* scene,
+		function<void(int32)> onRoundClearBonus = nullptr);
 
 	// 웨이브 진행
 	bool StartNextWave();
@@ -53,6 +54,9 @@ private:
 	const vector<Vector>* _path = nullptr;
 	Scene* _scene = nullptr;
 	Vector _spawnPos;
+
+	// 라운드 클리어 보너스 골드 지급 콜백. 인자로 지급할 골드량을 넘긴다.
+	function<void(int32)> _onRoundClearBonus;
 
 	// 웨이브 상태
 	WaveState _state = WaveState::Idle;

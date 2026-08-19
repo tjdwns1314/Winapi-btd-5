@@ -26,7 +26,8 @@ void GameScene::Init(Graphic& graphic)
 	_map.Init();
 
 	PoolManager::GetInstance().Init(250, 200, 50, 50, 250); // obstacleSize=50, effectSize=250: 임시값
-	_waveManager.Init(&PoolManager::GetInstance().GetBloonPool(), _map.GetBloonSpawnPos(), _map.GetPathPtr(), this);
+	_waveManager.Init(&PoolManager::GetInstance().GetBloonPool(), _map.GetBloonSpawnPos(), _map.GetPathPtr(), this,
+		[this](int32 bonusGold) { _economyManager.Add(bonusGold); });
 	_healthManager.Init(100); // 초기 체력: 임시값 — 밸런스 확정되면 조정
 	_economyManager.Init(10000); // 초기 골드: 임시값 — 밸런스 확정되면 조정
 
