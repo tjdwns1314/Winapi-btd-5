@@ -76,6 +76,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Engine\Core;$(ProjectDir)Engine\Manager;$(ProjectDir)Engine\Collision;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Scene;$(ProjectDir)Client\UI;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -94,6 +95,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Engine\Core;$(ProjectDir)Engine\Manager;$(ProjectDir)Engine\Collision;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Scene;$(ProjectDir)Client\UI;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -113,6 +115,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Engine\Core;$(ProjectDir)Engine\Manager;$(ProjectDir)Engine\Collision;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Scene;$(ProjectDir)Client\UI;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -131,6 +134,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Engine\Core;$(ProjectDir)Engine\Manager;$(ProjectDir)Engine\Collision;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Scene;$(ProjectDir)Client\UI;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -191,6 +195,7 @@
     <ClInclude Include="Engine\Manager\InputManager.h" />
     <ClInclude Include="Common\targetver.h" />
     <ClInclude Include="Engine\Manager\TimeManager.h" />
+    <ClInclude Include="Engine\Manager\AudioManager.h" />
     <ClInclude Include="Client\Object\Tower.h" />
     <ClInclude Include="Client\Object\TowerController.h" />
     <ClInclude Include="Client\Object\TowerType.h" />
@@ -258,6 +263,7 @@
     <ClCompile Include="Client\UI\GameSceneUI.cpp" />
     <ClCompile Include="Engine\Manager\InputManager.cpp" />
     <ClCompile Include="Engine\Manager\TimeManager.cpp" />
+    <ClCompile Include="Engine\Manager\AudioManager.cpp" />
     <ClCompile Include="Client\Object\Tower.cpp" />
     <ClCompile Include="Client\Object\TowerController.cpp" />
     <ClCompile Include="Client\Core\TowerDefense.cpp" />

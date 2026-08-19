@@ -103,6 +103,9 @@
     <ClInclude Include="Engine\Manager\TimeManager.h">
       <Filter>Engine\Manager</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Manager\AudioManager.h">
+      <Filter>Engine\Manager</Filter>
+    </ClInclude>
     <ClInclude Include="Client\Object\Bloon.h">
       <Filter>Client\Object</Filter>
     </ClInclude>
@@ -277,6 +280,9 @@
       <Filter>Engine\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Manager\TimeManager.cpp">
+      <Filter>Engine\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Manager\AudioManager.cpp">
       <Filter>Engine\Manager</Filter>
     </ClCompile>
     <ClCompile Include="Client\Object\Bloon.cpp">
