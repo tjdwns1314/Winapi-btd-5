@@ -1,0 +1,6 @@
+<SpriteInformation>
+<FrameInformation name="welcome_sheet" texw="980" texh="824" type="png">
+<Cell name="welcome_graphic_release" x="1" y="1" w="977" h="516" ax="0" ay="0" aw="977" ah="516"/>
+<Cell name="welcome_graphic" x="1" y="520" w="697" h="300" ax="0" ay="11" aw="697" ah="336"/>
+</FrameInformation>
+</SpriteInformation>

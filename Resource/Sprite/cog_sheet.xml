@@ -1,0 +1,6 @@
+<SpriteInformation>
+<FrameInformation name="cog_sheet" texw="984" texh="500" type="png">
+<Cell name="cog" x="499" y="1" w="482" h="482" ax="0" ay="0" aw="482" ah="482"/>
+<Cell name="cog_shadow" x="1" y="1" w="496" h="496" ax="0" ay="0" aw="496" ah="496"/>
+</FrameInformation>
+</SpriteInformation>
