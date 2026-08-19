@@ -194,6 +194,7 @@
     <ClInclude Include="Engine\UI\UIButton.h" />
     <ClInclude Include="Engine\Manager\UIManager.h" />
     <ClInclude Include="Client\UI\GameSceneUI.h" />
+    <ClInclude Include="Client\UI\LobbySceneUI.h" />
     <ClInclude Include="Engine\Manager\InputManager.h" />
     <ClInclude Include="Common\targetver.h" />
     <ClInclude Include="Engine\Manager\TimeManager.h" />
@@ -264,6 +265,7 @@
     <ClCompile Include="Engine\UI\UIButton.cpp" />
     <ClCompile Include="Engine\Manager\UIManager.cpp" />
     <ClCompile Include="Client\UI\GameSceneUI.cpp" />
+    <ClCompile Include="Client\UI\LobbySceneUI.cpp" />
     <ClCompile Include="Engine\Manager\InputManager.cpp" />
     <ClCompile Include="Engine\Manager\TimeManager.cpp" />
     <ClCompile Include="Engine\Manager\AudioManager.cpp" />

@@ -32,6 +32,8 @@ void GameAssets::Load(Graphic& graphic)
 	res.LoadImage(graphic, L"Resource\\Sprite\\newshared.png");
 	res.LoadAtlas(L"Resource\\Sprite\\newshared.xml");
 
+	res.LoadImage(graphic, L"Resource\\Image_png\\lobby_background.png");
+
 	res.LoadImage(graphic, L"Resource\\Sprite\\nukki\\autoplay.png");
 	res.LoadImage(graphic, L"Resource\\Sprite\\nukki\\music.png");
 	res.LoadImage(graphic, L"Resource\\Sprite\\nukki\\replay.png");
@@ -42,6 +44,7 @@ void GameAssets::Load(Graphic& graphic)
 	res.LoadImage(graphic, L"Resource\\Sprite\\nukki\\twocircle_nukki.png");
 	res.LoadImage(graphic, L"Resource\\Sprite\\nukki\\smallcircle_nukki.png");
 	res.LoadImage(graphic, L"Resource\\Sprite\\nukki\\cogwheel_nukki.png");
+	res.LoadImage(graphic, L"Resource\\Sprite\\nukki\\gold_trophy_nukki.png");
 
 	res.LoadImage(graphic, L"Resource\\Sprite\\loading_screen.png");
 	res.LoadAtlas(L"Resource\\Sprite\\loading_screen.xml");

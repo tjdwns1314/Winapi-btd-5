@@ -1,5 +1,6 @@
 ﻿#include "pch.h"
 #include "LobbyScene.h"
+#include "SceneManager.h"
 
 void LobbyScene::Init(Graphic& graphic)
 {
@@ -19,4 +20,11 @@ void LobbyScene::Update(float deltaTime)
 void LobbyScene::Render(Graphic& graphic)
 {
 	Super::Render(graphic);
+
+	_ui.Render(graphic);
+}
+
+void LobbyScene::CreateUI()
+{
+	_ui.Init([]() { SceneManager::GetInstance().ChangeScene(SceneType::Game); });
 }

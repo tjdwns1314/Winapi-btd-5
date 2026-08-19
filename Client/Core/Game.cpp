@@ -8,6 +8,7 @@
 #include "InputManager.h"
 #include "Scene/GameScene.h"
 #include "Scene/EditorScene.h"
+#include "Scene/LobbyScene.h"
 
 #pragma comment(lib, "d2d1.lib")
 #pragma comment(lib, "windowscodecs.lib") // WIC(이미지 로더) 관련 함수도 쓰고 있으므로 같이 필요
@@ -42,7 +43,8 @@ void Game::Init(HWND hwnd)
 	sceneManager.Init(_graphic);
 	sceneManager.RegisterScene(SceneType::Game, new GameScene());
 	sceneManager.RegisterScene(SceneType::Editor, new EditorScene());
-	sceneManager.ChangeScene(SceneType::Editor);
+	sceneManager.RegisterScene(SceneType::Lobby, new LobbyScene());
+	sceneManager.ChangeScene(SceneType::Lobby);
 }
 
 void Game::Cleanup()

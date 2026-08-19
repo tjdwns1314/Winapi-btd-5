@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "Scene.h"
+#include "LobbySceneUI.h"
 
 class LobbyScene : public Scene
 {
@@ -13,5 +14,11 @@ public:
 	virtual void Cleanup() override;
 	virtual void Update(float deltaTime) override;
 	virtual void Render(Graphic& graphic) override;
+
+protected:
+	virtual void CreateUI() override;
+
+private:
+	LobbySceneUI _ui;
 };
 

@@ -85,6 +85,9 @@
     <ClInclude Include="Client\UI\GameSceneUI.h">
       <Filter>Client\UI</Filter>
     </ClInclude>
+    <ClInclude Include="Client\UI\LobbySceneUI.h">
+      <Filter>Client\UI</Filter>
+    </ClInclude>
     <ClInclude Include="Engine\Manager\InputManager.h">
       <Filter>Engine\Manager</Filter>
     </ClInclude>
@@ -271,6 +274,9 @@
       <Filter>Engine\Manager</Filter>
     </ClCompile>
     <ClCompile Include="Client\UI\GameSceneUI.cpp">
+      <Filter>Client\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\UI\LobbySceneUI.cpp">
       <Filter>Client\UI</Filter>
     </ClCompile>
     <ClCompile Include="Engine\Manager\InputManager.cpp">
