@@ -15,6 +15,11 @@ void MapSystem::Init()
 	_bloonSpawnPos = Vector(
 		(startCell.iX + 0.5f) * gridSize,
 		(startCell.iY + 0.5f) * gridSize);
+
+	const Cell endCell = _tileMap.GetEndPoint();
+	_bloonEndPos = Vector(
+		(endCell.iX + 0.5f) * gridSize,
+		(endCell.iY + 0.5f) * gridSize);
 }
 
 void MapSystem::recomputePath()
@@ -140,32 +145,15 @@ void MapSystem::RenderPathDebug(Graphic& graphic) const
 	if (renderTarget == nullptr || brush == nullptr)
 		return;
 
-	const float radius = static_cast<float>(_grid.GetGridSize()) * 0.15f;
-
-	for (const Vector& point : _path)
-		renderTarget->FillEllipse(D2D1::Ellipse(D2D1::Point2F(point.x, point.y), radius, radius), brush);
-}
-
-void MapSystem::RenderStartEndDebug(Graphic& graphic) const
-{
-	ID2D1HwndRenderTarget* renderTarget = graphic.GetRenderTarget();
-	if (renderTarget == nullptr)
+	if (_path.size() <= 2)
 		return;
 
-	const int32 gridSize = _grid.GetGridSize();
-	const float radius = static_cast<float>(gridSize) * 0.3f;
+	const float radius = static_cast<float>(_grid.GetGridSize()) * 0.15f;
 
-	auto drawCellMarker = [&](Cell cell, const D2D1::ColorF& color)
+	for (size_t i = 1; i + 1 < _path.size(); ++i)
 	{
-		ID2D1SolidColorBrush* brush = graphic.GetBrush(color);
-		if (brush == nullptr)
-			return;
-
-		const float cx = (cell.iX + 0.5f) * gridSize;
-		const float cy = (cell.iY + 0.5f) * gridSize;
-		renderTarget->FillEllipse(D2D1::Ellipse(D2D1::Point2F(cx, cy), radius, radius), brush);
-	};
-
-	drawCellMarker(_tileMap.GetStartPoint(), D2D1::ColorF(D2D1::ColorF::Green));
-	drawCellMarker(_tileMap.GetEndPoint(), D2D1::ColorF(D2D1::ColorF::Red));
+		const Vector& point = _path[i];
+		renderTarget->FillEllipse(D2D1::Ellipse(D2D1::Point2F(point.x, point.y), radius, radius), brush);
+	}
 }
+

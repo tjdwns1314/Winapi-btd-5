@@ -113,6 +113,22 @@ void GameScene::Render(Graphic& graphic)
 {
 	_map.RenderTiles(graphic);
 
+	// 출발/도착 지점을 시각적으로 구분하기 위한 장식 스프라이트.
+	// 타일보다는 위, 풍선(Super::Render)보다는 아래에 그려야 풍선이 항상 위에 보인다.
+	// 원본 스프라이트가 커서 별도 스케일 상수로 크기를 조절한다.
+	constexpr float kSpawnDecorScale = 0.5f;
+	constexpr float kEndDecorScale = 0.6f;
+	if (const CellInfo* startCell = _sprite->GetCell("bloonsday_pro_ball_shields"))
+	{
+		const Vector spawnPos = _map.GetBloonSpawnPos();
+		_inGameBg->DrawSprite(graphic, spawnPos.x, spawnPos.y, *startCell, kSpawnDecorScale, 0.0f);
+	}
+	if (const CellInfo* endCell = _sprite->GetCell("candy_chimney_02"))
+	{
+		const Vector endPos = _map.GetBloonEndPos();
+		_inGameBg->DrawSprite(graphic, endPos.x, endPos.y, *endCell, kEndDecorScale, 0.0f);
+	}
+
 	_debugOverlay.Render(graphic, _map,
 		_towerController.IsDragging() || _obstacleController.IsDragging(),
 		GetActors(RenderLayer::Bloon));

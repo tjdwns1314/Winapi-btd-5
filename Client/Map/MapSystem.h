@@ -14,6 +14,7 @@ public:
 
 	const vector<Vector>* GetPathPtr() const { return &_path; }
 	Vector GetBloonSpawnPos() const { return _bloonSpawnPos; }
+	Vector GetBloonEndPos() const { return _bloonEndPos; }
 	int32 GetGridSize() const { return _grid.GetGridSize(); }
 	bool HasPath() const { return _path.empty() == false; }
 
@@ -28,7 +29,6 @@ public:
 	void RenderTiles(Graphic& graphic) const;
 	void RenderGrid(Graphic& graphic, const D2D1::ColorF& color = D2D1::ColorF(D2D1::ColorF::Gray, 0.5f)) const;
 	void RenderPathDebug(Graphic& graphic) const;
-	void RenderStartEndDebug(Graphic& graphic) const;
 
 private:
 	void recomputePath();
@@ -37,6 +37,7 @@ private:
 	TileMap _tileMap;
 	vector<Vector> _path;
 	Vector _bloonSpawnPos;
+	Vector _bloonEndPos;
 
 	Image* _tile1Img = nullptr;
 	Image* _tile2Img = nullptr;

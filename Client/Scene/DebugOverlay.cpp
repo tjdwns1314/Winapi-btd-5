@@ -23,18 +23,16 @@ void DebugOverlay::Update(float deltaTime)
 
 void DebugOverlay::Render(Graphic& graphic, const MapSystem& map, bool isDragging, const vector<Actor*>& bloons) const
 {
+	map.RenderPathDebug(graphic);
+
 	if (_enabled)
 	{
-		map.RenderGrid(graphic);
-		map.RenderPathDebug(graphic);
-		map.RenderStartEndDebug(graphic);
+		map.RenderGrid(graphic, D2D1::ColorF(D2D1::ColorF::Black, 0.8f));
 		renderColliders(graphic, bloons);
 	}
 	else if (isDragging)
 	{
 		map.RenderGrid(graphic, D2D1::ColorF(D2D1::ColorF::Black, 0.8f));
-		map.RenderPathDebug(graphic);
-		map.RenderStartEndDebug(graphic);
 	}
 	renderCircles(graphic);
 }
