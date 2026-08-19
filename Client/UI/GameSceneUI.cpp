@@ -76,13 +76,27 @@ namespace
 	// --------------------------------------------------
 	//  타워 상점 툴팁 (마우스오버 시 패널) — 1단계: 배경만 표시
 	// --------------------------------------------------
-	constexpr float kTowerTooltipScaleY = 3.0f; // target_box 세로 배율(가로는 원본 그대로)
+	constexpr float kTowerTooltipScaleX = 0.6f; // target_box 가로 배율(기존 1.0에서 0.4만큼 축소)
+	constexpr float kTowerTooltipScaleY = 2.4f; // target_box 세로 배율(기존 3.0에서 0.6만큼 축소)
 	constexpr float kTowerTooltipGapX = 15.0f;  // 오른쪽 HUD 패널 왼쪽 끝과 툴팁 사이 간격
 	// 채움 사각형은 테두리 스프라이트보다 살짝 작게(테두리 밖으로 삐져나오지 않도록) 축소.
 	constexpr float kTowerTooltipFillScaleX = 0.98f;
 	constexpr float kTowerTooltipFillScaleY = 0.85f;
 	// target_box는 테두리만 있고 안쪽이 투명해서, 스프라이트를 그리기 전에 배경색을 먼저 채운다.
 	const D2D1::ColorF kTowerTooltipFillColor = D2D1::ColorF(0.2f, 0.14f, 0.06f, 0.85f); // 진한 갈색, 살짝 반투명
+
+	// 타워 이름/가격/설명 텍스트 레이아웃(패널 안쪽 기준).
+	constexpr float kTowerTooltipTextSideGap = 14.0f; // 텍스트 좌우 여백(테두리와 안 겹치게)
+	constexpr float kTowerTooltipNameTopGap = 10.0f;  // 이름 텍스트 상단 여백
+	constexpr float kTowerTooltipNameHeight = 28.0f;  // 이름 텍스트 한 줄 높이
+	constexpr float kTowerTooltipPriceHeight = 26.0f; // 가격 텍스트 한 줄 높이
+	constexpr FontSize kTowerTooltipNameFontSize = FONT_20;
+	constexpr FontSize kTowerTooltipPriceFontSize = FONT_20;
+	constexpr FontSize kTowerTooltipDescFontSize = FONT_20;
+	const D2D1::ColorF kTowerTooltipNameColor = D2D1::ColorF(1.0f, 0.85f, 0.1f);  // 이름(노란색)
+	const D2D1::ColorF kTowerTooltipPriceColor = D2D1::ColorF(1.0f, 0.85f, 0.1f); // 가격(노란색)
+	const D2D1::ColorF kTowerTooltipDescColor = D2D1::ColorF(D2D1::ColorF::White); // 설명(하얀색)
+	const wchar_t* const kTowerTooltipPriceFormat = L"%d";
 
 	// --------------------------------------------------
 	//  선택된 타워/장애물 패널 (판매/업그레이드)
@@ -526,18 +540,25 @@ void GameSceneUI::renderTowerShopBoxes(Graphic& graphic) const
 	drawBox(_bombTowerShopButton);
 }
 
-// 타워 상점 버튼 4개 중 마우스가 올라간 버튼이 있으면 target_box 패널을 그린다(1단계: 배경만).
+// 타워 상점 버튼 4개 중 마우스가 올라간 버튼이 있으면 target_box 패널에 이름/가격/설명을 그린다.
 void GameSceneUI::renderTowerTooltip(Graphic& graphic) const
 {
-	UIButton* shopButtons[] = { _dartMonkeyShopButton, _tackShooterShopButton, _sniperMonkeyShopButton, _bombTowerShopButton };
+	const struct { UIButton* button; TowerType type; } shopEntries[] = {
+		{ _dartMonkeyShopButton, TowerType::DartMonkey },
+		{ _tackShooterShopButton, TowerType::TackShooter },
+		{ _sniperMonkeyShopButton, TowerType::SniperMonkey },
+		{ _bombTowerShopButton, TowerType::BombTower },
+	};
 
 	const Vector mousePos = InputManager::GetInstance().GetMousePos();
 
+	TowerType hoveredType = TowerType::DartMonkey;
 	bool isHovering = false;
-	for (UIButton* button : shopButtons)
+	for (const auto& entry : shopEntries)
 	{
-		if (button != nullptr && button->IsActive() && button->ContainsPoint(mousePos))
+		if (entry.button != nullptr && entry.button->IsActive() && entry.button->ContainsPoint(mousePos))
 		{
+			hoveredType = entry.type;
 			isHovering = true;
 			break;
 		}
@@ -550,24 +571,44 @@ void GameSceneUI::renderTowerTooltip(Graphic& graphic) const
 		return;
 
 	// X: 오른쪽 HUD 패널(게임 영역 바로 오른쪽부터 시작) 왼쪽에 살짝 띄워 고정.
-	const float centerX = static_cast<float>(GameAreaWidth) - kTowerTooltipGapX - cell->aw * 0.5f;
+	const float centerX = static_cast<float>(GameAreaWidth) - kTowerTooltipGapX - cell->aw * kTowerTooltipScaleX * 0.5f;
 	// Y: 마우스 위치를 그대로 따라간다.
 	const float centerY = mousePos.y;
+
+	const float panelWidth = cell->aw * kTowerTooltipScaleX * kTowerTooltipFillScaleX;
+	const float panelHeight = cell->ah * kTowerTooltipScaleY * kTowerTooltipFillScaleY;
 
 	// 테두리 안쪽 투명한 부분을 채울 배경 사각형을 먼저 그린다.
 	ID2D1HwndRenderTarget* renderTarget = graphic.GetRenderTarget();
 	ID2D1SolidColorBrush* fillBrush = graphic.GetBrush(kTowerTooltipFillColor);
 	if (renderTarget != nullptr && fillBrush != nullptr)
 	{
-		const float panelWidth = cell->aw * kTowerTooltipFillScaleX;
-		const float panelHeight = cell->ah * kTowerTooltipScaleY * kTowerTooltipFillScaleY;
 		const D2D1_RECT_F fillRect = D2D1::RectF(
 			centerX - panelWidth * 0.5f, centerY - panelHeight * 0.5f,
 			centerX + panelWidth * 0.5f, centerY + panelHeight * 0.5f);
 		renderTarget->FillRectangle(fillRect, fillBrush);
 	}
 
-	_hudImg->DrawSprite(graphic, centerX, centerY, *cell, 1.0f, 0.0f, false, kTowerTooltipScaleY);
+	_hudImg->DrawSprite(graphic, centerX, centerY, *cell, kTowerTooltipScaleX, 0.0f, false, kTowerTooltipScaleY);
+
+	// 이름(노란색) → 가격(노란색) → 설명(하얀색) 순서로 위에서부터 채운다.
+	const TowerStat& stat = GetTowerStat(hoveredType);
+	const float textLeft = centerX - panelWidth * 0.5f + kTowerTooltipTextSideGap;
+	const float textRight = centerX + panelWidth * 0.5f - kTowerTooltipTextSideGap;
+	float textTop = centerY - panelHeight * 0.5f + kTowerTooltipNameTopGap;
+
+	graphic.DrawString(stat.name.c_str(), D2D1::RectF(textLeft, textTop, textRight, textTop + kTowerTooltipNameHeight),
+		kTowerTooltipNameFontSize, kTowerTooltipNameColor, DWRITE_TEXT_ALIGNMENT_LEADING);
+	textTop += kTowerTooltipNameHeight;
+
+	wchar_t priceText[32];
+	swprintf_s(priceText, kTowerTooltipPriceFormat, stat.basePrice);
+	graphic.DrawString(priceText, D2D1::RectF(textLeft, textTop, textRight, textTop + kTowerTooltipPriceHeight),
+		kTowerTooltipPriceFontSize, kTowerTooltipPriceColor, DWRITE_TEXT_ALIGNMENT_LEADING);
+	textTop += kTowerTooltipPriceHeight;
+
+	graphic.DrawString(stat.description.c_str(), D2D1::RectF(textLeft, textTop, textRight, centerY + panelHeight * 0.5f - kTowerTooltipTextSideGap),
+		kTowerTooltipDescFontSize, kTowerTooltipDescColor, DWRITE_TEXT_ALIGNMENT_LEADING);
 }
 
 void GameSceneUI::drawObstacleIcon(Graphic& graphic, const Vector& pos, float scale) const
