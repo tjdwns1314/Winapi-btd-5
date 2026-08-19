@@ -23,13 +23,14 @@ public:
 
 	void SetProjectileSpeed(float speed) { _speed = speed; }
 	void SetSplashRadius(float radius) { _splashRadius = radius; }
+	void SetMaxDistance(float maxDistance) { _maxDistance = maxDistance; }
 	void SetPierceCount(int32 count) {
 		_pierceCount = count;
 	}
 
 private:
 	float _damage = 1.f;
-	float _maxDistance = 800.f;	// 이 거리 이상 날아가면 삭제 (placeholder, 실제 사거리 확인 후 조정)
+	float _maxDistance = 800.f;	// 이 거리 이상 날아가면 삭제. 발사한 타워의 attackRange로 스폰 시 설정된다.
 	float _traveledDistance = 0.f;
 	float _speed = 500.0f;
 	float _splashRadius = 0.f;

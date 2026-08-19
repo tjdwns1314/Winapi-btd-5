@@ -2,8 +2,8 @@
 #include "ProjectileFactory.h"
 #include "Projectile.h"
 
-Projectile* ProjectileFactory::Create(ObjectPool<Projectile>& pool, 
-	const Vector& pos, const Vector& dir, float damage, const string& spriteKey, float speed, float splashRadius, int32 pierceCount)
+Projectile* ProjectileFactory::Create(ObjectPool<Projectile>& pool,
+	const Vector& pos, const Vector& dir, float damage, const string& spriteKey, float speed, float maxDistance, float splashRadius, int32 pierceCount)
 {
 	Projectile* projectile = pool.Acquire();
 	if (projectile == nullptr)
@@ -14,6 +14,7 @@ Projectile* ProjectileFactory::Create(ObjectPool<Projectile>& pool,
 	projectile->SetDamage(damage);
 	projectile->SetSpriteKey(spriteKey);
 	projectile->SetProjectileSpeed(speed);
+	projectile->SetMaxDistance(maxDistance);
 	projectile->SetSplashRadius(splashRadius);
 	projectile->SetPierceCount(pierceCount);
 	projectile->Init();
