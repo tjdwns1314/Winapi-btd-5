@@ -28,6 +28,10 @@ private :
 	Game() = default;
 	~Game() = default;
 
+	// 무거운 리소스 로딩(GameAssets::Load) 전에 로딩 화면을 한 번 그려서
+	// 창이 하얀 화면으로 멈춘 것처럼 보이지 않도록 한다.
+	void drawLoadingScreen();
+
 private :
 	HWND _hwnd = nullptr;
 	RECT _rect = {};
