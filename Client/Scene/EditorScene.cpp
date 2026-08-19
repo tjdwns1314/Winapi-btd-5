@@ -450,10 +450,6 @@ void EditorScene::Render(Graphic& graphic)
 
 
 	//	// start 버튼 후보 4종 비교용 (미검증 - 실제 색상 확인 필요)
-	//	if (const CellInfo* cell = _hudSprite->GetCell("play_icon"))
-	//	 {
-	//	_hudImg->DrawSprite(graphic, 800.0f, 200.0f, *cell, 1.0f, 0.0f);
-	//	}
 	// if (const CellInfo* cell = _hudSprite->GetCell("ff_icon"))
 	//	 {
 	//	_hudImg->DrawSprite(graphic, 950.0f, 200.0f, *cell, 1.0f, 0.0f);
@@ -568,5 +564,10 @@ void EditorScene::Render(Graphic& graphic)
 	//drawEffectRow({ "ice_explosion_01", "ice_explosion_02", "ice_explosion_03", "ice_explosion_04", "ice_explosion_05" }, 860.0f);
 	//drawEffectRow({ "smoke_01", "smoke_02", "smoke_03" }, 950.0f);
 	//drawEffectRow({ "pop" }, 1040.0f);
+
+	if (const CellInfo* cell = _hudSprite->GetCell("target_box"))
+	{
+		_hudImg->DrawSprite(graphic, 800.0f, 200.0f, *cell, 1.0f, 0.0f);
+	}
 }
 

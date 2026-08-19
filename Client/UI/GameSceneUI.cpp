@@ -3,6 +3,7 @@
 #include "UIManager.h"
 #include "ResourceManager.h"
 #include "AudioManager.h"
+#include "InputManager.h"
 
 namespace
 {
@@ -52,8 +53,8 @@ namespace
 	constexpr float kSettingsIconCenterY = 1000.0f; // 설정 아이콘 Y 위치
 
 	// 디버그용 라운드 +/- 버튼 (정식 스프라이트 없이 사각형 도형으로 그림)
-	const Vector kWaveUpButtonPos = Vector(1720.0f, 1000.0f);   // + 버튼 위치
-	const Vector kWaveDownButtonPos = Vector(1720.0f, 1050.0f); // - 버튼 위치
+	const Vector kWaveUpButtonPos = Vector(1720.0f, 100.0f);   // + 버튼 위치
+	const Vector kWaveDownButtonPos = Vector(1720.0f, 150.0f); // - 버튼 위치
 	const Vector kWaveButtonSize = Vector(40.0f, 40.0f);        // 두 버튼 공통 크기
 
 	// --------------------------------------------------
@@ -71,6 +72,17 @@ namespace
 	const Vector kObstacleShopButtonPos = Vector(1675.0f, 1000.0f);  // 장애물 상점 버튼 위치
 	const Vector kObstacleShopButtonSize = Vector(109.0f, 113.0f);   // 장애물 상점 버튼 클릭 판정 크기
 	constexpr float kObstacleIconScale = 1.0f;                       // 장애물 아이콘 크기 배율(드래그 프리뷰에도 사용)
+
+	// --------------------------------------------------
+	//  타워 상점 툴팁 (마우스오버 시 패널) — 1단계: 배경만 표시
+	// --------------------------------------------------
+	constexpr float kTowerTooltipScaleY = 3.0f; // target_box 세로 배율(가로는 원본 그대로)
+	constexpr float kTowerTooltipGapX = 15.0f;  // 오른쪽 HUD 패널 왼쪽 끝과 툴팁 사이 간격
+	// 채움 사각형은 테두리 스프라이트보다 살짝 작게(테두리 밖으로 삐져나오지 않도록) 축소.
+	constexpr float kTowerTooltipFillScaleX = 0.98f;
+	constexpr float kTowerTooltipFillScaleY = 0.85f;
+	// target_box는 테두리만 있고 안쪽이 투명해서, 스프라이트를 그리기 전에 배경색을 먼저 채운다.
+	const D2D1::ColorF kTowerTooltipFillColor = D2D1::ColorF(0.2f, 0.14f, 0.06f, 0.85f); // 진한 갈색, 살짝 반투명
 
 	// --------------------------------------------------
 	//  선택된 타워/장애물 패널 (판매/업그레이드)
@@ -310,6 +322,9 @@ void GameSceneUI::Render(Graphic& graphic, bool isDraggingTower, TowerType dragg
 	if (_restartButton != nullptr) _restartButton->SetActive(isGameOver);
 	if (isGameOver)
 		renderGameOverPopup(graphic);
+
+	// 다른 HUD 요소들 위에 그려져야 하므로 맨 마지막에.
+	renderTowerTooltip(graphic);
 }
 
 void GameSceneUI::RenderModalOverlay(Graphic& graphic, bool isSettingsOpen) const
@@ -509,6 +524,50 @@ void GameSceneUI::renderTowerShopBoxes(Graphic& graphic) const
 	drawBox(_tackShooterShopButton);
 	drawBox(_sniperMonkeyShopButton);
 	drawBox(_bombTowerShopButton);
+}
+
+// 타워 상점 버튼 4개 중 마우스가 올라간 버튼이 있으면 target_box 패널을 그린다(1단계: 배경만).
+void GameSceneUI::renderTowerTooltip(Graphic& graphic) const
+{
+	UIButton* shopButtons[] = { _dartMonkeyShopButton, _tackShooterShopButton, _sniperMonkeyShopButton, _bombTowerShopButton };
+
+	const Vector mousePos = InputManager::GetInstance().GetMousePos();
+
+	bool isHovering = false;
+	for (UIButton* button : shopButtons)
+	{
+		if (button != nullptr && button->IsActive() && button->ContainsPoint(mousePos))
+		{
+			isHovering = true;
+			break;
+		}
+	}
+	if (!isHovering)
+		return;
+
+	const CellInfo* cell = _hudSprite->GetCell("target_box");
+	if (cell == nullptr)
+		return;
+
+	// X: 오른쪽 HUD 패널(게임 영역 바로 오른쪽부터 시작) 왼쪽에 살짝 띄워 고정.
+	const float centerX = static_cast<float>(GameAreaWidth) - kTowerTooltipGapX - cell->aw * 0.5f;
+	// Y: 마우스 위치를 그대로 따라간다.
+	const float centerY = mousePos.y;
+
+	// 테두리 안쪽 투명한 부분을 채울 배경 사각형을 먼저 그린다.
+	ID2D1HwndRenderTarget* renderTarget = graphic.GetRenderTarget();
+	ID2D1SolidColorBrush* fillBrush = graphic.GetBrush(kTowerTooltipFillColor);
+	if (renderTarget != nullptr && fillBrush != nullptr)
+	{
+		const float panelWidth = cell->aw * kTowerTooltipFillScaleX;
+		const float panelHeight = cell->ah * kTowerTooltipScaleY * kTowerTooltipFillScaleY;
+		const D2D1_RECT_F fillRect = D2D1::RectF(
+			centerX - panelWidth * 0.5f, centerY - panelHeight * 0.5f,
+			centerX + panelWidth * 0.5f, centerY + panelHeight * 0.5f);
+		renderTarget->FillRectangle(fillRect, fillBrush);
+	}
+
+	_hudImg->DrawSprite(graphic, centerX, centerY, *cell, 1.0f, 0.0f, false, kTowerTooltipScaleY);
 }
 
 void GameSceneUI::drawObstacleIcon(Graphic& graphic, const Vector& pos, float scale) const

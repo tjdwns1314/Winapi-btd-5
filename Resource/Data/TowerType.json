@@ -5,6 +5,8 @@
             "rotatesToTarget" : true,
             "projectileKey" : "dart_monkey_dart",
             "basePrice" : 200,
+            "name" : "다트 원숭이",
+            "description" : "풍선 하나를 터뜨리는 다트\n1개를 발사합니다.",
             "grades" : [
                 { "name": "",              "upgradeIconKey": "",                                    "avatarKey": "dart_monkey_avatar_small",                     "cost": 0,   "damage": 1, "attackRange": 200, "attackSpeed": 0.5, "projectileSpeed": 1000, "attackCount": 1, "pierceCount": 1 },
                 { "name": "장거리 다트",       "upgradeIconKey": "dart_monkey_longer_range_icon",      "avatarKey": "dart_monkey_avatar_increased_range_small",     "cost": 100, "damage": 1, "attackRange": 240, "attackSpeed": 0.5, "projectileSpeed": 1000, "attackCount": 1, "pierceCount": 1 },
@@ -17,7 +19,9 @@
             "type": "TackShooter",
             "rotatesToTarget": false,
             "projectileKey": "tack_shooter_tack",
-            "basePrice": 350,
+            "basePrice": 360,
+            "name": "압정 슈터",
+            "description": "모든 방향으로 퍼지는 8개의\n압정을 쏘며, 각 압정이 풍선\n1개를 터트립니다.",
             "grades": [
                 { "name": "",              "upgradeIconKey": "",                                   "avatarKey": "tack_shooter_avatar_small",                   "cost": 0,   "damage": 1, "attackRange": 150, "attackSpeed": 2.0, "projectileSpeed": 800, "attackCount": 8 },
                 { "name": "더 빠른 발사",      "upgradeIconKey": "tack_shooter_faster_firing_icon",      "avatarKey": "tack_shooter_avatar_faster_shooting_small",   "cost": 200, "damage": 1, "attackRange": 150, "attackSpeed": 1.8, "projectileSpeed": 800, "attackCount": 8 },
@@ -30,7 +34,9 @@
             "type": "SniperMonkey",
             "rotatesToTarget": true,
             "projectileKey": "",
-            "basePrice": 300,
+            "basePrice": 400,
+            "name": "저격 원숭이",
+            "description": "무제한 사정거리로 풍선 2층을\n터뜨립니다.",
             "grades": [
                 { "name": "",            "upgradeIconKey": "",                       "avatarKey": "sniper_avatar_small",                 "cost": 0,   "damage": 1,  "attackRange": 2000, "attackSpeed": 2.0, "projectileSpeed": 0, "attackCount": 1 },
                 { "name": "풀 메탈 재킷",   "upgradeIconKey": "sniper_full_metal_icon",   "avatarKey": "sniper_avatar_full_metal_jacket_small", "cost": 150, "damage": 3,  "attackRange": 2000, "attackSpeed": 2.0, "projectileSpeed": 0, "attackCount": 1 },
@@ -43,7 +49,9 @@
             "type": "BombTower",
             "rotatesToTarget": true,
             "projectileKey": "bomb_tower_bomb_01",
-            "basePrice": 500,
+            "basePrice": 650,
+            "name": "폭탄 타워",
+            "description": "반경 파열에서 폭발하는 단일\n폭탄을 발사합니다. ",
             "grades": [
                 { "name": "",          "upgradeIconKey": "",                "avatarKey": "bomb_avatar_small",                "cost": 0,    "damage": 1, "attackRange": 250, "attackSpeed": 2.0, "projectileSpeed": 800, "attackCount": 1, "splashRadius": 120 },
                 { "name": "추가 사거리",  "upgradeIconKey": "bomb_extra_range_icon", "avatarKey": "bomb_avatar_bigger_bombs_small",   "cost": 200,  "damage": 1, "attackRange": 300, "attackSpeed": 2.0, "projectileSpeed": 800, "attackCount": 1, "splashRadius": 120 },

@@ -31,6 +31,8 @@ struct TowerStat
 	bool rotatesToTarget;
 	string projectileKey;
 	int32 basePrice;
+	wstring name;         // 상점/선택 패널 등에 표시할 한글 타워 이름. TowerType.json의 "name" 필드.
+	wstring description;  // 상점 UI 툴팁 등에 표시할 한글 설명 문구. TowerType.json의 "description" 필드.
 	vector<TowerGradeStat> grades;
 };
 
@@ -46,8 +48,11 @@ struct TowerVisual
 
 const TowerVisual& GetTowerVisual(TowerType type);
 
-// 선택 패널 등 UI에 표시할 한글 이름.
+// 선택 패널 등 UI에 표시할 한글 이름. TowerType.json의 "name" 필드.
 const wchar_t* GetTowerDisplayName(TowerType type);
+
+// 상점 UI 툴팁 등에 표시할 한글 설명 문구. TowerType.json의 "description" 필드.
+const wchar_t* GetTowerDescription(TowerType type);
 
 // outKey에 이미지 키를 채우고, 그 타워의 던지기 애니메이션 총 프레임 수를 반환한다.
 // GetTowerFrameKeyFn이 nullptr을 반환하면 그 타워는 애니메이션 없이 TowerVisual::bakedImageKey 한 장만 쓴다.

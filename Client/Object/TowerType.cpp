@@ -24,6 +24,8 @@ namespace
 			stat.rotatesToTarget = entry.at("rotatesToTarget").get<bool>();
 			stat.projectileKey = entry.at("projectileKey").get<string>();
 			stat.basePrice = entry.at("basePrice").get<int32>();
+			stat.name = Utf8ToWide(entry.value("name", string()));
+			stat.description = Utf8ToWide(entry.value("description", string()));
 			for (const auto& g : entry.at("grades"))
 			{
 				TowerGradeStat grade;
@@ -92,15 +94,12 @@ const TowerVisual& GetTowerVisual(TowerType type)
 
 const wchar_t* GetTowerDisplayName(TowerType type)
 {
-	static const unordered_map<TowerType, const wchar_t*> table =
-	{
-		{ TowerType::DartMonkey,   L"다트 원숭이" },
-		{ TowerType::TackShooter,  L"압정 슈터" },
-		{ TowerType::SniperMonkey, L"저격 원숭이" },
-		{ TowerType::BombTower,    L"폭탄 타워" },
-	};
-	auto it = table.find(type);
-	return it != table.end() ? it->second : L"";
+	return GetTowerStat(type).name.c_str();
+}
+
+const wchar_t* GetTowerDescription(TowerType type)
+{
+	return GetTowerStat(type).description.c_str();
 }
 
 namespace

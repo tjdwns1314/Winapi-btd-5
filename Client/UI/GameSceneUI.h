@@ -91,6 +91,10 @@ private:
 	void drawObstacleIcon(Graphic& graphic, const Vector& pos, float scale) const;
 	void drawRangePreview(Graphic& graphic, const Vector& pos, TowerType type) const;
 
+	// 타워 상점 버튼에 마우스를 올리면 패널만 표시(1단계: 배경만, 텍스트는 다음 단계).
+	// target_box를 세로 1.5배로 그리며, X는 오른쪽 HUD 패널 왼쪽에 고정, Y는 마우스를 따라간다.
+	void renderTowerTooltip(Graphic& graphic) const;
+
 	// --------------------------------------------------
 	//  선택된 타워/장애물 패널 (판매/업그레이드)
 	// --------------------------------------------------
