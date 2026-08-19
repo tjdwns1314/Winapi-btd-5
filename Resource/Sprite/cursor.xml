@@ -1,6 +1,0 @@
-<SpriteInformation>
-	<FrameInformation name="cursor" texw="64" texh="128" type="png">
-		<Cell name="cursor_up" x="0" y="0" w="64" h="64" ax="0" ay="0" aw="64" ah="64"/>
-		<Cell name="cursor_down" x="0" y="64" w="64" h="64" ax="0" ay="0" aw="64" ah="64"/>
-	</FrameInformation>
-</SpriteInformation>

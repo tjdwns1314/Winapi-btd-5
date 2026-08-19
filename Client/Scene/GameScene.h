@@ -79,9 +79,7 @@ private:
 
 	// 스프라이트 및 이미지 리소스
 	Image*       _inGameBg           = nullptr;
-	Image*       _monkeyLaneBg       = nullptr; // 기존 _RealGameBG 대체
 	SpriteAtlas* _sprite             = nullptr; // InGame.xml
-	SpriteAtlas* _monkeyLaneSprite   = nullptr; // monkey_lane.xml
 
 	// 맵 / 경로
 	MapSystem _map;

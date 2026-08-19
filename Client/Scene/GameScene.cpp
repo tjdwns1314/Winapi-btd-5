@@ -16,9 +16,6 @@ void GameScene::Init(Graphic& graphic)
 
 	ResourceManager& res = ResourceManager::GetInstance();
 
-	_monkeyLaneBg = &res.GetImage(L"Resource\\Sprite\\monkey_lane.png");
-	_monkeyLaneSprite = &res.GetAtlas(L"Resource\\Sprite\\monkey_lane.xml");
-
 	_inGameBg = &res.GetImage(L"Resource\\Sprite\\InGame.png");
 	_sprite = &res.GetAtlas(L"Resource\\Sprite\\InGame.xml");
 
