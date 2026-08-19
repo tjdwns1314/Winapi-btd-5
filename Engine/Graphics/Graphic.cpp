@@ -138,8 +138,18 @@ void Graphic::BeginDraw()
 
 	_renderTarget->SetTransform(
 		D2D1::Matrix3x2F::Scale(scale, scale) * D2D1::Matrix3x2F::Translation(offsetX, offsetY));
+
+	// 레터박스(창 비율이 디자인 비율과 다를 때 생기는 상하/좌우 여백) 안쪽으로
+	// 디자인 캔버스(GWinSizeX x GWinSizeY) 밖의 내용이 새어 들어오지 않도록 클립.
+	_renderTarget->PushAxisAlignedClip(
+		D2D1::RectF(0.0f, 0.0f, static_cast<float>(GWinSizeX), static_cast<float>(GWinSizeY)),
+		D2D1_ANTIALIAS_MODE_ALIASED);
 }
-void Graphic::EndDraw() { _renderTarget->EndDraw(); }
+void Graphic::EndDraw()
+{
+	_renderTarget->PopAxisAlignedClip();
+	_renderTarget->EndDraw();
+}
 void Graphic::Clear(D2D1::ColorF color) { _renderTarget->Clear(color); }
 
 void Graphic::Resize(uint32 width, uint32 height)
