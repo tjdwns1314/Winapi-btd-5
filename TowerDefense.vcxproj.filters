@@ -163,6 +163,12 @@
     <ClInclude Include="Client\Core\HealthManager.h">
       <Filter>Client\Core</Filter>
     </ClInclude>
+    <ClInclude Include="Client\Core\SaveData.h">
+      <Filter>Client\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\Core\SaveManager.h">
+      <Filter>Client\Core</Filter>
+    </ClInclude>
     <ClInclude Include="Client\Scene\GameScene.h">
       <Filter>Client\Scene</Filter>
     </ClInclude>
@@ -328,6 +334,9 @@
       <Filter>Client\Core</Filter>
     </ClCompile>
     <ClCompile Include="Client\Core\HealthManager.cpp">
+      <Filter>Client\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\Core\SaveManager.cpp">
       <Filter>Client\Core</Filter>
     </ClCompile>
     <ClCompile Include="Client\Scene\GameScene.cpp">

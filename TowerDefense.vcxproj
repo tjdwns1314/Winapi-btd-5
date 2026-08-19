@@ -172,6 +172,8 @@
     <ClInclude Include="Client\Core\GameAssets.h" />
     <ClInclude Include="Client\Core\EconomyManager.h" />
     <ClInclude Include="Client\Core\HealthManager.h" />
+    <ClInclude Include="Client\Core\SaveData.h" />
+    <ClInclude Include="Client\Core\SaveManager.h" />
     <ClInclude Include="Client\Scene\GameScene.h" />
     <ClInclude Include="Client\Scene\DebugOverlay.h" />
     <ClInclude Include="Client\Scene\MainScene.h" />
@@ -240,6 +242,7 @@
     <ClCompile Include="Client\Core\GameAssets.cpp" />
     <ClCompile Include="Client\Core\EconomyManager.cpp" />
     <ClCompile Include="Client\Core\HealthManager.cpp" />
+    <ClCompile Include="Client\Core\SaveManager.cpp" />
     <ClCompile Include="Client\Scene\GameScene.cpp" />
     <ClCompile Include="Client\Scene\DebugOverlay.cpp" />
     <ClCompile Include="Client\Scene\MainScene.cpp" />

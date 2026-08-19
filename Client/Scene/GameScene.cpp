@@ -5,9 +5,17 @@
 #include "Tower.h"
 #include "Obstacle.h"
 #include "PoolManager.h"
+#include "TowerFactory.h"
+#include "ObstacleFactory.h"
+#include "SaveManager.h"
 #include "Game.h"
 #include "AudioManager.h"
 #include "AudioManager.h"
+
+namespace
+{
+	constexpr wchar_t kSavePath[] = L"Save\\save.json";
+}
 
 void GameScene::Init(Graphic& graphic)
 {
@@ -20,21 +28,57 @@ void GameScene::Init(Graphic& graphic)
 	_sprite = &res.GetAtlas(L"Resource\\Sprite\\InGame.xml");
 
 	_map.SetTileImages(&res.GetImage(L"Resource\\Tile\\Tile1_pipo.png"), &res.GetImage(L"Resource\\Tile\\Tile2_pipo.png"));
-	_map.Init();
+	if (_hasPendingLoad)
+		_map.Init(&_pendingLoadData.startCell, &_pendingLoadData.endCell);
+	else
+		_map.Init();
 
 	PoolManager::GetInstance().Init(250, 200, 50, 50, 250); // obstacleSize=50, effectSize=250: 임시값
 	_waveManager.Init(&PoolManager::GetInstance().GetBloonPool(), _map.GetBloonSpawnPos(), _map.GetPathPtr(), this,
-		[this](int32 bonusGold) { _economyManager.Add(bonusGold); });
-	_healthManager.Init(100); // 초기 체력: 임시값 — 밸런스 확정되면 조정
-	_economyManager.Init(10000); // 초기 골드: 임시값 — 밸런스 확정되면 조정
+		[this](int32 bonusGold) { _economyManager.Add(bonusGold); SaveToFile(kSavePath); });
+	_healthManager.Init(_hasPendingLoad ? _pendingLoadData.hp : 100);
+	_economyManager.Init(_hasPendingLoad ? _pendingLoadData.gold : 10000);
 
 	GetCollisionManager().RegisterLayer(RenderLayer::Bloon, RenderLayer::Projectile);
 
-	_speedEnabled = false;
+	_speedEnabled = _hasPendingLoad ? _pendingLoadData.speedEnabled : false;
 	_isSettingsOpen = false;
 	AudioManager::GetInstance().SetBgmVolumeScale(1.0f);
 
 	AudioManager::GetInstance().PlayBgm(L"jazz");
+
+	if (_hasPendingLoad)
+	{
+		_waveManager.SetNextRound(_pendingLoadData.nextRound);
+		_waveManager.SetAutoPlay(_pendingLoadData.autoPlay);
+
+		const int32 gridSize = _map.GetGridSize();
+
+		for (const TowerSaveData& towerData : _pendingLoadData.towers)
+		{
+			if (_map.TryOccupyCell(towerData.cell) == false)
+				continue;
+			Tower* tower = TowerFactory::Create(PoolManager::GetInstance().GetTowerPool(), towerData.type,
+				Vector((towerData.cell.iX + 0.5f) * gridSize, (towerData.cell.iY + 0.5f) * gridSize));
+			if (tower == nullptr)
+				continue;
+			AddActor(tower);
+			for (int32 i = 1; i < towerData.grade; ++i)
+				tower->ApplyUpgrade();
+		}
+
+		for (const ObstacleSaveData& obstacleData : _pendingLoadData.obstacles)
+		{
+			if (_map.TryOccupyCell(obstacleData.cell) == false)
+				continue;
+			Obstacle* obstacle = ObstacleFactory::Create(PoolManager::GetInstance().GetObstaclePool(), obstacleData.type,
+				Vector((obstacleData.cell.iX + 0.5f) * gridSize, (obstacleData.cell.iY + 0.5f) * gridSize));
+			if (obstacle != nullptr)
+				AddActor(obstacle);
+		}
+
+		_hasPendingLoad = false;
+	}
 }
 
 void GameScene::Cleanup()
@@ -205,12 +249,55 @@ void GameScene::CreateUI()
 void GameScene::Restart()
 {
 	Graphic* graphic = _graphicRef;
+	SaveManager::DeleteFile(kSavePath); // 재시작(게임오버/리플레이)은 새 판이므로 자동저장도 같이 초기화
 	Cleanup();
 	if (graphic != nullptr)
 		Init(*graphic);
 }
 
+SaveData GameScene::BuildSaveData() const
+{
+	SaveData data;
+	data.gold = _economyManager.GetGold();
+	data.hp = _healthManager.GetHp();
+	data.nextRound = _waveManager.GetNextRoundNumber();
+	data.autoPlay = _waveManager.GetAutoPlay();
+	data.speedEnabled = _speedEnabled;
+	data.startCell = _map.GetStartCell();
+	data.endCell = _map.GetEndCell();
 
+	const int32 gridSize = _map.GetGridSize();
+	for (Actor* actor : GetActors(RenderLayer::Tower))
+	{
+		const Tower* tower = static_cast<const Tower*>(actor);
+		data.towers.push_back({ tower->GetType(), tower->GetGrade(), Cell::ConvertToCell(tower->GetPos(), gridSize) });
+	}
+
+	for (Actor* actor : GetActors(RenderLayer::Obstacle))
+	{
+		const Obstacle* obstacle = static_cast<const Obstacle*>(actor);
+		data.obstacles.push_back({ obstacle->GetType(), Cell::ConvertToCell(obstacle->GetPos(), gridSize) });
+	}
+
+	return data;
+}
+
+void GameScene::SaveToFile(const wstring& path) const
+{
+	if (CanSave() == false)
+		return;
+	SaveManager::WriteToFile(BuildSaveData(), path);
+}
+
+void GameScene::LoadFromFile(const wstring& path)
+{
+	SaveData data;
+	if (SaveManager::ReadFromFile(data, path) == false)
+		return;
+	_pendingLoadData = data;
+	_hasPendingLoad = true;
+	Restart();
+}
 
 void GameScene::onStartButtonClick()
 {

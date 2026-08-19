@@ -18,6 +18,7 @@
 #include "HealthManager.h"
 #include "EconomyManager.h"
 #include "DebugOverlay.h"
+#include "SaveData.h"
 
 class Tower;
 class Obstacle;
@@ -51,6 +52,11 @@ public:
 	// 골드도 마찬가지로 싱글톤이 아니라 GameScene이 소유한다.
 	EconomyManager& GetEconomyManager() { return _economyManager; }
 
+	// 저장/불러오기. 웨이브가 Idle 상태일 때만 저장을 허용한다. (로비의 불러오기/새 게임 버튼이 나중에 호출할 API)
+	bool CanSave() const { return _waveManager.IsWaveActive() == false; }
+	void SaveToFile(const wstring& path) const;
+	void LoadFromFile(const wstring& path);
+
 protected:
 	virtual void CreateUI() override;
 
@@ -61,6 +67,7 @@ private:
 	void onStartButtonClick();
 	float getTimeScale() const;
 	void updateDebugWaveTitle();
+	SaveData BuildSaveData() const;
 
 	// 게임오버 후 재시작 버튼을 누르면 호출된다. Cleanup() 후 Init()을 다시 실행해 전부 초기화한다.
 	void Restart();
@@ -72,6 +79,10 @@ private:
 	EconomyManager _economyManager;
 	bool _speedEnabled = false; // 2배속 on/off. 웨이브가 끝나도 리셋하지 않고 유지한다.
 	bool _isSettingsOpen = false; // 설정 팝업이 열려 있는 동안 게임 로직 전체를 정지시킨다.
+
+	// Init()이 이 값을 보고 새 게임 대신 저장 데이터로 초기화한다. LoadFromFile()이 Restart() 전에 채워 넣는다.
+	bool _hasPendingLoad = false;
+	SaveData _pendingLoadData;
 
 	// Restart()에서 Init()을 다시 호출하기 위해 보관해둔다. Game이 소유한 Graphic이라 수명은 항상 유효하다.
 	Graphic* _graphicRef = nullptr;

@@ -10,11 +10,14 @@ class Image;
 class MapSystem
 {
 public:
-	void Init();
+	// forcedStart/forcedEnd가 둘 다 있으면 그 값을 쓰고, 없으면 기존처럼 랜덤 생성한다(불러오기용).
+	void Init(const Cell* forcedStart = nullptr, const Cell* forcedEnd = nullptr);
 
 	const vector<Vector>* GetPathPtr() const { return &_path; }
 	Vector GetBloonSpawnPos() const { return _bloonSpawnPos; }
 	Vector GetBloonEndPos() const { return _bloonEndPos; }
+	Cell GetStartCell() const { return _tileMap.GetStartPoint(); }
+	Cell GetEndCell() const { return _tileMap.GetEndPoint(); }
 	int32 GetGridSize() const { return _grid.GetGridSize(); }
 	bool HasPath() const { return _path.empty() == false; }
 

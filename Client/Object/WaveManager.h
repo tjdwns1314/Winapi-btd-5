@@ -27,6 +27,7 @@ public:
 
 	// 설정 팝업의 자동진행 토글과 연결. true면 웨이브 클리어 후 kAutoStartDelay(1초) 뒤 자동으로 다음 웨이브 시작.
 	void SetAutoPlay(bool enabled);
+	bool GetAutoPlay() const { return _autoPlayEnabled; }
 
 	// 라운드 디버그
 	void SetNextRound(int32 roundNumber);

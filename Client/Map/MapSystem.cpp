@@ -2,11 +2,15 @@
 #include "MapSystem.h"
 #include "Image.h"
 
-void MapSystem::Init()
+void MapSystem::Init(const Cell* forcedStart, const Cell* forcedEnd)
 {
 	_grid.Init(GRID_COUNT_X, GRID_COUNT_Y, BLOCK_SIZE);
 	_tileMap.Init(GRID_COUNT_X, GRID_COUNT_Y);
-	_tileMap.GenerateRandomStartEndPoint();
+
+	if (forcedStart != nullptr && forcedEnd != nullptr)
+		_tileMap.SetStartEndPoint(*forcedStart, *forcedEnd);
+	else
+		_tileMap.GenerateRandomStartEndPoint();
 
 	recomputePath();
 

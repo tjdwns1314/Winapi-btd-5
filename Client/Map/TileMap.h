@@ -9,6 +9,7 @@ public:
 
 
 	void GenerateRandomStartEndPoint();
+	void SetStartEndPoint(const Cell& start, const Cell& end) { _startCell = start; _endCell = end; }
 	Cell GetStartPoint() const { return _startCell; }
 	Cell GetEndPoint() const { return _endCell; }
 
