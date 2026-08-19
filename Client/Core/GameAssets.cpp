@@ -1,11 +1,15 @@
 ﻿#include "pch.h"
 #include "GameAssets.h"
 #include "ResourceManager.h"
+#include "AudioManager.h"
 #include "SpriteBaker.h"
 
 void GameAssets::Load(Graphic& graphic)
 {
 	ResourceManager& res = ResourceManager::GetInstance();
+
+	// Resource\Bgm 안의 모든 .wav(배경음 6곡 + 효과음)를 파일명 기준으로 캐싱한다.
+	AudioManager::GetInstance().LoadSoundsInDirectory(L"Resource\\Bgm");
 
 	res.LoadImage(graphic, L"Resource\\Sprite\\monkey_lane.png");
 	res.LoadAtlas(L"Resource\\Sprite\\monkey_lane.xml");

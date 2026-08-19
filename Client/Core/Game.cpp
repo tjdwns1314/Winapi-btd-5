@@ -3,6 +3,7 @@
 #include "TimeManager.h"
 #include "SceneManager.h"
 #include "ResourceManager.h"
+#include "AudioManager.h"
 #include "GameAssets.h"
 #include "InputManager.h"
 #include "Scene/GameScene.h"
@@ -25,6 +26,7 @@ void Game::Init(HWND hwnd)
 
 	TimeManager::GetInstance().Init();
 	InputManager::GetInstance().Init(hwnd);
+	AudioManager::GetInstance().Init();
 
 	// 게임 시작 시 필요한 이미지/아틀라스 리소스를 한 번에 전부 로드한다.
 	// 이후 개별 객체는 ResourceManager::GetImage/GetAtlas로 조회만 한다.
@@ -42,6 +44,7 @@ void Game::Cleanup()
 {
 	SceneManager::GetInstance().Cleanup();
 	ResourceManager::GetInstance().Cleanup();
+	AudioManager::GetInstance().Cleanup();
 	_graphic.Cleanup();
 }
 
@@ -49,6 +52,7 @@ void Game::Update(float deltaTime)
 {
 	TimeManager::GetInstance().Update(deltaTime);
 	InputManager::GetInstance().Update();
+	AudioManager::GetInstance().Update();
 
 	SceneManager::GetInstance().Update(deltaTime);
 
