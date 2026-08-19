@@ -6,6 +6,8 @@
 #include "Obstacle.h"
 #include "PoolManager.h"
 #include "Game.h"
+#include "AudioManager.h"
+#include "AudioManager.h"
 
 void GameScene::Init(Graphic& graphic)
 {
@@ -32,6 +34,7 @@ void GameScene::Init(Graphic& graphic)
 
 	_speedEnabled = false;
 
+	AudioManager::GetInstance().PlayBgm(L"jazz");
 }
 
 void GameScene::Cleanup()
@@ -48,7 +51,10 @@ void GameScene::Update(float deltaTime)
 		_debugOverlay.Toggle();
 
 	if (InputManager::GetInstance().GetButtonDown(KeyType::Escape) && _healthManager.IsGameOver() == false)
+	{
 		_isSettingsOpen = !_isSettingsOpen;
+		AudioManager::GetInstance().SetBgmVolumeScale(_isSettingsOpen ? 0.3f : 1.0f);
+	}
 
 	// 설정창이 열려 있는 동안, 설정 버튼 5개(+톱니바퀴)를 제외한 모든 UI 버튼의 클릭을 막는다.
 	// SetActive를 쓰지 않으므로 다른 버튼들은 계속 보이고, 클릭만 안 먹힌다.
@@ -168,8 +174,8 @@ void GameScene::CreateUI()
 		[this]() { _towerController.UpgradeSelected(_economyManager); },
 		[this]() { _obstacleController.SellSelected(_map, _economyManager); },
 		[this]() { Restart(); },
-		[this]() { _isSettingsOpen = !_isSettingsOpen; },
-		[this]() { _isSettingsOpen = false; });
+		[this]() { _isSettingsOpen = !_isSettingsOpen; AudioManager::GetInstance().SetBgmVolumeScale(_isSettingsOpen ? 0.3f : 1.0f); },
+		[this]() { _isSettingsOpen = false; AudioManager::GetInstance().SetBgmVolumeScale(1.0f); });
 	updateDebugWaveTitle();
 }
 
