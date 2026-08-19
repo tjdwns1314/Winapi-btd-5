@@ -441,74 +441,74 @@ void EditorScene::Render(Graphic& graphic)
 {
 	_inGameBg->DrawSprite(graphic, 600.0f, 500.0f, *cell, 1.0f, 0.0f);
 }*/
-	//graphic.DrawString(L"안녕하세요", 
-	//	D2D1::RectF(50.0f, 50.0f, 400.0f, 100.0f), 
-	//	FONT_30, 
-	//	D2D1::ColorF(D2D1::ColorF::White));
+//graphic.DrawString(L"안녕하세요", 
+//	D2D1::RectF(50.0f, 50.0f, 400.0f, 100.0f), 
+//	FONT_30, 
+//	D2D1::ColorF(D2D1::ColorF::White));
 
 
 
 
-	//	// start 버튼 후보 4종 비교용 (미검증 - 실제 색상 확인 필요)
-	// if (const CellInfo* cell = _hudSprite->GetCell("ff_icon"))
-	//	 {
-	//	_hudImg->DrawSprite(graphic, 950.0f, 200.0f, *cell, 1.0f, 0.0f);
-	//	}
-	// if (const CellInfo* cell = _hudSprite->GetCell("ff_icon_red"))
-	//	 {
-	//	_hudImg->DrawSprite(graphic, 1100.0f, 200.0f, *cell, 1.0f, 0.0f);
-	//	}
-	// if (const CellInfo* cell = _hudSprite->GetCell("ff_icon_locked"))
-	//	 {
-	//	_hudImg->DrawSprite(graphic, 1250.0f, 200.0f, *cell, 1.0f, 0.0f);
-	//	}
+//	// start 버튼 후보 4종 비교용 (미검증 - 실제 색상 확인 필요)
+// if (const CellInfo* cell = _hudSprite->GetCell("ff_icon"))
+//	 {
+//	_hudImg->DrawSprite(graphic, 950.0f, 200.0f, *cell, 1.0f, 0.0f);
+//	}
+// if (const CellInfo* cell = _hudSprite->GetCell("ff_icon_red"))
+//	 {
+//	_hudImg->DrawSprite(graphic, 1100.0f, 200.0f, *cell, 1.0f, 0.0f);
+//	}
+// if (const CellInfo* cell = _hudSprite->GetCell("ff_icon_locked"))
+//	 {
+//	_hudImg->DrawSprite(graphic, 1250.0f, 200.0f, *cell, 1.0f, 0.0f);
+//	}
 
-	// if (const CellInfo* cell = _hudSprite->GetCell("pause_icon"))
-	// {
-	//	 _hudImg->DrawSprite(graphic, 1400.0f, 200.0f, *cell, 1.0f, 0.0f);
-	// }
+// if (const CellInfo* cell = _hudSprite->GetCell("pause_icon"))
+// {
+//	 _hudImg->DrawSprite(graphic, 1400.0f, 200.0f, *cell, 1.0f, 0.0f);
+// }
 
-	// if (const CellInfo* cell = _hudSprite->GetCell("plain_button"))
-	// {
-	//	 _hudImg->DrawSprite(graphic, 1500.0f, 200.0f, *cell, 1.0f, 0.0f);
-	// }
+// if (const CellInfo* cell = _hudSprite->GetCell("plain_button"))
+// {
+//	 _hudImg->DrawSprite(graphic, 1500.0f, 200.0f, *cell, 1.0f, 0.0f);
+// }
 
-	// if (const CellInfo* cell = _popupSprite->GetCell("try_again_icon"))
-	// {
-	//	 _popupImg->DrawSprite(graphic, 1500.0f, 200.0f, *cell, 1.0f, 0.0f);
-	// }
+// if (const CellInfo* cell = _popupSprite->GetCell("try_again_icon"))
+// {
+//	 _popupImg->DrawSprite(graphic, 1500.0f, 200.0f, *cell, 1.0f, 0.0f);
+// }
 
-	//ResourceManager::GetInstance().GetImage(L"restart_button_baked").Draw(graphic, 1650.0f, 200.0f, 1.0f, 0.0f);
+//ResourceManager::GetInstance().GetImage(L"restart_button_baked").Draw(graphic, 1650.0f, 200.0f, 1.0f, 0.0f);
 
-	// shared_sheet 아이콘 확인용 (임시)
-	//auto drawSharedIcon = [&](const char* cellName, float x, float y)
-	//	{
-	//		if (const CellInfo* cell = _sharedSheetSprite->GetCell(cellName))
-	//		{
-	//			_sharedSheetImg->DrawSprite(graphic, x, y, *cell, 1.0f, 0.0f);
-	//		}
-	//	};
+// shared_sheet 아이콘 확인용 (임시)
+//auto drawSharedIcon = [&](const char* cellName, float x, float y)
+//	{
+//		if (const CellInfo* cell = _sharedSheetSprite->GetCell(cellName))
+//		{
+//			_sharedSheetImg->DrawSprite(graphic, x, y, *cell, 1.0f, 0.0f);
+//		}
+//	};
 
-	//drawSharedIcon("resume", 100.0f, 100.0f);
-	//drawSharedIcon("double_mm_icon_small", 200.0f, 100.0f);
-	//drawSharedIcon("sound", 300.0f, 100.0f);
-	//drawSharedIcon("info", 400.0f, 100.0f);
-	//drawSharedIcon("home", 500.0f, 100.0f);
-	//drawSharedIcon("music", 600.0f, 100.0f);
-	//drawSharedIcon("stroke", 700.0f, 100.0f);
-	//drawSharedIcon("load_icon_shared", 800.0f, 100.0f);
+//drawSharedIcon("resume", 100.0f, 100.0f);
+//drawSharedIcon("double_mm_icon_small", 200.0f, 100.0f);
+//drawSharedIcon("sound", 300.0f, 100.0f);
+//drawSharedIcon("info", 400.0f, 100.0f);
+//drawSharedIcon("home", 500.0f, 100.0f);
+//drawSharedIcon("music", 600.0f, 100.0f);
+//drawSharedIcon("stroke", 700.0f, 100.0f);
+//drawSharedIcon("load_icon_shared", 800.0f, 100.0f);
 
-	// nukki 아이콘 확인용 (임시, 아틀라스 없이 낱개 이미지)
-	//_nukkiAutoplayImg->Draw(graphic, 100.0f, 200.0f, 1.0f, 0.0f);
-	//_nukkiMusicImg->Draw(graphic, 200.0f, 200.0f, 1.0f, 0.0f);
-	//_nukkiReplayImg->Draw(graphic, 300.0f, 200.0f, 1.0f, 0.0f);
-	//_nukkiResumeImg->Draw(graphic, 400.0f, 200.0f, 1.0f, 0.0f);
-	//_nukkiSfxImg->Draw(graphic, 500.0f, 200.0f, 1.0f, 0.0f);
-	//_nukkiXImg->Draw(graphic, 600.0f, 200.0f, 0.25f, 0.0f);
+// nukki 아이콘 확인용 (임시, 아틀라스 없이 낱개 이미지)
+//_nukkiAutoplayImg->Draw(graphic, 100.0f, 200.0f, 1.0f, 0.0f);
+//_nukkiMusicImg->Draw(graphic, 200.0f, 200.0f, 1.0f, 0.0f);
+//_nukkiReplayImg->Draw(graphic, 300.0f, 200.0f, 1.0f, 0.0f);
+//_nukkiResumeImg->Draw(graphic, 400.0f, 200.0f, 1.0f, 0.0f);
+//_nukkiSfxImg->Draw(graphic, 500.0f, 200.0f, 1.0f, 0.0f);
+//_nukkiXImg->Draw(graphic, 600.0f, 200.0f, 0.25f, 0.0f);
 
 
 
-	// loading_screen 아이콘 확인용 (임시)
+// loading_screen 아이콘 확인용 (임시)
 	for (int i = 0; i < 10; ++i)
 	{
 		if (const CellInfo* cell = _loadingScreenSprite->GetCell("wooden_slat"))
@@ -568,6 +568,30 @@ void EditorScene::Render(Graphic& graphic)
 	if (const CellInfo* cell = _hudSprite->GetCell("target_box"))
 	{
 		_hudImg->DrawSprite(graphic, 800.0f, 200.0f, *cell, 1.0f, 0.0f);
+	}
+
+
+
+	if (const CellInfo* cell = _sprite->GetCell("bloonsday_pro_ball_shields"))
+	{
+		_inGameBg->DrawSprite(graphic, 400.0f, 500.0f, *cell, 1.0f, 0.0f);
+	}
+
+	if (const CellInfo* cell = _sprite->GetCell("candy_chimney_02"))
+	{
+		_inGameBg->DrawSprite(graphic, 500.0f, 500.0f, *cell, 1.0f, 0.0f);
+	}
+
+	//if (const CellInfo* cell = _sprite->GetCell("candy_chimney_01"))
+	//{
+	//	_inGameBg->DrawSprite(graphic, 600.0f, 500.0f, *cell, 1.0f, 0.0f);
+	//}
+
+
+
+	 if (const CellInfo* cell = _hudSprite->GetCell("newshared_parchment_bottom"))
+	 {
+	_hudImg->DrawSprite(graphic, 500.0f, 200.0f, *cell, 1.0f, 0.0f);
 	}
 }
 
