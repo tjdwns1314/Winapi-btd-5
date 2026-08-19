@@ -46,5 +46,8 @@ private :
 
 	Image* _loadingScreenImg = nullptr;      // loading_screen.png
 	SpriteAtlas* _loadingScreenSprite = nullptr; // loading_screen.xml
+
+	Image* _newSharedImg = nullptr;      // newshared.png
+	SpriteAtlas* _newSharedSprite = nullptr; // newshared.xml
 };
 

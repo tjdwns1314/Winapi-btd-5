@@ -33,6 +33,9 @@ void EditorScene::Init(Graphic& graphic)
 
 	_loadingScreenImg = &res.GetImage(L"Resource\\Sprite\\loading_screen.png");
 	_loadingScreenSprite = &res.GetAtlas(L"Resource\\Sprite\\loading_screen.xml");
+
+	_newSharedImg = &res.GetImage(L"Resource\\Sprite\\newshared.png");
+	_newSharedSprite = &res.GetAtlas(L"Resource\\Sprite\\newshared.xml");
 }
 
 void EditorScene::Cleanup()
@@ -589,9 +592,19 @@ void EditorScene::Render(Graphic& graphic)
 
 
 
-	 if (const CellInfo* cell = _hudSprite->GetCell("newshared_parchment_bottom"))
-	 {
-	_hudImg->DrawSprite(graphic, 500.0f, 200.0f, *cell, 1.0f, 0.0f);
-	}
+	// newshared.png 양피지 패널 5종 미리보기
+	auto drawNewShared = [&](const char* cellName, float x, float y)
+		{
+			if (const CellInfo* cell = _newSharedSprite->GetCell(cellName))
+			{
+				_newSharedImg->DrawSprite(graphic, x, y, *cell, 1.0f, 0.0f);
+			}
+		};
+
+	drawNewShared("newshared_parchment",       100.0f, 200.0f);
+	drawNewShared("newshared_parchment_top",    450.0f, 200.0f);
+	drawNewShared("newshared_parchment_mid",    450.0f, 260.0f);
+	drawNewShared("newshared_parchment_bottom", 450.0f, 300.0f);
+	drawNewShared("newshared_mini_parchment",   850.0f, 200.0f);
 }
 
