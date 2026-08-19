@@ -99,6 +99,7 @@ namespace
 	constexpr float kUpgradeIconOffsetY = 5.0f;    // 업그레이드 아이콘을 버튼 중심에서 위로 밀어내는 거리
 	constexpr float kUpgradeIconScale = 0.9f;        // 업그레이드 아이콘 크기 배율
 	constexpr float kUpgradePriceTextHeight = 60.0f; // 버튼 하단에서부터 가격 텍스트가 차지하는 띠 높이
+	constexpr float kUpgradeNameTextHeight = 60.0f;  // 버튼 상단에서부터 이름 텍스트가 차지하는 띠 높이
 
 	// 선택 패널 문구 및 이름/레벨 텍스트 표시 영역·색상
 	const wchar_t* const kSellTextFormat = L"판매: %d";               // 판매 버튼에 표시되는 판매가 문구
@@ -581,6 +582,18 @@ void GameSceneUI::renderTowerSelectionPanel(Graphic& graphic, const TowerSelecti
 
 	if (selection.canUpgrade)
 	{
+		// 다음 업그레이드 이름(버튼 상단 좁은 띠).
+		if (!selection.upgradeName.empty())
+		{
+			const Vector pos = _upgradeButton->GetPos();
+			const Vector size = _upgradeButton->GetSize();
+			graphic.DrawString(selection.upgradeName.c_str(), D2D1::RectF(
+				pos.x - size.x * 0.5f, pos.y - size.y * 0.5f,
+				pos.x + size.x * 0.5f, pos.y - size.y * 0.5f + kUpgradeNameTextHeight),
+				FONT_20, D2D1::ColorF(D2D1::ColorF::White), DWRITE_TEXT_ALIGNMENT_CENTER,
+				DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+		}
+
 		// 다음 업그레이드 아이콘(위쪽)과 가격(아래쪽 좁은 띠)을 함께 보여준다.
 		if (!selection.upgradeIconKey.empty())
 		{

@@ -27,6 +27,7 @@ namespace
 			for (const auto& g : entry.at("grades"))
 			{
 				TowerGradeStat grade;
+				grade.name = Utf8ToWide(g.value("name", string()));
 				grade.cost = g.at("cost").get<int32>();
 				grade.damage = g.at("damage").get<int32>();
 				grade.attackRange = g.at("attackRange").get<float>();

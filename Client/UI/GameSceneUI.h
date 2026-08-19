@@ -19,6 +19,7 @@ struct TowerSelectionInfo
 	int32 upgradePrice = 0;
 	bool canUpgrade = false;
 	string upgradeIconKey;
+	wstring upgradeName; // 다음 업그레이드 이름(한글). 업그레이드 패널 아이콘 위쪽에 표시.
 	string avatarKey;
 };
 

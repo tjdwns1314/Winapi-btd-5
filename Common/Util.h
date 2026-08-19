@@ -1,6 +1,10 @@
 ﻿#pragma once
+#include <string>
 float RadianToDegree(float radina);
 float DegreeToRadian(float degree);
+
+// JSON 등 UTF-8 문자열을 Direct2D DrawString에 넘길 wide 문자열로 변환.
+std::wstring Utf8ToWide(const std::string& utf8);
 
 enum class RenderLayer
 {

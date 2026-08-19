@@ -38,6 +38,7 @@ public:
 	int32 GetSellPrice() const;
 	int32 GetNextUpgradeCost() const;
 	const string& GetNextUpgradeIconKey() const;
+	const wstring& GetNextUpgradeName() const;
 	void ApplyUpgrade();
 
 
