@@ -2,6 +2,7 @@
 #include "GameSceneUI.h"
 #include "UIManager.h"
 #include "ResourceManager.h"
+#include "AudioManager.h"
 
 namespace
 {
@@ -223,7 +224,11 @@ void GameSceneUI::Init(
 		function<void()> onClick;
 		if (i == 0)
 			onClick = onSettingsCloseClick; // 0번(위 왼쪽) = 재개
-		else if (i == 2 || i == 3 || i == 4) // 2,3,4번 = 자동진행/음악/효과음 — 클릭할 때마다 on/off 토글
+		else if (i == 3) // 3번(음악) — 클릭할 때마다 BGM 음소거 on/off (꺼짐→켜짐 시 처음부터 재생)
+			onClick = [this, i]() { _settingsToggleOff[i] = !_settingsToggleOff[i]; AudioManager::GetInstance().SetBgmMuted(_settingsToggleOff[i]); };
+		else if (i == 4) // 4번(효과음) — 클릭할 때마다 SFX 음소거 on/off
+			onClick = [this, i]() { _settingsToggleOff[i] = !_settingsToggleOff[i]; AudioManager::GetInstance().SetSfxMuted(_settingsToggleOff[i]); };
+		else if (i == 2) // 2번(자동진행) — 오디오와 무관, on/off 상태만 토글
 			onClick = [this, i]() { _settingsToggleOff[i] = !_settingsToggleOff[i]; };
 		else
 			onClick = []() {};

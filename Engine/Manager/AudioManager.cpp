@@ -4,6 +4,11 @@
 #include <cstdio>
 #include <cstring>
 
+namespace
+{
+	constexpr float kBgmMuteFadeSeconds = 0.3f; // 음악 on/off 버튼 클릭 시 페이드 인/아웃 시간
+}
+
 void AudioManager::Init()
 {
 	// 1. XAudio2 엔진 인스턴스를 생성한다.
@@ -47,6 +52,10 @@ void AudioManager::Update()
 
 		_bgmVolumeScale += std::clamp(diff, -maxStep, maxStep);
 		_bgmVoice->SetVolume(_bgmBaseVolume * _bgmVolumeScale);
+
+		// 음소거로 인한 페이드아웃이 0까지 끝나면 보이스를 정지시킨다.
+		if (_bgmMuted && _bgmVolumeScale <= 0.0f)
+			StopBgm();
 	}
 }
 
@@ -113,6 +122,9 @@ void AudioManager::LoadSoundsInDirectory(const wchar_t* directory)
 
 void AudioManager::PlaySfx(const wchar_t* key, float volume)
 {
+	if (_sfxMuted)
+		return;
+
 	auto it = _clips.find(key);
 	if (it == _clips.end())
 	{
@@ -150,8 +162,15 @@ void AudioManager::PlayBgm(const wchar_t* key, float volume, bool loop)
 		return;
 	}
 
+	_lastBgmKey = key;
+	_lastBgmVolume = volume;
+	_lastBgmLoop = loop;
+
 	// 배경음은 하나만 재생되어야 하므로, 재생 중이던 배경음을 먼저 정지한다.
 	StopBgm();
+
+	if (_bgmMuted) // 음소거 상태면 재생하지 않고 key만 기억해둔다(음소거 해제 시 재생).
+		return;
 
 	SoundClip& clip = it->second;
 
@@ -188,6 +207,29 @@ void AudioManager::SetBgmVolumeScale(float targetScale, float fadeSeconds)
 {
 	_bgmTargetVolumeScale = targetScale;
 	_bgmFadeSpeed = (fadeSeconds > 0.f) ? (1.0f / fadeSeconds) : 1000.0f; // 0 이하면 사실상 즉시 전환
+}
+
+void AudioManager::SetBgmMuted(bool muted)
+{
+	if (_bgmMuted == muted)
+		return;
+	_bgmMuted = muted;
+
+	if (muted)
+	{
+		// 0으로 페이드아웃하고, 페이드가 끝나면 Update()에서 정지시킨다(위 StopBgm 참고).
+		SetBgmVolumeScale(0.0f, kBgmMuteFadeSeconds);
+	}
+	else if (!_lastBgmKey.empty())
+	{
+		PlayBgm(_lastBgmKey.c_str(), _lastBgmVolume, _lastBgmLoop); // 처음부터 다시 재생
+
+		// 0에서 시작해 페이드인.
+		_bgmVolumeScale = 0.0f;
+		if (_bgmVoice != nullptr)
+			_bgmVoice->SetVolume(0.0f);
+		SetBgmVolumeScale(1.0f, kBgmMuteFadeSeconds);
+	}
 }
 
 bool AudioManager::loadWavFile(const wchar_t* filePath, SoundClip& outClip)

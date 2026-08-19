@@ -27,6 +27,14 @@ public:
 	// 배경음 볼륨을 targetScale 배율로 fadeSeconds초에 걸쳐 부드럽게 전환한다(예: 설정창 열림/닫힘 덕킹).
 	void SetBgmVolumeScale(float targetScale, float fadeSeconds = 0.3f);
 
+	// 배경음 음소거 토글. 끄면 정지하고, 다시 켜면 마지막에 재생하던 곡을 처음부터 다시 재생한다.
+	void SetBgmMuted(bool muted);
+	bool IsBgmMuted() const { return _bgmMuted; }
+
+	// 효과음 음소거 토글. 켜져 있는 동안은 PlaySfx 호출을 무시한다.
+	void SetSfxMuted(bool muted) { _sfxMuted = muted; }
+	bool IsSfxMuted() const { return _sfxMuted; }
+
 private:
 	AudioManager() = default;
 	~AudioManager() = default;
@@ -47,6 +55,11 @@ private:
 	float _bgmVolumeScale = 1.0f;			// 현재 페이드 배율(0~1)
 	float _bgmTargetVolumeScale = 1.0f;	// 목표 배율
 	float _bgmFadeSpeed = 1.0f;			// 초당 배율 변화량
+	bool _bgmMuted = false;
+	bool _sfxMuted = false;
+	wstring _lastBgmKey;					// 음소거 해제 시 다시 재생할 마지막 배경음 key
+	float _lastBgmVolume = 1.0f;
+	bool _lastBgmLoop = true;
 
 	unordered_map<wstring, SoundClip> _clips;		// 파일명(key) -> 로드된 PCM 데이터 캐시
 	vector<IXAudio2SourceVoice*> _sfxVoices;		// 현재 재생 중인 효과음 보이스 목록(중복 재생 허용)
