@@ -7,112 +7,124 @@
 namespace
 {
 	// --------------------------------------------------
-	//  HUD 배경 패널 / 골드·HP 텍스트
+	//  HUD 배경 패널 (오른쪽 UI 영역 배경 이미지)
 	// --------------------------------------------------
-	// 오른쪽 상단 골드/HP 아이콘+숫자 배치. 임시값 — 빌드 후 눈으로 보고 조정 필요(미검증).
-	constexpr float kHudIconCenterX = 1520.0f;
-	constexpr float kHudTextLeft = 1575.0f;
-	constexpr float kHudTextRight = 1745.0f;
-	constexpr float kGoldIconCenterY = 100.0f;
-	constexpr float kHpIconCenterY = 200.0f;
-	const D2D1::ColorF kHudTextColor = D2D1::ColorF(D2D1::ColorF::White);
-
-	// 상단 HUD 패널(side_hud_bg_01, side_hud_scroll) 가로 폭(px). 이 값만 바꾸면 두 패널 폭이 함께 조절됨.
+	// 상단 배경(side_hud_bg_01) + 스크롤 배경(side_hud_scroll) 가로 폭(px), 공통으로 씀.
 	// 원본 폭 274px, UI 영역 왼쪽 끝에서부터 이 폭만큼만 그려짐(끝까지 채우려면 kUiPanelWidth와 동일한 320으로).
+	// 이 값 하나만 바꾸면 두 패널 폭이 함께 조절됨.
 	constexpr float kHudPanelWidth = 300.0f;
+
+	// --------------------------------------------------
+	//  골드 / HP 아이콘 + 숫자 (오른쪽 상단)
+	// --------------------------------------------------
+	constexpr float kHudIconCenterX = 1510.0f;   // 골드·HP 아이콘 공통 X 위치(둘 다 같은 세로선에 정렬)
+	constexpr float kHudTextLeft = 1560.0f;      // 숫자 텍스트 표시 영역 왼쪽 끝
+	constexpr float kHudTextRight = 1730.0f;     // 숫자 텍스트 표시 영역 오른쪽 끝
+	constexpr float kGoldIconCenterY = 80.0f;    // 골드 아이콘·숫자의 Y 위치
+	constexpr float kHpIconCenterY = 140.0f;     // HP 아이콘·숫자의 Y 위치
+	constexpr float kHudIconScale = 0.7f;        // 골드/HP 아이콘 크기 배율(둘 다 공유)
+	const D2D1::ColorF kHudTextColor = D2D1::ColorF(D2D1::ColorF::White); // 골드/HP 숫자 텍스트 색상
+
+	// --------------------------------------------------
+	//  라운드 텍스트 (골드/HP 아래, "라운드 : 현재/총" 한 줄)
+	// --------------------------------------------------
+	constexpr float kRoundTextCenterY = 200.0f;  // 라운드 텍스트 Y 위치
+	// 라벨("라운드 : ")과 숫자("현재/총")를 서로 다른 텍스트로 따로 그린다. 두 X 위치는 서로 독립적이라
+	// 하나씩 눈으로 보고 조정하면 됨(라벨 폭이 바뀌어도 숫자 위치는 안 바뀜, 필요하면 같이 옮길 것).
+	constexpr float kRoundLabelPosX = 1500.0f;   // 라벨("라운드 : ") 시작 X
+	constexpr float kRoundValuePosX = 1620.0f;   // 숫자("현재/총") 시작 X
+	constexpr FontSize kRoundTextFontSize = FONT_30; // 라벨/숫자 공통 글자 크기(FONT_12/20/30 중 선택)
+	const D2D1::ColorF kRoundLabelColor = D2D1::ColorF(1.0f, 0.55f, 0.0f); // 라벨 색(주황)
+	const D2D1::ColorF kRoundValueColor = D2D1::ColorF(D2D1::ColorF::White); // 숫자 색(흰색)
+	const wchar_t* const kRoundLabelText = L"라운드 : ";
+	const wchar_t* const kRoundValueFormat = L"%d / %d"; // %d=현재 라운드, %d=총 라운드
 
 	// --------------------------------------------------
 	//  웨이브 시작 / 디버그 웨이브 조절
 	// --------------------------------------------------
-	// 웨이브 시작 버튼 위치 및 원본 스프라이트 크기(128x129)에 곱할 배율.
-	const Vector kStartButtonPos = Vector(1485.0f, 1000.0f);
-	constexpr float kStartButtonBaseWidth = 128.0f;
-	constexpr float kStartButtonBaseHeight = 129.0f;
-	// 플레이(웨이브 시작) 버튼과 그 옆 설정 아이콘 크기 배율.
-	constexpr float kPlayButtonScale = 0.6f;
-	// 설정 아이콘(pause_icon) 표시 위치 — 플레이 버튼(1512.5, 950) 옆에 나란히. 임시값(미검증).
-	constexpr float kSettingsIconCenterX = 1575.0f;
-	constexpr float kSettingsIconCenterY = 1000.0f;
+	const Vector kStartButtonPos = Vector(1485.0f, 1000.0f); // 웨이브 시작(플레이) 버튼 위치
+	constexpr float kStartButtonBaseWidth = 128.0f;  // 버튼 원본 스프라이트 가로(px)
+	constexpr float kStartButtonBaseHeight = 129.0f; // 버튼 원본 스프라이트 세로(px)
+	constexpr float kPlayButtonScale = 0.6f;         // 플레이 버튼 + 옆 설정 아이콘 공통 크기 배율
 
-	// 디버그 웨이브 +/- 버튼 위치·크기 (정식 스프라이트 없이 도형으로 그림)
-	const Vector kWaveUpButtonPos = Vector(1720.0f, 1000.0f);
-	const Vector kWaveDownButtonPos = Vector(1720.0f, 1050.0f);
-	const Vector kWaveButtonSize = Vector(40.0f, 40.0f);
+	// 설정 아이콘(pause_icon) 표시 위치 — 플레이 버튼(1512.5, 950) 옆에 나란히 배치.
+	constexpr float kSettingsIconCenterX = 1575.0f; // 설정 아이콘 X 위치
+	constexpr float kSettingsIconCenterY = 1000.0f; // 설정 아이콘 Y 위치
+
+	// 디버그용 라운드 +/- 버튼 (정식 스프라이트 없이 사각형 도형으로 그림)
+	const Vector kWaveUpButtonPos = Vector(1720.0f, 1000.0f);   // + 버튼 위치
+	const Vector kWaveDownButtonPos = Vector(1720.0f, 1050.0f); // - 버튼 위치
+	const Vector kWaveButtonSize = Vector(40.0f, 40.0f);        // 두 버튼 공통 크기
 
 	// --------------------------------------------------
 	//  타워/장애물 상점
 	// --------------------------------------------------
 	// 타워 상점 버튼: 스크롤 패널(y=270~518) 안 2x2 그리드 위치. 클릭 판정 크기는
 	// tower_thumbs_box 배경(renderTowerShopBoxes)과 맞춘다.
-	const Vector kDartShopButtonPos = Vector(1520.0f, 332.0f);
-	const Vector kTackShopButtonPos = Vector(1680.0f, 332.0f);
-	const Vector kSniperShopButtonPos = Vector(1520.0f, 456.0f);
-	const Vector kBombShopButtonPos = Vector(1680.0f, 456.0f);
-	const Vector kTowerShopButtonSize = Vector(113.0f, 93.0f);
-	constexpr float kTowerIconScale = 0.7f;
+	const Vector kDartShopButtonPos = Vector(1520.0f, 332.0f);   // 다트몽키 상점 버튼(좌상단)
+	const Vector kTackShopButtonPos = Vector(1680.0f, 332.0f);   // 택슈터 상점 버튼(우상단)
+	const Vector kSniperShopButtonPos = Vector(1520.0f, 456.0f); // 스나이퍼몽키 상점 버튼(좌하단)
+	const Vector kBombShopButtonPos = Vector(1680.0f, 456.0f);   // 폭탄타워 상점 버튼(우하단)
+	const Vector kTowerShopButtonSize = Vector(113.0f, 93.0f);   // 4개 버튼 공통 클릭 판정 크기
+	constexpr float kTowerIconScale = 0.7f;                      // 타워 아이콘 자체 크기 배율(드래그 프리뷰에도 사용)
 
-	// 장애물 상점 버튼 위치·크기 및 아이콘 배율. 위치는 임시값 — 빌드 후 눈으로 보고 조정할 것.
-	const Vector kObstacleShopButtonPos = Vector(1675.0f, 1000.0f);
-	const Vector kObstacleShopButtonSize = Vector(109.0f, 113.0f);
-	constexpr float kObstacleIconScale = 1.0f;
+	const Vector kObstacleShopButtonPos = Vector(1675.0f, 1000.0f);  // 장애물 상점 버튼 위치
+	const Vector kObstacleShopButtonSize = Vector(109.0f, 113.0f);   // 장애물 상점 버튼 클릭 판정 크기
+	constexpr float kObstacleIconScale = 1.0f;                       // 장애물 아이콘 크기 배율(드래그 프리뷰에도 사용)
 
 	// --------------------------------------------------
 	//  선택된 타워/장애물 패널 (판매/업그레이드)
 	// --------------------------------------------------
 	// 판매 버튼 배경(sell_box) 가로 스케일. 원본이 288x76로 가로가 길어 오른쪽 UI 패널 폭에
 	// 맞추려면 가로만 축소해야 한다. 이 값만 바꾸면 판매 버튼 크기(시각+클릭 판정)가 함께 조절됨.
-	constexpr float kSellBoxScaleX = 0.7f;
+	constexpr float kSellBoxScaleX = 0.6f;
 
-	// 타워 선택 패널: 상점 버튼(y=550)과 웨이브 버튼(y=900) 사이 빈 공간에 고정 배치.
-	// 위치/크기는 임시값 — 빌드 후 눈으로 보고 조정할 것.
-	const Vector kSellButtonPos = Vector(1600.0f, 920.0f);
+	const Vector kSellButtonPos = Vector(1600.0f, 920.0f); // 타워 판매 버튼 위치
 	const Vector kSellButtonFallbackSize = Vector(109.0f, 60.0f); // sell_box 셀을 못 찾았을 때 대비
-	const Vector kUpgradeButtonPos = Vector(1600.0f, 800.0f);
+	const Vector kUpgradeButtonPos = Vector(1600.0f, 785.0f); // 타워 업그레이드 버튼 위치
 	const Vector kUpgradeButtonFallbackSize = Vector(109.0f, 60.0f); // upgrade_box 셀을 못 찾았을 때 대비
-	const Vector kObstacleSellButtonPos = Vector(1837.5f, 800.0f);
+	const Vector kObstacleSellButtonPos = Vector(1837.5f, 800.0f); // 장애물 판매 버튼 위치(크기는 kSellBoxScaleX 공유)
 
 	// upgrade_box_buy/cant 배경(284x226, 정사각형에 가까움) 축소 배율.
 	// 이 값만 바꾸면 업그레이드 버튼 크기(시각+클릭 판정)가 함께 조절됨. 임시값 — 빌드 후 눈으로 보고 조정할 것.
-	constexpr float kUpgradeBoxScale = 0.6f;
+	constexpr float kUpgradeBoxScale = 0.7f;
 
 	// 타워 이름 아래 등급별 초상화 박스(tower_profile_pic_box, 196x222) 위치·배율.
 	// 이름 텍스트(y=520~600)와 업그레이드 박스(y=800) 사이 빈 공간에 배치. 임시값 — 빌드 후 눈으로 보고 조정할 것.
-	const Vector kAvatarBoxPos = Vector(1600.0f, 640.0f);
-	constexpr float kAvatarBoxScale = 0.7f;
-	// 초상화(avatarKey) 자체의 배율. 박스보다 작게 그려서 프레임 안에 들어오도록. 임시값 — 빌드 후 눈으로 보고 조정할 것.
-	constexpr float kAvatarImageScale = 0.5f;
+	const Vector kAvatarBoxPos = Vector(1600.0f, 625.0f); // 초상화 박스 위치
+	constexpr float kAvatarBoxScale = 0.6f;               // 초상화 박스(프레임) 크기 배율
+	constexpr float kAvatarImageScale = 0.5f;             // 박스 안에 그려지는 초상화 이미지 자체 크기 배율(박스보다 작게)
 
-	// 업그레이드 아이콘은 박스 위쪽에, 가격 텍스트는 아래쪽 좁은 띠에. 임시값 — 빌드 후 눈으로 보고 조정할 것.
-	constexpr float kUpgradeIconOffsetY = -12.0f;
-	constexpr float kUpgradeIconScale = 0.9f;
-	constexpr float kUpgradePriceTextHeight = 24.0f;
+	// 업그레이드 아이콘은 박스 위쪽에, 가격 텍스트는 아래쪽 좁은 띠에.
+	constexpr float kUpgradeIconOffsetY = 5.0f;    // 업그레이드 아이콘을 버튼 중심에서 위로 밀어내는 거리
+	constexpr float kUpgradeIconScale = 0.9f;        // 업그레이드 아이콘 크기 배율
+	constexpr float kUpgradePriceTextHeight = 60.0f; // 버튼 하단에서부터 가격 텍스트가 차지하는 띠 높이
 
 	// 선택 패널 문구 및 이름/레벨 텍스트 표시 영역·색상
-	const wchar_t* const kSellTextFormat = L"판매: %d";
-	const wchar_t* const kUpgradeTextFormat = L"%d"; // 가격 숫자만 표시
-	const wchar_t* const kUpgradeMaxedText = L"업그레이드 경로 달함"; // 최고 등급 도달 시 표시
-	const wchar_t* const kNameLevelTextFormat = L"%s 레벨 %d";
-	constexpr D2D1_RECT_F kNameLevelTextRect = { 1450.0f, 520.0f, 1740.0f, 600.0f };
-	const D2D1::ColorF kNameLevelTextColor = D2D1::ColorF(D2D1::ColorF::Yellow);
+	const wchar_t* const kSellTextFormat = L"판매: %d";               // 판매 버튼에 표시되는 판매가 문구
+	const wchar_t* const kUpgradeTextFormat = L"%d";                  // 업그레이드 버튼에 표시되는 가격(숫자만)
+	const wchar_t* const kUpgradeMaxedText = L"업그레이드 경로 달함"; // 최고 등급 도달 시 업그레이드 버튼 대신 표시
+	const wchar_t* const kNameLevelTextFormat = L"%s 레벨 %d";        // 선택한 타워 이름+레벨 문구
+	constexpr D2D1_RECT_F kNameLevelTextRect = { 1450.0f, 520.0f, 1740.0f, 600.0f }; // 이름/레벨 텍스트 표시 영역
+	const D2D1::ColorF kNameLevelTextColor = D2D1::ColorF(D2D1::ColorF::Yellow);     // 이름/레벨 텍스트 색상
 
 	// --------------------------------------------------
 	//  게임오버 팝업
 	// --------------------------------------------------
-	// 재시작 버튼: baked 이미지(131x137) 크기에 맞춰 게임 영역 정중앙에 둔다.
-	const Vector kRestartButtonSize = Vector(131.0f, 137.0f);
-	const wchar_t* const kGameOverText = L"GAME OVER";
-	const D2D1::ColorF kGameOverTextColor = D2D1::ColorF(D2D1::ColorF::Red);
-	const D2D1::ColorF kGameOverDimColor = D2D1::ColorF(D2D1::ColorF::Black, 0.6f);
-	constexpr float kGameOverTextTopOffset = -160.0f;
-	constexpr float kGameOverTextBottomOffset = -80.0f;
+	const Vector kRestartButtonSize = Vector(131.0f, 137.0f); // 재시작 버튼 크기(baked 이미지 원본 크기, 게임 영역 정중앙에 배치)
+	const wchar_t* const kGameOverText = L"GAME OVER";                       // 게임오버 문구
+	const D2D1::ColorF kGameOverTextColor = D2D1::ColorF(D2D1::ColorF::Red); // 게임오버 문구 색상
+	const D2D1::ColorF kGameOverDimColor = D2D1::ColorF(D2D1::ColorF::Black, 0.6f); // 배경 딤(어둡게) 색상/투명도
+	constexpr float kGameOverTextTopOffset = -160.0f;    // 문구 표시 영역 위쪽 끝(화면 중앙 기준 오프셋)
+	constexpr float kGameOverTextBottomOffset = -80.0f;  // 문구 표시 영역 아래쪽 끝(화면 중앙 기준 오프셋)
 
 	// --------------------------------------------------
 	//  설정 팝업 (오륜기 배치)
 	// --------------------------------------------------
 	// plain_button(131x137) 5개를 오륜기처럼 배치: 위 3개, 아래 2개(위 버튼 사이 아래에 걸치도록).
 	// 배열 순서: 0,1,2 = 위쪽 왼→오, 3,4 = 아래쪽 왼→오. 0번(위 왼쪽)이 재개(닫기) 버튼.
-	// 위치는 게임 영역 정중앙 기준 임시값 — 빌드 후 눈으로 보고 조정할 것(미검증).
-	// 각 버튼 아이콘 파일(Resource/Sprite/nukki). 순서: 0 재개, 1 리플레이, 2 자동진행, 3 음악, 4 효과음.
+	// 위치는 게임 영역 정중앙 기준.
+	// 각 버튼 가운데 그려질 아이콘 파일(Resource/Sprite/nukki). 순서: 0 재개, 1 리플레이, 2 자동진행, 3 음악, 4 효과음.
 	const wchar_t* const kSettingsIconFiles[5] = {
 		L"Resource\\Sprite\\nukki\\resume.png",
 		L"Resource\\Sprite\\nukki\\replay.png",
@@ -120,15 +132,15 @@ namespace
 		L"Resource\\Sprite\\nukki\\music.png",
 		L"Resource\\Sprite\\nukki\\sfx.png",
 	};
-	constexpr float kSettingsIconScale = 1.0f; // 아이콘 원본 크기 배율. 버튼(plain_button, kSettingsRingScale 적용) 안에 들어오도록 임시값 — 눈으로 보고 조정할 것(미검증).
-	constexpr float kSettingsOffMarkScale = 0.25f; // nukki/x.png 원본이 커서 축소. EditorScene 확인 코드에서 쓰던 값 그대로 가져옴(미검증).
+	constexpr float kSettingsIconScale = 1.0f; // 버튼 안 아이콘 크기 배율. 버튼(plain_button, kSettingsRingScale 적용) 안에 들어오도록 조정.
+	constexpr float kSettingsOffMarkScale = 0.25f; // 꺼짐 표시(x.png) 크기 배율. 원본이 커서 축소해서 사용.
 	constexpr float kSettingsButtonBaseWidth = 128.0f;  // plain_button 원본 스프라이트 가로 크기(px). 클릭 판정 크기 계산에 사용.
 	constexpr float kSettingsButtonBaseHeight = 129.0f; // plain_button 원본 스프라이트 세로 크기(px). 클릭 판정 크기 계산에 사용.
 	constexpr float kSettingsRingSpacingX = 250.0f;     // 위쪽 3개 버튼 사이 가로 간격, 아래쪽 2개 버튼 가로 오프셋(간격의 절반)에도 쓰임.
 	constexpr float kSettingsRingSpacingY = 200.0f;     // 위쪽 줄과 아래쪽 줄 사이 세로 간격.
 	constexpr float kSettingsRingScale = 1.5f;          // 버튼 원본 크기(128x129)에 곱하는 배율 — 실제 그려지는 크기 + 클릭 판정 크기가 함께 커진다.
 	constexpr float kSettingsRingCenterOffsetY = -150.0f;  // 5개 버튼 그룹 전체를 위(-)/아래(+)로 한 번에 밀 때 쓰는 값. 게임 영역 정중앙(GameAreaCenterY) 기준.
-	const D2D1::ColorF kSettingsDimColor = D2D1::ColorF(D2D1::ColorF::Black, 0.6f);
+	const D2D1::ColorF kSettingsDimColor = D2D1::ColorF(D2D1::ColorF::Black, 0.6f); // 설정 팝업 배경 딤(어둡게) 색상/투명도
 }
 
 void GameSceneUI::Init(
@@ -256,7 +268,8 @@ void GameSceneUI::Render(Graphic& graphic, bool isDraggingTower, TowerType dragg
 	bool isDraggingObstacle,
 	const Vector& dragPreviewPos, const TowerSelectionInfo& selection,
 	const ObstacleSelectionInfo& obstacleSelection,
-	int32 hp, int32 gold, bool isWaveActive, bool isSpeedEnabled,
+	int32 hp, int32 gold, bool isWaveActive,
+	int32 currentRound, int32 totalRound, bool isSpeedEnabled,
 	bool isGameOver)
 {
 	renderHudBackgroundPanel(graphic);
@@ -282,6 +295,7 @@ void GameSceneUI::Render(Graphic& graphic, bool isDraggingTower, TowerType dragg
 	renderDebugWaveButtons(graphic);
 	renderGoldText(graphic, gold);
 	renderHpText(graphic, hp);
+	renderRoundText(graphic, currentRound, totalRound);
 
 	if (_sellButton != nullptr) _sellButton->SetActive(selection.isSelected);
 	if (_upgradeButton != nullptr) _upgradeButton->SetActive(selection.isSelected && selection.canUpgrade);
@@ -349,7 +363,7 @@ void GameSceneUI::renderHudBackgroundPanel(Graphic& graphic) const
 void GameSceneUI::renderGoldText(Graphic& graphic, int32 gold) const
 {
 	if (const CellInfo* cell = _hudSprite->GetCell("cash_icon"))
-		_hudImg->DrawSprite(graphic, kHudIconCenterX, kGoldIconCenterY, *cell);
+		_hudImg->DrawSprite(graphic, kHudIconCenterX, kGoldIconCenterY, *cell, kHudIconScale);
 
 	wchar_t text[32];
 	swprintf_s(text, L"%d", gold);
@@ -361,13 +375,27 @@ void GameSceneUI::renderGoldText(Graphic& graphic, int32 gold) const
 void GameSceneUI::renderHpText(Graphic& graphic, int32 hp) const
 {
 	if (const CellInfo* cell = _hudSprite->GetCell("lives_icon"))
-		_hudImg->DrawSprite(graphic, kHudIconCenterX, kHpIconCenterY, *cell);
+		_hudImg->DrawSprite(graphic, kHudIconCenterX, kHpIconCenterY, *cell, kHudIconScale);
 
 	wchar_t text[32];
 	swprintf_s(text, L"%d", hp);
 
 	graphic.DrawString(text, D2D1::RectF(kHudTextLeft, kHpIconCenterY - 25.0f, kHudTextRight, kHpIconCenterY + 25.0f),
 		FONT_30, kHudTextColor, DWRITE_TEXT_ALIGNMENT_LEADING);
+}
+
+void GameSceneUI::renderRoundText(Graphic& graphic, int32 currentRound, int32 totalRound) const
+{
+	const float panelRight = static_cast<float>(GameAreaWidth) + kHudPanelWidth;
+
+	// 라벨("라운드 : ")과 숫자("현재/총")를 색을 다르게 하기 위해 텍스트 두 개로 나눠서 그린다.
+	graphic.DrawString(kRoundLabelText, D2D1::RectF(kRoundLabelPosX, kRoundTextCenterY - 25.0f, panelRight, kRoundTextCenterY + 25.0f),
+		kRoundTextFontSize, kRoundLabelColor, DWRITE_TEXT_ALIGNMENT_LEADING);
+
+	wchar_t valueText[32];
+	swprintf_s(valueText, kRoundValueFormat, currentRound, totalRound);
+	graphic.DrawString(valueText, D2D1::RectF(kRoundValuePosX, kRoundTextCenterY - 25.0f, panelRight, kRoundTextCenterY + 25.0f),
+		kRoundTextFontSize, kRoundValueColor, DWRITE_TEXT_ALIGNMENT_LEADING);
 }
 
 // --------------------------------------------------

@@ -28,6 +28,9 @@ public:
 	void SetNextRound(int32 roundNumber);
 	int32 GetNextRoundNumber() const { return _roundIndex + 1; }
 	int32 GetCurrentRoundNumber() const { return IsWaveActive() ? _roundIndex : 0; }
+	// HUD 표시용: 진행 중이면 현재 라운드, 대기 중이면 다음에 시작할 라운드.
+	int32 GetDisplayRoundNumber() const { return IsWaveActive() ? _roundIndex : GetNextRoundNumber(); }
+	int32 GetTotalRoundNumber() const;
 
 private:
 	enum class WaveState

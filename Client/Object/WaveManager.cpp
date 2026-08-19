@@ -96,6 +96,11 @@ void WaveManager::SetNextRound(int32 roundNumber)
 	_roundIndex = roundNumber - 1;
 }
 
+int32 WaveManager::GetTotalRoundNumber() const
+{
+	return kRoundCount;
+}
+
 void WaveManager::Update(float deltaTime)
 {
 	// 1. 대기 상태 (웨이브 시작 전)

@@ -58,6 +58,7 @@ public:
 		const ObstacleSelectionInfo& obstacleSelection,
 		int32 hp,
 		int32 gold, bool isWaveActive,
+		int32 currentRound, int32 totalRound,
 		bool isSpeedEnabled,
 		bool isGameOver);
 
@@ -73,6 +74,7 @@ private:
 	void renderHudBackgroundPanel(Graphic& graphic) const;
 	void renderGoldText(Graphic& graphic, int32 gold) const;
 	void renderHpText(Graphic& graphic, int32 hp) const;
+	void renderRoundText(Graphic& graphic, int32 currentRound, int32 totalRound) const;
 
 	// --------------------------------------------------
 	//  웨이브 시작 / 디버그 웨이브 조절

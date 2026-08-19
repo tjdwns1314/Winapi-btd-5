@@ -146,6 +146,8 @@ void GameScene::Render(Graphic& graphic)
 		_healthManager.GetHp(),
 		_economyManager.GetGold(),
 		_waveManager.IsWaveActive(),
+		_waveManager.GetDisplayRoundNumber(),
+		_waveManager.GetTotalRoundNumber(),
 		_speedEnabled,
 		_healthManager.IsGameOver());
 
