@@ -228,16 +228,17 @@ namespace
 	constexpr float kTipsBodyInsetTop = 110.0f;      // 패널 위쪽 끝에서 본문 텍스트 시작까지의 여백
 	constexpr float kTipsClosingHeight = 90.0f;      // 맺음말이 차지하는 아래쪽 띠 높이
 	constexpr float kTipsClosingInsetBottom = 70.0f; // 맺음말과 패널 아래쪽 끝 사이 여백(살짝 위로)
-	constexpr FontSize kTipsBodyFontSize = FONT_25;
+	constexpr FontSize kTipsBodyFontSize = FONT_20;
 	constexpr FontSize kTipsClosingFontSize = FONT_25;
 	const D2D1::ColorF kTipsTextColor = D2D1::ColorF(D2D1::ColorF::Black); // 안내 문구 색상(검정)
 
 	const wchar_t* const kTipsBodyText =
 		L"1. 플레이 버튼을 누르면 웨이브가 시작되고, 다시 누르면 2배속으로 전환됩니다.\n\n"
-		L"2. 장애물은 설치하면 회수할 수 없습니다.\n\n"
-		L"3. 10라운드부터 매 라운드 30% 확률로 타워를 피해 가는 특수 풍선이 등장합니다.\n\n"
-		L"4. 설정창에서 자동 웨이브 진행을 켤 수 있습니다.\n\n"
-		L"5. 라운드가 끝날 때마다 저장되어, 로비에서 저장된 게임을 가져올 수 있습니다.";
+		L"2. 초록색 부분에서 풍선이 생성됩니다.\n\n"
+		L"3. 장애물은 설치하면 회수할 수 없습니다.\n\n"
+		L"4. 10라운드부터 매 라운드 30% 확률로 타워를 피해 가는 특수 풍선이 등장합니다.\n\n"
+		L"5. 설정창에서 자동 웨이브 진행을 켤 수 있습니다.\n\n"
+		L"6. 라운드가 끝날 때마다 저장되어, 로비에서 저장된 게임을 가져올 수 있습니다.";
 	const wchar_t* const kTipsClosingText = L"원숭이들을 배치하고, 풍선 침공을 막아보세요.";
 }
 
