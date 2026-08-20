@@ -33,7 +33,7 @@ void GameScene::Init(Graphic& graphic)
 	_waveManager.Init(&PoolManager::GetInstance().GetBloonPool(), _map.GetBloonSpawnPos(), _map.GetPathPtr(), this,
 		[this](int32 bonusGold) { _economyManager.Add(bonusGold); SaveToFile(kSaveFilePath); });
 	_healthManager.Init(_hasPendingLoad ? _pendingLoadData.hp : 100);
-	_economyManager.Init(_hasPendingLoad ? _pendingLoadData.gold : 10000);
+	_economyManager.Init(_hasPendingLoad ? _pendingLoadData.gold : 650);
 
 	GetCollisionManager().RegisterLayer(RenderLayer::Bloon, RenderLayer::Projectile);
 
