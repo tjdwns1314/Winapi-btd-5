@@ -14,6 +14,7 @@ Obstacle* ObstacleFactory::Create(ObjectPool<Obstacle>& pool, ObstacleType type,
 
 	obstacle->SetType(type);
 	obstacle->SetPos(pos);
+	obstacle->SetScale(Vector(stat.renderScale, stat.renderScale));
 	obstacle->SetImage(&res.GetImage(L"Resource\\Sprite\\InGame.png"));
 	obstacle->SetCell(res.GetAtlas(L"Resource\\Sprite\\InGame.xml").GetCell(stat.cellName.c_str()));
 

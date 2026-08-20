@@ -13,7 +13,7 @@ struct TowerSaveData
 // 장애물 1개의 저장 정보.
 struct ObstacleSaveData
 {
-	ObstacleType type = ObstacleType::BananaFarmTree;
+	ObstacleType type = ObstacleType::BananaFarmChimney;
 	Cell cell;
 };
 

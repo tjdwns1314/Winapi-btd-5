@@ -26,5 +26,5 @@ private:
 	Image* _image = nullptr;
 	const CellInfo* _cell = nullptr;
 
-	ObstacleType _type = ObstacleType::BananaFarmTree;
+	ObstacleType _type = ObstacleType::BananaFarmChimney;
 };

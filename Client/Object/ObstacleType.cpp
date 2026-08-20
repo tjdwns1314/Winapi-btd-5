@@ -5,7 +5,7 @@ const ObstacleStat& GetObstacleStat(ObstacleType type)
 {
 	static const unordered_map<ObstacleType, ObstacleStat> table =
 	{
-		{ ObstacleType::BananaFarmTree, ObstacleStat{ ObstacleType::BananaFarmTree, 20, 10, "banana_farm_tree" } },
+		{ ObstacleType::BananaFarmChimney, ObstacleStat{ ObstacleType::BananaFarmChimney, 20, 10, "banana_farm_chimney_02", 0.7f } },
 	};
 	return table.at(type);
 }

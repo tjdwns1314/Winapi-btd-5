@@ -23,16 +23,16 @@ namespace
 	{
 		switch (type)
 		{
-		case ObstacleType::BananaFarmTree: return "BananaFarmTree";
+		case ObstacleType::BananaFarmChimney: return "BananaFarmChimney";
 		}
-		return "BananaFarmTree";
+		return "BananaFarmChimney";
 	}
 
 	ObstacleType ParseObstacleTypeName(const string& name)
 	{
-		if (name == "BananaFarmTree")
-			return ObstacleType::BananaFarmTree;
-		return ObstacleType::BananaFarmTree;
+		if (name == "BananaFarmChimney")
+			return ObstacleType::BananaFarmChimney;
+		return ObstacleType::BananaFarmChimney;
 	}
 
 	nlohmann::json CellToJson(const Cell& cell)

@@ -575,7 +575,7 @@ void EditorScene::Render(Graphic& graphic)
 
 
 
-	if (const CellInfo* cell = _sprite->GetCell("bloonsday_pro_ball_shields"))
+	if (const CellInfo* cell = _sprite->GetCell("banana_farm_chimney_02"))
 	{
 		_inGameBg->DrawSprite(graphic, 400.0f, 500.0f, *cell, 1.0f, 0.0f);
 	}

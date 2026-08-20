@@ -709,7 +709,7 @@ void GameSceneUI::drawObstacleIcon(Graphic& graphic, const Vector& pos, float sc
 	if (_sprite == nullptr || _inGameBg == nullptr)
 		return;
 
-	const ObstacleStat& stat = GetObstacleStat(ObstacleType::BananaFarmTree);
+	const ObstacleStat& stat = GetObstacleStat(ObstacleType::BananaFarmChimney);
 	if (const CellInfo* cell = _sprite->GetCell(stat.cellName.c_str()))
 		_inGameBg->DrawSprite(graphic, pos.x, pos.y, *cell, scale, 0.0f);
 }
