@@ -14,6 +14,7 @@ public:
 	void Init(const Cell* forcedStart = nullptr, const Cell* forcedEnd = nullptr);
 
 	const vector<Vector>* GetPathPtr() const { return &_path; }
+	const vector<Vector>* GetRiskPathPtr() const { return &_riskPath; }
 	Vector GetBloonSpawnPos() const { return _bloonSpawnPos; }
 	Vector GetBloonEndPos() const { return _bloonEndPos; }
 	Cell GetStartCell() const { return _tileMap.GetStartPoint(); }
@@ -32,6 +33,11 @@ public:
 	void RenderTiles(Graphic& graphic) const;
 	void RenderGrid(Graphic& graphic, const D2D1::ColorF& color = D2D1::ColorF(D2D1::ColorF::Gray, 0.5f)) const;
 	void RenderPathDebug(Graphic& graphic) const;
+	void RenderRiskPathDebug(Graphic& graphic) const;
+
+	// 타워 목록(위치+사거리)을 받아 위험도 가중 A*로 특수 풍선 전용 경로를 다시 계산한다.
+	// 특수 웨이브가 시작될 때만 호출하면 된다.
+	void RecomputeRiskPath(const vector<PathFinder::RiskSource>& towers);
 
 private:
 	void recomputePath();
@@ -39,6 +45,7 @@ private:
 	Grid _grid;
 	TileMap _tileMap;
 	vector<Vector> _path;
+	vector<Vector> _riskPath; // 특수 풍선 전용. _path와 별개로 관리.
 	Vector _bloonSpawnPos;
 	Vector _bloonEndPos;
 

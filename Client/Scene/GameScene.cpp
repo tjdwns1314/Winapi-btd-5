@@ -36,8 +36,10 @@ void GameScene::Init(Graphic& graphic)
 		_map.Init();
 
 	PoolManager::GetInstance().Init(250, 200, 50, 50, 250); // obstacleSize=50, effectSize=250: 임시값
-	_waveManager.Init(&PoolManager::GetInstance().GetBloonPool(), _map.GetBloonSpawnPos(), _map.GetPathPtr(), this,
-		[this](int32 bonusGold) { _economyManager.Add(bonusGold); SaveToFile(kSaveFilePath); });
+	_waveManager.Init(&PoolManager::GetInstance().GetBloonPool(), _map.GetBloonSpawnPos(), _map.GetPathPtr(),
+		_map.GetRiskPathPtr(), this,
+		[this](int32 bonusGold) { _economyManager.Add(bonusGold); SaveToFile(kSaveFilePath); },
+		[this]() { recomputeRiskPath(); });
 	_healthManager.Init(_hasPendingLoad ? _pendingLoadData.hp : 150);
 	_economyManager.Init(_hasPendingLoad ? _pendingLoadData.gold : 650);
 
@@ -171,6 +173,19 @@ float GameScene::getTimeScale() const
 	return _speedEnabled ? kFastTimeScale : 1.0f;
 }
 
+void GameScene::recomputeRiskPath()
+{
+	vector<PathFinder::RiskSource> towers;
+	for (Actor* actor : GetActors(RenderLayer::Tower))
+	{
+		if (actor->IsPendingKill())
+			continue;
+		const Tower* tower = static_cast<Tower*>(actor);
+		towers.push_back({ tower->GetPos(), tower->GetStat().attackRange });
+	}
+	_map.RecomputeRiskPath(towers);
+}
+
 
 void GameScene::AddDebugCircle(const Vector& pos, float radius, float duration)
 {
@@ -199,7 +214,8 @@ void GameScene::Render(Graphic& graphic)
 
 	_debugOverlay.Render(graphic, _map,
 		_towerController.IsDragging() || _obstacleController.IsDragging(),
-		GetActors(RenderLayer::Bloon));
+		GetActors(RenderLayer::Bloon),
+		_waveManager.IsSpecialWaveActive());
 
 	Tower* selectedTower = _towerController.GetSelected();
 	TowerSelectionInfo selection;
@@ -249,6 +265,14 @@ void GameScene::Render(Graphic& graphic)
 		selectedTower->RenderRange(graphic);
 
 	Super::Render(graphic);
+
+	// 특수 풍선은 날아다니는 컨셉이라 타워 등 다른 액터보다 위에 보이도록 마지막에 그린다.
+	for (Actor* actor : GetActors(RenderLayer::Bloon))
+	{
+		Bloon* bloon = static_cast<Bloon*>(actor);
+		if (bloon->GetColor() == BloonColor::Special)
+			bloon->RenderSprite(graphic);
+	}
 
 	// 게임오버 중에도 계속 움직이는 풍선 등 액터보다 위에 그려야 하므로 액터 렌더링 이후에 호출.
 	_ui.RenderGameOverPopup(graphic, _healthManager.IsGameOver(), gameOverFadeProgress, _waveManager.GetDisplayRoundNumber());

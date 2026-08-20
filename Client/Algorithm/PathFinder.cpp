@@ -20,6 +20,104 @@ namespace
 	}
 }
 
+vector<Vector> PathFinder::FindRiskPath(Cell start, Cell end, int32 gridCountX, int32 gridCountY, int32 gridSize,
+	const vector<RiskSource>& riskSources)
+{
+	const size_t cellCount = static_cast<size_t>(gridCountX) * gridCountY;
+
+	// 위험 가중치. 타워 1개가 겹칠 때마다 이동 비용이 이만큼 늘어난다. (미검증: 밸런스 확인 필요)
+	constexpr float kRiskWeightPerTower = 1.0f;
+
+	vector<float> risk(cellCount, 0.f);
+	for (int32 y = 0; y < gridCountY; ++y)
+	{
+		for (int32 x = 0; x < gridCountX; ++x)
+		{
+			Vector cellCenter((x + 0.5f) * gridSize, (y + 0.5f) * gridSize);
+			int32 count = 0;
+			for (const RiskSource& source : riskSources)
+			{
+				const Vector diff = cellCenter - source.pos;
+				if (std::max(std::abs(diff.x), std::abs(diff.y)) <= source.range)
+					++count;
+			}
+			risk[y * gridCountX + x] = count * kRiskWeightPerTower;
+		}
+	}
+
+	vector<float> gScore(cellCount, (std::numeric_limits<float>::max)());
+	vector<int32> cameFrom(cellCount, -1);
+	vector<bool> closed(cellCount, false);
+
+	auto index = [gridCountX](int32 x, int32 y) { return y * gridCountX + x; };
+
+	std::priority_queue<Node, vector<Node>, NodeCompare> open;
+	gScore[index(start.iX, start.iY)] = 0.f;
+	open.push(Node{ start, Heuristic(start, end) });
+
+	const Cell dirs[4] = { {1,0}, {-1,0}, {0,1}, {0,-1} };
+	bool found = false;
+
+	while (open.empty() == false)
+	{
+		const Node current = open.top();
+		open.pop();
+
+		const int32 curIdx = index(current.cell.iX, current.cell.iY);
+		if (closed[curIdx])
+			continue;
+		closed[curIdx] = true;
+
+		if (current.cell.iX == end.iX && current.cell.iY == end.iY)
+		{
+			found = true;
+			break;
+		}
+
+		for (const Cell& dir : dirs)
+		{
+			const int32 nx = current.cell.iX + dir.iX;
+			const int32 ny = current.cell.iY + dir.iY;
+
+			if (nx < 0 || nx >= gridCountX || ny < 0 || ny >= gridCountY)
+				continue;
+
+			const int32 nIdx = index(nx, ny);
+			if (closed[nIdx])
+				continue;
+
+			// 이동 기본 비용 1 + 그 칸에 겹치는 타워 사거리 개수만큼 위험 비용을 더한다.
+			const float tentativeG = gScore[curIdx] + 1.f + risk[nIdx];
+			if (tentativeG < gScore[nIdx])
+			{
+				gScore[nIdx] = tentativeG;
+				cameFrom[nIdx] = curIdx;
+				open.push(Node{ Cell{ nx, ny }, tentativeG + Heuristic(Cell{ nx, ny }, end) });
+			}
+		}
+	}
+
+	vector<Vector> path;
+	if (found == false)
+		return path;
+
+	vector<Cell> cellPath;
+	int32 idx = index(end.iX, end.iY);
+	while (idx != -1)
+	{
+		cellPath.push_back(Cell{ idx % gridCountX, idx / gridCountX });
+		idx = cameFrom[idx];
+	}
+	std::reverse(cellPath.begin(), cellPath.end());
+
+	path.reserve(cellPath.size());
+	for (const Cell& cell : cellPath)
+	{
+		path.push_back(Vector((cell.iX + 0.5f) * gridSize, (cell.iY + 0.5f) * gridSize));
+	}
+
+	return path;
+}
 
 vector<Vector> PathFinder::FindPath(const TileMap& tileMap, Cell start, Cell end,
 	int32 gridCountX, int32 gridCountY, int32 gridSize)

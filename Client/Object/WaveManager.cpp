@@ -47,14 +47,17 @@ namespace
 	constexpr float kAutoStartDelay = 1.0f;
 }
 
-void WaveManager::Init(ObjectPool<Bloon>* pool, const Vector& spawnPos, const vector<Vector>* path, Scene* scene,
-	function<void(int32)> onRoundClearBonus)
+void WaveManager::Init(ObjectPool<Bloon>* pool, const Vector& spawnPos, const vector<Vector>* path,
+	const vector<Vector>* riskPath, Scene* scene, function<void(int32)> onRoundClearBonus,
+	function<void()> onSpecialWaveStart)
 {
 	_pool = pool;
 	_spawnPos = spawnPos;
 	_path = path;
+	_riskPath = riskPath;
 	_scene = scene;
 	_onRoundClearBonus = onRoundClearBonus;
+	_onSpecialWaveStart = onSpecialWaveStart;
 
 	// 재시작 시 GameScene이 이 WaveManager 인스턴스를 재사용하므로,
 	// 이전 판의 라운드 진행 상태가 그대로 남지 않도록 여기서 리셋한다.
@@ -80,6 +83,10 @@ bool WaveManager::StartNextWave()
 	// 3. 라운드 증가 및 웨이브 데이터 빌드
 	++_roundIndex;
 	_currentRound = buildRound(_roundIndex);
+
+	// 특수 웨이브면 이 시점에 딱 한 번 위험도 경로를 다시 계산한다(그 이후 타워가 바뀌어도 이번 웨이브 동안은 유지).
+	if (_currentRound.hasSpecialBloon && _onSpecialWaveStart != nullptr)
+		_onSpecialWaveStart();
 
 	// 4. 스폰 관련 진행 상황 및 타이머 초기화
 	_spawnIndex = 0;
@@ -173,7 +180,8 @@ void WaveManager::spawnNext()
 	const BloonColor color =
 		_currentRound.spawnOrder[_spawnIndex];
 
-	Bloon* bloon = BloonFactory::Create(*_pool, color, _spawnPos, _path);
+	const vector<Vector>* pathForBloon = (color == BloonColor::Special) ? _riskPath : _path;
+	Bloon* bloon = BloonFactory::Create(*_pool, color, _spawnPos, pathForBloon);
 	if (bloon != nullptr && _scene != nullptr)
 		_scene->AddActor(bloon);
 
@@ -257,6 +265,26 @@ WaveData WaveManager::buildRound(int32 roundNumber)
 
 		round.spawnOrder.push_back(picked->color);
 		remainingBudget -= picked->weight;
+	}
+
+	// 10라운드부터 30% 확률로 이 라운드에 위험도 경로(빨간선)를 타는 특수 풍선을 20마리 섞는다.
+	// TODO(테스트용): 100%로 임시 설정. 확인 끝나면 0.3f로 되돌릴 것.
+	constexpr int32 kSpecialWaveUnlockRound = 10;
+	constexpr float kSpecialWaveChance = 1.0f;
+	constexpr int32 kSpecialBloonCount = 20;
+
+	if (roundNumber >= kSpecialWaveUnlockRound)
+	{
+		std::uniform_real_distribution<float> chanceDist(0.f, 1.f);
+		if (chanceDist(rng) < kSpecialWaveChance)
+		{
+			round.hasSpecialBloon = true;
+			for (int32 i = 0; i < kSpecialBloonCount; ++i)
+			{
+				std::uniform_int_distribution<size_t> posDist(0, round.spawnOrder.size());
+				round.spawnOrder.insert(round.spawnOrder.begin() + posDist(rng), BloonColor::Special);
+			}
+		}
 	}
 
 	return round;

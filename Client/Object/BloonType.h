@@ -16,6 +16,7 @@ enum class BloonColor
     Ceramic,  // 레이어 HP 10, 터지면 Rainbow x2
     Boss1,    // MOAB: 레이어 HP 200, 터지면 Ceramic x4
     Boss2,    // BFB: 레이어 HP 700, 터지면 Boss1 x4
+    Special,  // 특수 풍선: 일반 도로가 아니라 타워 사거리 위험도 가중 A* 경로(빨간선)를 탄다. 하위 없음.
 };
 
 struct BloonChildSpawn
@@ -33,6 +34,7 @@ struct BloonStat
     wstring spriteKey;
     vector<BloonChildSpawn> children;
     float spriteScale = 1.0f; // 보스 풍선 전용: 베이크된 원본 픽셀 크기에 직접 곱하는 최종 배율(자동 정규화 미적용). 일반 풍선은 사용 안 함.
+    string cellName;         // 비어있지 않으면 InGame.xml 아틀라스 셀을 그대로 쓴다(별도 스프라이트 파일 불필요). 비어있으면 기존처럼 spriteKey로 Resource\<spriteKey>.png를 로드.
 
 };
 

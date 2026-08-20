@@ -19,12 +19,15 @@ void Bloon::Init()
 	const D2D1_SIZE_F size = _image->GetSize();
 	const BloonStat& stat = GetBloonStat(_color);
 	const bool isBoss = (_color == BloonColor::Boss1 || _color == BloonColor::Boss2);
+	// 아틀라스 셀을 쓰는 풍선(_cell != nullptr)은 셀 자체의 폭을, 그 외에는 이미지 원본 폭을 기준으로 정규화한다.
+	// (_cell이 있을 때 _image는 InGame.png 시트 전체라 size.width를 그대로 쓰면 안 된다.)
+	const float spriteWidth = (_cell != nullptr) ? _cell->w : size.width;
 
 	// 일반 풍선: 기존처럼 폭 기준으로 BLOCK_SIZE에 자동 정규화.
 	// 보스 풍선: 베이크된 원본 픽셀 크기가 크므로, 정규화 없이 spriteScale을 최종 배율로 그대로 사용.
 	const float scale = isBoss
 		? stat.spriteScale
-		: static_cast<float>(BLOCK_SIZE) / size.width * kBloonBaseScale;
+		: static_cast<float>(BLOCK_SIZE) / spriteWidth * kBloonBaseScale;
 
 	SetScale(Vector(scale, scale));
 
@@ -67,12 +70,24 @@ void Bloon::Render(Graphic& graphic)
 {
 	Super::Render(graphic);
 
+	// 특수 풍선은 GameScene::Render가 타워 등 위에 별도로 그리므로 여기서는 건너뛴다.
+	if (_color == BloonColor::Special)
+		return;
+
+	RenderSprite(graphic);
+}
+
+void Bloon::RenderSprite(Graphic& graphic)
+{
 	if (_image == nullptr)
 		return;
 
 	const Vector pos = GetPos();
 	const Vector scale = GetScale();
-	_image->Draw(graphic, pos.x, pos.y, scale.x, GetRotation());
+	if (_cell != nullptr)
+		_image->DrawSprite(graphic, pos.x, pos.y, *_cell, scale.x, GetRotation());
+	else
+		_image->Draw(graphic, pos.x, pos.y, scale.x, GetRotation());
 }
 
 //const wchar_t* Bloon::getImageKey(BloonColor color)

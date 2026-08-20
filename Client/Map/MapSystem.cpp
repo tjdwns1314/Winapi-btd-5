@@ -13,6 +13,7 @@ void MapSystem::Init(const Cell* forcedStart, const Cell* forcedEnd)
 		_tileMap.GenerateRandomStartEndPoint();
 
 	recomputePath();
+	RecomputeRiskPath({}); // 아직 타워가 없으니 위험도 0인 최단 경로로 시작
 
 	const Cell startCell = _tileMap.GetStartPoint();
 	const int32 gridSize = _grid.GetGridSize();
@@ -30,6 +31,12 @@ void MapSystem::recomputePath()
 {
 	_path = PathFinder::FindPath(_tileMap, _tileMap.GetStartPoint(), _tileMap.GetEndPoint(),
 		GRID_COUNT_X, GRID_COUNT_Y, _grid.GetGridSize());
+}
+
+void MapSystem::RecomputeRiskPath(const vector<PathFinder::RiskSource>& towers)
+{
+	_riskPath = PathFinder::FindRiskPath(_tileMap.GetStartPoint(), _tileMap.GetEndPoint(),
+		GRID_COUNT_X, GRID_COUNT_Y, _grid.GetGridSize(), towers);
 }
 
 Cell MapSystem::WorldToCell(const Vector& world) const
@@ -157,6 +164,25 @@ void MapSystem::RenderPathDebug(Graphic& graphic) const
 	for (size_t i = 1; i + 1 < _path.size(); ++i)
 	{
 		const Vector& point = _path[i];
+		renderTarget->FillEllipse(D2D1::Ellipse(D2D1::Point2F(point.x, point.y), radius, radius), brush);
+	}
+}
+
+void MapSystem::RenderRiskPathDebug(Graphic& graphic) const
+{
+	ID2D1HwndRenderTarget* renderTarget = graphic.GetRenderTarget();
+	ID2D1SolidColorBrush* brush = graphic.GetBrush(D2D1::ColorF(D2D1::ColorF::Red));
+	if (renderTarget == nullptr || brush == nullptr)
+		return;
+
+	if (_riskPath.size() <= 2)
+		return;
+
+	const float radius = static_cast<float>(_grid.GetGridSize()) * 0.15f;
+
+	for (size_t i = 1; i + 1 < _riskPath.size(); ++i)
+	{
+		const Vector& point = _riskPath[i];
 		renderTarget->FillEllipse(D2D1::Ellipse(D2D1::Point2F(point.x, point.y), radius, radius), brush);
 	}
 }

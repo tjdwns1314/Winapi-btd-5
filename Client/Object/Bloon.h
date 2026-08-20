@@ -4,6 +4,8 @@
 #include "BloonType.h"
 #include "Image.h"
 
+struct CellInfo;
+
 class Bloon : public MovableActor
 {
 	using Super = MovableActor;
@@ -20,6 +22,9 @@ public:
 	virtual void Render(Graphic& graphic) override;
 	virtual void OnEnter(Actor* other) override;
 
+	// 특수 풍선처럼 GameScene이 별도 시점에 직접 스프라이트만 그리고 싶을 때 사용.
+	void RenderSprite(Graphic& graphic);
+
 	// 풍선 정보
 	BloonColor GetColor() const { return _color; }
 	void SetColor(BloonColor color) { _color = color; }
@@ -27,6 +32,8 @@ public:
 	int32 GetHp() const { return _hp; }
 	void SetHp(int32 hp) { _hp = hp; }
 	void SetImage(Image* image) { _image = image; }
+	// cellName이 있는 특수 풍선처럼 InGame.xml 아틀라스 셀을 그대로 쓸 때만 설정한다. 일반 풍선은 nullptr.
+	void SetCell(const CellInfo* cell) { _cell = cell; }
 
 	void SetHitHandler(HitHandler handler) { _hitHandler = std::move(handler); }
 	void SetLeakHandler(LeakHandler handler) { _leakHandler = std::move(handler); }
@@ -52,6 +59,7 @@ private:
 	BloonColor _color = BloonColor::Red;
 	int32 _hp = 1;
 	Image* _image = nullptr;
+	const CellInfo* _cell = nullptr;
 	HitHandler _hitHandler;
 	LeakHandler _leakHandler;
 

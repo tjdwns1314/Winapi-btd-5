@@ -12,18 +12,22 @@ struct WaveData
 {
 	vector<BloonColor> spawnOrder;
 	float spawnInterval = 0.f;
+	bool hasSpecialBloon = false; // 이 라운드에 위험도 경로를 타는 특수 풍선이 섞여 있는지
 };
 
 class WaveManager
 {
 public:
-	void Init(ObjectPool<Bloon>* pool, const Vector& spawnPos, const vector<Vector>* path, Scene* scene,
-		function<void(int32)> onRoundClearBonus = nullptr);
+	void Init(ObjectPool<Bloon>* pool, const Vector& spawnPos, const vector<Vector>* path,
+		const vector<Vector>* riskPath, Scene* scene, function<void(int32)> onRoundClearBonus = nullptr,
+		function<void()> onSpecialWaveStart = nullptr);
 
 	// 웨이브 진행
 	bool StartNextWave();
 	void Update(float deltaTime);
 	bool IsWaveActive() const { return _state != WaveState::Idle; }
+	// 진행 중인 라운드에 특수 풍선이 섞여 있으면 true. GameScene이 이걸 보고 위험도 경로(빨간선)를 그린다.
+	bool IsSpecialWaveActive() const { return IsWaveActive() && _currentRound.hasSpecialBloon; }
 
 	// 설정 팝업의 자동진행 토글과 연결. true면 웨이브 클리어 후 kAutoStartDelay(1초) 뒤 자동으로 다음 웨이브 시작.
 	void SetAutoPlay(bool enabled);
@@ -56,11 +60,14 @@ private:
 	// 외부 참조
 	ObjectPool<Bloon>* _pool = nullptr;
 	const vector<Vector>* _path = nullptr;
+	const vector<Vector>* _riskPath = nullptr;
 	Scene* _scene = nullptr;
 	Vector _spawnPos;
 
 	// 라운드 클리어 보너스 골드 지급 콜백. 인자로 지급할 골드량을 넘긴다.
 	function<void(int32)> _onRoundClearBonus;
+	// 특수 웨이브가 시작되는 순간(StartNextWave) 한 번 호출된다. GameScene이 이때 위험도 경로를 재계산한다.
+	function<void()> _onSpecialWaveStart;
 
 	// 웨이브 상태
 	WaveState _state = WaveState::Idle;

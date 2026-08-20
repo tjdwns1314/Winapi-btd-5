@@ -19,7 +19,8 @@ public:
 	void Clear() { _circles.clear(); }
 
 	// isDragging: 타워/장애물 드래그 중이면 오버레이가 꺼져 있어도 그리드/경로를 옅게 보여준다.
-	void Render(Graphic& graphic, const MapSystem& map, bool isDragging, const vector<Actor*>& bloons) const;
+	void Render(Graphic& graphic, const MapSystem& map, bool isDragging, const vector<Actor*>& bloons,
+		bool isSpecialWaveActive) const;
 
 private:
 	void renderCircles(Graphic& graphic) const;

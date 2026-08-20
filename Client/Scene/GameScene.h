@@ -77,6 +77,8 @@ private:
 	float getTimeScale() const;
 	void updateDebugWaveTitle();
 	SaveData BuildSaveData() const;
+	// 현재 타워 배치를 스캔해 특수 풍선용 위험도 경로를 다시 계산한다. 특수 웨이브 시작 시 WaveManager가 콜백으로 호출.
+	void recomputeRiskPath();
 
 	// 게임오버 후 재시작 버튼을 누르면 호출된다. Cleanup() 후 Init()을 다시 실행해 전부 초기화한다.
 	void Restart();

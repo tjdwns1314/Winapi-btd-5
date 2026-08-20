@@ -21,9 +21,12 @@ void DebugOverlay::Update(float deltaTime)
 		});
 }
 
-void DebugOverlay::Render(Graphic& graphic, const MapSystem& map, bool isDragging, const vector<Actor*>& bloons) const
+void DebugOverlay::Render(Graphic& graphic, const MapSystem& map, bool isDragging, const vector<Actor*>& bloons,
+	bool isSpecialWaveActive) const
 {
 	map.RenderPathDebug(graphic);
+	if (isSpecialWaveActive)
+		map.RenderRiskPathDebug(graphic);
 
 	if (_enabled)
 	{

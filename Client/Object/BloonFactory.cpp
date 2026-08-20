@@ -26,7 +26,19 @@ Bloon* BloonFactory::Create(ObjectPool<Bloon>& pool, BloonColor color, const Vec
 	bloon->SetPath(path, waypointIndex);
 	bloon->SetHp(stat.layerHp);
 	bloon->SetMoveSpeed(stat.speed);
-	bloon->SetImage(&getBloonImage(stat.spriteKey));
+
+	if (stat.cellName.empty())
+	{
+		bloon->SetImage(&getBloonImage(stat.spriteKey));
+	}
+	else
+	{
+		// cellName이 있으면 별도 스프라이트 파일 없이 InGame.xml 아틀라스 셀을 그대로 쓴다.
+		ResourceManager& res = ResourceManager::GetInstance();
+		bloon->SetImage(&res.GetImage(L"Resource\\Sprite\\InGame.png"));
+		bloon->SetCell(res.GetAtlas(L"Resource\\Sprite\\InGame.xml").GetCell(stat.cellName));
+	}
+
 	bloon->SetHitHandler(&BloonPopResolver::HandleHit);
 	bloon->SetLeakHandler(&BloonPopResolver::HandleLeak);
 	bloon->Init();

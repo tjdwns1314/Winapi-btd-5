@@ -33,6 +33,9 @@ namespace
             stat.spriteScale =
                 entry.value("spriteScale", 1.0f);
 
+            stat.cellName =
+                entry.value("cellName", string());
+
             const string spriteKey =
                 entry.at("spriteKey").get<string>();
 
@@ -90,6 +93,7 @@ BloonColor ParseBloonColorName(const string& name)
         {"Ceramic",BloonColor::Ceramic},
         {"Boss1",BloonColor::Boss1},
         {"Boss2",BloonColor::Boss2},
+        {"Special",BloonColor::Special},
     };
     auto it = table.find(name);
     return it != table.end() ? it->second : BloonColor::Red;

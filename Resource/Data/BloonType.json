@@ -105,6 +105,15 @@
             "spriteKey" : "Boss2",
             "spriteScale" : 0.4,
             "children" : [{"color":"Boss1","count":4}]
+            },
+            {
+            "color": "Special",
+            "layerHp":2,
+            "speed" : 150,
+            "goldReward" : 2,
+            "spriteKey" : "special",
+            "cellName" : "golden_bloon_01",
+            "children" : []
             }
     ]
 }
