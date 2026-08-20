@@ -29,7 +29,11 @@ void LobbyScene::Render(Graphic& graphic)
 void LobbyScene::CreateUI()
 {
 	_ui.Init(
-		[]() { SceneManager::GetInstance().ChangeScene(SceneType::Game); }, // 새 게임: pending load 없이 바로 진입 → Init()이 기본값으로 새로 시작
+		[]() // 새 게임: 기존 자동저장이 남아있으면 다음에 "게임 재개"가 그 파일을 그대로 불러오게 되므로, 전환 전에 지운다.
+		{
+			SaveManager::DeleteFile(GameScene::kSaveFilePath);
+			SceneManager::GetInstance().ChangeScene(SceneType::Game);
+		},
 		[]() // 게임 재개: 저장 파일을 먼저 읽어 pending 상태로 만든 뒤 전환해야 Init()이 그 데이터를 반영한다.
 		{
 			GameScene* gameScene = static_cast<GameScene*>(SceneManager::GetInstance().GetScene(SceneType::Game));
