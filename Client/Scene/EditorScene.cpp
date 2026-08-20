@@ -606,5 +606,25 @@ void EditorScene::Render(Graphic& graphic)
 	drawNewShared("newshared_parchment_mid",    450.0f, 260.0f);
 	drawNewShared("newshared_parchment_bottom", 450.0f, 300.0f);
 	drawNewShared("newshared_mini_parchment",   850.0f, 200.0f);
+
+	// 풍선(Bloon) 스톡 스프라이트 미리보기: 기본 / 리젠 / 카모 / 카모+리젠
+	auto drawBloonPreview = [&](const char* baseCellName, const char* overlayCellName, float x, float y)
+		{
+			const CellInfo* baseCell = _sprite->GetCell(baseCellName);
+			if (baseCell == nullptr)
+				return;
+
+			_inGameBg->DrawSprite(graphic, x, y, *baseCell, 1.0f, 0.0f);
+
+			if (const CellInfo* overlayCell = _sprite->GetCell(overlayCellName))
+			{
+				_inGameBg->DrawSprite(graphic, x, y, *overlayCell, 1.0f, 0.0f);
+			}
+		};
+
+	drawBloonPreview("stock_bloon",       "stock_bloon_highlight",       150.0f, 650.0f);
+	drawBloonPreview("stock_regen_bloon", "stock_regen_bloon_highlight", 350.0f, 650.0f);
+	drawBloonPreview("stock_bloon",       "camo_overlay",                550.0f, 650.0f);
+	drawBloonPreview("stock_regen_bloon", "camo_regen_overlay",          750.0f, 650.0f);
 }
 
