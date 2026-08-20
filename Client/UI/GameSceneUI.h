@@ -108,6 +108,16 @@ private:
 	// --------------------------------------------------
 	void drawTowerIcon(Graphic& graphic, const Vector& pos, TowerType type, float scale) const;
 	void renderTowerShopBoxes(Graphic& graphic) const;
+	void renderShopIcons(Graphic& graphic) const;
+	void renderShopScrollButtons(Graphic& graphic) const;
+	void updateShopActiveStates() const;
+	// 슬롯 인덱스(0~3) -> 전체 상점 목록 인덱스(0~kShopEntryCount-1) 변환. 0~3=타워, 4=장애물.
+	int32 shopEntryIndex(int32 slotIndex) const { return _shopScrollRowOffset * kShopColumns + slotIndex; }
+
+	static constexpr int32 kShopEntryCount = 5;  // 타워 4종 + 장애물 1종
+	static constexpr int32 kShopColumns = 2;
+	static constexpr int32 kShopVisibleRows = 2; // 2x2 그리드
+	static constexpr int32 kShopMaxRowOffset = (kShopEntryCount + kShopColumns - 1) / kShopColumns - kShopVisibleRows;
 	void drawObstacleIcon(Graphic& graphic, const Vector& pos, float scale) const;
 	void drawRangePreview(Graphic& graphic, const Vector& pos, TowerType type) const;
 
@@ -128,6 +138,9 @@ private:
 	// 타워 상점 버튼에 마우스를 올리면 패널만 표시(1단계: 배경만, 텍스트는 다음 단계).
 	// target_box를 세로 1.5배로 그리며, X는 오른쪽 HUD 패널 왼쪽에 고정, Y는 마우스를 따라간다.
 	void renderTowerTooltip(Graphic& graphic) const;
+
+	// 상점 그리드에서 장애물 칸에 마우스를 올리면 이름/설명을 target_box 패널로 보여준다.
+	void renderObstacleShopTooltip(Graphic& graphic) const;
 
 	// 업그레이드 버튼에 마우스를 올리면 다음 업그레이드 설명을 renderTooltipPanel 공용 패널로 보여준다.
 	void renderUpgradeTooltip(Graphic& graphic, const TowerSelectionInfo& selection) const;
@@ -168,11 +181,11 @@ private:
 	// 타워/장애물 상점
 	Image* _inGameBg = nullptr;
 	SpriteAtlas* _sprite = nullptr;
-	UIButton* _dartMonkeyShopButton = nullptr;
-	UIButton* _tackShooterShopButton = nullptr;
-	UIButton* _sniperMonkeyShopButton = nullptr;
-	UIButton* _bombTowerShopButton = nullptr;
-	UIButton* _obstacleShopButton = nullptr;
+	UIButton* _shopSlotButtons[4] = {};                     // 2x2 그리드 4칸(내용은 스크롤 오프셋에 따라 바뀜)
+	function<void()> _shopEntryCallbacks[kShopEntryCount];  // shopEntryIndex() 순서: Dart/Tack/Sniper/Bomb/Obstacle
+	int32 _shopScrollRowOffset = 0;                         // 현재 보이는 시작 "행"(0~kShopMaxRowOffset)
+	UIButton* _shopScrollUpButton = nullptr;
+	UIButton* _shopScrollDownButton = nullptr;
 
 	// 선택된 타워/장애물 패널 (판매/업그레이드)
 	UIButton* _sellButton = nullptr;

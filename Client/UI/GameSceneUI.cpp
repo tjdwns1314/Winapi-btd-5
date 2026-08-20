@@ -67,20 +67,27 @@ namespace
 	const Vector kHpSubButtonPos = Vector(kHpAddButtonPos.x + 30.0f, kHpIconCenterY);       // HP - 버튼 위치
 
 	// --------------------------------------------------
-	//  타워/장애물 상점
+	//  타워/장애물 상점 (2x2 그리드 + 스크롤)
 	// --------------------------------------------------
-	// 타워 상점 버튼: 스크롤 패널(y=270~518) 안 2x2 그리드 위치. 클릭 판정 크기는
-	// tower_thumbs_box 배경(renderTowerShopBoxes)과 맞춘다.
-	const Vector kDartShopButtonPos = Vector(1520.0f, 332.0f);   // 다트몽키 상점 버튼(좌상단)
-	const Vector kTackShopButtonPos = Vector(1680.0f, 332.0f);   // 택슈터 상점 버튼(우상단)
-	const Vector kSniperShopButtonPos = Vector(1520.0f, 456.0f); // 스나이퍼몽키 상점 버튼(좌하단)
-	const Vector kBombShopButtonPos = Vector(1680.0f, 456.0f);   // 폭탄타워 상점 버튼(우하단)
+	// 타워 4종 + 장애물 1종을 한 목록으로 묶어 스크롤 패널(y=270~518) 안 2x2 그리드 4칸에 보여준다.
+	// 그리드 슬롯 "위치"는 고정, 슬롯에 표시되는 "내용"만 스크롤 오프셋에 따라 바뀐다.
+	const Vector kShopSlotPositions[4] = {
+		Vector(1520.0f, 332.0f), // 슬롯0: 좌상단
+		Vector(1680.0f, 332.0f), // 슬롯1: 우상단
+		Vector(1520.0f, 456.0f), // 슬롯2: 좌하단
+		Vector(1680.0f, 456.0f), // 슬롯3: 우하단
+	};
+	// 슬롯 인덱스 0~3이 타워일 때(전체 목록 인덱스 0~3) 어떤 타입인지. 4번(장애물)은 별도 분기 처리.
+	constexpr TowerType kShopTowerOrder[4] = { TowerType::DartMonkey, TowerType::TackShooter, TowerType::SniperMonkey, TowerType::BombTower };
 	const Vector kTowerShopButtonSize = Vector(113.0f, 93.0f);   // 4개 버튼 공통 클릭 판정 크기
 	constexpr float kTowerIconScale = 0.7f;                      // 타워 아이콘 자체 크기 배율(드래그 프리뷰에도 사용)
+	constexpr float kObstacleIconScale = 0.7f;                   // 장애물 아이콘 크기 배율(드래그 프리뷰에도 사용)
 
-	const Vector kObstacleShopButtonPos = Vector(1675.0f, 1000.0f);  // 장애물 상점 버튼 위치
-	const Vector kObstacleShopButtonSize = Vector(109.0f, 113.0f);   // 장애물 상점 버튼 클릭 판정 크기
-	constexpr float kObstacleIconScale = 1.0f;                       // 장애물 아이콘 크기 배율(드래그 프리뷰에도 사용)
+	// 그리드 위/아래에 놓일 작은 스크롤 화살표 버튼. 임시값 — 빌드 후 눈으로 보고 조정할 것.
+	const Vector kShopScrollUpButtonPos = Vector(1600.0f, 278.0f);   // 그리드 상단(y=270) 바로 안쪽
+	const Vector kShopScrollDownButtonPos = Vector(1600.0f, 510.0f); // 그리드 하단(y=518) 바로 안쪽
+	const Vector kShopScrollArrowFallbackSize = Vector(80.0f, 20.0f); // scroll_up_arrow 셀을 못 찾았을 때 대비
+	constexpr float kShopScrollArrowScale = 0.35f;                    // scroll_up_arrow/scroll_down_arrow(130x59) 축소 배율
 
 	// --------------------------------------------------
 	//  타워 상점 툴팁 (마우스오버 시 패널) — 1단계: 배경만 표시
@@ -107,6 +114,10 @@ namespace
 	const D2D1::ColorF kTowerTooltipPriceColor = D2D1::ColorF(1.0f, 0.85f, 0.1f); // 가격(노란색)
 	const D2D1::ColorF kTowerTooltipDescColor = D2D1::ColorF(D2D1::ColorF::White); // 설명(하얀색)
 	const wchar_t* const kTowerTooltipPriceFormat = L"%d";
+
+	// 장애물 상점 칸 툴팁 문구(가격 없이 이름+설명만 표시).
+	const wchar_t* const kObstacleTooltipNameText = L"장애물";
+	const wchar_t* const kObstacleTooltipDescText = L"총 10개까지만 설치할 수 있다. 10, 20라운드가 되면 각각 5개를 더 설치할 수 있다.";
 
 	// --------------------------------------------------
 	//  선택된 타워/장애물 패널 (판매/업그레이드)
@@ -234,13 +245,38 @@ void GameSceneUI::Init(
 		Vector(kStartButtonBaseWidth * kPlayButtonScale, kStartButtonBaseHeight * kPlayButtonScale), onSettingsClick);
 	_settingsButton->SetIgnoresModalLock(true); // 설정창이 열려 있어도(입력 잠금) 이 버튼 자체는 계속 눌려야 닫을 수 있다.
 
-	// 타워 상점 버튼: 스크롤 패널(y=270~518) 안에 2x2 그리드로 배치.
-	// 클릭 판정 크기는 실제로 그려지는 tower_thumbs_box 배경(113x93, renderTowerShopBoxes 참고)과 맞춘다.
-	_dartMonkeyShopButton = createButton(kDartShopButtonPos, kTowerShopButtonSize, onDartShopClick);
-	_tackShooterShopButton = createButton(kTackShopButtonPos, kTowerShopButtonSize, onTackShopClick);
-	_sniperMonkeyShopButton = createButton(kSniperShopButtonPos, kTowerShopButtonSize, onSniperShopClick);
-	_bombTowerShopButton = createButton(kBombShopButtonPos, kTowerShopButtonSize, onBombShopClick);
-	_obstacleShopButton = createButton(kObstacleShopButtonPos, kObstacleShopButtonSize, onObstacleShopClick);
+	// 타워 4종 + 장애물 1종 콜백을 목록 순서(Dart/Tack/Sniper/Bomb/Obstacle)대로 저장해두고,
+	// 그리드 슬롯 클릭 시점에 현재 스크롤 오프셋으로 실제 어떤 항목인지 찾아 호출한다.
+	_shopEntryCallbacks[0] = onDartShopClick;
+	_shopEntryCallbacks[1] = onTackShopClick;
+	_shopEntryCallbacks[2] = onSniperShopClick;
+	_shopEntryCallbacks[3] = onBombShopClick;
+	_shopEntryCallbacks[4] = onObstacleShopClick;
+
+	// 타워/장애물 상점 버튼: 스크롤 패널(y=270~518) 안 2x2 그리드 4칸. 클릭 판정 크기는 실제로
+	// 그려지는 tower_thumbs_box 배경(113x93, renderTowerShopBoxes 참고)과 맞춘다.
+	for (int32 i = 0; i < 4; ++i)
+	{
+		_shopSlotButtons[i] = createButton(kShopSlotPositions[i], kTowerShopButtonSize,
+			[this, i]()
+			{
+				const int32 entryIndex = shopEntryIndex(i);
+				if (entryIndex < kShopEntryCount && _shopEntryCallbacks[entryIndex])
+					_shopEntryCallbacks[entryIndex]();
+			});
+	}
+
+	// 상점 그리드 스크롤 화살표. 한 번 누를 때마다 한 행(2칸)씩 밀리며, 끝에 도달하면 멈춘다
+	// (Render의 updateShopActiveStates에서 매 프레임 활성/비활성 갱신).
+	// 클릭 판정 크기는 실제로 그려지는 scroll_up_arrow 스프라이트 크기(kShopScrollArrowScale 적용)와 맞춘다.
+	Vector shopScrollArrowSize = kShopScrollArrowFallbackSize;
+	if (const CellInfo* scrollArrowCell = _hudSprite->GetCell("scroll_up_arrow"))
+		shopScrollArrowSize = Vector(scrollArrowCell->aw * kShopScrollArrowScale, scrollArrowCell->ah * kShopScrollArrowScale);
+
+	_shopScrollUpButton = createButton(kShopScrollUpButtonPos, shopScrollArrowSize,
+		[this]() { _shopScrollRowOffset = std::max(_shopScrollRowOffset - 1, 0); });
+	_shopScrollDownButton = createButton(kShopScrollDownButtonPos, shopScrollArrowSize,
+		[this]() { _shopScrollRowOffset = std::min(_shopScrollRowOffset + 1, kShopMaxRowOffset); });
 
 	// 디버그 웨이브 +/- 버튼
 	_waveUpButton = createButton(kWaveUpButtonPos, kWaveButtonSize, onWaveUp);
@@ -349,13 +385,10 @@ void GameSceneUI::Render(Graphic& graphic, bool isDraggingTower, TowerType dragg
 
 	renderStartButton(graphic, isWaveActive, isSpeedEnabled);
 
+	updateShopActiveStates();
 	renderTowerShopBoxes(graphic);
-
-	if (_dartMonkeyShopButton != nullptr) drawTowerIcon(graphic, _dartMonkeyShopButton->GetPos(), TowerType::DartMonkey, kTowerIconScale);
-	if (_tackShooterShopButton != nullptr) drawTowerIcon(graphic, _tackShooterShopButton->GetPos(), TowerType::TackShooter, kTowerIconScale);
-	if (_sniperMonkeyShopButton != nullptr) drawTowerIcon(graphic, _sniperMonkeyShopButton->GetPos(), TowerType::SniperMonkey, kTowerIconScale);
-	if (_bombTowerShopButton != nullptr) drawTowerIcon(graphic, _bombTowerShopButton->GetPos(), TowerType::BombTower, kTowerIconScale);
-	if (_obstacleShopButton != nullptr) drawObstacleIcon(graphic, _obstacleShopButton->GetPos(), kObstacleIconScale);
+	renderShopIcons(graphic);
+	renderShopScrollButtons(graphic);
 
 	if (isDraggingTower)
 	{
@@ -398,6 +431,7 @@ void GameSceneUI::RenderModalOverlay(Graphic& graphic, bool isSettingsOpen) cons
 void GameSceneUI::RenderTooltips(Graphic& graphic, const TowerSelectionInfo& selection) const
 {
 	renderTowerTooltip(graphic);
+	renderObstacleShopTooltip(graphic);
 	renderUpgradeTooltip(graphic, selection);
 }
 
@@ -584,18 +618,62 @@ void GameSceneUI::renderTowerShopBoxes(Graphic& graphic) const
 	if (cell == nullptr)
 		return;
 
-	auto drawBox = [&](UIButton* button)
+	for (UIButton* button : _shopSlotButtons)
 	{
-		if (button == nullptr)
-			return;
+		if (button == nullptr || !button->IsActive())
+			continue;
 		const Vector pos = button->GetPos();
 		_hudImg->DrawSprite(graphic, pos.x, pos.y, *cell, 1.0f, 0.0f);
-	};
+	}
+}
 
-	drawBox(_dartMonkeyShopButton);
-	drawBox(_tackShooterShopButton);
-	drawBox(_sniperMonkeyShopButton);
-	drawBox(_bombTowerShopButton);
+// 슬롯 4칸 각각 현재 스크롤 오프셋에 해당하는 항목(타워 or 장애물) 아이콘을 그린다.
+void GameSceneUI::renderShopIcons(Graphic& graphic) const
+{
+	for (int32 i = 0; i < 4; ++i)
+	{
+		if (_shopSlotButtons[i] == nullptr || !_shopSlotButtons[i]->IsActive())
+			continue;
+		const int32 entryIndex = shopEntryIndex(i);
+		const Vector pos = _shopSlotButtons[i]->GetPos();
+		if (entryIndex < 4)
+			drawTowerIcon(graphic, pos, kShopTowerOrder[entryIndex], kTowerIconScale);
+		else
+			drawObstacleIcon(graphic, pos, kObstacleIconScale);
+	}
+}
+
+// 상점 그리드 위/아래 스크롤 화살표. 끝에 도달해 비활성화된 쪽은 그리지 않는다.
+void GameSceneUI::renderShopScrollButtons(Graphic& graphic) const
+{
+	if (_shopScrollUpButton != nullptr && _shopScrollUpButton->IsActive())
+	{
+		if (const CellInfo* cell = _hudSprite->GetCell("scroll_up_arrow"))
+		{
+			const Vector pos = _shopScrollUpButton->GetPos();
+			_hudImg->DrawSprite(graphic, pos.x, pos.y, *cell, kShopScrollArrowScale, 0.0f);
+		}
+	}
+	if (_shopScrollDownButton != nullptr && _shopScrollDownButton->IsActive())
+	{
+		if (const CellInfo* cell = _hudSprite->GetCell("scroll_down_arrow"))
+		{
+			const Vector pos = _shopScrollDownButton->GetPos();
+			_hudImg->DrawSprite(graphic, pos.x, pos.y, *cell, kShopScrollArrowScale, 0.0f);
+		}
+	}
+}
+
+// 스크롤 오프셋에 맞춰 슬롯 4칸 + 화살표 2개의 활성 상태를 매 프레임 갱신한다.
+void GameSceneUI::updateShopActiveStates() const
+{
+	for (int32 i = 0; i < 4; ++i)
+	{
+		if (_shopSlotButtons[i] != nullptr)
+			_shopSlotButtons[i]->SetActive(shopEntryIndex(i) < kShopEntryCount);
+	}
+	if (_shopScrollUpButton != nullptr) _shopScrollUpButton->SetActive(_shopScrollRowOffset > 0);
+	if (_shopScrollDownButton != nullptr) _shopScrollDownButton->SetActive(_shopScrollRowOffset < kShopMaxRowOffset);
 }
 
 // target_box 배경을 그리고 텍스트 좌표를 반환하는 공용 함수. X는 오른쪽 HUD 패널 왼쪽 고정, Y는 mouseY를 따라간다.
@@ -636,25 +714,21 @@ bool GameSceneUI::renderTooltipPanel(Graphic& graphic, float mouseY, float scale
 // 타워 상점 버튼 4개 중 마우스가 올라간 버튼이 있으면 target_box 패널에 이름/가격/설명을 그린다.
 void GameSceneUI::renderTowerTooltip(Graphic& graphic) const
 {
-	const struct { UIButton* button; TowerType type; } shopEntries[] = {
-		{ _dartMonkeyShopButton, TowerType::DartMonkey },
-		{ _tackShooterShopButton, TowerType::TackShooter },
-		{ _sniperMonkeyShopButton, TowerType::SniperMonkey },
-		{ _bombTowerShopButton, TowerType::BombTower },
-	};
-
 	const Vector mousePos = InputManager::GetInstance().GetMousePos();
 
 	TowerType hoveredType = TowerType::DartMonkey;
 	bool isHovering = false;
-	for (const auto& entry : shopEntries)
+	for (int32 i = 0; i < 4; ++i)
 	{
-		if (entry.button != nullptr && entry.button->IsActive() && entry.button->ContainsPoint(mousePos))
-		{
-			hoveredType = entry.type;
-			isHovering = true;
+		UIButton* button = _shopSlotButtons[i];
+		if (button == nullptr || !button->IsActive() || !button->ContainsPoint(mousePos))
+			continue;
+		const int32 entryIndex = shopEntryIndex(i);
+		if (entryIndex >= 4) // 장애물 칸은 타워 툴팁 대상이 아니라서 스킵(이번 작업 범위 밖)
 			break;
-		}
+		hoveredType = kShopTowerOrder[entryIndex];
+		isHovering = true;
+		break;
 	}
 	if (!isHovering)
 		return;
@@ -680,6 +754,35 @@ void GameSceneUI::renderTowerTooltip(Graphic& graphic) const
 	textTop += kTowerTooltipPriceHeight;
 
 	graphic.DrawString(stat.description.c_str(), D2D1::RectF(textLeft, textTop, textRight, layout.textBottom),
+		kTowerTooltipDescFontSize, kTowerTooltipDescColor, DWRITE_TEXT_ALIGNMENT_LEADING);
+}
+
+// 상점 그리드에서 장애물 칸(entryIndex>=4)에 마우스가 올라가 있으면 target_box 패널에 이름/설명을 그린다.
+void GameSceneUI::renderObstacleShopTooltip(Graphic& graphic) const
+{
+	const Vector mousePos = InputManager::GetInstance().GetMousePos();
+
+	bool isHovering = false;
+	for (int32 i = 0; i < 4; ++i)
+	{
+		UIButton* button = _shopSlotButtons[i];
+		if (button == nullptr || !button->IsActive() || !button->ContainsPoint(mousePos))
+			continue;
+		isHovering = shopEntryIndex(i) >= 4;
+		break;
+	}
+	if (!isHovering)
+		return;
+
+	TooltipLayout layout;
+	if (!renderTooltipPanel(graphic, mousePos.y, kTowerTooltipScaleY, layout))
+		return;
+
+	// 이름(노란색) → 설명(하얀색). 가격 줄은 없음.
+	graphic.DrawString(kObstacleTooltipNameText, D2D1::RectF(layout.textLeft, layout.textTop, layout.textRight, layout.textTop + kTowerTooltipNameHeight),
+		kTowerTooltipNameFontSize, kTowerTooltipNameColor, DWRITE_TEXT_ALIGNMENT_LEADING);
+
+	graphic.DrawString(kObstacleTooltipDescText, D2D1::RectF(layout.textLeft, layout.textTop + kTowerTooltipNameHeight, layout.textRight, layout.textBottom),
 		kTowerTooltipDescFontSize, kTowerTooltipDescColor, DWRITE_TEXT_ALIGNMENT_LEADING);
 }
 
