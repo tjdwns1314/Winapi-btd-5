@@ -214,6 +214,31 @@ namespace
 	constexpr float kSettingsRingScale = 1.5f;          // 버튼 원본 크기(128x129)에 곱하는 배율 — 실제 그려지는 크기 + 클릭 판정 크기가 함께 커진다.
 	constexpr float kSettingsRingCenterOffsetY = -150.0f;  // 5개 버튼 그룹 전체를 위(-)/아래(+)로 한 번에 밀 때 쓰는 값. 게임 영역 정중앙(GameAreaCenterY) 기준.
 	const D2D1::ColorF kSettingsDimColor = D2D1::ColorF(D2D1::ColorF::Black, 0.6f); // 설정 팝업 배경 딤(어둡게) 색상/투명도
+
+	// --------------------------------------------------
+	//  안내(양피지) 팝업 — newshared_parchment
+	// --------------------------------------------------
+	constexpr float kTipsPanelScale = 1.5f;         // newshared_parchment(600x450) 크기 배율
+	constexpr float kTipsCloseButtonScale = 0.5f;   // newshared_close(138x138) 아이콘 크기 배율
+	constexpr float kTipsCloseButtonInset = 40.0f;  // 패널 우상단 모서리로부터 닫기 버튼까지의 안쪽 여백
+	const D2D1::ColorF kTipsDimColor = D2D1::ColorF(D2D1::ColorF::Black, 0.6f); // 배경 딤 색상/투명도
+
+	// 본문(안내 목록)/맺음말 텍스트 레이아웃. 임시값 — 빌드 후 눈으로 보고 여백 조정할 것.
+	constexpr float kTipsBodyInsetX = 110.0f;        // 패널 좌우 끝에서 본문 텍스트 영역까지의 여백
+	constexpr float kTipsBodyInsetTop = 110.0f;      // 패널 위쪽 끝에서 본문 텍스트 시작까지의 여백
+	constexpr float kTipsClosingHeight = 90.0f;      // 맺음말이 차지하는 아래쪽 띠 높이
+	constexpr float kTipsClosingInsetBottom = 70.0f; // 맺음말과 패널 아래쪽 끝 사이 여백(살짝 위로)
+	constexpr FontSize kTipsBodyFontSize = FONT_25;
+	constexpr FontSize kTipsClosingFontSize = FONT_25;
+	const D2D1::ColorF kTipsTextColor = D2D1::ColorF(D2D1::ColorF::Black); // 안내 문구 색상(검정)
+
+	const wchar_t* const kTipsBodyText =
+		L"1. 플레이 버튼을 누르면 웨이브가 시작되고, 다시 누르면 2배속으로 전환됩니다.\n\n"
+		L"2. 장애물은 설치하면 회수할 수 없습니다.\n\n"
+		L"3. 10라운드부터 매 라운드 30% 확률로 타워를 피해 가는 특수 풍선이 등장합니다.\n\n"
+		L"4. 설정창에서 자동 웨이브 진행을 켤 수 있습니다.\n\n"
+		L"5. 라운드가 끝날 때마다 저장되어, 로비에서 저장된 게임을 가져올 수 있습니다.";
+	const wchar_t* const kTipsClosingText = L"원숭이들을 배치하고, 풍선 침공을 막아보세요.";
 }
 
 void GameSceneUI::Init(
@@ -238,7 +263,8 @@ void GameSceneUI::Init(
 	function<void()> onSettingsReplayClick,
 	function<void()> onHomeClick,
 	function<void(bool)> onAutoPlayToggle,
-	function<void()> onFreePlayClick)
+	function<void()> onFreePlayClick,
+	function<void()> onTipsCloseClick)
 {
 	ResourceManager& res = ResourceManager::GetInstance();
 	// HUD 배경 패널
@@ -256,6 +282,9 @@ void GameSceneUI::Init(
 	// 승리(웨이브 클리어) 팝업
 	_welcomeImg = &res.GetImage(L"Resource\\Sprite\\welcome_sheet.png");
 	_welcomeSprite = &res.GetAtlas(L"Resource\\Sprite\\welcome_sheet.xml");
+	// 안내(양피지) 팝업
+	_newSharedImg = &res.GetImage(L"Resource\\Sprite\\newshared.png");
+	_newSharedSprite = &res.GetAtlas(L"Resource\\Sprite\\newshared.xml");
 
 	// 웨이브 시작 버튼
 	_startButton = createButton(kStartButtonPos, Vector(kStartButtonBaseWidth * kPlayButtonScale, kStartButtonBaseHeight * kPlayButtonScale), onStartWave);
@@ -388,6 +417,20 @@ void GameSceneUI::Init(
 	}
 	// 자동진행(2번, 위 오른쪽)만 기본값이 꺼짐 상태 — 나머지 토글(음악/효과음)은 기본 켜짐.
 	_settingsToggleOff[2] = true;
+
+	// 안내 팝업 닫기 버튼. newshared_parchment 패널의 우상단 모서리 안쪽에 배치한다.
+	Vector tipsCloseButtonPos(static_cast<float>(GWinSizeX) * 0.5f, static_cast<float>(GWinSizeY) * 0.5f);
+	Vector tipsCloseButtonSize(69.0f, 69.0f); // newshared_close 셀을 못 찾았을 때 대비
+	if (const CellInfo* parchmentCell = _newSharedSprite->GetCell("newshared_parchment"))
+	{
+		tipsCloseButtonPos.x += parchmentCell->aw * kTipsPanelScale * 0.5f - kTipsCloseButtonInset;
+		tipsCloseButtonPos.y -= parchmentCell->ah * kTipsPanelScale * 0.5f - kTipsCloseButtonInset;
+	}
+	if (const CellInfo* closeCell = _newSharedSprite->GetCell("newshared_close"))
+		tipsCloseButtonSize = Vector(closeCell->aw * kTipsCloseButtonScale, closeCell->ah * kTipsCloseButtonScale);
+	_tipsCloseButton = createButton(tipsCloseButtonPos, tipsCloseButtonSize, onTipsCloseClick);
+	_tipsCloseButton->SetActive(false);
+	_tipsCloseButton->SetIgnoresModalLock(true); // 안내 팝업이 입력을 잠가도 닫기 버튼 자체는 눌려야 한다.
 }
 
 UIButton* GameSceneUI::createButton(const Vector& pos, const Vector& size, function<void()> onClick)
@@ -475,6 +518,14 @@ void GameSceneUI::RenderVictoryPopup(Graphic& graphic, bool isVictoryOpen, float
 		_freePlayButton->SetActive(isVictoryOpen);
 	if (isVictoryOpen)
 		renderVictoryPopup(graphic, fadeProgress);
+}
+
+void GameSceneUI::RenderTipsPopup(Graphic& graphic, bool isTipsOpen) const
+{
+	if (_tipsCloseButton != nullptr)
+		_tipsCloseButton->SetActive(isTipsOpen);
+	if (isTipsOpen)
+		renderTipsPopup(graphic);
 }
 
 // --------------------------------------------------
@@ -1087,6 +1138,57 @@ void GameSceneUI::renderVictoryPopup(Graphic& graphic, float fadeProgress) const
 	graphic.DrawString(kVictoryFreePlayText,
 		D2D1::RectF(0.0f, kVictoryTargetBoxCenterY - 30.0f, static_cast<float>(GWinSizeX), kVictoryTargetBoxCenterY + 30.0f),
 		FONT_30, kVictoryFreePlayTextColor, DWRITE_TEXT_ALIGNMENT_CENTER, DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+}
+
+// --------------------------------------------------
+//  안내(양피지) 팝업
+// --------------------------------------------------
+
+void GameSceneUI::renderTipsPopup(Graphic& graphic) const
+{
+	ID2D1HwndRenderTarget* renderTarget = graphic.GetRenderTarget();
+	ID2D1SolidColorBrush* dimBrush = graphic.GetBrush(kTipsDimColor);
+	if (renderTarget != nullptr && dimBrush != nullptr)
+	{
+		renderTarget->FillRectangle(D2D1::RectF(0.0f, 0.0f,
+			static_cast<float>(GWinSizeX), static_cast<float>(GWinSizeY)), dimBrush);
+	}
+
+	const float centerX = static_cast<float>(GWinSizeX) * 0.5f;
+	const float centerY = static_cast<float>(GWinSizeY) * 0.5f;
+
+	// 패널 본체. 이후 좌표 계산에도 재사용하므로 지역 변수로 받아둔다.
+	const CellInfo* parchmentCell = _newSharedSprite->GetCell("newshared_parchment");
+	if (parchmentCell != nullptr)
+		_newSharedImg->DrawSprite(graphic, centerX, centerY, *parchmentCell, kTipsPanelScale, 0.0f);
+
+	if (parchmentCell != nullptr)
+	{
+		const float panelLeft = centerX - parchmentCell->aw * kTipsPanelScale * 0.5f;
+		const float panelRight = centerX + parchmentCell->aw * kTipsPanelScale * 0.5f;
+		const float panelTop = centerY - parchmentCell->ah * kTipsPanelScale * 0.5f;
+		const float panelBottom = centerY + parchmentCell->ah * kTipsPanelScale * 0.5f;
+
+		const D2D1_RECT_F bodyRect = D2D1::RectF(
+			panelLeft + kTipsBodyInsetX, panelTop + kTipsBodyInsetTop,
+			panelRight - kTipsBodyInsetX, panelBottom - kTipsClosingHeight - kTipsClosingInsetBottom);
+		graphic.DrawString(kTipsBodyText, bodyRect, kTipsBodyFontSize, kTipsTextColor, DWRITE_TEXT_ALIGNMENT_LEADING);
+
+		const D2D1_RECT_F closingRect = D2D1::RectF(
+			panelLeft, panelBottom - kTipsClosingHeight - kTipsClosingInsetBottom,
+			panelRight, panelBottom - kTipsClosingInsetBottom);
+		graphic.DrawString(kTipsClosingText, closingRect, kTipsClosingFontSize, kTipsTextColor,
+			DWRITE_TEXT_ALIGNMENT_CENTER, DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+	}
+
+	if (_tipsCloseButton != nullptr)
+	{
+		if (const CellInfo* closeCell = _newSharedSprite->GetCell("newshared_close"))
+		{
+			const Vector pos = _tipsCloseButton->GetPos();
+			_newSharedImg->DrawSprite(graphic, pos.x, pos.y, *closeCell, kTipsCloseButtonScale, 0.0f);
+		}
+	}
 }
 
 // --------------------------------------------------

@@ -49,6 +49,7 @@ enum FontSize
 {
 	FONT_12 = 12,
 	FONT_20 = 20,
+	FONT_25 = 25,
 	FONT_30 = 30,
 	FONT_35 = 35,
 	FONT_40 = 40,

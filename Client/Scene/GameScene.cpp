@@ -51,6 +51,7 @@ void GameScene::Init(Graphic& graphic)
 	_isVictoryOpen = false;
 	_victoryPopupShown = false;
 	_victoryFadeTimer = 0.0f;
+	_isTipsOpen = !_hasPendingLoad; // 세이브 불러오기가 아니라 새 게임/재시작일 때만 안내 패널을 띄운다.
 	UIManager::GetInstance().SetInputLocked(false); // 이전 판(게임오버 등)에서 잠긴 입력을 새 판 시작 시 반드시 풀어준다.
 	AudioManager::GetInstance().SetBgmVolumeScale(1.0f);
 
@@ -103,7 +104,7 @@ void GameScene::Update(float deltaTime)
 	if (InputManager::GetInstance().GetButtonDown(KeyType::F2))
 		_debugOverlay.Toggle();
 
-	if (InputManager::GetInstance().GetButtonDown(KeyType::Escape) && _healthManager.IsGameOver() == false && _isVictoryOpen == false)
+	if (InputManager::GetInstance().GetButtonDown(KeyType::Escape) && _healthManager.IsGameOver() == false && _isVictoryOpen == false && _isTipsOpen == false)
 	{
 		_isSettingsOpen = !_isSettingsOpen;
 		AudioManager::GetInstance().SetBgmVolumeScale(_isSettingsOpen ? 0.3f : 1.0f);
@@ -111,7 +112,14 @@ void GameScene::Update(float deltaTime)
 
 	// 설정창이 열려 있는 동안, 설정 버튼 5개(+톱니바퀴)를 제외한 모든 UI 버튼의 클릭을 막는다.
 	// SetActive를 쓰지 않으므로 다른 버튼들은 계속 보이고, 클릭만 안 먹힌다.
-	UIManager::GetInstance().SetInputLocked(_isSettingsOpen || _isVictoryOpen);
+	UIManager::GetInstance().SetInputLocked(_isSettingsOpen || _isVictoryOpen || _isTipsOpen);
+
+	if (_isTipsOpen)
+	{
+		// 안내 팝업이 열려 있는 동안은 설정/승리 팝업과 마찬가지로 게임 로직을 완전히 멈추고, 버튼 클릭만 받는다.
+		UIManager::GetInstance().Update(deltaTime);
+		return;
+	}
 
 	if (_healthManager.IsGameOver())
 	{
@@ -281,9 +289,12 @@ void GameScene::Render(Graphic& graphic)
 	const float victoryFadeProgress = _victoryFadeTimer / kVictoryFadeDuration;
 	_ui.RenderVictoryPopup(graphic, _isVictoryOpen, victoryFadeProgress);
 
+	// 안내(양피지) 팝업. 새 게임 시작 시에만 뜨며, 다른 모든 UI보다 위에 보여야 하므로 프레임 맨 마지막에 그린다.
+	_ui.RenderTipsPopup(graphic, _isTipsOpen);
+
 	// 배치된 타워 등 액터보다 위에 그려야 하므로 액터 렌더링 이후에 호출.
-	// 게임오버/설정 팝업이 떠 있는 동안은 툴팁을 보이지 않게 한다.
-	if (_isSettingsOpen == false && _healthManager.IsGameOver() == false)
+	// 게임오버/설정/안내 팝업이 떠 있는 동안은 툴팁을 보이지 않게 한다.
+	if (_isSettingsOpen == false && _healthManager.IsGameOver() == false && _isTipsOpen == false)
 		_ui.RenderTooltips(graphic, selection);
 
 	// 액터/버튼까지 전부 그려진 뒤 맨 마지막에 덧그려야 설정 팝업이 항상 최상단에 보인다.
@@ -329,7 +340,8 @@ void GameScene::CreateUI()
 			SceneManager::GetInstance().ChangeScene(SceneType::Lobby);
 		},
 		[this](bool enabled) { _waveManager.SetAutoPlay(enabled); },
-		[this]() { _isVictoryOpen = false; });
+		[this]() { _isVictoryOpen = false; },
+		[this]() { _isTipsOpen = false; });
 	updateDebugWaveTitle();
 }
 

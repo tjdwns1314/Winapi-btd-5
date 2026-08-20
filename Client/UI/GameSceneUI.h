@@ -58,7 +58,8 @@ public:
 		function<void()> onSettingsReplayClick,
 		function<void()> onHomeClick,
 		function<void(bool)> onAutoPlayToggle,
-		function<void()> onFreePlayClick);
+		function<void()> onFreePlayClick,
+		function<void()> onTipsCloseClick);
 
 	void Render(Graphic& graphic,
 		bool isDraggingTower,
@@ -89,6 +90,10 @@ public:
 	// 승리(전체 웨이브 클리어) 팝업 전용. 게임오버 팝업과 마찬가지로 액터 렌더링이 끝난 뒤
 	// GameScene::Render에서 별도로 호출해야 한다.
 	void RenderVictoryPopup(Graphic& graphic, bool isVictoryOpen, float fadeProgress) const;
+
+	// 안내(양피지) 팝업 전용. 새 게임 시작 시에만 열리며, 다른 모든 UI/액터보다 위에 그려야 하므로
+	// GameScene::Render 맨 마지막에 호출해야 한다.
+	void RenderTipsPopup(Graphic& graphic, bool isTipsOpen) const;
 private:
 	UIButton* createButton(const Vector& pos, const Vector& size, function<void()> onClick);
 
@@ -169,6 +174,11 @@ private:
 	void renderVictoryPopup(Graphic& graphic, float fadeProgress) const;
 
 	// --------------------------------------------------
+	//  안내(양피지) 팝업
+	// --------------------------------------------------
+	void renderTipsPopup(Graphic& graphic) const;
+
+	// --------------------------------------------------
 	//  설정 팝업
 	// --------------------------------------------------
 	void renderSettingsPopup(Graphic& graphic) const;
@@ -226,4 +236,9 @@ private:
 	// 업그레이드 패널 아이콘
 	Image* _upgradeIconsImg = nullptr;
 	SpriteAtlas* _upgradeIconsSprite = nullptr;
+
+	// 안내(양피지) 팝업
+	Image* _newSharedImg = nullptr;
+	SpriteAtlas* _newSharedSprite = nullptr;
+	UIButton* _tipsCloseButton = nullptr;
 };
