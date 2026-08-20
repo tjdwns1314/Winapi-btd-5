@@ -6,11 +6,13 @@ void InputManager::Update()
 	for (int32 i = 0; i < static_cast<int32>(std::size(_prevPressed)); ++i)
 		_prevPressed[i] = _currPressed[i];
 
-	_currPressed[static_cast<int32>(KeyType::LeftMouse)] = (::GetAsyncKeyState(VK_LBUTTON) & 0x8000) != 0;
-	_currPressed[static_cast<int32>(KeyType::RightMouse)] = (::GetAsyncKeyState(VK_RBUTTON) & 0x8000) != 0;
-	_currPressed[static_cast<int32>(KeyType::F1)] = (::GetAsyncKeyState(VK_F1) & 0x8000) != 0;
-	_currPressed[static_cast<int32>(KeyType::F2)] = (::GetAsyncKeyState(VK_F2) & 0x8000) != 0;
-	_currPressed[static_cast<int32>(KeyType::Escape)] = (::GetAsyncKeyState(VK_ESCAPE) & 0x8000) != 0;
+	const bool isForeground = (::GetForegroundWindow() == _hwnd);
+
+	_currPressed[static_cast<int32>(KeyType::LeftMouse)] = isForeground && (::GetAsyncKeyState(VK_LBUTTON) & 0x8000) != 0;
+	_currPressed[static_cast<int32>(KeyType::RightMouse)] = isForeground && (::GetAsyncKeyState(VK_RBUTTON) & 0x8000) != 0;
+	_currPressed[static_cast<int32>(KeyType::F1)] = isForeground && (::GetAsyncKeyState(VK_F1) & 0x8000) != 0;
+	_currPressed[static_cast<int32>(KeyType::F2)] = isForeground && (::GetAsyncKeyState(VK_F2) & 0x8000) != 0;
+	_currPressed[static_cast<int32>(KeyType::Escape)] = isForeground && (::GetAsyncKeyState(VK_ESCAPE) & 0x8000) != 0;
 	POINT pt;
 	::GetCursorPos(&pt);
 	::ScreenToClient(_hwnd, &pt);
