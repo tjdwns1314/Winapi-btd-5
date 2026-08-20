@@ -41,6 +41,8 @@ namespace
 void LobbySceneUI::Init(function<void()> onNewGameClick, function<void()> onResumeClick, function<bool()> hasSaveFile)
 {
 	ResourceManager& res = ResourceManager::GetInstance();
+	_isSelectOpen = false; // 씬 재진입(로비 재방문) 시 이전 팝업 열림 상태가 남아있지 않도록 리셋.
+
 	_background = &res.GetImage(L"Resource\\Image_png\\lobby_background.png");
 	_trophy = &res.GetImage(L"Resource\\Sprite\\nukki\\gold_trophy_nukki.png");
 

@@ -237,7 +237,13 @@ void GameScene::CreateUI()
 		[this]() { _isSettingsOpen = !_isSettingsOpen; AudioManager::GetInstance().SetBgmVolumeScale(_isSettingsOpen ? 0.3f : 1.0f); },
 		[this]() { _isSettingsOpen = false; AudioManager::GetInstance().SetBgmVolumeScale(1.0f); },
 		[this]() { Restart(); },
-		[this]() { SceneManager::GetInstance().ChangeScene(SceneType::Lobby); },
+		[this]()
+		{
+			_isSettingsOpen = false;
+			AudioManager::GetInstance().SetBgmVolumeScale(1.0f);
+			UIManager::GetInstance().SetInputLocked(false); // 씬 전환 전에 입력 잠금을 풀어야 로비 UI가 눌린다.
+			SceneManager::GetInstance().ChangeScene(SceneType::Lobby);
+		},
 		[this](bool enabled) { _waveManager.SetAutoPlay(enabled); });
 	updateDebugWaveTitle();
 }
