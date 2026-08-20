@@ -18,6 +18,7 @@ struct TowerSelectionInfo
 	int32 sellPrice = 0;
 	int32 upgradePrice = 0;
 	bool canUpgrade = false;
+	bool canAfford = false;
 	string upgradeIconKey;
 	wstring upgradeName; // 다음 업그레이드 이름(한글). 업그레이드 패널 아이콘 위쪽에 표시.
 	wstring upgradeDescription; // 다음 업그레이드 설명(한글). 업그레이드 버튼에 마우스 올리면 툴팁으로 표시.

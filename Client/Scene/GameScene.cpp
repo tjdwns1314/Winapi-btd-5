@@ -180,6 +180,7 @@ void GameScene::Render(Graphic& graphic)
 		selection.sellPrice = selectedTower->GetSellPrice();
 		selection.canUpgrade = selectedTower->CanUpgrade();
 		selection.upgradePrice = selectedTower->GetNextUpgradeCost();
+		selection.canAfford = _economyManager.GetGold() >= selection.upgradePrice;
 		selection.upgradeIconKey = selectedTower->GetNextUpgradeIconKey();
 		selection.upgradeName = selectedTower->GetNextUpgradeName();
 		selection.upgradeDescription = selectedTower->GetNextUpgradeDescription();

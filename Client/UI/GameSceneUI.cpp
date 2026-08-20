@@ -138,6 +138,7 @@ namespace
 	const wchar_t* const kSellTextFormat = L"판매: %d";               // 판매 버튼에 표시되는 판매가 문구
 	const wchar_t* const kUpgradeTextFormat = L"%d";                  // 업그레이드 버튼에 표시되는 가격(숫자만)
 	const wchar_t* const kUpgradeMaxedText = L"업그레이드 경로 달함"; // 최고 등급 도달 시 업그레이드 버튼 대신 표시
+	const wchar_t* const kUpgradeCantAffordText = L"할 수 없습니다";   // 골드 부족 시 업그레이드 버튼 대신 표시
 	const wchar_t* const kNameLevelTextFormat = L"%s 레벨 %d";        // 선택한 타워 이름+레벨 문구
 	constexpr D2D1_RECT_F kNameLevelTextRect = { 1450.0f, 520.0f, 1740.0f, 600.0f }; // 이름/레벨 텍스트 표시 영역
 	const D2D1::ColorF kNameLevelTextColor = D2D1::ColorF(D2D1::ColorF::Yellow);     // 이름/레벨 텍스트 색상
@@ -355,7 +356,7 @@ void GameSceneUI::Render(Graphic& graphic, bool isDraggingTower, TowerType dragg
 	renderMiniButton(graphic, _hpAddButton, true);
 
 	if (_sellButton != nullptr) _sellButton->SetActive(selection.isSelected);
-	if (_upgradeButton != nullptr) _upgradeButton->SetActive(selection.isSelected && selection.canUpgrade);
+	if (_upgradeButton != nullptr) _upgradeButton->SetActive(selection.isSelected && selection.canUpgrade && selection.canAfford);
 	if (selection.isSelected)
 		renderTowerSelectionPanel(graphic, selection);
 
@@ -745,21 +746,20 @@ void GameSceneUI::renderTowerSelectionPanel(Graphic& graphic, const TowerSelecti
 	swprintf_s(sellText, kSellTextFormat, selection.sellPrice);
 	drawPriceText(_sellButton, sellText);
 
-	drawUpgradeBoxBg(_upgradeButton, selection.canUpgrade);
+	const bool showBuyPanel = selection.canUpgrade && selection.canAfford;
+	drawUpgradeBoxBg(_upgradeButton, showBuyPanel);
 
 	if (selection.canUpgrade)
 	{
-		// 다음 업그레이드 이름(버튼 상단 좁은 띠).
-		if (!selection.upgradeName.empty())
-		{
-			const Vector pos = _upgradeButton->GetPos();
-			const Vector size = _upgradeButton->GetSize();
-			graphic.DrawString(selection.upgradeName.c_str(), D2D1::RectF(
-				pos.x - size.x * 0.5f, pos.y - size.y * 0.5f,
-				pos.x + size.x * 0.5f, pos.y - size.y * 0.5f + kUpgradeNameTextHeight),
-				FONT_20, D2D1::ColorF(D2D1::ColorF::White), DWRITE_TEXT_ALIGNMENT_CENTER,
-				DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
-		}
+		// 다음 업그레이드 이름(버튼 상단 좁은 띠). 골드가 부족하면 이름 대신 "할 수 없습니다"를 보여준다.
+		const wchar_t* nameText = selection.canAfford ? selection.upgradeName.c_str() : kUpgradeCantAffordText;
+		const Vector namePos = _upgradeButton->GetPos();
+		const Vector nameSize = _upgradeButton->GetSize();
+		graphic.DrawString(nameText, D2D1::RectF(
+			namePos.x - nameSize.x * 0.5f, namePos.y - nameSize.y * 0.5f,
+			namePos.x + nameSize.x * 0.5f, namePos.y - nameSize.y * 0.5f + kUpgradeNameTextHeight),
+			FONT_20, D2D1::ColorF(D2D1::ColorF::White), DWRITE_TEXT_ALIGNMENT_CENTER,
+			DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
 
 		// 다음 업그레이드 아이콘(위쪽)과 가격(아래쪽 좁은 띠)을 함께 보여준다.
 		if (!selection.upgradeIconKey.empty())
