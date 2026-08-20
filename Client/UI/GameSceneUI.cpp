@@ -53,13 +53,13 @@ namespace
 	constexpr float kSettingsIconCenterY = 1000.0f; // 설정 아이콘 Y 위치
 
 	// 디버그용 라운드 +/- 버튼 (정식 스프라이트 없이 사각형 도형으로 그림). 라운드 텍스트(kRoundTextCenterY=200) 바로 아래, 작게 배치.
-	constexpr float kWaveButtonRowY = 245.0f;                            // 라운드 +/- 버튼 Y 위치(라운드 텍스트 아래)
-	const Vector kWaveDownButtonPos = Vector(1690.0f, kWaveButtonRowY);  // - 버튼 위치(라운드 라벨 쪽)
-	const Vector kWaveUpButtonPos = Vector(1630.0f, kWaveButtonRowY);    // + 버튼 위치(라운드 숫자 쪽)
-	const Vector kWaveButtonSize = Vector(28.0f, 28.0f);                 // 두 버튼 공통 크기(기존 40→28로 축소)
+	constexpr float kWaveButtonRowY = 230.0f;                            // 라운드 +/- 버튼 Y 위치(라운드 텍스트 아래)
+	const Vector kWaveDownButtonPos = Vector(1720.0f, kWaveButtonRowY);  // - 버튼 위치(라운드 라벨 쪽)
+	const Vector kWaveUpButtonPos = Vector(1690.0f, kWaveButtonRowY);    // + 버튼 위치(라운드 숫자 쪽)
+	const Vector kWaveButtonSize = Vector(26.0f, 26.0f);                 // 두 버튼 공통 크기(기존 40→28로 축소)
 
 	// 골드/HP 디버그 증가(+) 버튼 — 각 숫자 텍스트 오른쪽에 작게 배치.
-	const Vector kGoldAddButtonPos = Vector(1680.0f, kGoldIconCenterY); // 골드 + 버튼 위치
+	const Vector kGoldAddButtonPos = Vector(1650.0f, kGoldIconCenterY); // 골드 + 버튼 위치
 	const Vector kHpAddButtonPos = Vector(1650.0f, kHpIconCenterY);     // HP + 버튼 위치
 	const Vector kStatAddButtonSize = Vector(26.0f, 26.0f);             // 두 버튼 공통 크기
 	// 골드/HP 디버그 감소(-) 버튼 — 각 + 버튼 바로 오른쪽에 배치.
