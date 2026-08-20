@@ -28,6 +28,10 @@ public:
 
 	Scene* GetCurrentScene() const { return _currentScene; }
 
+	// 아직 활성화되지 않은 다른 씬(예: 로비에서 GameScene)의 공개 API를 미리 호출해야 할 때 쓴다.
+	// 등록 안 된 타입이면 nullptr.
+	Scene* GetScene(SceneType sceneType) const;
+
 private:
 	// 아무나 생성못하게 생성자/소멸자를 숨기자
 	SceneManager() = default;

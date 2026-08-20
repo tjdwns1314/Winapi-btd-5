@@ -8,4 +8,5 @@ public:
 	static bool WriteToFile(const SaveData& data, const wstring& path);
 	static bool ReadFromFile(SaveData& outData, const wstring& path);
 	static void DeleteFile(const wstring& path);
+	static bool FileExists(const wstring& path);
 };

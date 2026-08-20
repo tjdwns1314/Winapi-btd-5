@@ -57,6 +57,15 @@ public:
 	void SaveToFile(const wstring& path) const;
 	void LoadFromFile(const wstring& path);
 
+	// 로비의 "게임 재개" 버튼 전용. 저장 파일을 읽어 pending 상태만 만들고 Restart()는 호출하지 않는다.
+	// (로비에서는 GameScene::Init()이 이번 세션에 아직 한 번도 안 됐을 수 있어 _graphicRef가 비어 있고,
+	//  Restart() 내부에서 세이브 파일을 삭제해버리는 것도 위험하다. 실제 로드 반영은
+	//  이후 SceneManager::ChangeScene(Game)이 호출할 Init()에서 일어난다.)
+	bool PrepareLoad(const wstring& path);
+
+	// GameScene 자동저장 파일 경로. 로비 UI도 같은 경로를 참조해야 해서 공개해둔다.
+	static constexpr wchar_t kSaveFilePath[] = L"Save\\save.json";
+
 protected:
 	virtual void CreateUI() override;
 

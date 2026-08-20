@@ -49,6 +49,13 @@ void SceneManager::ChangeScene(SceneType sceneType)
 	_reservedScene = sceneType;
 }
 
+Scene* SceneManager::GetScene(SceneType sceneType) const
+{
+	if (sceneType >= SceneType::Max)
+		return nullptr;
+	return _scenes[static_cast<int32>(sceneType)];
+}
+
 void SceneManager::ApplyReservedScene()
 {
 	if (_reservedScene >= SceneType::Max)

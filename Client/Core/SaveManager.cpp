@@ -143,3 +143,8 @@ void SaveManager::DeleteFile(const wstring& path)
 	std::error_code ec;
 	std::filesystem::remove(std::filesystem::path(path), ec); // 파일이 원래 없어도 에러 아님
 }
+
+bool SaveManager::FileExists(const wstring& path)
+{
+	return std::filesystem::exists(std::filesystem::path(path));
+}

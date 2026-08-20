@@ -12,11 +12,6 @@
 #include "AudioManager.h"
 #include "AudioManager.h"
 
-namespace
-{
-	constexpr wchar_t kSavePath[] = L"Save\\save.json";
-}
-
 void GameScene::Init(Graphic& graphic)
 {
 	Super::Init(graphic);
@@ -35,7 +30,7 @@ void GameScene::Init(Graphic& graphic)
 
 	PoolManager::GetInstance().Init(250, 200, 50, 50, 250); // obstacleSize=50, effectSize=250: 임시값
 	_waveManager.Init(&PoolManager::GetInstance().GetBloonPool(), _map.GetBloonSpawnPos(), _map.GetPathPtr(), this,
-		[this](int32 bonusGold) { _economyManager.Add(bonusGold); SaveToFile(kSavePath); });
+		[this](int32 bonusGold) { _economyManager.Add(bonusGold); SaveToFile(kSaveFilePath); });
 	_healthManager.Init(_hasPendingLoad ? _pendingLoadData.hp : 100);
 	_economyManager.Init(_hasPendingLoad ? _pendingLoadData.gold : 10000);
 
@@ -249,7 +244,7 @@ void GameScene::CreateUI()
 void GameScene::Restart()
 {
 	Graphic* graphic = _graphicRef;
-	SaveManager::DeleteFile(kSavePath); // 재시작(게임오버/리플레이)은 새 판이므로 자동저장도 같이 초기화
+	SaveManager::DeleteFile(kSaveFilePath); // 재시작(게임오버/리플레이)은 새 판이므로 자동저장도 같이 초기화
 	Cleanup();
 	if (graphic != nullptr)
 		Init(*graphic);
@@ -297,6 +292,16 @@ void GameScene::LoadFromFile(const wstring& path)
 	_pendingLoadData = data;
 	_hasPendingLoad = true;
 	Restart();
+}
+
+bool GameScene::PrepareLoad(const wstring& path)
+{
+	SaveData data;
+	if (SaveManager::ReadFromFile(data, path) == false)
+		return false;
+	_pendingLoadData = data;
+	_hasPendingLoad = true;
+	return true;
 }
 
 void GameScene::onStartButtonClick()
