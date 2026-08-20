@@ -37,7 +37,7 @@ void GameScene::Init(Graphic& graphic)
 	PoolManager::GetInstance().Init(250, 200, 50, 50, 250); // obstacleSize=50, effectSize=250: 임시값
 	_waveManager.Init(&PoolManager::GetInstance().GetBloonPool(), _map.GetBloonSpawnPos(), _map.GetPathPtr(), this,
 		[this](int32 bonusGold) { _economyManager.Add(bonusGold); SaveToFile(kSaveFilePath); });
-	_healthManager.Init(_hasPendingLoad ? _pendingLoadData.hp : 100);
+	_healthManager.Init(_hasPendingLoad ? _pendingLoadData.hp : 150);
 	_economyManager.Init(_hasPendingLoad ? _pendingLoadData.gold : 650);
 
 	GetCollisionManager().RegisterLayer(RenderLayer::Bloon, RenderLayer::Projectile);
