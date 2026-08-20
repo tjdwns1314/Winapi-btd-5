@@ -864,7 +864,7 @@ void GameSceneUI::drawRangePreview(Graphic& graphic, const Vector& pos, TowerTyp
 		return;
 
 	const float range = GetTowerStat(type).grades.front().attackRange;
-	renderTarget->FillEllipse(D2D1::Ellipse(D2D1::Point2F(pos.x, pos.y), range, range), brush);
+	renderTarget->FillRectangle(D2D1::RectF(pos.x - range, pos.y - range, pos.x + range, pos.y + range), brush);
 }
 
 // --------------------------------------------------

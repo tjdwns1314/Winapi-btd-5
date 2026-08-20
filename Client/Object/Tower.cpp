@@ -162,11 +162,12 @@ void Tower::RenderRange(Graphic& graphic) const
 	if (renderTarget == nullptr || brush == nullptr)
 		return;
 	const Vector pos = GetPos();
+	const float range = _stat.attackRange;
 
-	// 사거리 원이 오른쪽 UI 패널이나 창 밖으로 삐져나오지 않도록 게임 필드 영역으로 잘라낸다.
+	// 사거리 사각형이 오른쪽 UI 패널이나 창 밖으로 삐져나오지 않도록 게임 필드 영역으로 잘라낸다.
 	const D2D1_RECT_F clipRect = D2D1::RectF(0.0f, 0.0f, static_cast<float>(GameAreaWidth), static_cast<float>(GWinSizeY));
 	renderTarget->PushAxisAlignedClip(clipRect, D2D1_ANTIALIAS_MODE_PER_PRIMITIVE);
-	renderTarget->FillEllipse(D2D1::Ellipse(D2D1::Point2F(pos.x, pos.y), _stat.attackRange, _stat.attackRange), brush);
+	renderTarget->FillRectangle(D2D1::RectF(pos.x - range, pos.y - range, pos.x + range, pos.y + range), brush);
 	renderTarget->PopAxisAlignedClip();
 }
 
@@ -177,8 +178,7 @@ bool Tower::isInRange(const Actor* target) const
 
 	const float range = _stat.attackRange + GetColliderRadius(target);
 	const Vector diff = target->GetPos() - GetPos();
-	const float distSq = diff.x * diff.x + diff.y * diff.y;
-	return distSq <= range * range;
+	return std::max(std::abs(diff.x), std::abs(diff.y)) <= range;
 }
 
 Bloon* Tower::findTarget() const
