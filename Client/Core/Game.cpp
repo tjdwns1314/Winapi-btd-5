@@ -71,10 +71,14 @@ void Game::Update(float deltaTime)
 	{
 		SceneManager& sceneManager = SceneManager::GetInstance();
 		Scene* current = sceneManager.GetCurrentScene();
-		const bool isEditor = current != nullptr &&
-			current->GetSceneType() == SceneType::Editor;
-		sceneManager.ChangeScene(isEditor ? SceneType::Lobby : SceneType::Editor);
-
+		if (current != nullptr)
+		{
+			if (current->GetSceneType() == SceneType::Editor)
+				sceneManager.ChangeScene(SceneType::Lobby);
+			else if (current->GetSceneType() == SceneType::Lobby)
+				sceneManager.ChangeScene(SceneType::Editor);
+			// GameScene 등 나머지 씬에서는 F1이 아무 동작도 하지 않음
+		}
 	}
 }
 
