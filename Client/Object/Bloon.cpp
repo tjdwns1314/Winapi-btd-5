@@ -106,7 +106,11 @@ void Bloon::followPath(float deltaTime)
 
 	const float dist = std::sqrtf(distSq);
 	SetDir(Vector(toTarget.x / dist, toTarget.y / dist));
-	SetRotation(RadianToDegree(atan2f(toTarget.x, -toTarget.y))); // Projectile과 동일한 패턴: 이동 방향을 바라보게 회전
+	// 보스 풍선(MOAB/BFB)만 진행 방향을 바라보게 회전하고, 일반 풍선은 회전하지 않는다.
+	const bool isBoss = (_color == BloonColor::Boss1 || _color == BloonColor::Boss2);
+	if (isBoss)
+		SetRotation(RadianToDegree(atan2f(toTarget.x, -toTarget.y))); // Projectile과 동일한 패턴: 이동 방향을 바라보게 회전
+
 	Move(deltaTime); // MovableActor::Move가 _dir * _moveSpeed * deltaTime 만큼 이동시킴
 }
 
