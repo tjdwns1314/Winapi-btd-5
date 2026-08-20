@@ -117,7 +117,7 @@ namespace
 
 	// 장애물 상점 칸 툴팁 문구(가격 없이 이름+설명만 표시).
 	const wchar_t* const kObstacleTooltipNameText = L"장애물";
-	const wchar_t* const kObstacleTooltipDescText = L"총 10개까지만 설치할 수 있다. 10, 20라운드가 되면 각각 5개를 더 설치할 수 있다.";
+	const wchar_t* const kObstacleTooltipDescText = L"총 10개까지만 설치할 수 있다. 10, 20라운드가 되면 각각 5개를 더 설치할 수 있다.\n설치하면 회수할 수 없다.";
 
 	// --------------------------------------------------
 	//  선택된 타워/장애물 패널 (판매/업그레이드)
