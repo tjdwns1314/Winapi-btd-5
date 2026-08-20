@@ -14,6 +14,9 @@ public:
 	// 풍선이 새어나갔을 때 호출. 0 밑으로는 내려가지 않는다.
 	void TakeDamage(int32 amount);
 
+	// 디버그/치트용 체력 증가. 상한 없음.
+	void Add(int32 amount);
+
 private:
 	int32 _hp = 0;
 };

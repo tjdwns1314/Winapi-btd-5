@@ -12,3 +12,8 @@ void HealthManager::TakeDamage(int32 amount)
 	if (_hp < 0)
 		_hp = 0;
 }
+
+void HealthManager::Add(int32 amount)
+{
+	_hp += amount;
+}

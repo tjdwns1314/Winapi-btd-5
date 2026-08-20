@@ -52,10 +52,16 @@ namespace
 	constexpr float kSettingsIconCenterX = 1575.0f; // 설정 아이콘 X 위치
 	constexpr float kSettingsIconCenterY = 1000.0f; // 설정 아이콘 Y 위치
 
-	// 디버그용 라운드 +/- 버튼 (정식 스프라이트 없이 사각형 도형으로 그림)
-	const Vector kWaveUpButtonPos = Vector(1720.0f, 100.0f);   // + 버튼 위치
-	const Vector kWaveDownButtonPos = Vector(1720.0f, 150.0f); // - 버튼 위치
-	const Vector kWaveButtonSize = Vector(40.0f, 40.0f);        // 두 버튼 공통 크기
+	// 디버그용 라운드 +/- 버튼 (정식 스프라이트 없이 사각형 도형으로 그림). 라운드 텍스트(kRoundTextCenterY=200) 바로 아래, 작게 배치.
+	constexpr float kWaveButtonRowY = 245.0f;                            // 라운드 +/- 버튼 Y 위치(라운드 텍스트 아래)
+	const Vector kWaveDownButtonPos = Vector(1690.0f, kWaveButtonRowY);  // - 버튼 위치(라운드 라벨 쪽)
+	const Vector kWaveUpButtonPos = Vector(1630.0f, kWaveButtonRowY);    // + 버튼 위치(라운드 숫자 쪽)
+	const Vector kWaveButtonSize = Vector(28.0f, 28.0f);                 // 두 버튼 공통 크기(기존 40→28로 축소)
+
+	// 골드/HP 디버그 증가(+) 버튼 — 각 숫자 텍스트 오른쪽에 작게 배치.
+	const Vector kGoldAddButtonPos = Vector(1680.0f, kGoldIconCenterY); // 골드 + 버튼 위치
+	const Vector kHpAddButtonPos = Vector(1650.0f, kHpIconCenterY);     // HP + 버튼 위치
+	const Vector kStatAddButtonSize = Vector(26.0f, 26.0f);             // 두 버튼 공통 크기
 
 	// --------------------------------------------------
 	//  타워/장애물 상점
@@ -181,6 +187,8 @@ void GameSceneUI::Init(
 	function<void()> onObstacleShopClick,
 	function<void()> onWaveUp,
 	function<void()> onWaveDown,
+	function<void()> onGoldAdd,
+	function<void()> onHpAdd,
 	function<void()> onSellClick,
 	function<void()> onUpgradeClick,
 	function<void()> onObstacleSellClick,
@@ -224,6 +232,10 @@ void GameSceneUI::Init(
 	// 디버그 웨이브 +/- 버튼
 	_waveUpButton = createButton(kWaveUpButtonPos, kWaveButtonSize, onWaveUp);
 	_waveDownButton = createButton(kWaveDownButtonPos, kWaveButtonSize, onWaveDown);
+
+	// 골드/HP 디버그 증가(+) 버튼
+	_goldAddButton = createButton(kGoldAddButtonPos, kStatAddButtonSize, onGoldAdd);
+	_hpAddButton = createButton(kHpAddButtonPos, kStatAddButtonSize, onHpAdd);
 
 	// 타워 선택 패널: 상점 버튼(y=550)과 웨이브 버튼(y=900) 사이 빈 공간에 고정 배치.
 	// 위치/크기는 임시값 — 빌드 후 눈으로 보고 조정할 것.
@@ -339,6 +351,8 @@ void GameSceneUI::Render(Graphic& graphic, bool isDraggingTower, TowerType dragg
 	renderGoldText(graphic, gold);
 	renderHpText(graphic, hp);
 	renderRoundText(graphic, currentRound, totalRound);
+	renderMiniButton(graphic, _goldAddButton, true);
+	renderMiniButton(graphic, _hpAddButton, true);
 
 	if (_sellButton != nullptr) _sellButton->SetActive(selection.isSelected);
 	if (_upgradeButton != nullptr) _upgradeButton->SetActive(selection.isSelected && selection.canUpgrade);
@@ -471,48 +485,49 @@ void GameSceneUI::renderStartButton(Graphic& graphic, bool isWaveActive, bool is
 
 void GameSceneUI::renderDebugWaveButtons(Graphic& graphic) const
 {
+	renderMiniButton(graphic, _waveUpButton, true);
+	renderMiniButton(graphic, _waveDownButton, false);
+}
+
+// 작은 사각형 +/- 버튼(배경 + 기호)을 그린다. 라운드 +/- 버튼과 골드/HP + 버튼이 공용으로 쓴다.
+void GameSceneUI::renderMiniButton(Graphic& graphic, UIButton* button, bool isPlus) const
+{
+	if (button == nullptr)
+		return;
+
 	ID2D1HwndRenderTarget* renderTarget = graphic.GetRenderTarget();
 	if (renderTarget == nullptr)
 		return;
 
-	auto drawButton = [&](UIButton* button, bool isPlus)
+	const Vector pos = button->GetPos();
+	const Vector size = button->GetSize();
+	const D2D1_RECT_F rect = D2D1::RectF(
+		pos.x - size.x * 0.5f,
+		pos.y - size.y * 0.5f,
+		pos.x + size.x * 0.5f,
+		pos.y + size.y * 0.5f);
+
+	ID2D1SolidColorBrush* bgBrush = graphic.GetBrush(D2D1::ColorF(D2D1::ColorF::DarkGray, 0.8f));
+	if (bgBrush != nullptr)
+		renderTarget->FillRectangle(rect, bgBrush);
+
+	const float cx = pos.x;
+	const float cy = pos.y;
+	const float half = size.x * 0.3f;
+	const float thickness = 4.0f;
+
+	ID2D1SolidColorBrush* markBrush = graphic.GetBrush(D2D1::ColorF(D2D1::ColorF::White));
+	if (markBrush == nullptr)
+		return;
+
+	renderTarget->FillRectangle(
+		D2D1::RectF(cx - half, cy - thickness * 0.5f, cx + half, cy + thickness * 0.5f), markBrush);
+
+	if (isPlus)
 	{
-		if (button == nullptr)
-			return;
-
-		const Vector pos = button->GetPos();
-		const Vector size = button->GetSize();
-		const D2D1_RECT_F rect = D2D1::RectF(
-			pos.x - size.x * 0.5f,
-			pos.y - size.y * 0.5f,
-			pos.x + size.x * 0.5f,
-			pos.y + size.y * 0.5f);
-
-		ID2D1SolidColorBrush* bgBrush = graphic.GetBrush(D2D1::ColorF(D2D1::ColorF::DarkGray, 0.8f));
-		if (bgBrush != nullptr)
-			renderTarget->FillRectangle(rect, bgBrush);
-
-		const float cx = pos.x;
-		const float cy = pos.y;
-		const float half = size.x * 0.3f;
-		const float thickness = 4.0f;
-
-		ID2D1SolidColorBrush* markBrush = graphic.GetBrush(D2D1::ColorF(D2D1::ColorF::White));
-		if (markBrush == nullptr)
-			return;
-
 		renderTarget->FillRectangle(
-			D2D1::RectF(cx - half, cy - thickness * 0.5f, cx + half, cy + thickness * 0.5f), markBrush);
-
-		if (isPlus)
-		{
-			renderTarget->FillRectangle(
-				D2D1::RectF(cx - thickness * 0.5f, cy - half, cx + thickness * 0.5f, cy + half), markBrush);
-		}
-	};
-
-	drawButton(_waveUpButton, true);
-	drawButton(_waveDownButton, false);
+			D2D1::RectF(cx - thickness * 0.5f, cy - half, cx + thickness * 0.5f, cy + half), markBrush);
+	}
 }
 
 // --------------------------------------------------

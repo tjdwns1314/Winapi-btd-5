@@ -44,6 +44,8 @@ public:
 		function<void()> onObstacleShopClick,
 		function<void()> onWaveUp,
 		function<void()> onWaveDown,
+		function<void()> onGoldAdd,
+		function<void()> onHpAdd,
 		function<void()> onSellClick,
 		function<void()> onUpgradeClick,
 		function<void()> onObstacleSellClick,
@@ -86,6 +88,8 @@ private:
 	// --------------------------------------------------
 	void renderStartButton(Graphic& graphic, bool isWaveActive, bool isSpeedEnabled)const;
 	void renderDebugWaveButtons(Graphic& graphic) const;
+	// 작은 사각형 +/- 버튼(배경+기호)을 그린다. 라운드 +/- 및 골드/HP + 버튼이 공용으로 쓴다.
+	void renderMiniButton(Graphic& graphic, UIButton* button, bool isPlus) const;
 
 	// --------------------------------------------------
 	//  타워/장애물 상점
@@ -141,6 +145,9 @@ private:
 	UIButton* _settingsButton = nullptr; // 설정(톱니바퀴) 아이콘. 플레이 버튼 옆, 클릭 시 설정 팝업 토글.
 	UIButton* _waveUpButton = nullptr;   // 디버그용: 시작 라운드를 +/-로 조절(정식 스프라이트 없이 도형으로 그림)
 	UIButton* _waveDownButton = nullptr;
+
+	UIButton* _goldAddButton = nullptr; // 골드 +1000 버튼(돈 텍스트 옆)
+	UIButton* _hpAddButton = nullptr;   // HP +10 버튼(체력 텍스트 옆)
 
 	// 타워/장애물 상점
 	Image* _inGameBg = nullptr;

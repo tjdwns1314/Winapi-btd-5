@@ -230,6 +230,8 @@ void GameScene::CreateUI()
 		[this]() { _obstacleController.TryStartDrag(_economyManager); },
 		[this]() { _waveManager.SetNextRound(_waveManager.GetNextRoundNumber() + 1); },
 		[this]() { _waveManager.SetNextRound(_waveManager.GetNextRoundNumber() - 1); },
+		[this]() { _economyManager.Add(1000); },
+		[this]() { _healthManager.Add(10); },
 		[this]() { _towerController.SellSelected(_map, _economyManager); },
 		[this]() { _towerController.UpgradeSelected(_economyManager); },
 		[this]() { _obstacleController.SellSelected(_map, _economyManager); },
