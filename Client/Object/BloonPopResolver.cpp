@@ -13,7 +13,7 @@
 
 namespace
 {
-	// 풍선 종류별 터짐 효과음: 납은 metal, 세라믹은 ceramic, 나머지는 pop1~4 중 랜덤.
+	// 풍선 종류별 터짐 효과음: 납은 metal, 세라믹은 ceramic, 보스(MOAB/BFB)는 전용 파괴음, 나머지는 pop1~4 중 랜덤.
 	void playPopSound(BloonColor color)
 	{
 		AudioManager& audio = AudioManager::GetInstance();
@@ -28,11 +28,33 @@ namespace
 			audio.PlaySfx(L"ceramic_bloon_hit");
 			return;
 		}
+		if (color == BloonColor::Boss1 || color == BloonColor::Boss2)
+		{
+			audio.PlaySfx(L"moab_destroyed_short");
+			return;
+		}
 
 		static const wchar_t* popKeys[] = { L"pop1", L"pop2", L"pop3", L"pop4" };
 		static std::mt19937 rng{ std::random_device{}() };
 		std::uniform_int_distribution<int32> dist(0, 3);
 		audio.PlaySfx(popKeys[dist(rng)]);
+	}
+
+	// 풍선 종류별 피격 효과음(터지지 않고 맞기만 했을 때): 납/세라믹은 터짐음과 동일, 보스는 전용 피격음.
+	void playHitSound(BloonColor color)
+	{
+		if (color == BloonColor::Lead)
+		{
+			AudioManager::GetInstance().PlaySfx(L"metal_bloon_hit");
+			return;
+		}
+		if (color == BloonColor::Ceramic)
+		{
+			AudioManager::GetInstance().PlaySfx(L"ceramic_bloon_hit");
+			return;
+		}
+		if (color == BloonColor::Boss1 || color == BloonColor::Boss2)
+			AudioManager::GetInstance().PlaySfx(L"moab_damage_quieter");
 	}
 
 	// 자식 풍선끼리 같은 좌표에 겹치지 않도록, 부모 위치를 중심으로 살짝 흩뿌린 위치를 반환한다.
@@ -99,6 +121,7 @@ void BloonPopResolver::HandleHit(Bloon& bloon, float damage)
 	if (!result.popped)
 	{
 		bloon.SetHp(result.remainingHp);
+		playHitSound(bloon.GetColor());
 		return;
 	}
 
