@@ -1,6 +1,7 @@
 ﻿#include "pch.h"
 #include "Bloon.h"
 #include "ColliderCircle.h"
+#include "ColliderEllipse.h"
 #include "Projectile.h"
 
 
@@ -16,9 +17,29 @@ void Bloon::Init()
 	if (_image == nullptr)
 		return;
 	const D2D1_SIZE_F size = _image->GetSize();
-	const float scale = static_cast<float>(BLOCK_SIZE) / size.width * kBloonBaseScale;
+	const BloonStat& stat = GetBloonStat(_color);
+	const bool isBoss = (_color == BloonColor::Boss1 || _color == BloonColor::Boss2);
+
+	// 일반 풍선: 기존처럼 폭 기준으로 BLOCK_SIZE에 자동 정규화.
+	// 보스 풍선: 베이크된 원본 픽셀 크기가 크므로, 정규화 없이 spriteScale을 최종 배율로 그대로 사용.
+	const float scale = isBoss
+		? stat.spriteScale
+		: static_cast<float>(BLOCK_SIZE) / size.width * kBloonBaseScale;
+
 	SetScale(Vector(scale, scale));
-	SetCollider(new ColliderCircle(this, static_cast<float>(BLOCK_SIZE) / 2.f * kBloonBaseScale));
+
+	if (isBoss)
+	{
+		// 판정 범위가 스프라이트 세로 길이에 딱 맞으면 다소 빡빡해 보여서, 진행 방향 축(radiusY)을 조금 더 늘린다.
+		constexpr float kBossColliderLengthScale = 1.05f;
+		// 보스는 세로로 긴 모양이므로 원 대신 타원 콜라이더로 실제 렌더된 폭/높이에 맞춘다.
+		SetCollider(new ColliderEllipse(this, size.width * scale * 0.5f, size.height * scale * 0.5f * kBossColliderLengthScale));
+	}
+	else
+	{
+		SetCollider(new ColliderCircle(this, static_cast<float>(BLOCK_SIZE) / 2.f * kBloonBaseScale));
+	}
+
 	SetLayer(RenderLayer::Bloon);
 }
 
@@ -51,7 +72,7 @@ void Bloon::Render(Graphic& graphic)
 
 	const Vector pos = GetPos();
 	const Vector scale = GetScale();
-	_image->Draw(graphic, pos.x, pos.y, scale.x);
+	_image->Draw(graphic, pos.x, pos.y, scale.x, GetRotation());
 }
 
 //const wchar_t* Bloon::getImageKey(BloonColor color)
@@ -85,6 +106,7 @@ void Bloon::followPath(float deltaTime)
 
 	const float dist = std::sqrtf(distSq);
 	SetDir(Vector(toTarget.x / dist, toTarget.y / dist));
+	SetRotation(RadianToDegree(atan2f(toTarget.x, -toTarget.y))); // Projectile과 동일한 패턴: 이동 방향을 바라보게 회전
 	Move(deltaTime); // MovableActor::Move가 _dir * _moveSpeed * deltaTime 만큼 이동시킴
 }
 

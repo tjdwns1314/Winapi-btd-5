@@ -30,6 +30,9 @@ namespace
             stat.goldReward =
                 entry.at("goldReward").get<int32>();
 
+            stat.spriteScale =
+                entry.value("spriteScale", 1.0f);
+
             const string spriteKey =
                 entry.at("spriteKey").get<string>();
 
@@ -85,6 +88,8 @@ BloonColor ParseBloonColorName(const string& name)
         {"Zebra",BloonColor::Zebra},
         {"Rainbow",BloonColor::Rainbow},
         {"Ceramic",BloonColor::Ceramic},
+        {"Boss1",BloonColor::Boss1},
+        {"Boss2",BloonColor::Boss2},
     };
     auto it = table.find(name);
     return it != table.end() ? it->second : BloonColor::Red;

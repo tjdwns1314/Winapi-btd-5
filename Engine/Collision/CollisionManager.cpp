@@ -41,6 +41,11 @@ void CollisionManager::checkLayer(Scene& scene, RenderLayer a, RenderLayer b)
 
 		for (Actor* actorB : actorsB)
 		{
+			// OnEnter 처리 도중 actorA가 pending-kill 상태가 됐다면(예: 발사체 관통 소진)
+			// 같은 프레임에 남은 actorB들과는 더 이상 충돌 처리를 하지 않는다.
+			if (actorA->IsPendingKill())
+				break;
+
 			if (actorB->IsPendingKill() || actorB->GetCollider() == nullptr)
 				continue;
 

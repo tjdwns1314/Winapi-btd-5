@@ -639,5 +639,23 @@ void EditorScene::Render(Graphic& graphic)
 		};
 
 	drawGoldenBloonPreview("golden_bloon_01", 950.0f, 650.0f);
+
+	// 보스 풍선(MOAB/BFB/ZOMG) 무손상 스프라이트 미리보기: 종류별 1개씩
+	auto drawBossBloonPreview = [&](const char* cellName, float x, float y, bool flipX = false)
+		{
+			if (const CellInfo* cell = _sprite->GetCell(cellName))
+			{
+				_inGameBg->DrawSprite(graphic, x, y, *cell, 1.0f, 0.0f, flipX);
+			}
+		};
+
+	drawBossBloonPreview("moab_undamaged", 1150.0f, 650.0f);
+	drawBossBloonPreview("bfb_undamaged",  1350.0f, 650.0f);
+	drawBossBloonPreview("zomg_undamaged", 1600.0f, 650.0f);
+
+	// 창 중앙(x=880) 기준 좌우 대칭 위치에 좌우 반전해서 미러 배치
+	drawBossBloonPreview("moab_undamaged", 610.0f, 650.0f, true);
+	drawBossBloonPreview("bfb_undamaged",  410.0f, 650.0f, true);
+	drawBossBloonPreview("zomg_undamaged", 160.0f, 650.0f, true);
 }
 

@@ -9,6 +9,7 @@
 #include "EffectFactory.h"
 #include "AudioManager.h"
 #include <random>
+#include <cmath>
 
 namespace
 {
@@ -32,6 +33,18 @@ namespace
 		static std::mt19937 rng{ std::random_device{}() };
 		std::uniform_int_distribution<int32> dist(0, 3);
 		audio.PlaySfx(popKeys[dist(rng)]);
+	}
+
+	// 자식 풍선끼리 같은 좌표에 겹치지 않도록, 부모 위치를 중심으로 살짝 흩뿌린 위치를 반환한다.
+	Vector getScatteredSpawnPos(Vector center)
+	{
+		static std::mt19937 rng{ std::random_device{}() };
+		static std::uniform_real_distribution<float> angleDist(0.0f, 6.2831853f); // 0 ~ 2π
+		static std::uniform_real_distribution<float> radiusDist(20.0f, 35.0f); // 벌룬 충돌 반지름(약 28px)과 비슷한 범위로 흩뿌림
+
+		const float angle = angleDist(rng);
+		const float radius = radiusDist(rng);
+		return center + Vector(std::cos(angle) * radius, std::sin(angle) * radius);
 	}
 }
 
@@ -108,7 +121,7 @@ void BloonPopResolver::HandleHit(Bloon& bloon, float damage)
 	for (const SpawnRequest& spawn : result.spawns)
 	{
 		Bloon* child = BloonFactory::Create(PoolManager::GetInstance().GetBloonPool(),
-			spawn.color, bloon.GetPos(), bloon.GetPath(), bloon.GetWaypointIndex());
+			spawn.color, getScatteredSpawnPos(bloon.GetPos()), bloon.GetPath(), bloon.GetWaypointIndex());
 		if (child == nullptr)
 			continue;
 		child->SetHp(spawn.hp);

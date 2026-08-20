@@ -68,6 +68,19 @@ void GameAssets::Load(Graphic& graphic)
 
 	SpriteBaker baker(res.GetImage(L"Resource\\Sprite\\InGame.png"), res.GetAtlas(L"Resource\\Sprite\\InGame.xml"));
 
+	// 보스 풍선(MOAB/BFB): 절반 스프라이트를 자기 중심 기준 좌우 반전으로 이어붙여 한 장으로 굽는다.
+	// spriteKey가 "Boss1"/"Boss2"이므로 BloonFactory가 조회하는 "Resource\\Boss1.png" 경로를 키로 그대로 사용한다.
+	baker.Bake(res, graphic, L"Resource\\Boss1.png", { 212.0f, 435.0f },
+	{
+		{ .cellName = "moab_undamaged", .anchor = BakeAnchor::Left },
+		{ .cellName = "moab_undamaged", .anchor = BakeAnchor::Right, .flipX = true },
+	});
+
+	baker.Bake(res, graphic, L"Resource\\Boss2.png", { 304.0f, 609.0f },
+	{
+		{ .cellName = "bfb_undamaged", .anchor = BakeAnchor::Left },
+		{ .cellName = "bfb_undamaged", .anchor = BakeAnchor::Right, .flipX = true },
+	});
 
 	auto bakeDartMonkeyThrow = [&](const wchar_t* keyPrefix, const char* bandanaCell, D2D1_POINT_2F bandanaOffset = { 0.0f, 0.0f })
 		{

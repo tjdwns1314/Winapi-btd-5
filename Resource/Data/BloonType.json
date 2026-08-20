@@ -87,6 +87,24 @@
             "goldReward" : 1,
             "spriteKey" : "Ceramic",
             "children" : [{"color":"Rainbow","count":2}]
+            },
+            {
+            "color": "Boss1",
+            "layerHp":200,
+            "speed" : 100,
+            "goldReward" : 300,
+            "spriteKey" : "Boss1",
+            "spriteScale" : 0.4,
+            "children" : [{"color":"Ceramic","count":4}]
+            },
+            {
+            "color": "Boss2",
+            "layerHp":700,
+            "speed" : 80,
+            "goldReward" : 500,
+            "spriteKey" : "Boss2",
+            "spriteScale" : 0.4,
+            "children" : [{"color":"Boss1","count":4}]
             }
     ]
 }

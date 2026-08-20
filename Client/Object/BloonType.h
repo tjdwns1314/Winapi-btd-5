@@ -14,6 +14,8 @@ enum class BloonColor
     Zebra,    // 레이어 HP 1, 터지면 Black x1 + White x1
     Rainbow,  // 레이어 HP 1, 터지면 Zebra x2
     Ceramic,  // 레이어 HP 10, 터지면 Rainbow x2
+    Boss1,    // MOAB: 레이어 HP 200, 터지면 Ceramic x4
+    Boss2,    // BFB: 레이어 HP 700, 터지면 Boss1 x4
 };
 
 struct BloonChildSpawn
@@ -30,6 +32,7 @@ struct BloonStat
     int32 goldReward;
     wstring spriteKey;
     vector<BloonChildSpawn> children;
+    float spriteScale = 1.0f; // 보스 풍선 전용: 베이크된 원본 픽셀 크기에 직접 곱하는 최종 배율(자동 정규화 미적용). 일반 풍선은 사용 안 함.
 
 };
 
