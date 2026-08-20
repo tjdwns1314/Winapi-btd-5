@@ -84,6 +84,9 @@ void AudioManager::Cleanup()
 
 void AudioManager::LoadSound(const wchar_t* key, const wchar_t* filePath)
 {
+	if (_clips.find(key) != _clips.end())
+		return;
+
 	SoundClip clip;
 	if (!loadWavFile(filePath, clip))
 	{

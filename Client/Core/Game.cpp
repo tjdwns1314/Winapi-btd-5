@@ -34,6 +34,10 @@ void Game::Init(HWND hwnd)
 	ResourceManager::GetInstance().LoadImage(_graphic, L"Resource\\Sprite\\newslocal_01.png");
 	drawLoadingScreen();
 
+	// 로딩 화면과 함께 한 번만 재생할 효과음
+	AudioManager::GetInstance().LoadSound(L"schwing", L"Resource\\Bgm\\schwing.wav");
+	AudioManager::GetInstance().PlaySfx(L"schwing");
+
 	// 게임 시작 시 필요한 이미지/아틀라스 리소스를 한 번에 전부 로드한다.
 	// 이후 개별 객체는 ResourceManager::GetImage/GetAtlas로 조회만 한다.
 	GameAssets::Load(_graphic);
