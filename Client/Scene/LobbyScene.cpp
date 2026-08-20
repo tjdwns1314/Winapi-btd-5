@@ -3,10 +3,13 @@
 #include "SceneManager.h"
 #include "GameScene.h"
 #include "SaveManager.h"
+#include "AudioManager.h"
 
 void LobbyScene::Init(Graphic& graphic)
 {
 	Super::Init(graphic);
+
+	AudioManager::GetInstance().PlayBgm(L"main");
 }
 
 void LobbyScene::Cleanup()
