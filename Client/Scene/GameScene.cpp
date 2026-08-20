@@ -11,6 +11,7 @@
 #include "Game.h"
 #include "AudioManager.h"
 #include "AudioManager.h"
+#include "SceneManager.h"
 
 void GameScene::Init(Graphic& graphic)
 {
@@ -236,6 +237,7 @@ void GameScene::CreateUI()
 		[this]() { _isSettingsOpen = !_isSettingsOpen; AudioManager::GetInstance().SetBgmVolumeScale(_isSettingsOpen ? 0.3f : 1.0f); },
 		[this]() { _isSettingsOpen = false; AudioManager::GetInstance().SetBgmVolumeScale(1.0f); },
 		[this]() { Restart(); },
+		[this]() { SceneManager::GetInstance().ChangeScene(SceneType::Lobby); },
 		[this](bool enabled) { _waveManager.SetAutoPlay(enabled); });
 	updateDebugWaveTitle();
 }

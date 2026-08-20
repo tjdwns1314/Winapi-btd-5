@@ -153,6 +153,7 @@ namespace
 	// 배열 순서: 0,1,2 = 위쪽 왼→오, 3,4 = 아래쪽 왼→오. 0번(위 왼쪽)이 재개(닫기) 버튼.
 	// 위치는 게임 영역 정중앙 기준.
 	// 각 버튼 가운데 그려질 아이콘 파일(Resource/Sprite/nukki). 순서: 0 재개, 1 리플레이, 2 자동진행, 3 음악, 4 효과음.
+	// 5(홈)은 nukki 개별 파일이 아니라 game_over_popup.xml의 home_icon_shared를 쓰므로 목록에 없음.
 	const wchar_t* const kSettingsIconFiles[5] = {
 		L"Resource\\Sprite\\nukki\\resume.png",
 		L"Resource\\Sprite\\nukki\\replay.png",
@@ -187,6 +188,7 @@ void GameSceneUI::Init(
 	function<void()> onSettingsClick,
 	function<void()> onSettingsCloseClick,
 	function<void()> onSettingsReplayClick,
+	function<void()> onHomeClick,
 	function<void(bool)> onAutoPlayToggle)
 {
 	ResourceManager& res = ResourceManager::GetInstance();
@@ -249,18 +251,19 @@ void GameSceneUI::Init(
 	_restartButton = createButton(Vector(GameAreaCenterX, GameAreaCenterY), kRestartButtonSize, onRestartClick);
 	_restartButton->SetActive(false);
 
-	// 설정 팝업 버튼 5개: 오륜기 배치. 게임 영역 정중앙 기준.
+	// 설정 팝업 버튼 6개: 3x2 격자 배치. 게임 영역 정중앙 기준.
 	const Vector settingsButtonSize(kSettingsButtonBaseWidth * kSettingsRingScale, kSettingsButtonBaseHeight * kSettingsRingScale);
-	const Vector ringOffsets[5] = {
-		Vector(-kSettingsRingSpacingX, 0.0f),                          // 0: 위 왼쪽
-		Vector(0.0f, 0.0f),                                            // 1: 위 가운데
-		Vector(kSettingsRingSpacingX, 0.0f),                           // 2: 위 오른쪽
-		Vector(-kSettingsRingSpacingX * 0.5f, kSettingsRingSpacingY),  // 3: 아래 왼쪽
-		Vector(kSettingsRingSpacingX * 0.5f, kSettingsRingSpacingY),   // 4: 아래 오른쪽
+	const Vector ringOffsets[6] = {
+		Vector(-kSettingsRingSpacingX, 0.0f),                  // 0: 위 왼쪽
+		Vector(0.0f, 0.0f),                                    // 1: 위 가운데
+		Vector(kSettingsRingSpacingX, 0.0f),                   // 2: 위 오른쪽
+		Vector(-kSettingsRingSpacingX, kSettingsRingSpacingY), // 3: 아래 왼쪽
+		Vector(0.0f, kSettingsRingSpacingY),                   // 4: 아래 가운데
+		Vector(kSettingsRingSpacingX, kSettingsRingSpacingY),  // 5: 아래 오른쪽
 	};
 	_settingsOffMarkImg = &res.GetImage(L"Resource\\Sprite\\nukki\\x.png");
 
-	for (int32 i = 0; i < 5; ++i)
+	for (int32 i = 0; i < 6; ++i)
 	{
 		const Vector pos = Vector(static_cast<float>(GWinSizeX) * 0.5f + ringOffsets[i].x, GameAreaCenterY + kSettingsRingCenterOffsetY + ringOffsets[i].y);
 		function<void()> onClick;
@@ -279,12 +282,15 @@ void GameSceneUI::Init(
 				if (onAutoPlayToggle != nullptr)
 					onAutoPlayToggle(!_settingsToggleOff[i]); // ToggleOff==false가 "켜짐"
 			};
+		else if (i == 5) // 5번(홈) — 로비씬으로 이동
+			onClick = onHomeClick;
 		else
 			onClick = []() {};
 		_settingsMenuButtons[i] = createButton(pos, settingsButtonSize, onClick);
 		_settingsMenuButtons[i]->SetActive(false);
 		_settingsMenuButtons[i]->SetIgnoresModalLock(true); // 설정창 자신의 버튼들이라 입력 잠금 대상에서 제외.
-		_settingsIconImgs[i] = &res.GetImage(kSettingsIconFiles[i]);
+		if (i < 5)
+			_settingsIconImgs[i] = &res.GetImage(kSettingsIconFiles[i]);
 	}
 	// 자동진행(2번, 위 오른쪽)만 기본값이 꺼짐 상태 — 나머지 토글(음악/효과음)은 기본 켜짐.
 	_settingsToggleOff[2] = true;
@@ -846,7 +852,7 @@ void GameSceneUI::renderSettingsPopup(Graphic& graphic) const
 	if (cell == nullptr)
 		return;
 
-	for (int32 i = 0; i < 5; ++i)
+	for (int32 i = 0; i < 6; ++i)
 	{
 		UIButton* button = _settingsMenuButtons[i];
 		if (button == nullptr)
@@ -854,7 +860,13 @@ void GameSceneUI::renderSettingsPopup(Graphic& graphic) const
 		const Vector pos = button->GetPos();
 		_hudImg->DrawSprite(graphic, pos.x, pos.y, *cell, kSettingsRingScale, 0.0f);
 
-		if (_settingsIconImgs[i] != nullptr)
+		if (i == 5) // 홈 아이콘은 nukki 개별 PNG가 아니라 game_over_popup.xml의 home_icon_shared 셀.
+		{
+			if (_popupImg != nullptr && _popupSprite != nullptr)
+				if (const CellInfo* homeCell = _popupSprite->GetCell("home_icon_shared"))
+					_popupImg->DrawSprite(graphic, pos.x, pos.y, *homeCell, kSettingsIconScale, 0.0f);
+		}
+		else if (_settingsIconImgs[i] != nullptr)
 			_settingsIconImgs[i]->Draw(graphic, pos.x, pos.y, kSettingsIconScale, 0.0f);
 
 		if (_settingsToggleOff[i] && _settingsOffMarkImg != nullptr)

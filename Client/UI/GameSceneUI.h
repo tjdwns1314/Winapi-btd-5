@@ -51,6 +51,7 @@ public:
 		function<void()> onSettingsClick,
 		function<void()> onSettingsCloseClick,
 		function<void()> onSettingsReplayClick,
+		function<void()> onHomeClick,
 		function<void(bool)> onAutoPlayToggle);
 
 	void Render(Graphic& graphic,
@@ -160,13 +161,15 @@ private:
 	SpriteAtlas* _popupSprite = nullptr;
 	UIButton* _restartButton = nullptr;
 
-	// 설정 팝업: 오륜기 배치(위 3개 + 아래 2개). 아래 왼쪽 버튼이 닫기, 나머지는 아직 자리만 잡음(레이아웃만 구현).
-	UIButton* _settingsMenuButtons[5] = {};
-	// 각 버튼 가운데 그려질 아이콘(nukki 폴더, 개별 PNG). 순서는 _settingsMenuButtons와 동일: 0 재개, 1 리플레이, 2 자동진행, 3 음악, 4 효과음.
-	Image* _settingsIconImgs[5] = {};
+	// 설정 팝업: 3x2 격자 배치(위 3개 + 아래 3개). 위 왼쪽 버튼이 닫기, 나머지는 각자 기능 보유.
+	UIButton* _settingsMenuButtons[6] = {};
+	// 각 버튼 가운데 그려질 아이콘. 0~4는 nukki 폴더 개별 PNG. 5(홈)는 nullptr — game_over_popup.xml의
+	// home_icon_shared 셀을 _popupImg/_popupSprite로 그린다(renderSettingsPopup 참고).
+	// 순서: 0 재개, 1 리플레이, 2 자동진행, 3 음악, 4 효과음, 5 로비로 이동.
+	Image* _settingsIconImgs[6] = {};
 	// 2(자동진행)/3(음악)/4(효과음) 버튼의 on/off 토글 상태. true면 꺼짐 — 버튼 위에 nukki/x.png를 겹쳐 그린다.
-	// 0(재개)/1(리플레이)는 토글이 아니라서 항상 false로 둔다.
-	bool _settingsToggleOff[5] = {};
+	// 0(재개)/1(리플레이)/5(홈)는 토글이 아니라서 항상 false로 둔다.
+	bool _settingsToggleOff[6] = {};
 	Image* _settingsOffMarkImg = nullptr; // nukki/x.png, 꺼짐 표시용
 
 	// 업그레이드 패널 아이콘
