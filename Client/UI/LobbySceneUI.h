@@ -14,6 +14,8 @@ class LobbySceneUI
 public:
 	void Init(function<void()> onNewGameClick, function<void()> onResumeClick, function<bool()> hasSaveFile);
 	void Render(Graphic& graphic) const;
+	// ESC 키를 누르면 LobbyScene이 호출한다. X 버튼을 누른 것과 동일하게 팝업을 닫는다.
+	void CloseSelectPopup();
 
 private:
 	void openSelectPopup();

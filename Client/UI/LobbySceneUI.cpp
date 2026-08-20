@@ -37,7 +37,7 @@ namespace
 	const wchar_t* const kNewGameText = L"새 게임";
 	const wchar_t* const kResumeText = L"게임 재개";
 
-	const Vector kCloseButtonPos = Vector(70.0f, 70.0f); // 화면 왼쪽 위
+	const Vector kCloseButtonPos = Vector(1300.0f, 300.0f); // 화면 왼쪽 위에서 오른쪽 아래로 이동
 }
 
 void LobbySceneUI::Init(function<void()> onNewGameClick, function<void()> onResumeClick, function<bool()> hasSaveFile)
@@ -106,6 +106,11 @@ void LobbySceneUI::closeSelectPopup()
 	if (_newGameButton != nullptr) _newGameButton->SetActive(false);
 	if (_resumeButton != nullptr) _resumeButton->SetActive(false);
 	if (_closeButton != nullptr) _closeButton->SetActive(false);
+}
+
+void LobbySceneUI::CloseSelectPopup()
+{
+	closeSelectPopup();
 }
 
 void LobbySceneUI::Render(Graphic& graphic) const

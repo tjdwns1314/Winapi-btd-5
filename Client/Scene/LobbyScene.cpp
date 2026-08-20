@@ -4,6 +4,7 @@
 #include "GameScene.h"
 #include "SaveManager.h"
 #include "AudioManager.h"
+#include "InputManager.h"
 
 void LobbyScene::Init(Graphic& graphic)
 {
@@ -20,6 +21,9 @@ void LobbyScene::Cleanup()
 void LobbyScene::Update(float deltaTime)
 {
 	Super::Update(deltaTime);
+
+	if (InputManager::GetInstance().GetButtonDown(KeyType::Escape))
+		_ui.CloseSelectPopup();
 }
 
 void LobbyScene::Render(Graphic& graphic)
