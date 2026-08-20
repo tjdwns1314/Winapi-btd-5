@@ -268,9 +268,8 @@ WaveData WaveManager::buildRound(int32 roundNumber)
 	}
 
 	// 10라운드부터 30% 확률로 이 라운드에 위험도 경로(빨간선)를 타는 특수 풍선을 20마리 섞는다.
-	// TODO(테스트용): 100%로 임시 설정. 확인 끝나면 0.3f로 되돌릴 것.
 	constexpr int32 kSpecialWaveUnlockRound = 10;
-	constexpr float kSpecialWaveChance = 1.0f;
+	constexpr float kSpecialWaveChance = 0.3f;
 	constexpr int32 kSpecialBloonCount = 20;
 
 	if (roundNumber >= kSpecialWaveUnlockRound)
