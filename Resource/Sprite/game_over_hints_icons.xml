@@ -1,0 +1,21 @@
+<SpriteInformation>
+<FrameInformation name="game_over_hints_icons" texw="1008" texh="1024" type="png">
+<Cell name="banana_farms" x="468" y="616" w="183" h="221" ax="0" ay="0" aw="183" ah="221"/>
+<Cell name="buccaneer_ninja" x="1" y="1" w="312" h="199" ax="0" ay="1" aw="312" ah="200"/>
+<Cell name="chest" x="315" y="1" w="278" h="193" ax="2" ay="0" aw="281" ah="193"/>
+<Cell name="dartling_spikes" x="1" y="644" w="239" h="213" ax="0" ay="0" aw="239" ah="213"/>
+<Cell name="general" x="664" y="446" w="172" h="246" ax="0" ay="0" aw="172" ah="246"/>
+<Cell name="glue_ice" x="1" y="202" w="280" h="220" ax="0" ay="0" aw="280" ah="220"/>
+<Cell name="hints" x="283" y="202" w="274" h="211" ax="4" ay="2" aw="289" ah="217"/>
+<Cell name="mauler" x="838" y="380" w="169" h="224" ax="0" ay="0" aw="169" ah="224"/>
+<Cell name="moab" x="595" y="1" w="266" h="173" ax="0" ay="0" aw="266" ah="173"/>
+<Cell name="monkey_sense" x="653" y="694" w="139" h="205" ax="0" ay="0" aw="140" ah="205"/>
+<Cell name="monkey_sense_white_hot" x="1" y="424" w="239" h="218" ax="1" ay="2" aw="240" ah="221"/>
+<Cell name="pro_agents" x="813" y="176" w="193" h="202" ax="1" ay="2" aw="194" ah="204"/>
+<Cell name="radar_meerkat" x="559" y="196" w="252" h="248" ax="0" ay="0" aw="252" ah="248"/>
+<Cell name="regens" x="242" y="424" w="224" h="196" ax="0" ay="1" aw="224" ah="197"/>
+<Cell name="specialty_buildings" x="242" y="826" w="189" h="194" ax="1" ay="2" aw="191" ah="196"/>
+<Cell name="supermonkey" x="242" y="622" w="218" h="202" ax="0" ay="0" aw="218" ah="202"/>
+<Cell name="tokens" x="468" y="446" w="194" h="168" ax="2" ay="1" aw="198" ah="169"/>
+</FrameInformation>
+</SpriteInformation>

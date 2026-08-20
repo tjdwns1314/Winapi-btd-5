@@ -1,18 +1,18 @@
 <SpriteInformation>
-<FrameInformation name="game_over_popup" texw="460" texh="320" type="png">
-<Cell name="agents_icon" x="1" y="96" w="182" h="116" ax="0" ay="0" aw="182" ah="116"/>
-<Cell name="apopalypse" x="370" y="1" w="85" h="103" ax="0" ay="0" aw="85" ah="103"/>
-<Cell name="camera_icon" x="112" y="233" w="75" h="63" ax="0" ay="0" aw="75" ah="63"/>
-<Cell name="continue_icon" x="306" y="109" w="109" h="67" ax="0" ay="0" aw="109" ah="67"/>
-<Cell name="deflation" x="225" y="1" w="142" h="105" ax="0" ay="0" aw="142" ah="105"/>
-<Cell name="eye_glow" x="369" y="179" w="60" h="60" ax="0" ay="0" aw="60" ah="60"/>
-<Cell name="home_icon_shared" x="258" y="251" w="59" h="67" ax="0" ay="0" aw="59" ah="67"/>
-<Cell name="lose_odyssey_captain" x="186" y="109" w="117" h="121" ax="0" ay="0" aw="117" ah="121"/>
-<Cell name="lose_odyssey_flag" x="190" y="233" w="65" h="59" ax="0" ay="0" aw="65" ah="59"/>
-<Cell name="lose_odyssey_monkey" x="418" y="107" w="37" h="28" ax="0" ay="0" aw="37" ah="28"/>
-<Cell name="lose_odyssey_plank" x="320" y="251" w="50" h="45" ax="0" ay="0" aw="50" ah="45"/>
-<Cell name="lose_odyssey_water" x="1" y="1" w="221" h="92" ax="0" ay="0" aw="221" ah="92"/>
-<Cell name="skull" x="1" y="215" w="108" h="103" ax="0" ay="0" aw="108" ah="103"/>
-<Cell name="try_again_icon" x="306" y="179" w="60" h="69" ax="0" ay="0" aw="60" ah="69"/>
+<FrameInformation name="game_over_popup" texw="904" texh="680" type="png">
+<Cell name="agents_icon" x="1" y="187" w="364" h="232" ax="0" ay="0" aw="364" ah="232"/>
+<Cell name="apopalypse" x="732" y="1" w="169" h="205" ax="0" ay="0" aw="169" ah="205"/>
+<Cell name="camera_icon" x="219" y="459" w="150" h="126" ax="0" ay="0" aw="150" ah="126"/>
+<Cell name="continue_icon" x="604" y="214" w="217" h="133" ax="0" ay="0" aw="217" ah="133"/>
+<Cell name="deflation" x="445" y="1" w="284" h="210" ax="0" ay="0" aw="284" ah="210"/>
+<Cell name="eye_glow" x="727" y="350" w="119" h="119" ax="0" ay="0" aw="119" ah="119"/>
+<Cell name="home_icon_shared" x="505" y="491" w="118" h="134" ax="0" ay="0" aw="118" ah="134"/>
+<Cell name="lose_odyssey_captain" x="368" y="214" w="233" h="242" ax="0" ay="0" aw="233" ah="242"/>
+<Cell name="lose_odyssey_flag" x="372" y="459" w="130" h="117" ax="0" ay="0" aw="130" ah="117"/>
+<Cell name="lose_odyssey_monkey" x="322" y="588" w="73" h="55" ax="0" ay="0" aw="73" ah="55"/>
+<Cell name="lose_odyssey_plank" x="219" y="588" w="100" h="89" ax="0" ay="0" aw="100" ah="89"/>
+<Cell name="lose_odyssey_water" x="1" y="1" w="441" h="183" ax="0" ay="0" aw="441" ah="183"/>
+<Cell name="skull" x="1" y="422" w="215" h="206" ax="0" ay="0" aw="215" ah="206"/>
+<Cell name="try_again_icon" x="604" y="350" w="120" h="138" ax="0" ay="0" aw="120" ah="138"/>
 </FrameInformation>
 </SpriteInformation>
