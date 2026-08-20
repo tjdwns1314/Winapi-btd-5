@@ -1,4 +1,4 @@
-{
+﻿{
     "bloons" : [
             {
             "color": "Red", 
@@ -58,7 +58,7 @@
             },
             {
             "color": "Lead",
-            "layerHp":1,
+            "layerHp":3,
             "speed" : 150,
             "goldReward" : 1,
             "spriteKey" : "Lead",
