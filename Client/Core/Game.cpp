@@ -69,7 +69,7 @@ void Game::Update(float deltaTime)
 		Scene* current = sceneManager.GetCurrentScene();
 		const bool isEditor = current != nullptr &&
 			current->GetSceneType() == SceneType::Editor;
-		sceneManager.ChangeScene(isEditor ? SceneType::Game : SceneType::Editor);
+		sceneManager.ChangeScene(isEditor ? SceneType::Lobby : SceneType::Editor);
 
 	}
 }
