@@ -47,6 +47,8 @@ public:
 		function<void()> onWaveDown,
 		function<void()> onGoldAdd,
 		function<void()> onHpAdd,
+		function<void()> onGoldSub,
+		function<void()> onHpSub,
 		function<void()> onSellClick,
 		function<void()> onUpgradeClick,
 		function<void()> onObstacleSellClick,
@@ -160,6 +162,8 @@ private:
 
 	UIButton* _goldAddButton = nullptr; // 골드 +1000 버튼(돈 텍스트 옆)
 	UIButton* _hpAddButton = nullptr;   // HP +10 버튼(체력 텍스트 옆)
+	UIButton* _goldSubButton = nullptr; // 골드 -1000 버튼(+ 버튼 옆)
+	UIButton* _hpSubButton = nullptr;   // HP -10 버튼(+ 버튼 옆)
 
 	// 타워/장애물 상점
 	Image* _inGameBg = nullptr;

@@ -62,6 +62,9 @@ namespace
 	const Vector kGoldAddButtonPos = Vector(1680.0f, kGoldIconCenterY); // 골드 + 버튼 위치
 	const Vector kHpAddButtonPos = Vector(1650.0f, kHpIconCenterY);     // HP + 버튼 위치
 	const Vector kStatAddButtonSize = Vector(26.0f, 26.0f);             // 두 버튼 공통 크기
+	// 골드/HP 디버그 감소(-) 버튼 — 각 + 버튼 바로 오른쪽에 배치.
+	const Vector kGoldSubButtonPos = Vector(kGoldAddButtonPos.x + 30.0f, kGoldIconCenterY); // 골드 - 버튼 위치
+	const Vector kHpSubButtonPos = Vector(kHpAddButtonPos.x + 30.0f, kHpIconCenterY);       // HP - 버튼 위치
 
 	// --------------------------------------------------
 	//  타워/장애물 상점
@@ -197,6 +200,8 @@ void GameSceneUI::Init(
 	function<void()> onWaveDown,
 	function<void()> onGoldAdd,
 	function<void()> onHpAdd,
+	function<void()> onGoldSub,
+	function<void()> onHpSub,
 	function<void()> onSellClick,
 	function<void()> onUpgradeClick,
 	function<void()> onObstacleSellClick,
@@ -244,6 +249,8 @@ void GameSceneUI::Init(
 	// 골드/HP 디버그 증가(+) 버튼
 	_goldAddButton = createButton(kGoldAddButtonPos, kStatAddButtonSize, onGoldAdd);
 	_hpAddButton = createButton(kHpAddButtonPos, kStatAddButtonSize, onHpAdd);
+	_goldSubButton = createButton(kGoldSubButtonPos, kStatAddButtonSize, onGoldSub);
+	_hpSubButton = createButton(kHpSubButtonPos, kStatAddButtonSize, onHpSub);
 
 	// 타워 선택 패널: 상점 버튼(y=550)과 웨이브 버튼(y=900) 사이 빈 공간에 고정 배치.
 	// 위치/크기는 임시값 — 빌드 후 눈으로 보고 조정할 것.
@@ -364,6 +371,8 @@ void GameSceneUI::Render(Graphic& graphic, bool isDraggingTower, TowerType dragg
 	renderRoundText(graphic, currentRound, totalRound);
 	renderMiniButton(graphic, _goldAddButton, true);
 	renderMiniButton(graphic, _hpAddButton, true);
+	renderMiniButton(graphic, _goldSubButton, false);
+	renderMiniButton(graphic, _hpSubButton, false);
 
 	if (_sellButton != nullptr) _sellButton->SetActive(selection.isSelected);
 	if (_upgradeButton != nullptr) _upgradeButton->SetActive(selection.isSelected && selection.canUpgrade && selection.canAfford);
