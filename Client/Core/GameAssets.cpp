@@ -38,6 +38,7 @@ void GameAssets::Load(Graphic& graphic)
 	res.LoadImage(graphic, L"Resource\\Sprite\\nukki\\music.png");
 	res.LoadImage(graphic, L"Resource\\Sprite\\nukki\\replay.png");
 	res.LoadImage(graphic, L"Resource\\Sprite\\nukki\\resume.png");
+	res.LoadImage(graphic, L"Resource\\Sprite\\nukki\\save.png");
 	res.LoadImage(graphic, L"Resource\\Sprite\\nukki\\sfx.png");
 	res.LoadImage(graphic, L"Resource\\Sprite\\nukki\\x.png");
 	res.LoadImage(graphic, L"Resource\\Sprite\\nukki\\circle_nukki.png");
