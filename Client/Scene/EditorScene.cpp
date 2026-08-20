@@ -624,7 +624,20 @@ void EditorScene::Render(Graphic& graphic)
 
 	drawBloonPreview("stock_bloon",       "stock_bloon_highlight",       150.0f, 650.0f);
 	drawBloonPreview("stock_regen_bloon", "stock_regen_bloon_highlight", 350.0f, 650.0f);
+
+	// 특수 풍선으로 이용할 얘들
 	drawBloonPreview("stock_bloon",       "camo_overlay",                550.0f, 650.0f);
 	drawBloonPreview("stock_regen_bloon", "camo_regen_overlay",          750.0f, 650.0f);
+
+	// 골든 풍선(보너스) 미리보기: 오버레이 없는 단일 스프라이트
+	auto drawGoldenBloonPreview = [&](const char* cellName, float x, float y)
+		{
+			if (const CellInfo* cell = _sprite->GetCell(cellName))
+			{
+				_inGameBg->DrawSprite(graphic, x, y, *cell, 1.0f, 0.0f);
+			}
+		};
+
+	drawGoldenBloonPreview("golden_bloon_01", 950.0f, 650.0f);
 }
 
