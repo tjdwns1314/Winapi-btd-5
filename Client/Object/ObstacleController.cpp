@@ -8,15 +8,37 @@
 #include "PoolManager.h"
 #include "InputManager.h"
 
-void ObstacleController::TryStartDrag(EconomyManager& economy)
+namespace
 {
-	if (economy.GetGold() < GetObstacleStat(ObstacleType::BananaFarmTree).basePrice)
+	// 기본 10개. 10라운드부터 +5(15개), 20라운드부터 +5 더(20개). 그 이후(30라운드 등)는 더 늘어나지 않는다.
+	constexpr int32 kObstacleBaseCount = 10;
+	constexpr int32 kObstacleBonusCount = 5;
+	constexpr int32 kObstacleFirstBonusRound = 10;
+	constexpr int32 kObstacleSecondBonusRound = 20;
+
+	int32 GetMaxObstacleCount(int32 currentRound)
+	{
+		int32 maxCount = kObstacleBaseCount;
+		if (currentRound >= kObstacleFirstBonusRound)
+			maxCount += kObstacleBonusCount;
+		if (currentRound >= kObstacleSecondBonusRound)
+			maxCount += kObstacleBonusCount;
+		return maxCount;
+	}
+}
+
+void ObstacleController::TryStartDrag(Scene& scene, int32 currentRound, EconomyManager& economy)
+{
+	if (economy.GetGold() < GetObstacleStat(ObstacleType::BananaFarmChimney).basePrice)
 		return; // 골드가 부족하면 드래그를 시작하지 않는다.
+
+	if (countObstacles(scene) >= GetMaxObstacleCount(currentRound))
+		return; // 현재 라운드 기준 설치 한도에 도달하면 드래그를 시작하지 않는다.
 
 	_isDragging = true;
 }
 
-void ObstacleController::UpdateDrag(Scene& scene, MapSystem& map, EconomyManager& economy, bool waveActive)
+void ObstacleController::UpdateDrag(Scene& scene, MapSystem& map, EconomyManager& economy, bool waveActive, int32 currentRound)
 {
 	if (_isDragging == false)
 		return;
@@ -44,17 +66,20 @@ void ObstacleController::UpdateDrag(Scene& scene, MapSystem& map, EconomyManager
 	if (findObstacleAt(scene, targetCell, gridSize) != nullptr)
 		return; // 이미 장애물이 있는 셀에는 중복 설치 금지
 
+	if (countObstacles(scene) >= GetMaxObstacleCount(currentRound))
+		return; // 드래그 도중 한도를 넘겼으면(방어적 재확인) 설치하지 않는다.
+
 	if (map.TryOccupyCell(targetCell) == false)
 		return; // 도착 경로를 완전히 막으면 설치 불가
 
-	const int32 price = GetObstacleStat(ObstacleType::BananaFarmTree).basePrice;
+	const int32 price = GetObstacleStat(ObstacleType::BananaFarmChimney).basePrice;
 	if (economy.TrySpend(price) == false)
 	{
 		map.ReleaseCell(targetCell);
 		return; // 골드 부족 시 설치 취소
 	}
 
-	Obstacle* obstacle = ObstacleFactory::Create(PoolManager::GetInstance().GetObstaclePool(), ObstacleType::BananaFarmTree,
+	Obstacle* obstacle = ObstacleFactory::Create(PoolManager::GetInstance().GetObstaclePool(), ObstacleType::BananaFarmChimney,
 		Vector((targetCell.iX + 0.5f) * gridSize, (targetCell.iY + 0.5f) * gridSize));
 	if (obstacle != nullptr)
 	{
@@ -96,6 +121,17 @@ Obstacle* ObstacleController::findObstacleAt(Scene& scene, const Cell& cell, int
 			return static_cast<Obstacle*>(actor);
 	}
 	return nullptr;
+}
+
+int32 ObstacleController::countObstacles(Scene& scene) const
+{
+	int32 count = 0;
+	for (Actor* actor : scene.GetActors(RenderLayer::Obstacle))
+	{
+		if (!actor->IsPendingKill())
+			++count;
+	}
+	return count;
 }
 
 void ObstacleController::SellSelected(MapSystem& map, EconomyManager& economy)

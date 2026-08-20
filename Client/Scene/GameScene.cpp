@@ -137,7 +137,7 @@ void GameScene::Update(float deltaTime)
 	const bool waveActive = _waveManager.IsWaveActive();
 	_towerController.UpdateDrag(*this, _map, _economyManager, waveActive);
 	_towerController.UpdateSelect(_map, *this);
-	_obstacleController.UpdateDrag(*this, _map, _economyManager, waveActive);
+	_obstacleController.UpdateDrag(*this, _map, _economyManager, waveActive, _waveManager.GetDisplayRoundNumber());
 	_obstacleController.UpdateSelect(_map, *this);
 	GetCollisionManager().Update(*this);
 	updateDebugWaveTitle();
@@ -250,7 +250,7 @@ void GameScene::CreateUI()
 		[this]() { _towerController.TryStartDrag(TowerType::TackShooter, _economyManager); },
 		[this]() { _towerController.TryStartDrag(TowerType::SniperMonkey, _economyManager); },
 		[this]() { _towerController.TryStartDrag(TowerType::BombTower, _economyManager); },
-		[this]() { _obstacleController.TryStartDrag(_economyManager); },
+		[this]() { _obstacleController.TryStartDrag(*this, _waveManager.GetDisplayRoundNumber(), _economyManager); },
 		[this]() { _waveManager.SetNextRound(_waveManager.GetNextRoundNumber() + 1); },
 		[this]() { _waveManager.SetNextRound(_waveManager.GetNextRoundNumber() - 1); },
 		[this]() { _economyManager.Add(1000); },
