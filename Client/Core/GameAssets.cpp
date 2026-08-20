@@ -33,6 +33,7 @@ void GameAssets::Load(Graphic& graphic)
 	res.LoadAtlas(L"Resource\\Sprite\\newshared.xml");
 
 	res.LoadImage(graphic, L"Resource\\Image_png\\lobby_background.png");
+	res.LoadImage(graphic, L"Resource\\Image_png\\newslocal_02.png");
 
 	res.LoadImage(graphic, L"Resource\\Sprite\\nukki\\autoplay.png");
 	res.LoadImage(graphic, L"Resource\\Sprite\\nukki\\music.png");

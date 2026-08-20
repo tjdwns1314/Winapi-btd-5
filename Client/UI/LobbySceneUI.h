@@ -32,6 +32,7 @@ private:
 
 	Image* _background = nullptr; // lobby_background.png
 	Image* _trophy = nullptr;     // gold_trophy_nukki.png
+	Image* _newsLocal = nullptr;  // newslocal_02.png
 
 	// 팝업 배경(plain_button)/닫기(close_button) 스프라이트, 버튼 아이콘
 	Image* _hudImg = nullptr;          // in_game_hud.png

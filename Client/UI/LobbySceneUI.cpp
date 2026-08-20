@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "LobbySceneUI.h"
 #include "UIManager.h"
 #include "Graphic.h"
@@ -14,6 +14,8 @@ namespace
 	constexpr float kPlayButtonBgAlpha = 0.2f;   // 버튼 배경 반투명 검정 알파값
 	const wchar_t* const kPlayButtonText = L"플레이";
 	constexpr float kTrophyScale = 0.4f; // 원본 1432x1098로 커서 축소 배율 (미검증 - 실제 비율 확인 후 조정 필요)
+	constexpr float kNewsLocalOffsetY = -350.0f; // 화면 중앙 기준 Y 오프셋(위로) - 트로피와 안 겹치게 (미검증 - 실제 크기 보고 조정 필요)
+	constexpr float kNewsLocalScale = 1.3f;      // (미검증 - 실제 크기 보고 조정 필요)
 
 	// 새 게임 / 게임 재개 선택 팝업
 	const D2D1::ColorF kSelectDimColor = D2D1::ColorF(D2D1::ColorF::Black, 0.6f); // 배경 페이드(딤) 색상/투명도
@@ -30,7 +32,7 @@ namespace
 	constexpr FontSize kSelectTitleFontSize = FONT_40;
 	const wchar_t* const kSelectTitleText = L"게임 선택하기";
 
-	constexpr float kSelectLabelTopOffset = 110.0f; // 버튼 아래 라벨 텍스트, 버튼 중심 기준 Y 오프셋
+	constexpr float kSelectLabelTopOffset = 130.0f; // 버튼 아래 라벨 텍스트, 버튼 중심 기준 Y 오프셋
 	constexpr FontSize kSelectLabelFontSize = FONT_30;
 	const wchar_t* const kNewGameText = L"새 게임";
 	const wchar_t* const kResumeText = L"게임 재개";
@@ -45,6 +47,7 @@ void LobbySceneUI::Init(function<void()> onNewGameClick, function<void()> onResu
 
 	_background = &res.GetImage(L"Resource\\Image_png\\lobby_background.png");
 	_trophy = &res.GetImage(L"Resource\\Sprite\\nukki\\gold_trophy_nukki.png");
+	_newsLocal = &res.GetImage(L"Resource\\Image_png\\newslocal_02.png");
 
 	_hasSaveFile = hasSaveFile;
 
@@ -111,6 +114,8 @@ void LobbySceneUI::Render(Graphic& graphic) const
 	const D2D1_SIZE_F bgSize = _background->GetSize();
 	const float bgScale = std::max(static_cast<float>(GWinSizeX) / bgSize.width, static_cast<float>(GWinSizeY) / bgSize.height);
 	_background->Draw(graphic, static_cast<float>(GWinSizeX) * 0.5f, static_cast<float>(GWinSizeY) * 0.5f, bgScale);
+
+	_newsLocal->Draw(graphic, static_cast<float>(GWinSizeX) * 0.5f, static_cast<float>(GWinSizeY) * 0.5f + kNewsLocalOffsetY, kNewsLocalScale);
 
 	_trophy->Draw(graphic, static_cast<float>(GWinSizeX) * 0.5f, static_cast<float>(GWinSizeY) * 0.5f, kTrophyScale);
 
