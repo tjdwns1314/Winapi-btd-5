@@ -13,6 +13,11 @@
 #include "AudioManager.h"
 #include "SceneManager.h"
 
+namespace
+{
+	constexpr float kGameOverFadeDuration = 0.4f; // 게임오버 딤이 다 어두워지기까지 걸리는 시간(초)
+}
+
 void GameScene::Init(Graphic& graphic)
 {
 	Super::Init(graphic);
@@ -39,6 +44,8 @@ void GameScene::Init(Graphic& graphic)
 
 	_speedEnabled = _hasPendingLoad ? _pendingLoadData.speedEnabled : false;
 	_isSettingsOpen = false;
+	_gameOverFadeTimer = 0.0f;
+	UIManager::GetInstance().SetInputLocked(false); // 이전 판(게임오버 등)에서 잠긴 입력을 새 판 시작 시 반드시 풀어준다.
 	AudioManager::GetInstance().SetBgmVolumeScale(1.0f);
 
 	AudioManager::GetInstance().PlayBgm(L"jazz");
@@ -102,6 +109,10 @@ void GameScene::Update(float deltaTime)
 
 	if (_healthManager.IsGameOver())
 	{
+		_gameOverFadeTimer = std::min(_gameOverFadeTimer + deltaTime, kGameOverFadeDuration);
+		// 재시작 버튼을 제외한 모든 UI(오른쪽 상점/HUD 패널 포함) 입력을 막는다.
+		UIManager::GetInstance().SetInputLocked(true);
+
 		for (Actor* actor : GetActors(RenderLayer::Bloon))
 		{
 			if (actor->IsActive() && actor->IsPendingKill() == false)
@@ -195,6 +206,8 @@ void GameScene::Render(Graphic& graphic)
 		obstacleSelection.sellPrice = selectedObstacle->GetSellPrice();
 	}
 
+	const float gameOverFadeProgress = _gameOverFadeTimer / kGameOverFadeDuration;
+
 	_ui.Render(graphic,
 		_towerController.IsDragging(),
 		_towerController.DraggingType(),
@@ -208,13 +221,22 @@ void GameScene::Render(Graphic& graphic)
 		_waveManager.GetDisplayRoundNumber(),
 		_waveManager.GetTotalRoundNumber(),
 		_speedEnabled,
-		_healthManager.IsGameOver());
+		_healthManager.IsGameOver(),
+		gameOverFadeProgress);
 
 	// 모든 타워를 그리기 전에 선택된 타워의 사거리부터 그려서, 다른 타워를 덮지 않도록 함.
 	if (selectedTower != nullptr && selectedTower->GetType() != TowerType::SniperMonkey)
 		selectedTower->RenderRange(graphic);
 
 	Super::Render(graphic);
+
+	// 게임오버 중에도 계속 움직이는 풍선 등 액터보다 위에 그려야 하므로 액터 렌더링 이후에 호출.
+	_ui.RenderGameOverPopup(graphic, _healthManager.IsGameOver(), gameOverFadeProgress, _waveManager.GetDisplayRoundNumber());
+
+	// 배치된 타워 등 액터보다 위에 그려야 하므로 액터 렌더링 이후에 호출.
+	// 게임오버/설정 팝업이 떠 있는 동안은 툴팁을 보이지 않게 한다.
+	if (_isSettingsOpen == false && _healthManager.IsGameOver() == false)
+		_ui.RenderTooltips(graphic, selection);
 
 	// 액터/버튼까지 전부 그려진 뒤 맨 마지막에 덧그려야 설정 팝업이 항상 최상단에 보인다.
 	_ui.RenderModalOverlay(graphic, _isSettingsOpen);
@@ -237,7 +259,12 @@ void GameScene::CreateUI()
 		[this]() { _towerController.UpgradeSelected(_economyManager); },
 		[this]() { _obstacleController.SellSelected(_map, _economyManager); },
 		[this]() { Restart(); },
-		[this]() { _isSettingsOpen = !_isSettingsOpen; AudioManager::GetInstance().SetBgmVolumeScale(_isSettingsOpen ? 0.3f : 1.0f); },
+		[this]()
+		{
+			if (_healthManager.IsGameOver()) return; // 게임오버 중에는 설정창을 열 수 없다.
+			_isSettingsOpen = !_isSettingsOpen;
+			AudioManager::GetInstance().SetBgmVolumeScale(_isSettingsOpen ? 0.3f : 1.0f);
+		},
 		[this]() { _isSettingsOpen = false; AudioManager::GetInstance().SetBgmVolumeScale(1.0f); },
 		[this]() { Restart(); },
 		[this]()

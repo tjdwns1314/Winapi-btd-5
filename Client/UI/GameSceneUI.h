@@ -68,11 +68,20 @@ public:
 		int32 gold, bool isWaveActive,
 		int32 currentRound, int32 totalRound,
 		bool isSpeedEnabled,
-		bool isGameOver);
+		bool isGameOver,
+		float gameOverFadeProgress);
 
 	// 설정 팝업 전용. 다른 모든 그리기(액터, HUD, 다른 팝업)가 끝난 뒤 프레임 맨 마지막에 호출해야
 	// 액터/버튼에 가려지지 않고 항상 최상단에 딤+버튼이 그려진다.
 	void RenderModalOverlay(Graphic& graphic, bool isSettingsOpen) const;
+
+	// 상점 호버/업그레이드 툴팁 전용. 배치된 타워 등 액터(Super::Render)보다도 위에 그려야 하므로
+	// GameScene::Render에서 액터 렌더링이 끝난 뒤 별도로 호출해야 한다.
+	void RenderTooltips(Graphic& graphic, const TowerSelectionInfo& selection) const;
+
+	// 게임오버 딤/문구/재시작 버튼 전용. 게임오버 중에도 계속 움직이는 풍선 등 액터보다 위에 그려야 하므로
+	// GameScene::Render에서 액터 렌더링이 끝난 뒤 별도로 호출해야 한다.
+	void RenderGameOverPopup(Graphic& graphic, bool isGameOver, float fadeProgress, int32 finalRound) const;
 private:
 	UIButton* createButton(const Vector& pos, const Vector& size, function<void()> onClick);
 
@@ -130,7 +139,9 @@ private:
 	// --------------------------------------------------
 	//  게임오버 팝업
 	// --------------------------------------------------
-	void renderGameOverPopup(Graphic& graphic) const;
+	// fadeProgress: 0(딤 시작)→1(완전히 어두워짐). 1이 될 때까지 딤만 그리고, 이후 문구/버튼을 그린다.
+	// finalRound: 게임오버가 발생한 시점의 현재 라운드(문구에 "라운드 : N"으로 표시).
+	void renderGameOverPopup(Graphic& graphic, float fadeProgress, int32 finalRound) const;
 
 	// --------------------------------------------------
 	//  설정 팝업

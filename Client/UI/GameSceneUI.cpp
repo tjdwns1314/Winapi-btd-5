@@ -146,12 +146,19 @@ namespace
 	// --------------------------------------------------
 	//  게임오버 팝업
 	// --------------------------------------------------
-	const Vector kRestartButtonSize = Vector(131.0f, 137.0f); // 재시작 버튼 크기(baked 이미지 원본 크기, 게임 영역 정중앙에 배치)
-	const wchar_t* const kGameOverText = L"GAME OVER";                       // 게임오버 문구
-	const D2D1::ColorF kGameOverTextColor = D2D1::ColorF(D2D1::ColorF::Red); // 게임오버 문구 색상
+	const Vector kRestartButtonSize = Vector(131.0f, 137.0f); // 재시작 버튼 크기(baked 이미지 원본 크기)
+	constexpr float kRestartButtonScale = 1.4f; // 재시작 버튼(plain_button 패널) 확대 배율
+	const wchar_t* const kGameOverTitleText = L"게임 오버";                   // 게임오버 제목
+	const wchar_t* const kGameOverReasonText = L"생명고갈";                   // 게임오버 사유
+	const wchar_t* const kGameOverRoundFormat = L"라운드 : %d";               // 게임오버 시점 라운드
+	const D2D1::ColorF kGameOverTextColor = D2D1::ColorF(D2D1::ColorF::Red);  // 제목 색상
+	const D2D1::ColorF kGameOverSubTextColor = D2D1::ColorF(D2D1::ColorF::White); // 사유/라운드 텍스트 색상
 	const D2D1::ColorF kGameOverDimColor = D2D1::ColorF(D2D1::ColorF::Black, 0.6f); // 배경 딤(어둡게) 색상/투명도
-	constexpr float kGameOverTextTopOffset = -160.0f;    // 문구 표시 영역 위쪽 끝(화면 중앙 기준 오프셋)
-	constexpr float kGameOverTextBottomOffset = -80.0f;  // 문구 표시 영역 아래쪽 끝(화면 중앙 기준 오프셋)
+	// 이 값 하나만 바꾸면 문구 3줄 전체가 위/아래로 같이 움직인다.
+	constexpr float kGameOverTextStartOffset = -320.0f;
+	// 줄 간격(다음 줄로 넘어갈 때 더하는 높이). 제목/부제 폰트 크기가 달라서 따로 둔다.
+	constexpr float kGameOverTitleLineHeight = 80.0f;
+	constexpr float kGameOverSubTextLineHeight = 80.0f;
 
 	// --------------------------------------------------
 	//  설정 팝업 (오륜기 배치)
@@ -260,9 +267,12 @@ void GameSceneUI::Init(
 	_obstacleSellButton = createButton(kObstacleSellButtonPos, sellButtonSize, onObstacleSellClick);
 	_obstacleSellButton->SetActive(false);
 
-	// 게임오버 팝업의 재시작 버튼. baked 이미지(131x137) 크기에 맞춰 게임 영역 정중앙에 둔다.
-	_restartButton = createButton(Vector(GameAreaCenterX, GameAreaCenterY), kRestartButtonSize, onRestartClick);
+	// 게임오버 팝업의 재시작 버튼. baked 이미지(131x137)를 kRestartButtonScale배로 키워 전체 화면 정중앙에 둔다.
+	const Vector kGameOverCenter(static_cast<float>(GWinSizeX) * 0.5f, static_cast<float>(GWinSizeY) * 0.5f);
+	const Vector kRestartButtonScaledSize(kRestartButtonSize.x * kRestartButtonScale, kRestartButtonSize.y * kRestartButtonScale);
+	_restartButton = createButton(kGameOverCenter, kRestartButtonScaledSize, onRestartClick);
 	_restartButton->SetActive(false);
+	_restartButton->SetIgnoresModalLock(true); // 게임오버로 입력이 잠겨도 재시작 버튼 자체는 눌려야 한다.
 
 	// 설정 팝업 버튼 6개: 3x2 격자 배치. 게임 영역 정중앙 기준.
 	const Vector settingsButtonSize(kSettingsButtonBaseWidth * kSettingsRingScale, kSettingsButtonBaseHeight * kSettingsRingScale);
@@ -326,7 +336,7 @@ void GameSceneUI::Render(Graphic& graphic, bool isDraggingTower, TowerType dragg
 	const ObstacleSelectionInfo& obstacleSelection,
 	int32 hp, int32 gold, bool isWaveActive,
 	int32 currentRound, int32 totalRound, bool isSpeedEnabled,
-	bool isGameOver)
+	bool isGameOver, float gameOverFadeProgress)
 {
 	renderHudBackgroundPanel(graphic);
 
@@ -365,12 +375,6 @@ void GameSceneUI::Render(Graphic& graphic, bool isDraggingTower, TowerType dragg
 		renderObstacleSelectionPanel(graphic, obstacleSelection);
 
 	if (_restartButton != nullptr) _restartButton->SetActive(isGameOver);
-	if (isGameOver)
-		renderGameOverPopup(graphic);
-
-	// 다른 HUD 요소들 위에 그려져야 하므로 맨 마지막에.
-	renderTowerTooltip(graphic);
-	renderUpgradeTooltip(graphic, selection);
 }
 
 void GameSceneUI::RenderModalOverlay(Graphic& graphic, bool isSettingsOpen) const
@@ -380,6 +384,18 @@ void GameSceneUI::RenderModalOverlay(Graphic& graphic, bool isSettingsOpen) cons
 
 	if (isSettingsOpen)
 		renderSettingsPopup(graphic);
+}
+
+void GameSceneUI::RenderTooltips(Graphic& graphic, const TowerSelectionInfo& selection) const
+{
+	renderTowerTooltip(graphic);
+	renderUpgradeTooltip(graphic, selection);
+}
+
+void GameSceneUI::RenderGameOverPopup(Graphic& graphic, bool isGameOver, float fadeProgress, int32 finalRound) const
+{
+	if (isGameOver)
+		renderGameOverPopup(graphic, fadeProgress, finalRound);
 }
 
 // --------------------------------------------------
@@ -829,23 +845,47 @@ void GameSceneUI::renderObstacleSelectionPanel(Graphic& graphic, const ObstacleS
 //  게임오버 팝업
 // --------------------------------------------------
 
-void GameSceneUI::renderGameOverPopup(Graphic& graphic) const
+void GameSceneUI::renderGameOverPopup(Graphic& graphic, float fadeProgress, int32 finalRound) const
 {
+	const float dimAlpha = kGameOverDimColor.a * std::clamp(fadeProgress, 0.0f, 1.0f);
+
 	ID2D1HwndRenderTarget* renderTarget = graphic.GetRenderTarget();
-	ID2D1SolidColorBrush* dimBrush = graphic.GetBrush(kGameOverDimColor);
+	ID2D1SolidColorBrush* dimBrush = graphic.GetBrush(
+		D2D1::ColorF(kGameOverDimColor.r, kGameOverDimColor.g, kGameOverDimColor.b, dimAlpha));
 	if (renderTarget != nullptr && dimBrush != nullptr)
 	{
-		// game_over_popup.xml에는 배경 패널 셀이 없어서, 게임 영역 전체를 어둡게 깔아 팝업처럼 보이게 한다.
+		// game_over_popup.xml에는 배경 패널 셀이 없어서, 화면 전체(오른쪽 UI 패널 포함)를 어둡게 깔아
+		// 팝업처럼 보이게 한다. fadeProgress(0→1)에 따라 서서히 어두워진다.
 		renderTarget->FillRectangle(D2D1::RectF(0.0f, 0.0f,
-			static_cast<float>(GameAreaWidth), static_cast<float>(GameAreaHeight)), dimBrush);
+			static_cast<float>(GWinSizeX), static_cast<float>(GWinSizeY)), dimBrush);
 	}
 
-	graphic.DrawString(kGameOverText,
-		D2D1::RectF(0.0f, GameAreaCenterY + kGameOverTextTopOffset, static_cast<float>(GameAreaWidth), GameAreaCenterY + kGameOverTextBottomOffset),
-		FONT_30, kGameOverTextColor, DWRITE_TEXT_ALIGNMENT_CENTER);
+	// 딤이 다 어두워진 뒤에 문구/버튼을 보여준다.
+	if (fadeProgress < 1.0f)
+		return;
+
+	const float centerX = static_cast<float>(GWinSizeX) * 0.5f;
+	const float centerY = static_cast<float>(GWinSizeY) * 0.5f;
+	float lineY = centerY + kGameOverTextStartOffset;
+
+	graphic.DrawString(kGameOverTitleText,
+		D2D1::RectF(0.0f, lineY, static_cast<float>(GWinSizeX), lineY + kGameOverTitleLineHeight),
+		FONT_35, kGameOverTextColor, DWRITE_TEXT_ALIGNMENT_CENTER);
+	lineY += kGameOverTitleLineHeight;
+
+	graphic.DrawString(kGameOverReasonText,
+		D2D1::RectF(0.0f, lineY, static_cast<float>(GWinSizeX), lineY + kGameOverSubTextLineHeight),
+		FONT_30, kGameOverSubTextColor, DWRITE_TEXT_ALIGNMENT_CENTER);
+	lineY += kGameOverSubTextLineHeight;
+
+	wchar_t roundText[32];
+	swprintf_s(roundText, kGameOverRoundFormat, finalRound);
+	graphic.DrawString(roundText,
+		D2D1::RectF(0.0f, lineY, static_cast<float>(GWinSizeX), lineY + kGameOverSubTextLineHeight),
+		FONT_30, kGameOverSubTextColor, DWRITE_TEXT_ALIGNMENT_CENTER);
 
 	ResourceManager::GetInstance().GetImage(L"restart_button_baked")
-		.Draw(graphic, GameAreaCenterX, GameAreaCenterY, 1.0f, 0.0f);
+		.Draw(graphic, centerX, centerY, kRestartButtonScale, 0.0f);
 }
 
 // --------------------------------------------------

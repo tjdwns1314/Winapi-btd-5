@@ -315,6 +315,8 @@ void GameAssets::Load(Graphic& graphic)
 
 
 
+	constexpr float kRestartIconScale = 0.7f; // try_again_icon만 축소(패널 plain_button은 그대로 1.0배)
+
 	// plain_button(in_game_hud) 베이스 위에 try_again_icon(game_over_popup)을 겹쳐 하나의 이미지로 굽는다.
 	// 서로 다른 아틀라스라 SpriteBaker(BakeFrame)로는 합성이 안 되어 BakeImage에 직접 그린다.
 	{
@@ -330,7 +332,7 @@ void GameAssets::Load(Graphic& graphic)
 			[&](ID2D1RenderTarget* rt)
 			{
 				if (baseCell) hudImg.DrawSprite(rt, 65.5f, 68.5f, *baseCell, 1.0f, 0.0f);
-				if (iconCell) popupImg.DrawSprite(rt, 65.5f, 68.5f, *iconCell, 1.0f, 0.0f);
+				if (iconCell) popupImg.DrawSprite(rt, 65.5f, 68.5f, *iconCell, kRestartIconScale, 0.0f);
 			});
 	}
 }
