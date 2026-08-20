@@ -110,6 +110,13 @@ void GameScene::Update(float deltaTime)
 		AudioManager::GetInstance().SetBgmVolumeScale(_isSettingsOpen ? 0.3f : 1.0f);
 	}
 
+	// 스페이스바 = 재생 버튼과 동일한 동작(웨이브 시작 / 배속↔일반 전환). 팝업이 떠 있는 동안은 막는다.
+	if (InputManager::GetInstance().GetButtonDown(KeyType::Space) && _healthManager.IsGameOver() == false &&
+		_isVictoryOpen == false && _isTipsOpen == false && _isSettingsOpen == false)
+	{
+		onStartButtonClick();
+	}
+
 	// 설정창이 열려 있는 동안, 설정 버튼 5개(+톱니바퀴)를 제외한 모든 UI 버튼의 클릭을 막는다.
 	// SetActive를 쓰지 않으므로 다른 버튼들은 계속 보이고, 클릭만 안 먹힌다.
 	UIManager::GetInstance().SetInputLocked(_isSettingsOpen || _isVictoryOpen || _isTipsOpen);

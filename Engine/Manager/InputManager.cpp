@@ -13,6 +13,7 @@ void InputManager::Update()
 	_currPressed[static_cast<int32>(KeyType::F1)] = isForeground && (::GetAsyncKeyState(VK_F1) & 0x8000) != 0;
 	_currPressed[static_cast<int32>(KeyType::F2)] = isForeground && (::GetAsyncKeyState(VK_F2) & 0x8000) != 0;
 	_currPressed[static_cast<int32>(KeyType::Escape)] = isForeground && (::GetAsyncKeyState(VK_ESCAPE) & 0x8000) != 0;
+	_currPressed[static_cast<int32>(KeyType::Space)] = isForeground && (::GetAsyncKeyState(VK_SPACE) & 0x8000) != 0;
 	POINT pt;
 	::GetCursorPos(&pt);
 	::ScreenToClient(_hwnd, &pt);
