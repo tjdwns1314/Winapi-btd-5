@@ -16,6 +16,7 @@
 namespace
 {
 	constexpr float kGameOverFadeDuration = 0.4f; // 게임오버 딤이 다 어두워지기까지 걸리는 시간(초)
+	constexpr float kVictoryFadeDuration = 0.4f;  // 승리 딤이 다 어두워지기까지 걸리는 시간(초)
 }
 
 void GameScene::Init(Graphic& graphic)
@@ -45,6 +46,9 @@ void GameScene::Init(Graphic& graphic)
 	_speedEnabled = _hasPendingLoad ? _pendingLoadData.speedEnabled : false;
 	_isSettingsOpen = false;
 	_gameOverFadeTimer = 0.0f;
+	_isVictoryOpen = false;
+	_victoryPopupShown = false;
+	_victoryFadeTimer = 0.0f;
 	UIManager::GetInstance().SetInputLocked(false); // 이전 판(게임오버 등)에서 잠긴 입력을 새 판 시작 시 반드시 풀어준다.
 	AudioManager::GetInstance().SetBgmVolumeScale(1.0f);
 
@@ -97,7 +101,7 @@ void GameScene::Update(float deltaTime)
 	if (InputManager::GetInstance().GetButtonDown(KeyType::F2))
 		_debugOverlay.Toggle();
 
-	if (InputManager::GetInstance().GetButtonDown(KeyType::Escape) && _healthManager.IsGameOver() == false)
+	if (InputManager::GetInstance().GetButtonDown(KeyType::Escape) && _healthManager.IsGameOver() == false && _isVictoryOpen == false)
 	{
 		_isSettingsOpen = !_isSettingsOpen;
 		AudioManager::GetInstance().SetBgmVolumeScale(_isSettingsOpen ? 0.3f : 1.0f);
@@ -105,7 +109,7 @@ void GameScene::Update(float deltaTime)
 
 	// 설정창이 열려 있는 동안, 설정 버튼 5개(+톱니바퀴)를 제외한 모든 UI 버튼의 클릭을 막는다.
 	// SetActive를 쓰지 않으므로 다른 버튼들은 계속 보이고, 클릭만 안 먹힌다.
-	UIManager::GetInstance().SetInputLocked(_isSettingsOpen);
+	UIManager::GetInstance().SetInputLocked(_isSettingsOpen || _isVictoryOpen);
 
 	if (_healthManager.IsGameOver())
 	{
@@ -122,6 +126,14 @@ void GameScene::Update(float deltaTime)
 		return;
 	}
 
+	if (_isVictoryOpen)
+	{
+		// 승리 팝업이 열려 있는 동안은 설정 팝업과 마찬가지로 게임 로직을 완전히 멈추고, 버튼 클릭만 받는다.
+		_victoryFadeTimer = std::min(_victoryFadeTimer + deltaTime, kVictoryFadeDuration);
+		UIManager::GetInstance().Update(deltaTime);
+		return;
+	}
+
 	if (_isSettingsOpen)
 	{
 		// 설정 팝업이 열려 있는 동안은 게임 로직을 완전히 멈추고, 버튼 클릭만 받는다.
@@ -133,6 +145,14 @@ void GameScene::Update(float deltaTime)
 
 	Super::Update(scaledDeltaTime);
 	_waveManager.Update(scaledDeltaTime);
+
+	// 마지막 라운드까지 클리어하고 대기 상태로 돌아온 첫 순간에만 승리 팝업을 띄운다.
+	if (_victoryPopupShown == false && _waveManager.IsWaveActive() == false &&
+		_waveManager.GetDisplayRoundNumber() > _waveManager.GetTotalRoundNumber())
+	{
+		_victoryPopupShown = true;
+		_isVictoryOpen = true;
+	}
 
 	const bool waveActive = _waveManager.IsWaveActive();
 	_towerController.UpdateDrag(*this, _map, _economyManager, waveActive);
@@ -233,6 +253,10 @@ void GameScene::Render(Graphic& graphic)
 	// 게임오버 중에도 계속 움직이는 풍선 등 액터보다 위에 그려야 하므로 액터 렌더링 이후에 호출.
 	_ui.RenderGameOverPopup(graphic, _healthManager.IsGameOver(), gameOverFadeProgress, _waveManager.GetDisplayRoundNumber());
 
+	// 승리 팝업도 게임오버 팝업과 같은 레이어(액터 렌더링 이후)에 그린다.
+	const float victoryFadeProgress = _victoryFadeTimer / kVictoryFadeDuration;
+	_ui.RenderVictoryPopup(graphic, _isVictoryOpen, victoryFadeProgress);
+
 	// 배치된 타워 등 액터보다 위에 그려야 하므로 액터 렌더링 이후에 호출.
 	// 게임오버/설정 팝업이 떠 있는 동안은 툴팁을 보이지 않게 한다.
 	if (_isSettingsOpen == false && _healthManager.IsGameOver() == false)
@@ -280,7 +304,8 @@ void GameScene::CreateUI()
 			UIManager::GetInstance().SetInputLocked(false); // 씬 전환 전에 입력 잠금을 풀어야 로비 UI가 눌린다.
 			SceneManager::GetInstance().ChangeScene(SceneType::Lobby);
 		},
-		[this](bool enabled) { _waveManager.SetAutoPlay(enabled); });
+		[this](bool enabled) { _waveManager.SetAutoPlay(enabled); },
+		[this]() { _isVictoryOpen = false; });
 	updateDebugWaveTitle();
 }
 

@@ -175,6 +175,22 @@ namespace
 	constexpr float kGameOverSubTextLineHeight = 80.0f;
 
 	// --------------------------------------------------
+	//  승리(웨이브 클리어) 팝업
+	// --------------------------------------------------
+	constexpr float kVictoryImageScale = 0.8f;                     // welcome_graphic_release(977x516) 축소 배율(임시값)
+	constexpr float kVictoryImageCenterY = 260.0f;                 // 이미지 중심 Y(화면 전체 기준, 임시값)
+	const wchar_t* const kVictoryTitleText = L"축하합니다!";        // 클리어 문구
+	constexpr float kVictoryTitleCenterY = 560.0f;                  // 문구 중심 Y(임시값)
+	const D2D1::ColorF kVictoryTitleColor = D2D1::ColorF(D2D1::ColorF::Yellow);
+	constexpr float kVictoryTargetBoxScale = 1.2f;                  // target_box(522x74) 확대 배율
+	constexpr float kVictoryTargetBoxCenterY = 720.0f;              // target_box(=무료 플레이 버튼) 중심 Y(임시값)
+	const Vector kFreePlayButtonFallbackSize = Vector(626.0f, 89.0f); // target_box 셀을 못 찾았을 때 대비
+	const D2D1::ColorF kVictoryTargetBoxFillColor = D2D1::ColorF(0.2f, 0.14f, 0.06f, 0.85f); // 테두리 안쪽 채움색
+	const wchar_t* const kVictoryFreePlayText = L"무료 플레이";
+	const D2D1::ColorF kVictoryFreePlayTextColor = D2D1::ColorF(D2D1::ColorF::White);
+	const D2D1::ColorF kVictoryDimColor = D2D1::ColorF(D2D1::ColorF::Black, 0.6f);
+
+	// --------------------------------------------------
 	//  설정 팝업 (오륜기 배치)
 	// --------------------------------------------------
 	// plain_button(131x137) 5개를 오륜기처럼 배치: 위 3개, 아래 2개(위 버튼 사이 아래에 걸치도록).
@@ -221,7 +237,8 @@ void GameSceneUI::Init(
 	function<void()> onSettingsCloseClick,
 	function<void()> onSettingsReplayClick,
 	function<void()> onHomeClick,
-	function<void(bool)> onAutoPlayToggle)
+	function<void(bool)> onAutoPlayToggle,
+	function<void()> onFreePlayClick)
 {
 	ResourceManager& res = ResourceManager::GetInstance();
 	// HUD 배경 패널
@@ -236,6 +253,9 @@ void GameSceneUI::Init(
 	// 업그레이드 패널 아이콘
 	_upgradeIconsImg = &res.GetImage(L"Resource\\Sprite\\upgrade_icons.png");
 	_upgradeIconsSprite = &res.GetAtlas(L"Resource\\Sprite\\upgrade_icons.xml");
+	// 승리(웨이브 클리어) 팝업
+	_welcomeImg = &res.GetImage(L"Resource\\Sprite\\welcome_sheet.png");
+	_welcomeSprite = &res.GetAtlas(L"Resource\\Sprite\\welcome_sheet.xml");
 
 	// 웨이브 시작 버튼
 	_startButton = createButton(kStartButtonPos, Vector(kStartButtonBaseWidth * kPlayButtonScale, kStartButtonBaseHeight * kPlayButtonScale), onStartWave);
@@ -316,6 +336,14 @@ void GameSceneUI::Init(
 	_restartButton = createButton(kGameOverCenter, kRestartButtonScaledSize, onRestartClick);
 	_restartButton->SetActive(false);
 	_restartButton->SetIgnoresModalLock(true); // 게임오버로 입력이 잠겨도 재시작 버튼 자체는 눌려야 한다.
+
+	// 승리 팝업의 "무료 플레이" 버튼. target_box 크기를 기준으로 클릭 판정을 맞춘다.
+	Vector freePlayButtonSize = kFreePlayButtonFallbackSize;
+	if (const CellInfo* targetBoxCell = _hudSprite->GetCell("target_box"))
+		freePlayButtonSize = Vector(targetBoxCell->aw * kVictoryTargetBoxScale, targetBoxCell->ah * kVictoryTargetBoxScale);
+	_freePlayButton = createButton(Vector(kGameOverCenter.x, kVictoryTargetBoxCenterY), freePlayButtonSize, onFreePlayClick);
+	_freePlayButton->SetActive(false);
+	_freePlayButton->SetIgnoresModalLock(true); // 승리 팝업이 입력을 잠가도 이 버튼 자체는 눌려야 한다.
 
 	// 설정 팝업 버튼 6개: 3x2 격자 배치. 게임 영역 정중앙 기준.
 	const Vector settingsButtonSize(kSettingsButtonBaseWidth * kSettingsRingScale, kSettingsButtonBaseHeight * kSettingsRingScale);
@@ -439,6 +467,14 @@ void GameSceneUI::RenderGameOverPopup(Graphic& graphic, bool isGameOver, float f
 {
 	if (isGameOver)
 		renderGameOverPopup(graphic, fadeProgress, finalRound);
+}
+
+void GameSceneUI::RenderVictoryPopup(Graphic& graphic, bool isVictoryOpen, float fadeProgress) const
+{
+	if (_freePlayButton != nullptr)
+		_freePlayButton->SetActive(isVictoryOpen);
+	if (isVictoryOpen)
+		renderVictoryPopup(graphic, fadeProgress);
 }
 
 // --------------------------------------------------
@@ -998,6 +1034,59 @@ void GameSceneUI::renderGameOverPopup(Graphic& graphic, float fadeProgress, int3
 
 	ResourceManager::GetInstance().GetImage(L"restart_button_baked")
 		.Draw(graphic, centerX, centerY, kRestartButtonScale, 0.0f);
+}
+
+// --------------------------------------------------
+//  승리(웨이브 클리어) 팝업
+// --------------------------------------------------
+
+void GameSceneUI::renderVictoryPopup(Graphic& graphic, float fadeProgress) const
+{
+	const float dimAlpha = kVictoryDimColor.a * std::clamp(fadeProgress, 0.0f, 1.0f);
+
+	ID2D1HwndRenderTarget* renderTarget = graphic.GetRenderTarget();
+	ID2D1SolidColorBrush* dimBrush = graphic.GetBrush(
+		D2D1::ColorF(kVictoryDimColor.r, kVictoryDimColor.g, kVictoryDimColor.b, dimAlpha));
+	if (renderTarget != nullptr && dimBrush != nullptr)
+	{
+		renderTarget->FillRectangle(D2D1::RectF(0.0f, 0.0f,
+			static_cast<float>(GWinSizeX), static_cast<float>(GWinSizeY)), dimBrush);
+	}
+
+	// 딤이 다 어두워진 뒤에 이미지/문구/버튼을 보여준다.
+	if (fadeProgress < 1.0f)
+		return;
+
+	const float centerX = static_cast<float>(GWinSizeX) * 0.5f;
+
+	// 1. welcome_graphic_release 이미지를 가운데 위쪽에.
+	if (const CellInfo* welcomeCell = _welcomeSprite->GetCell("welcome_graphic_release"))
+		_welcomeImg->DrawSprite(graphic, centerX, kVictoryImageCenterY, *welcomeCell, kVictoryImageScale, 0.0f);
+
+	// 2. 그 아래 "축하합니다!" 문구.
+	graphic.DrawString(kVictoryTitleText,
+		D2D1::RectF(0.0f, kVictoryTitleCenterY - 40.0f, static_cast<float>(GWinSizeX), kVictoryTitleCenterY + 40.0f),
+		FONT_35, kVictoryTitleColor, DWRITE_TEXT_ALIGNMENT_CENTER, DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+
+	// 3. 그 아래 target_box(무료 플레이 버튼). 테두리 안쪽이 투명해서 배경을 먼저 채운다.
+	if (const CellInfo* targetBoxCell = _hudSprite->GetCell("target_box"))
+	{
+		const float boxWidth = targetBoxCell->aw * kVictoryTargetBoxScale;
+		const float boxHeight = targetBoxCell->ah * kVictoryTargetBoxScale;
+		ID2D1SolidColorBrush* fillBrush = graphic.GetBrush(kVictoryTargetBoxFillColor);
+		if (renderTarget != nullptr && fillBrush != nullptr)
+		{
+			const D2D1_RECT_F fillRect = D2D1::RectF(
+				centerX - boxWidth * 0.5f, kVictoryTargetBoxCenterY - boxHeight * 0.5f,
+				centerX + boxWidth * 0.5f, kVictoryTargetBoxCenterY + boxHeight * 0.5f);
+			renderTarget->FillRectangle(fillRect, fillBrush);
+		}
+		_hudImg->DrawSprite(graphic, centerX, kVictoryTargetBoxCenterY, *targetBoxCell, kVictoryTargetBoxScale, 0.0f);
+	}
+
+	graphic.DrawString(kVictoryFreePlayText,
+		D2D1::RectF(0.0f, kVictoryTargetBoxCenterY - 30.0f, static_cast<float>(GWinSizeX), kVictoryTargetBoxCenterY + 30.0f),
+		FONT_30, kVictoryFreePlayTextColor, DWRITE_TEXT_ALIGNMENT_CENTER, DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
 }
 
 // --------------------------------------------------

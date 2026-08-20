@@ -89,6 +89,9 @@ private:
 	bool _speedEnabled = false; // 2배속 on/off. 웨이브가 끝나도 리셋하지 않고 유지한다.
 	bool _isSettingsOpen = false; // 설정 팝업이 열려 있는 동안 게임 로직 전체를 정지시킨다.
 	float _gameOverFadeTimer = 0.0f; // 게임오버 딤 페이드인 경과 시간(초).
+	bool _isVictoryOpen = false;      // 승리 팝업이 열려 있는 동안 게임 로직 전체를 정지시킨다(설정 팝업과 동일).
+	bool _victoryPopupShown = false;  // 이번 판에서 이미 한 번 띄웠는지(재발동 방지용).
+	float _victoryFadeTimer = 0.0f;   // 승리 딤 페이드인 경과 시간(초).
 
 	// Init()이 이 값을 보고 새 게임 대신 저장 데이터로 초기화한다. LoadFromFile()이 Restart() 전에 채워 넣는다.
 	bool _hasPendingLoad = false;

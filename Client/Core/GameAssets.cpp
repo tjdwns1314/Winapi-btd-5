@@ -20,6 +20,9 @@ void GameAssets::Load(Graphic& graphic)
 	res.LoadImage(graphic, L"Resource\\Sprite\\in_game_hud.png");
 	res.LoadAtlas(L"Resource\\Sprite\\in_game_hud.xml");
 
+	res.LoadImage(graphic, L"Resource\\Sprite\\welcome_sheet.png");
+	res.LoadAtlas(L"Resource\\Sprite\\welcome_sheet.xml");
+
 	res.LoadImage(graphic, L"Resource\\Sprite\\game_over_popup.png");
 	res.LoadAtlas(L"Resource\\Sprite\\game_over_popup.xml");
 
