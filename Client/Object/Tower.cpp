@@ -162,7 +162,12 @@ void Tower::RenderRange(Graphic& graphic) const
 	if (renderTarget == nullptr || brush == nullptr)
 		return;
 	const Vector pos = GetPos();
+
+	// 사거리 원이 오른쪽 UI 패널이나 창 밖으로 삐져나오지 않도록 게임 필드 영역으로 잘라낸다.
+	const D2D1_RECT_F clipRect = D2D1::RectF(0.0f, 0.0f, static_cast<float>(GameAreaWidth), static_cast<float>(GWinSizeY));
+	renderTarget->PushAxisAlignedClip(clipRect, D2D1_ANTIALIAS_MODE_PER_PRIMITIVE);
 	renderTarget->FillEllipse(D2D1::Ellipse(D2D1::Point2F(pos.x, pos.y), _stat.attackRange, _stat.attackRange), brush);
+	renderTarget->PopAxisAlignedClip();
 }
 
 bool Tower::isInRange(const Actor* target) const
