@@ -1,4 +1,4 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "BloonFactory.h"
 #include "Bloon.h"
 #include "BloonPopResolver.h"
@@ -29,6 +29,7 @@ Bloon* BloonFactory::Create(ObjectPool<Bloon>& pool, BloonColor color, const Vec
 
 	if (stat.cellName.empty())
 	{
+		bloon->SetCell(nullptr);
 		bloon->SetImage(&getBloonImage(stat.spriteKey));
 	}
 	else

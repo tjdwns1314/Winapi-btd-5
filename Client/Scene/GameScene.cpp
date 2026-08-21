@@ -1,4 +1,4 @@
-﻿#include "pch.h"
+#include "pch.h"
 #include "GameScene.h"
 #include "InputManager.h"
 #include "UIManager.h"
@@ -285,7 +285,7 @@ void GameScene::Render(Graphic& graphic)
 	for (Actor* actor : GetActors(RenderLayer::Bloon))
 	{
 		Bloon* bloon = static_cast<Bloon*>(actor);
-		if (bloon->GetColor() == BloonColor::Special)
+		if (bloon->GetColor() == BloonColor::Special && !bloon->IsPendingKill() && bloon->IsActive())
 			bloon->RenderSprite(graphic);
 	}
 
