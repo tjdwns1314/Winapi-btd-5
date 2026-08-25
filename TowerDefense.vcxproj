@@ -97,6 +97,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine\Graphics;$(ProjectDir)Engine\UI;$(ProjectDir)Engine\Core;$(ProjectDir)Engine\Manager;$(ProjectDir)Engine\Collision;$(ProjectDir)Client;$(ProjectDir)Client\Core;$(ProjectDir)Client\Object;$(ProjectDir)Client\Scene;$(ProjectDir)Client\UI;$(ProjectDir)Client\Map;$(ProjectDir)Client\Algorithm;$(ProjectDir)Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
